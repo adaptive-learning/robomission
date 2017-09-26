@@ -87,10 +87,10 @@ RoboMission is developed by [Adaptive Learning group][2] at Faculty of informati
 
   * Take a regular breaks (e.g. after 25 minutes), stretch yourself (including your eyes).
 
-8. Test the implemented feature and check the code by pylint:
+8. Test the implemented feature and check the code by a linter:
 
         $ make test
-        $ make check
+        $ make lint
 
 9. Commit changes:
 
