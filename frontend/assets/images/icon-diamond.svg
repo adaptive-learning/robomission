@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   id="Layer_1"
+   data-name="Layer 1"
+   viewBox="0 0 17.02 17.02"
+   version="1.1"
+   sodipodi:docname="icon-diamond.svg"
+   width="17.02"
+   height="17.02"
+   inkscape:version="0.92.1 r">
+  <metadata
+     id="metadata21">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>miniikonky2</dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1362"
+     inkscape:window-height="729"
+     id="namedview19"
+     showgrid="false"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0"
+     inkscape:zoom="7.8666667"
+     inkscape:cx="-17.637796"
+     inkscape:cy="8.4200001"
+     inkscape:window-x="0"
+     inkscape:window-y="18"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="Layer_1" />
+  <defs
+     id="defs4">
+    <style
+       id="style2">.cls-1{fill:#01012d;}.cls-2{fill:#fff;}</style>
+  </defs>
+  <title
+     id="title6">miniikonky2</title>
+  <circle
+     class="cls-1"
+     cx="8.5100002"
+     cy="8.5100002"
+     r="8.5100002"
+     id="circle8"
+     style="fill:#01012d" />
+  <polygon
+     class="cls-2"
+     points="20.86,14.11 17.78,11 11.34,11 8.12,13.93 14.5,21.27 "
+     id="polygon10"
+     style="fill:#ffffff"
+     transform="translate(-6.0699997,-6.3999996)" />
+  <polygon
+     class="cls-1"
+     points="16.55,15.46 20.9,14.48 21.17,13.5 16.6,14.69 12.67,14.67 7.71,13.46 8.08,14.34 12.72,15.43 "
+     id="polygon12"
+     style="fill:#01012d"
+     transform="translate(-6.0699997,-6.3999996)" />
+  <polygon
+     class="cls-1"
+     points="13.9,21.11 11.96,14.91 12.62,15.11 14.6,21.42 "
+     id="polygon14"
+     style="fill:#01012d"
+     transform="translate(-6.0699997,-6.3999996)" />
+  <polygon
+     class="cls-1"
+     points="15.29,21.16 17.38,14.91 16.69,15.03 14.6,21.42 "
+     id="polygon16"
+     style="fill:#01012d"
+     transform="translate(-6.0699997,-6.3999996)" />
+</svg>
