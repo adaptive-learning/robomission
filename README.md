@@ -32,9 +32,9 @@ RoboMission is developed by [Adaptive Learning group][2] at Faculty of informati
 
 5. Install dependencies and initialize DB:
 
-        $ make update
+        $ make install
 
-  The `make update` command uses pip to install install backend dependencies,
+  The `make install` command uses pip to install install backend dependencies,
   npm for frontend dependencies,
   and then it sets up the database for development. (See Makefile for details.)
   You can deactivate the virtual environment by calling `deactivate`.
