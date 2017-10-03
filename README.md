@@ -8,12 +8,12 @@ RoboMission is developed by [Adaptive Learning group][2] at Faculty of informati
 
 ## Start working on the project
 
-1. Install Python 3, virtualenv, virtualenvwrapper and npm.
+1. Install Python 3.5, virtualenv, virtualenvwrapper and npm.
 
 2. Configure virtualenv and virtualenvwrapper by adding the following two lines in your `~/.bashrc`:
 
         export WORKON_HOME=~/.virtualenvs
-        source /usr/bin/virtualenvwrapper.sh
+        source --python=/usr/bin/python3.5 /usr/bin/virtualenvwrapper.sh
 
   Load the changes:
 
