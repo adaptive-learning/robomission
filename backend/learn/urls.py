@@ -4,8 +4,8 @@ from learn import views
 
 
 urlpatterns = [
-    url(r'^blocks/$', views.block_list),
-    url(r'^blocks/(?P<pk>[0-9]+)$', views.block_detail),
+    url(r'^blocks/$', views.BlockList.as_view()),
+    url(r'^blocks/(?P<pk>[0-9]+)$', views.BlockDetail.as_view()),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)
