@@ -8,6 +8,8 @@ urlpatterns = [
     url(r'^blocks/(?P<pk>[0-9]+)$', views.BlockDetail.as_view()),
     url(r'^toolboxes/$', views.ToolboxList.as_view()),
     url(r'^toolboxes/(?P<pk>[0-9]+)$', views.ToolboxDetail.as_view()),
+    url(r'^users/$', views.UserList.as_view()),
+    url(r'^users/(?P<pk>[0-9]+)/$', views.UserDetail.as_view()),
     url(r'^students/$', views.StudentList.as_view()),
     url(r'^students/(?P<pk>[0-9]+)$', views.StudentDetail.as_view()),
 ]

@@ -1,8 +1,20 @@
+from django.contrib.auth.models import User
+from rest_framework import generics
 from learn.models import Block, Toolbox, Student
 from learn.serializers import BlockSerializer
-from learn.serializers import ToolboxSerializer
 from learn.serializers import StudentSerializer
-from rest_framework import generics
+from learn.serializers import ToolboxSerializer
+from learn.serializers import UserSerializer
+
+
+class UserList(generics.ListAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+
+class UserDetail(generics.RetrieveAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
 
 
 class BlockList(generics.ListCreateAPIView):
@@ -33,4 +45,3 @@ class StudentList(generics.ListCreateAPIView):
 class StudentDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
-
