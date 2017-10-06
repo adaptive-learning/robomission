@@ -1,0 +1,29 @@
+[MESSAGES CONTROL]
+disable=I,
+    redefined-builtin,
+    too-few-public-methods
+
+[REPORTS]
+reports=no
+
+[BASIC]
+# function or class names that do not require a docstring
+no-docstring-rgx=^_
+# min line length for functions/classes to require docstring
+docstring-min-length=10
+
+[FORMAT]
+max-line-length=100
+ignore-long-lines=^\s*(# )?<?https?://\S+>?$
+max-module-lines=200
+
+[VARIABLES]
+# do not check for unused import in __init__ files
+init-import=no
+dummy-variables-rgx=(_+[a-zA-Z0-9_]*?$)|dummy
+
+[MASTER]
+load-plugins=pylint_django
+
+[DESIGN]
+max-parents=15

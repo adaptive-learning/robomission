@@ -50,7 +50,7 @@ lint: lint-backend lint-frontend
 .PHONY: lint-backend
 lint-backend:
 	@echo "===== Backend linting ====="
-	pylint --ignore=migrations,wsgi.py flocs
+	pylint --ignore=migrations backend
 
 
 .PHONY: lint-frontend
