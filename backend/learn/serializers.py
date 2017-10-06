@@ -3,11 +3,11 @@ from rest_framework import serializers
 from learn.models import Block, Toolbox, Student
 
 
-class UserSerializer(serializers.ModelSerializer):
-    student = serializers.PrimaryKeyRelatedField(read_only=True)
+class UserSerializer(serializers.HyperlinkedModelSerializer):
+    student = serializers.HyperlinkedIdentityField(view_name='student-detail')
     class Meta:
         model = User
-        fields = ('id', 'username', 'student')
+        fields = ('id', 'url', 'username', 'student')
 
 
 class BlockSerializer(serializers.ModelSerializer):
@@ -27,6 +27,9 @@ class ToolboxSerializer(serializers.ModelSerializer):
 class StudentSerializer(serializers.HyperlinkedModelSerializer):
     id = serializers.ReadOnlyField(source='user.id')
     username = serializers.ReadOnlyField(source='user.username')
+    user = serializers.HyperlinkedIdentityField(view_name='user-detail')
+    practice_overview = serializers.HyperlinkedIdentityField(view_name='practice-overview')
+
     class Meta:
         model = Student
-        fields = ('id', 'username', 'credits')
+        fields = ('id', 'url', 'username', 'user', 'credits', 'practice_overview')
