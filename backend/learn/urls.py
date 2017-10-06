@@ -11,5 +11,5 @@ router.register(r'students', views.StudentViewSet, base_name='student')
 
 
 urlpatterns = [
-    url(r'^', include(router.urls)),
+    url(r'^api/', include(router.urls)),
 ]

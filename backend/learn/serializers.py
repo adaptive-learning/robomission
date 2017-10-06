@@ -7,7 +7,7 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
     student = serializers.HyperlinkedIdentityField(view_name='student-detail')
     class Meta:
         model = User
-        fields = ('id', 'url', 'username', 'student')
+        fields = ('id', 'url', 'username', 'email', 'is_staff', 'student')
 
 
 class BlockSerializer(serializers.ModelSerializer):
