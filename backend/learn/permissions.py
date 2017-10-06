@@ -1,0 +1,19 @@
+from rest_framework import permissions
+
+
+class IsOwnerOrStaff(permissions.BasePermission):
+    """Permission for object owners and staff members
+    """
+
+    def has_object_permission(self, request, view, obj):
+        print('>>> checking permissions')
+        if request.user.is_staff:
+            return True
+        # some entites (e.g. Student) have a direct `user` attribute
+        if hasattr(obj, 'user'):
+            return obj.user == request.user
+        # other entites (e.g. TaskSession) have indirect ownership through
+        # `student` attribute
+        if hasattr(obj, 'student'):
+            return obj.student.user == request.user
+        return False

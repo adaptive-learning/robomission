@@ -1,6 +1,8 @@
 from django.contrib.auth.models import User
 from rest_framework import generics
+from rest_framework import permissions
 from learn.models import Block, Toolbox, Student
+from learn.permissions import IsOwnerOrStaff
 from learn.serializers import BlockSerializer
 from learn.serializers import StudentSerializer
 from learn.serializers import ToolboxSerializer
@@ -40,8 +42,13 @@ class ToolboxDetail(generics.RetrieveUpdateDestroyAPIView):
 class StudentList(generics.ListCreateAPIView):
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
 
 
 class StudentDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsOwnerOrStaff)
