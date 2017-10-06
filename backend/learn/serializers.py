@@ -28,7 +28,8 @@ class StudentSerializer(serializers.HyperlinkedModelSerializer):
     id = serializers.ReadOnlyField(source='user.id')
     username = serializers.ReadOnlyField(source='user.username')
     user = serializers.HyperlinkedIdentityField(view_name='user-detail')
-    practice_overview = serializers.HyperlinkedIdentityField(view_name='practice-overview')
+    practice_overview = serializers.HyperlinkedIdentityField(
+            view_name='student-practice-overview')
 
     class Meta:
         model = Student

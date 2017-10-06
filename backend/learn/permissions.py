@@ -6,7 +6,6 @@ class IsOwnerOrStaff(permissions.BasePermission):
     """
 
     def has_object_permission(self, request, view, obj):
-        print('>>> checking permissions')
         if request.user.is_staff:
             return True
         # some entites (e.g. Student) have a direct `user` attribute
