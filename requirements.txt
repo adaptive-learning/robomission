@@ -15,6 +15,7 @@ ipywidgets==7.0.1
 isort==4.2.15
 jedi==0.11.0
 Jinja2==2.9.6
+jsonfield==2.0.2
 jsonschema==2.6.0
 jupyter==1.0.0
 jupyter-client==5.1.0

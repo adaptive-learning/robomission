@@ -2,6 +2,7 @@
 """
 from django.db import models
 from django.contrib.auth.models import User
+from jsonfield import JSONField
 
 
 class Block(models.Model):
@@ -35,6 +36,7 @@ class Level(models.Model):
     toolbox = models.ForeignKey(Toolbox)
     credits = models.IntegerField(
         help_text="Number of credits needed to complete this level.")
+    # tasks = 1:n relation, see learn.models.Task
 
     def __str__(self):
         return 'L{level} {name}'.format(level=self.level, name=self.name)
@@ -44,6 +46,18 @@ class Instruction(models.Model):
     """Explanation of a single concept, such as while loop or wormholes.
     """
     name = models.SlugField(unique=True)
+
+    def __str__(self):
+        return self.name
+
+
+class Task(models.Model):
+    """Programming problem to be solved by students.
+    """
+    name = models.SlugField(max_length=100, unique=True)
+    level = models.ForeignKey(Level, null=True, default=None, related_name='tasks')
+    setting = JSONField()
+    solution = JSONField()
 
     def __str__(self):
         return self.name
