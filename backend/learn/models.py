@@ -1,9 +1,11 @@
+"""DB entities definitions.
+"""
 from django.db import models
 from django.contrib.auth.models import User
 
 
 class Block(models.Model):
-    """Programming block, such as "fly" or "repeat"
+    """Programming block, such as "fly" or "repeat".
     """
     name = models.CharField(max_length=256, unique=True)
     order = models.SmallIntegerField()
@@ -26,7 +28,7 @@ class Toolbox(models.Model):
 
 
 class Level(models.Model):
-    """Small group of coherent tasks of similar difficulty sharing same toolbox
+    """Small group of coherent tasks of similar difficulty sharing same toolbox.
     """
     level = models.SmallIntegerField()
     name = models.SlugField(unique=True)
@@ -38,8 +40,17 @@ class Level(models.Model):
         return 'L{level} {name}'.format(level=self.level, name=self.name)
 
 
+class Instruction(models.Model):
+    """Explanation of a single concept, such as while loop or wormholes.
+    """
+    name = models.SlugField(unique=True)
+
+    def __str__(self):
+        return self.name
+
+
 class Student(models.Model):
-    """Entity for a learner
+    """Entity for a learner.
     """
     user = models.OneToOneField(
         User,
