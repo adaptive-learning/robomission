@@ -66,11 +66,11 @@ RoboMission is developed by [Adaptive Learning group][2] at Faculty of informati
 
   * To start a server, run:
 
-          $ make start
+          $ make server
 
   *  To open python console (with all models automatically imported), run:
 
-          $ make console
+          $ make shell
 
   *  To open jupyter notebooek, run:
 

@@ -22,9 +22,21 @@ frontend-dependencies:
 	@echo "== Install frontend dependencies. =="
 	cd frontend && npm update
 
-.PHONY: start
-start:
-	python manage.py run_liveserver
+
+.PHONY: server
+server:
+	#python manage.py run_liveserver
+	python backend/manage.py runserver
+
+
+.PHONY: shell
+shell:
+	python backend/manage.py shell_plus
+
+
+.PHONY: notebook
+notebook:
+	python backend/manage.py shell_plus --notebook
 
 
 .PHONY: test
