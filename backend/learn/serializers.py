@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
-from learn.models import Block, Toolbox, Student
+from learn.models import Block, Toolbox, Level, Task, Instruction, Student
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
@@ -13,7 +13,7 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 class BlockSerializer(serializers.ModelSerializer):
     class Meta:
         model = Block
-        fields = ('id', 'name', 'order')
+        fields = ('url', 'id', 'name', 'order')
 
 
 class ToolboxSerializer(serializers.ModelSerializer):
@@ -21,7 +21,27 @@ class ToolboxSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Toolbox
-        fields = ('id', 'name', 'blocks')
+        fields = ('url', 'id', 'name', 'blocks')
+
+
+class LevelSerializer(serializers.ModelSerializer):
+    tasks = serializers.SlugRelatedField(slug_field='name', many=True, read_only=True)
+    class Meta:
+        model = Level
+        fields = ('url', 'id', 'name', 'credits', 'toolbox', 'tasks')
+
+
+class InstructionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Instruction
+        fields = ('url', 'id', 'name')
+
+
+class TaskSerializer(serializers.ModelSerializer):
+    level = serializers.SlugRelatedField(slug_field='name', many=False, read_only=True)
+    class Meta:
+        model = Task
+        fields = ('url', 'id', 'name', 'level', 'setting', 'solution')
 
 
 class StudentSerializer(serializers.HyperlinkedModelSerializer):

@@ -3,11 +3,14 @@ from rest_framework import permissions
 from rest_framework import viewsets
 from rest_framework.decorators import detail_route
 from rest_framework.response import Response
-from learn.models import Block, Toolbox, Student
+from learn.models import Block, Toolbox, Level, Task, Instruction, Student
 from learn.permissions import IsOwnerOrStaff
 from learn.serializers import BlockSerializer
-from learn.serializers import StudentSerializer
 from learn.serializers import ToolboxSerializer
+from learn.serializers import LevelSerializer
+from learn.serializers import InstructionSerializer
+from learn.serializers import TaskSerializer
+from learn.serializers import StudentSerializer
 from learn.serializers import UserSerializer
 
 
@@ -24,6 +27,21 @@ class BlockViewSet(viewsets.ReadOnlyModelViewSet):
 class ToolboxViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Toolbox.objects.all()
     serializer_class = ToolboxSerializer
+
+
+class LevelViewSet(viewsets.ReadOnlyModelViewSet):
+    serializer_class = LevelSerializer
+    queryset = Level.objects.all()
+
+
+class InstructionViewSet(viewsets.ReadOnlyModelViewSet):
+    serializer_class = InstructionSerializer
+    queryset = Instruction.objects.all()
+
+
+class TaskViewSet(viewsets.ReadOnlyModelViewSet):
+    serializer_class = TaskSerializer
+    queryset = Task.objects.all()
 
 
 class StudentViewSet(viewsets.ModelViewSet):
