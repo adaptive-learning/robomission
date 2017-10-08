@@ -77,22 +77,22 @@ db: migrate data
 
 .PHONY: migrate
 migrate:
-	python manage.py migrate --noinput
+	python backend/manage.py migrate --noinput
 
 
 .PHONY: flush
 flush:
-	python manage.py flush --noinput
+	python backend/manage.py flush --noinput
 
 
 .PHONY: admin
 admin:
-	python manage.py create_admin
+	python backend/manage.py create_admin
 
 
 .PHONY: data
 data:
-	python manage.py load_static_data
+	python backend/manage.py load_data
 
 
 .PHONY: export

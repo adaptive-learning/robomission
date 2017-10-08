@@ -78,7 +78,7 @@ RoboMission is developed by [Adaptive Learning group][2] at Faculty of informati
 
   * If you change data in fixtures and want to load them to the database:
 
-          $ make db-load-data
+          $ make data
 
   * If you change the data model, create and apply a migration:
 
