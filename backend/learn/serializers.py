@@ -17,7 +17,7 @@ class BlockSerializer(serializers.ModelSerializer):
 
 
 class ToolboxSerializer(serializers.ModelSerializer):
-    blocks = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+    blocks = serializers.SlugRelatedField(slug_field='name', many=True, read_only=True)
 
     class Meta:
         model = Toolbox
