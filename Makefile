@@ -90,6 +90,11 @@ admin:
 	python backend/manage.py create_admin
 
 
+.PHONY: tasks
+tasks:
+	python backend/manage.py build_tasks
+
+
 .PHONY: data
 data:
 	python backend/manage.py load_data

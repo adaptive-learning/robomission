@@ -38,7 +38,11 @@ class InstructionSerializer(serializers.ModelSerializer):
 
 
 class TaskSerializer(serializers.ModelSerializer):
-    level = serializers.SlugRelatedField(slug_field='name', many=False, read_only=True)
+    level = serializers.SlugRelatedField(
+        slug_field='name',
+        many=False,
+        queryset=Level.objects.all())
+
     class Meta:
         model = Task
         fields = ('url', 'id', 'name', 'level', 'setting', 'solution')
