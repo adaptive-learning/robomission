@@ -111,3 +111,8 @@ RoboMission is developed by [Adaptive Learning group][2] at Faculty of informati
         $ deactivate
 
 13. Celebrate the developed feature with some physical exercise and healthy snack.
+
+
+## Tips
+
+* Use `export SHOW_SQL_QUERIES=True` to log all performed SQL queries.

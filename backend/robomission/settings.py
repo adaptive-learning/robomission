@@ -19,6 +19,7 @@ FRONTEND_DIR = os.path.join(REPO_DIR, 'frontend')
 JS_NODE_PATH = os.path.join(FRONTEND_DIR, 'node_modules', '.bin', 'babel-node')
 JS_TOOLS_DIR = os.path.join(FRONTEND_DIR, 'tools')
 
+SHOW_SQL_QUERIES = os.getenv('SHOW_SQL_QUERIES', 'False') == 'True'
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
@@ -163,8 +164,7 @@ LOGGING = {
         },
         'django.db.backends': {
             'handlers': ['console'],
-            'level': 'DEBUG',
-            'propagate': True,
+            'level': 'DEBUG' if SHOW_SQL_QUERIES else 'INFO',
         },
         'robomission': {
             'handlers': ['console', 'file'],
