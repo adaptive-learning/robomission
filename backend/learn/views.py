@@ -41,7 +41,7 @@ class InstructionViewSet(viewsets.ReadOnlyModelViewSet):
 
 class TaskViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = TaskSerializer
-    queryset = Task.objects.all()
+    queryset = Task.objects.all().select_related('level')
 
 
 class StudentViewSet(viewsets.ModelViewSet):
