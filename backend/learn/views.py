@@ -25,13 +25,13 @@ class BlockViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 class ToolboxViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Toolbox.objects.all()
+    queryset = Toolbox.objects.all().prefetch_related('blocks')
     serializer_class = ToolboxSerializer
 
 
 class LevelViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = LevelSerializer
-    queryset = Level.objects.all()
+    queryset = Level.objects.all().prefetch_related('tasks')
 
 
 class InstructionViewSet(viewsets.ReadOnlyModelViewSet):
