@@ -1,5 +1,6 @@
 """DB entities definitions.
 """
+from datetime import datetime
 from django.db import models
 from django.contrib.auth.models import User
 from jsonfield import JSONField
@@ -74,3 +75,19 @@ class Student(models.Model):
 
     def __str__(self):
         return '[{pk}] {username}'.format(pk=self.pk, username=self.user.username)
+
+
+class TaskSession(models.Model):
+    """Continous attempt of a student to solve a task.
+    """
+    student = models.ForeignKey(Student, related_name='task_sessions')
+    task = models.ForeignKey(Task)
+    solved = models.BooleanField(default=False)
+    start = models.DateTimeField(default=datetime.now)
+    end = models.DateTimeField(default=datetime.now)
+
+    def __str__(self):
+        return '[{pk}] s{student}-{task}'.format(
+            pk=self.pk,
+            student=self.student.pk,
+            task=self.task.name)
