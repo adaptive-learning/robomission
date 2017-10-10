@@ -4,7 +4,7 @@ help:
 
 
 .PHONY: install
-install: dependencies db frontend
+install: dependencies db frontend logs
 
 
 .PHONY: dependencies
@@ -108,3 +108,9 @@ export:
 .PHONY: frontend
 frontend:
 	cd frontend && npm run build
+
+
+.PHONY: logs
+logs:
+	mkdir -p logs
+	touch logs/robomission.log
