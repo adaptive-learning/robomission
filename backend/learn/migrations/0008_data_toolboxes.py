@@ -40,6 +40,7 @@ def create_toolboxes(apps, schema_editor):
             model = Toolbox
             fields = ('id', 'name', 'blocks')
 
+    Toolbox.objects.all().delete()
     serializer = ToolboxSerializer(data=TOOLBOXES, many=True)
     serializer.is_valid(raise_exception=True)
     serializer.save()

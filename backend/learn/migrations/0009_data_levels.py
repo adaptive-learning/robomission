@@ -7,6 +7,7 @@ def create_levels(apps, schema_editor):
     Level = apps.get_model('learn', 'Level')
     Toolbox = apps.get_model('learn', 'Toolbox')
     toolbox = lambda name: Toolbox.objects.get(name=name)
+    Level.objects.all().delete()
     levels = [
         Level(id=1, level=1, name='moves', toolbox=toolbox('fly'), credits=6),
         Level(id=2, level=2, name='world', toolbox=toolbox('shoot'), credits=25),

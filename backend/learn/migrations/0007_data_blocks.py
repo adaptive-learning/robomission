@@ -5,6 +5,7 @@ from django.db import migrations
 
 def create_blocks(apps, schema_editor):
     Block = apps.get_model('learn', 'Block')
+    Block.objects.all().delete()
     blocks = [
         Block(id=1, name='fly', order=1),
         Block(id=2, name='shoot', order=2),

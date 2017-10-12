@@ -5,6 +5,7 @@ from django.db import migrations
 
 def create_instructions(apps, schema_editor):
     Instruction = apps.get_model('learn', 'Instruction')
+    Instruction.objects.all().delete()
     instructions = [
         Instruction(id=1, name='env.space-world'),
         Instruction(id=2, name='env.toolbox'),
