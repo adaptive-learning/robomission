@@ -4,7 +4,7 @@ help:
 
 
 .PHONY: install
-install: dependencies db frontend logs
+install: dependencies logs db frontend
 
 
 .PHONY: dependencies
@@ -72,7 +72,7 @@ lint-frontend:
 
 
 .PHONY: db
-db: migrate data
+db: migrate tasks data
 
 
 .PHONY: migrate
