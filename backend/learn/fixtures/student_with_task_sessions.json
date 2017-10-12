@@ -1,0 +1,39 @@
+[
+{
+  "model": "auth.user",
+  "pk": 23,
+  "fields": {
+    "username": "john",
+    "password": "pbkdf2_sha256$36000$t8cJ5W1k1jmL$vxrj0IzgKqZzt70HeYWB9aSMlNUyYof9sW7GeUOMbnk="
+  }
+},
+{
+  "model": "learn.student",
+  "pk": 23,
+  "fields": {
+    "credits": 10
+  }
+},
+{
+  "model": "learn.tasksession",
+  "pk": 1,
+  "fields": {
+    "student": 23,
+    "task": 57,
+    "solved": true,
+    "start": "2017-10-12T12:00:00.000Z",
+    "end": "2017-10-12T12:01:30.000Z"
+  }
+},
+{
+  "model": "learn.tasksession",
+  "pk": 2,
+  "fields": {
+    "student": 23,
+    "task": 22,
+    "solved": false,
+    "start": "2017-10-12T12:02:00.000Z",
+    "end": "2017-10-12T12:05:00.000Z"
+  }
+}
+]
