@@ -69,3 +69,28 @@ class TaskSessionSerializer(serializers.HyperlinkedModelSerializer):
         read_only_fields = ('student', 'solved', 'start', 'end')
         # Student field is made read-only as it should be determined by the
         # current user and passed by TaskSessionsViewSet.perform_create().
+
+
+class StudentInstructionSerializer(serializers.Serializer):
+    name = serializers.CharField()
+    seen = serializers.BooleanField()
+
+
+class StudentTaskSerializer(serializers.Serializer):
+    name = serializers.CharField()
+    solved = serializers.BooleanField()
+    time = serializers.DurationField()
+
+
+class RecommendationSerializer(serializers.Serializer):
+    available = serializers.BooleanField()
+    task = serializers.CharField()
+
+
+class PracticeOverviewSerializer(serializers.Serializer):
+    level = serializers.IntegerField()
+    credits = serializers.IntegerField()
+    active_credits = serializers.IntegerField()
+    instructions = StudentInstructionSerializer(many=True)
+    tasks = StudentTaskSerializer(many=True)
+    recommendation = RecommendationSerializer()

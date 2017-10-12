@@ -6,14 +6,17 @@ from rest_framework.response import Response
 from learn.models import Block, Toolbox, Level, Task, Instruction
 from learn.models import Student, TaskSession
 from learn.permissions import IsOwnerOrAdmin
+from learn.practice_overview import get_practice_overview
 from learn.serializers import BlockSerializer
 from learn.serializers import ToolboxSerializer
 from learn.serializers import LevelSerializer
 from learn.serializers import InstructionSerializer
-from learn.serializers import TaskSerializer
+from learn.serializers import PracticeOverviewSerializer
 from learn.serializers import StudentSerializer
+from learn.serializers import TaskSerializer
 from learn.serializers import TaskSessionSerializer
 from learn.serializers import UserSerializer
+from learn.world import get_world
 
 
 class UserViewSet(viewsets.ReadOnlyModelViewSet):
@@ -59,9 +62,12 @@ class StudentViewSet(viewsets.ModelViewSet):
 
     @detail_route(url_path='practice-overview')
     def practice_overview(self, request, *args, **kwargs):
+        # TODO: prefetch all we need and check SQL queries
         student = self.get_object()
-        return Response(
-            'there will be a practice overview for student {s}'.format(s=student))
+        world = get_world(include=('instructions', 'levels', 'tasks'))
+        overview = get_practice_overview(world, student)
+        serializer = PracticeOverviewSerializer(overview)
+        return Response(serializer.data)
 
     def get_queryset(self):
         user = self.request.user
