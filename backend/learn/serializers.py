@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
-from learn.models import Block, Toolbox, Level, Task, Instruction, Student
+from learn.models import Block, Toolbox, Level, Task, Instruction
+from learn.models import Student, TaskSession
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
@@ -52,9 +53,19 @@ class StudentSerializer(serializers.HyperlinkedModelSerializer):
     id = serializers.ReadOnlyField(source='user.id')
     username = serializers.ReadOnlyField(source='user.username')
     user = serializers.HyperlinkedIdentityField(view_name='user-detail')
+    credits = serializers.IntegerField(read_only=True)
     practice_overview = serializers.HyperlinkedIdentityField(
-            view_name='student-practice-overview')
+        view_name='student-practice-overview')
 
     class Meta:
         model = Student
         fields = ('id', 'url', 'username', 'user', 'credits', 'practice_overview')
+
+
+class TaskSessionSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = TaskSession
+        fields = ('url', 'id', 'student', 'task', 'solved', 'start', 'end')
+        read_only_fields = ('student', 'solved', 'start', 'end')
+        # Student field is made read-only as it should be determined by the
+        # current user and passed by TaskSessionsViewSet.perform_create().
