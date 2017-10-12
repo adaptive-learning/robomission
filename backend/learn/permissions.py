@@ -1,8 +1,8 @@
 from rest_framework import permissions
 
 
-class IsOwnerOrStaff(permissions.BasePermission):
-    """Permission for object owners and staff members
+class IsOwnerOrAdmin(permissions.BasePermission):
+    """Permission for object owners and admin
     """
 
     def has_object_permission(self, request, view, obj):
