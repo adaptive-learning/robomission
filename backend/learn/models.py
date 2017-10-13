@@ -1,6 +1,6 @@
 """DB entities definitions.
 """
-from datetime import datetime
+from datetime import datetime, timedelta
 from django.db import models
 from django.contrib.auth.models import User
 from jsonfield import JSONField
@@ -88,6 +88,12 @@ class TaskSession(models.Model):
     solved = models.BooleanField(default=False)
     start = models.DateTimeField(default=datetime.now)
     end = models.DateTimeField(default=datetime.now)
+
+    @property
+    def time_spent(self):
+        delta = max(self.end - self.start, timedelta(seconds=1))
+        seconds = int(delta.total_seconds())
+        return seconds
 
     def __str__(self):
         return '[{pk}] s{student}-{task}'.format(

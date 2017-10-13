@@ -78,8 +78,9 @@ class StudentInstructionSerializer(serializers.Serializer):
 
 class StudentTaskSerializer(serializers.Serializer):
     name = serializers.CharField()
+    attempted = serializers.BooleanField()
     solved = serializers.BooleanField()
-    time = serializers.DurationField()
+    time = serializers.IntegerField()  # number of seconds
 
 
 class RecommendationSerializer(serializers.Serializer):

@@ -67,7 +67,7 @@ class StudentViewSet(viewsets.ModelViewSet):
         student = self.get_object()
         prefetch_related_objects(
             [student],
-            'seen_instructions', 'task_sessions')
+            'seen_instructions', 'task_sessions__task')
         # -> Same as:
         # student = Student.objects.prefetch_related(
         #       'seen_instructions', 'task_sessions').get(pk=pk)
