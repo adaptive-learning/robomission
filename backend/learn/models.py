@@ -72,6 +72,7 @@ class Student(models.Model):
         primary_key=True,
         on_delete=models.CASCADE)
     credits = models.IntegerField(default=0)
+    seen_instructions = models.ManyToManyField(Instruction)
 
     def __str__(self):
         return '[{pk}] {username}'.format(pk=self.pk, username=self.user.username)
