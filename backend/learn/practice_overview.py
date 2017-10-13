@@ -20,13 +20,13 @@ Recommendation = namedtuple('Recommendation', [
 
 
 StudentInstruction = namedtuple('StudentInstruction', [
-    'instruction_id',
+    'name',
     'seen',
 ])
 
 
 StudentTask = namedtuple('StudentTask', [
-    'task_id',
+    'name',
     'solved',
     'time',
 ])
@@ -38,15 +38,16 @@ def get_recommendation(world, student):
 
 
 def get_instructions_overview(world, student):
-    return []
-# TODO: implement, something like:
-    #instructions_overview = [
-    #    StudentInstruction(
-    #        name=instruction.name,
-    #        seen=instruction in student.seen_instructions,
-    #    )
-    #    for instruction in world.instructions]
-    #return instructions_overview
+    instructions_overview = [
+        StudentInstruction(
+            name=instruction.name,
+            seen=instruction in student.seen_instructions.all(),
+            # It's important for the student.seen_instrustions to be
+            # prefetched, otherwise a SQL query will be spawned for each
+            # instruction.
+        )
+        for instruction in world.instructions]
+    return instructions_overview
 
 
 def get_tasks(world, student):
