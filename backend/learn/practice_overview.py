@@ -1,6 +1,6 @@
 from collections import namedtuple
-#from flocs.student import get_active_credits, get_instructions, get_tasks, get_level
-#from flocs.recommendation import random_by_level
+from learn.credits import get_active_credits, get_level_value
+
 
 PracticeOverview = namedtuple('PracticeOverview', [
     'level',
@@ -83,14 +83,9 @@ def get_time(student, task):
     return last_task_session.time_spent
 
 
-def get_active_credits(world, student):
-    # TODO: implement
-    return 0
-
-
 def get_practice_overview(world, student):
     overview = PracticeOverview(
-        level=0,
+        level=get_level_value(world, student),
         credits=student.credits,
         active_credits=get_active_credits(world, student),
         instructions=get_instructions_overview(world, student),

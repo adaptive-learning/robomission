@@ -1,5 +1,5 @@
 from django.contrib.auth.models import User
-from django.db.models import prefetch_related_objects
+from django.db.models import prefetch_related_objects, Prefetch
 from rest_framework import permissions
 from rest_framework import viewsets
 from rest_framework.decorators import detail_route
@@ -67,10 +67,9 @@ class StudentViewSet(viewsets.ModelViewSet):
         student = self.get_object()
         prefetch_related_objects(
             [student],
-            'seen_instructions', 'task_sessions__task')
-        # -> Same as:
-        # student = Student.objects.prefetch_related(
-        #       'seen_instructions', 'task_sessions').get(pk=pk)
+            'seen_instructions',
+            Prefetch('task_sessions', queryset=TaskSession.objects.select_related('task')))
+        # -> Same as student = Student.objects.prefetch_related(...).get(pk=pk)
         world = get_world(include=('instructions', 'levels', 'tasks'))
         overview = get_practice_overview(world, student)
         serializer = PracticeOverviewSerializer(overview)
