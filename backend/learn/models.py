@@ -59,6 +59,7 @@ class Task(models.Model):
     level = models.ForeignKey(Level, null=True, default=None, related_name='tasks')
     setting = JSONField()
     solution = JSONField()
+    # sessions = m:n relation with students through learn.TaskSession
 
     def __str__(self):
         return self.name
@@ -73,6 +74,7 @@ class Student(models.Model):
         on_delete=models.CASCADE)
     credits = models.IntegerField(default=0)
     seen_instructions = models.ManyToManyField(Instruction)
+    # task_sessions = m:n relation with tasks through learn.TaskSession
 
     def __str__(self):
         return '[{pk}] {username}'.format(pk=self.pk, username=self.user.username)
@@ -82,7 +84,7 @@ class TaskSession(models.Model):
     """Continous attempt of a student to solve a task.
     """
     student = models.ForeignKey(Student, related_name='task_sessions')
-    task = models.ForeignKey(Task)
+    task = models.ForeignKey(Task, related_name='sessions')
     solved = models.BooleanField(default=False)
     start = models.DateTimeField(default=datetime.now)
     end = models.DateTimeField(default=datetime.now)
