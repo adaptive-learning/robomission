@@ -131,6 +131,6 @@ class ActionsViewSet(viewsets.ModelViewSet):
     serializer_class = ActionSerializer
 
 
-class ProgramSnapshotViewSet(viewsets.ModelViewSet):
+class ProgramSnapshotsViewSet(viewsets.ModelViewSet):
     queryset = ProgramSnapshot.objects.all()
     serializer_class = ProgramSnapshotSerializer

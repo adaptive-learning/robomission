@@ -29,6 +29,8 @@ mistune==0.7.4
 nbconvert==5.3.1
 nbformat==4.4.0
 notebook==5.1.0
+numpy==1.13.3
+pandas==0.20.3
 pandocfilters==1.4.2
 parso==0.1.0
 pexpect==4.2.1
@@ -43,6 +45,7 @@ python-dateutil==2.6.1
 pytz==2017.2
 pyzmq==16.0.2
 qtconsole==4.3.1
+rest-pandas==1.0.0
 simplegeneric==0.8.1
 six==1.11.0
 terminado==0.6
