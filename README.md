@@ -116,3 +116,4 @@ RoboMission is developed by [Adaptive Learning group][2] at Faculty of informati
 ## Tips
 
 * Use `export SHOW_SQL_QUERIES=True` to log all performed SQL queries.
+  Environment variables can be also passed by `make`, e.g. `make server SHOW_SQL_QUERIES=True`.
