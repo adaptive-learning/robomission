@@ -75,6 +75,30 @@ class StudentViewSet(viewsets.ModelViewSet):
         serializer = PracticeOverviewSerializer(overview)
         return Response(serializer.data)
 
+    @detail_route(methods=['post'])
+    def watch_instruction(self, request, pk=None):
+        # del request, pk  # not needed
+        instruction_name = request.data['instruction']
+        print('watch instruction:', instruction_name)
+        return Response()
+
+    @detail_route(methods=['post'])
+    def edit_program(self, request, pk=None):
+        # del request, pk  # not needed
+        task_session_id = request.data['task-session-id']
+        program = request.data['program']
+        print('edit program:', task_session_id, program)
+        return Response()
+
+    @detail_route(methods=['post'])
+    def run_program(self, request, pk=None):
+        # del request, pk  # not needed
+        task_session_id = request.data['task-session-id']
+        program = request.data['program']
+        correct = request.data['correct']
+        print('run program:', task_session_id, program)
+        return Response()
+
     def get_queryset(self):
         user = self.request.user
         if user and user.is_staff:
