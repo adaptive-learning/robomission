@@ -3,6 +3,7 @@
 from datetime import datetime, timedelta
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils.functional import cached_property
 from jsonfield import JSONField
 
 
@@ -100,3 +101,53 @@ class TaskSession(models.Model):
             pk=self.pk,
             student=self.student.pk,
             task=self.task.name)
+
+
+class ProgramSnapshot(models.Model):
+    """Snapshot of a program at a point of time.
+    """
+    EXECUTION = 'execution'
+    EDIT = 'edit'
+    GRANULARITY_CHOICES = (
+        (EXECUTION, EXECUTION),
+        (EDIT, EDIT))
+
+    task_session = models.ForeignKey(TaskSession, related_name='snapshots')
+    time = models.DateTimeField(auto_now_add=True)
+    program = models.TextField()
+    granularity = models.CharField(
+        help_text='Level of snapshoptting frequency.',
+        max_length=10,
+        choices=GRANULARITY_CHOICES,
+        default=EDIT)
+    correct = models.NullBooleanField(
+        help_text='Whether the snapshot is correct solution. Only applies for executions.',
+        default=None)
+
+    @property
+    def program_shortened(self):
+        if len(self.program) > 60:
+            return self.program[:60] + '...'
+        return self.program
+
+    @cached_property
+    def order(self):
+        """Order of the snapshot for the granularity level and current task session.
+        """
+        previous_snapshots = ProgramSnapshot.objects.filter(
+            task_session=self.task_session,
+            granularity=self.granularity,
+            time__lt=self.time)
+        order = previous_snapshots.count() + 1
+        return order
+
+    @cached_property
+    def time_from_start(self):
+        """Number of seconds from the point when the student started the task session.
+        """
+        delta = self.time - self.task_session.start
+        seconds = max(int(delta.total_seconds()), 1)
+        return seconds
+
+    def __str__(self):
+        return '[{pk}] {program}'.format(pk=self.pk, program=self.program_shortened)
