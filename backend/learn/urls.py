@@ -12,6 +12,8 @@ router.register(r'tasks', views.TaskViewSet)
 router.register(r'users', views.UserViewSet)
 router.register(r'students', views.StudentViewSet, base_name='student')
 router.register(r'task_sessions', views.TaskSessionsViewSet, base_name='tasksession')
+router.register(r'program_snapshots', views.ProgramSnapshotViewSet, base_name='programsnapshot')
+router.register(r'actions', views.ActionsViewSet, base_name='action')
 
 
 urlpatterns = [

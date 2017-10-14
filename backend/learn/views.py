@@ -5,14 +5,16 @@ from rest_framework import viewsets
 from rest_framework.decorators import detail_route
 from rest_framework.response import Response
 from learn.models import Block, Toolbox, Level, Task, Instruction
-from learn.models import Student, TaskSession
+from learn.models import Action, Student, TaskSession, ProgramSnapshot
 from learn.permissions import IsOwnerOrAdmin
 from learn.practice_overview import get_practice_overview
+from learn.serializers import ActionSerializer
 from learn.serializers import BlockSerializer
 from learn.serializers import ToolboxSerializer
 from learn.serializers import LevelSerializer
 from learn.serializers import InstructionSerializer
 from learn.serializers import PracticeOverviewSerializer
+from learn.serializers import ProgramSnapshotSerializer
 from learn.serializers import StudentSerializer
 from learn.serializers import TaskSerializer
 from learn.serializers import TaskSessionSerializer
@@ -122,3 +124,13 @@ class TaskSessionsViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(student=self.request.user.student)
+
+
+class ActionsViewSet(viewsets.ModelViewSet):
+    queryset = Action.objects.all()
+    serializer_class = ActionSerializer
+
+
+class ProgramSnapshotViewSet(viewsets.ModelViewSet):
+    queryset = ProgramSnapshot.objects.all()
+    serializer_class = ProgramSnapshotSerializer
