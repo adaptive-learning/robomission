@@ -2,11 +2,9 @@
 
 Task recommender protocol: world, student -> task (or None)
 """
-from collections import namedtuple, Counter
-import math
 import random
 from learn.credits import get_level_value
-from learn.student import has_solved
+from learn.student_task import has_solved
 
 
 def randomly_by_level(world, student):
@@ -66,6 +64,6 @@ def _roulette_wheel_selection(weighted_tasks, number):
         raise ValueError("Number must be positive.")
     for task, weight in weighted_tasks:
         if number < weight:
-            return task_id
+            return task
         number -= weight
     raise ValueError("Number must be less than the sum of all weights in the list.")
