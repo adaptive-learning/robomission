@@ -1,5 +1,6 @@
 """DB entities definitions.
 """
+from random import randrange
 from datetime import datetime, timedelta
 from django.db import models
 from django.contrib.auth.models import User
@@ -151,3 +152,57 @@ class ProgramSnapshot(models.Model):
 
     def __str__(self):
         return '[{pk}] {program}'.format(pk=self.pk, program=self.program_shortened)
+
+
+def generate_random_integer():
+    return randrange(2**30)
+
+
+class Action(models.Model):
+    """All actions and events in the domain we model.
+    """
+    START_TASK = 'start-task'
+    EDIT_PROGRAM = 'edit-program'
+    RUN_PROGRAM = 'run-program'
+    WATCH_INSTRUCTION = 'watch-instruction'
+    ACTION_CHOICES = (
+        (START_TASK, START_TASK),
+        (EDIT_PROGRAM, EDIT_PROGRAM),
+        (RUN_PROGRAM, RUN_PROGRAM),
+        (WATCH_INSTRUCTION, WATCH_INSTRUCTION))
+
+    name = models.CharField(
+        help_text='One of the predefined types of actions.',
+        max_length=20,
+        choices=ACTION_CHOICES)
+    student = models.ForeignKey(Student, null=True)
+    task = models.ForeignKey(Task, null=True)
+    time = models.DateTimeField(auto_now_add=True)
+    randomness = models.IntegerField(default=generate_random_integer)
+    data = JSONField(
+        help_text='Unstructured part of the data (depends on the action type).')
+
+    @property
+    def instruction(self):
+        return self.data['instruction']
+
+    @property
+    def snapshot(self):
+        return self.data['snapshot']
+
+    @property
+    def correct(self):
+        return self.data['correct']
+
+    def __str__(self):
+        return '[{pk}] {name}:s{student}:{task_or_instruction}'.format(
+            pk=self.pk,
+            name=self.name,
+            student=self.student_id,
+            task_or_instruction=(
+                self.instruction if self.name == self.WATCH_INSTRUCTION
+                else self.task.name))
+
+
+    class Meta:
+        ordering = ('time',)
