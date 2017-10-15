@@ -20,6 +20,7 @@ from learn.serializers import TaskSerializer
 from learn.serializers import TaskSessionSerializer
 from learn.serializers import UserSerializer
 from learn.world import get_world
+from learn import actions
 
 
 class UserViewSet(viewsets.ReadOnlyModelViewSet):
@@ -78,10 +79,21 @@ class StudentViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
     @detail_route(methods=['post'])
+    def start_task(self, request, pk=None):
+        # del request, pk  # not needed
+        student = self.get_object()
+        task_name = request.data['task']
+        world = get_world()
+        actions.start_task(world, student, task_name)
+        return Response()
+
+    @detail_route(methods=['post'])
     def watch_instruction(self, request, pk=None):
         # del request, pk  # not needed
+        student = self.get_object()
         instruction_name = request.data['instruction']
-        print('watch instruction:', instruction_name)
+        world = get_world()
+        actions.watch_instruction(world, student, instruction_name)
         return Response()
 
     @detail_route(methods=['post'])

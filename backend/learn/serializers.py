@@ -56,6 +56,8 @@ class StudentSerializer(serializers.HyperlinkedModelSerializer):
     credits = serializers.IntegerField(read_only=True)
     practice_overview = serializers.HyperlinkedIdentityField(
         view_name='student-practice-overview')
+    start_task = serializers.HyperlinkedIdentityField(
+        view_name='student-start-task')
     watch_instruction = serializers.HyperlinkedIdentityField(
         view_name='student-watch-instruction')
     edit_program = serializers.HyperlinkedIdentityField(
@@ -67,7 +69,8 @@ class StudentSerializer(serializers.HyperlinkedModelSerializer):
         model = Student
         fields = (
             'id', 'url', 'username', 'user', 'credits',
-            'practice_overview', 'watch_instruction', 'edit_program', 'run_program')
+            'practice_overview',
+            'start_task', 'watch_instruction', 'edit_program', 'run_program')
 
 
 class TaskSessionSerializer(serializers.HyperlinkedModelSerializer):

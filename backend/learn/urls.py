@@ -33,4 +33,3 @@ urlpatterns = [
     url(r'^api/', include(apiRouter.urls)),
     url(r'^export/', include(exportRouter.urls, namespace='export')),
 ]
-print(apiRouter.urls)
