@@ -98,10 +98,15 @@ class StudentViewSet(viewsets.ModelViewSet):
 
     @detail_route(methods=['post'])
     def edit_program(self, request, pk=None):
-        # del request, pk  # not needed
         task_session_id = request.data['task-session-id']
         program = request.data['program']
-        print('edit program:', task_session_id, program)
+        task_session = (
+            TaskSession.objects
+            .select_related('task', 'student')
+            .get(pk=task_session_id))
+        assert task_session.student_id == int(pk)
+        world = get_world()
+        actions.edit_program(world, task_session, program)
         return Response()
 
     @detail_route(methods=['post'])
