@@ -194,6 +194,10 @@ class Action(models.Model):
     def correct(self):
         return self.data['correct']
 
+    @property
+    def task_session_id(self):
+        return self.data['task_session_id']
+
     def __str__(self):
         return '[{pk}] {name}:s{student}:{task_or_instruction}'.format(
             pk=self.pk,

@@ -1,7 +1,9 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
+from learn.credits import get_active_credits, get_level_value
 from learn.models import Block, Toolbox, Level, Task, Instruction
 from learn.models import Action, ProgramSnapshot, Student, TaskSession
+from learn.world import get_world
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
@@ -54,6 +56,8 @@ class StudentSerializer(serializers.HyperlinkedModelSerializer):
     username = serializers.ReadOnlyField(source='user.username')
     user = serializers.HyperlinkedIdentityField(view_name='user-detail')
     credits = serializers.IntegerField(read_only=True)
+    level = serializers.SerializerMethodField()
+    active_credits = serializers.SerializerMethodField()
     practice_overview = serializers.HyperlinkedIdentityField(
         view_name='student-practice-overview')
     start_task = serializers.HyperlinkedIdentityField(
@@ -68,9 +72,17 @@ class StudentSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Student
         fields = (
-            'id', 'url', 'username', 'user', 'credits',
+            'id', 'url', 'username', 'user', 'credits', 'level', 'active_credits',
             'practice_overview',
             'start_task', 'watch_instruction', 'edit_program', 'run_program')
+
+    def get_active_credits(self, student):
+        world = get_world()
+        return get_active_credits(world, student)
+
+    def get_level(self, student):
+        world = get_world()
+        return get_level_value(world, student)
 
 
 class TaskSessionSerializer(serializers.HyperlinkedModelSerializer):
@@ -118,3 +130,15 @@ class PracticeOverviewSerializer(serializers.Serializer):
     instructions = StudentInstructionSerializer(many=True)
     tasks = StudentTaskSerializer(many=True)
     recommendation = RecommendationSerializer()
+
+
+class ProgressSerializer(serializers.Serializer):
+    level = serializers.IntegerField()
+    credits = serializers.IntegerField()
+    active_credits = serializers.IntegerField()
+
+
+class RunProgramResponseSerializer(serializers.Serializer):
+    correct = serializers.BooleanField()
+    progress = ProgressSerializer(required=False)
+    recommendation = RecommendationSerializer(required=False)

@@ -4,10 +4,11 @@ from rest_framework import permissions
 from rest_framework import viewsets
 from rest_framework.decorators import detail_route
 from rest_framework.response import Response
+from learn.credits import get_active_credits, get_level_value
 from learn.models import Block, Toolbox, Level, Task, Instruction
 from learn.models import Action, Student, TaskSession, ProgramSnapshot
 from learn.permissions import IsOwnerOrAdmin
-from learn.practice_overview import get_practice_overview
+from learn.practice_overview import get_practice_overview, get_recommendation
 from learn.serializers import ActionSerializer
 from learn.serializers import BlockSerializer
 from learn.serializers import ToolboxSerializer
@@ -19,6 +20,7 @@ from learn.serializers import StudentSerializer
 from learn.serializers import TaskSerializer
 from learn.serializers import TaskSessionSerializer
 from learn.serializers import UserSerializer
+from learn.serializers import RunProgramResponseSerializer
 from learn.world import get_world
 from learn import actions
 
@@ -80,20 +82,22 @@ class StudentViewSet(viewsets.ModelViewSet):
 
     @detail_route(methods=['post'])
     def start_task(self, request, pk=None):
-        # del request, pk  # not needed
         student = self.get_object()
+        assert student.pk == int(pk)
         task_name = request.data['task']
         world = get_world()
-        actions.start_task(world, student, task_name)
-        return Response()
+        action = actions.start_task(world, student, task_name)
+        response_data = {'task_session_id': action.task_session_id}
+        return Response(response_data)
 
     @detail_route(methods=['post'])
     def watch_instruction(self, request, pk=None):
-        # del request, pk  # not needed
         student = self.get_object()
+        assert student.pk == int(pk)
         instruction_name = request.data['instruction']
         world = get_world()
-        actions.watch_instruction(world, student, instruction_name)
+        action = actions.watch_instruction(world, student, instruction_name)
+        #serializer = ActionSerializer(action, context={'request': request})
         return Response()
 
     @detail_route(methods=['post'])
@@ -106,17 +110,32 @@ class StudentViewSet(viewsets.ModelViewSet):
             .get(pk=task_session_id))
         assert task_session.student_id == int(pk)
         world = get_world()
-        actions.edit_program(world, task_session, program)
+        action = actions.edit_program(world, task_session, program)
+        #serializer = ActionSerializer(action, context={'request': request})
         return Response()
 
     @detail_route(methods=['post'])
     def run_program(self, request, pk=None):
-        # del request, pk  # not needed
         task_session_id = request.data['task-session-id']
         program = request.data['program']
         correct = request.data['correct']
-        print('run program:', task_session_id, program)
-        return Response()
+        task_session = (
+            TaskSession.objects
+            .select_related('task', 'student')
+            .get(pk=task_session_id))
+        student = task_session.student
+        assert student.pk == int(pk)
+        world = get_world()
+        action = actions.run_program(world, task_session, program, correct)
+        response = {'correct': correct}
+        if correct:
+            response['recommendation'] = get_recommendation(world, student)
+            response['progress'] = {
+                'level': get_level_value(world, student),
+                'credits': student.credits,
+                'active_credits': get_active_credits(world, student)}
+        serializer = RunProgramResponseSerializer(response)
+        return Response(serializer.data)
 
     def get_queryset(self):
         user = self.request.user

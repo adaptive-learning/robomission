@@ -9,16 +9,17 @@ def total_credits_for_levels(levels):
     return zip(levels, needed_credits)
 
 
-def get_needed_credits(world, which_level):
-    for level, credits in total_credits_for_levels(world.levels):
+def get_needed_credits(levels, which_level):
+    for level, credits in total_credits_for_levels(levels):
         if level == which_level:
             return credits
     raise ValueError('Unknown level: {level}'.format(level=which_level))
 
 
 def get_level(world, student):
-    level = world.levels[0]
-    for next_level, needed_credits in total_credits_for_levels(world.levels):
+    levels = list(world.levels.all())
+    level = levels[0]
+    for next_level, needed_credits in total_credits_for_levels(levels):
         if student.credits >= needed_credits:
             level = next_level
         else:
@@ -32,6 +33,6 @@ def get_level_value(world, student):
 
 def get_active_credits(world, student):
     level = get_level(world, student)
-    passive_credits = get_needed_credits(world, level)
+    passive_credits = get_needed_credits(world.levels, level)
     active_credits = student.credits - passive_credits
     return active_credits
