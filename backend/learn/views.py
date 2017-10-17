@@ -1,9 +1,14 @@
 from django.contrib.auth.models import User
 from django.db.models import prefetch_related_objects, Prefetch
+from django.shortcuts import redirect
+from lazysignup.decorators import allow_lazy_user
 from rest_framework import permissions
 from rest_framework import viewsets
 from rest_framework.decorators import detail_route
 from rest_framework.response import Response
+from rest_framework.decorators import list_route
+from rest_framework.reverse import reverse
+from rest_framework.exceptions import NotFound
 from learn.credits import get_active_credits, get_level_value
 from learn.models import Block, Toolbox, Level, Task, Instruction
 from learn.models import Action, Student, TaskSession, ProgramSnapshot
@@ -25,15 +30,32 @@ from learn.world import get_world
 from learn import actions
 
 
+@allow_lazy_user
+def get_or_create_user(request):
+    """Return a current user and create one if it doesn't exist
+    """
+    return request.user
+
+
 class UserViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
     def get_queryset(self):
-        user = self.request.user
+        user = get_or_create_user(self.request)
         if user and user.is_staff:
             return User.objects.all()
         return User.objects.filter(pk=user.pk)
+
+    @list_route(url_path='current')
+    def current_user(self, request):
+        """Issue redirect to details of currently logged in user.
+        """
+        #pk = get_or_create_user(request).pk
+        #return redirect(reverse('user-detail', args=[pk], request=request))
+        user = get_or_create_user(request)
+        serializer = UserSerializer(user, context={'request': request})
+        return Response(serializer.data)
 
 
 class BlockViewSet(viewsets.ReadOnlyModelViewSet):
