@@ -1,14 +1,15 @@
+from django.conf import global_settings, settings
 from django.contrib.auth.models import User
 from django.db.models import prefetch_related_objects, Prefetch
-from django.shortcuts import redirect
+from django.contrib.sessions.models import Session
+from django.shortcuts import render
+from django.views.decorators.csrf import ensure_csrf_cookie
 from lazysignup.decorators import allow_lazy_user
 from rest_framework import permissions
 from rest_framework import viewsets
 from rest_framework.decorators import detail_route
 from rest_framework.response import Response
 from rest_framework.decorators import list_route
-from rest_framework.reverse import reverse
-from rest_framework.exceptions import NotFound
 from learn.credits import get_active_credits, get_level_value
 from learn.models import Block, Toolbox, Level, Task, Instruction
 from learn.models import Action, Student, TaskSession, ProgramSnapshot
@@ -30,6 +31,29 @@ from learn.world import get_world
 from learn import actions
 
 
+@ensure_csrf_cookie
+def frontend_app(request, *_):
+    response = render(request, 'index.html')
+    delete_invalid_session_cookie_from_response(request, response)
+    return response
+
+
+def delete_invalid_session_cookie_from_response(request, response):
+    # In case there is an invalid or otherwise corrupted session id cookie sent
+    # from the user, delete the cookie right away. If we ignore invalid
+    # session ids, it causes unpredictable problems when running parallel
+    # requests from the frontend app as each response will instruct the browser
+    # to set a new session id resulting in a race condition.
+    if not request.session.session_key:
+        return
+    if Session.objects.filter(pk=request.session.session_key).exists():
+        return
+    cookie_name = (
+        settings.SESSION_COOKIE_NAME if hasattr(settings, 'SESSION_COOKIE_NAME')
+        else global_settings.SESSION_COOKIE_NAME)
+    response.delete_cookie(cookie_name)
+
+
 @allow_lazy_user
 def get_or_create_user(request):
     """Return a current user and create one if it doesn't exist
@@ -49,10 +73,6 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
 
     @list_route(url_path='current')
     def current_user(self, request):
-        """Issue redirect to details of currently logged in user.
-        """
-        #pk = get_or_create_user(request).pk
-        #return redirect(reverse('user-detail', args=[pk], request=request))
         user = get_or_create_user(request)
         serializer = UserSerializer(user, context={'request': request})
         return Response(serializer.data)

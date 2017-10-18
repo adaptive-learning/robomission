@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'django_extensions',
     'rest_framework',
     'lazysignup',
+    'webpack_loader',
 ]
 
 MIDDLEWARE = [
@@ -124,9 +125,12 @@ USE_TZ = True
 
 
 # Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/1.11/howto/static-files/
-
 STATIC_URL = '/static/'
+STATICFILES_DIRS = (os.path.join(FRONTEND_DIR, 'static'),)
+STATIC_ROOT = os.path.join(REPO_DIR, '..', 'static')
+WEBPACK_LOADER = {
+    'DEFAULT': {
+        'STATS_FILE': os.path.join(FRONTEND_DIR, 'webpack-stats.json')}}
 
 
 LOGGING = {

@@ -25,8 +25,8 @@ frontend-dependencies:
 
 .PHONY: server
 server:
-	#python manage.py run_liveserver
-	python backend/manage.py runserver
+	#python backend/manage.py runserver
+	python backend/manage.py run_liveserver
 
 
 .PHONY: shell
