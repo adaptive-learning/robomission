@@ -104,13 +104,12 @@ CategoryTasks.propTypes = {
 
 
 function formatSolvingTime(time) {
+  // assumes time as a number of seconds
   if (time == null) {
     return translate('not tackled');
   }
-  // remove hours part if 0
-  const parts = time.split(':');
-  if (parts[0] === '00') {
-    return parts.slice(1).join(':');
-  }
-  return time;
+  const minutes = Math.floor(time / 60);
+  const seconds = time % 60;
+  const paddedSeconds = ('0' + seconds).slice(-2);
+  return `${minutes}:${paddedSeconds}`;
 }
