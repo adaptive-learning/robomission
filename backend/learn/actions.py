@@ -1,6 +1,7 @@
 """ Actions represent events and interactions in the world we want to model.
 """
 from django.utils import timezone
+from learn.credits import get_earned_credits
 from learn.models import Action, TaskSession, ProgramSnapshot
 
 
@@ -68,6 +69,7 @@ def run_program(world, task_session, program, correct):
     task_session.end = timezone.now()
     if correct:
         task_session.solved = True
+        student.credits += get_earned_credits(student, task)
     snapshot = ProgramSnapshot(
         task_session_id=task_session.pk,
         granularity=ProgramSnapshot.EXECUTION,
@@ -83,6 +85,7 @@ def run_program(world, task_session, program, correct):
             'correct': correct})
 
     # TODO: factor db updates out
+    student.save()
     task_session.save()
     snapshot.save()
     action.save()

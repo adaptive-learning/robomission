@@ -36,3 +36,22 @@ def get_active_credits(world, student):
     passive_credits = get_needed_credits(world.levels, level)
     active_credits = student.credits - passive_credits
     return active_credits
+
+
+def get_credits(task):
+    """Number of credits for solving given task.
+    """
+    level = task.level.level
+    credits = (level + 1) ** 2
+    return credits
+
+
+def get_earned_credits(student, task):
+    """Number of credits earned for solving given task by given student.
+
+    It is 0 if the student has already solved this task before.
+    """
+    solved_before = student.task_sessions.filter(task=task, solved=True).exists()
+    if solved_before:
+        return 0
+    return get_credits(task)
