@@ -140,16 +140,6 @@ export function seeInstruction(instructionId) {
 }
 
 
-function postAction(type, data = {}) {
-  throw new Error("Posting actions directly is not supported anymore.");
-  //const requestData = {
-  //  type,
-  //  data: JSON.stringify(data),
-  //};
-  //return axios.post('/api/actions/', requestData);
-}
-
-
 function parseStartTaskResponse(response) {
   const { data } = response;
   return {
