@@ -3,10 +3,23 @@
 from django.utils import timezone
 from learn.credits import get_earned_credits
 from learn.models import Action, TaskSession, ProgramSnapshot
+from learn.student_task import get_current_task_session
 
 
 def start_task(world, student, task_name):
     task = world.tasks.get(name=task_name)
+    task_session = get_current_task_session(student, task)
+
+    if task_session is not None:
+        # task has been already started, so this is a duplicate actions and
+        # we don't wan't to save it again
+        duplicate_action = Action(
+            name=Action.START_TASK,
+            student=student,
+            task=task,
+            data={'task_session_id': task_session.pk})
+        return duplicate_action
+
     task_session = TaskSession(
         student=student,
         task=task)
