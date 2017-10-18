@@ -28,10 +28,18 @@ class ToolboxSerializer(serializers.ModelSerializer):
 
 
 class LevelSerializer(serializers.ModelSerializer):
-    tasks = serializers.SlugRelatedField(slug_field='name', many=True, read_only=True)
+    tasks = serializers.SlugRelatedField(
+        slug_field='name',
+        many=True,
+        read_only=True)
+    toolbox = serializers.SlugRelatedField(
+        slug_field='name',
+        many=False,
+        queryset=Toolbox.objects.all())
+
     class Meta:
         model = Level
-        fields = ('url', 'id', 'name', 'credits', 'toolbox', 'tasks')
+        fields = ('url', 'id', 'level', 'name', 'credits', 'toolbox', 'tasks')
 
 
 class InstructionSerializer(serializers.ModelSerializer):
@@ -57,6 +65,10 @@ class StudentSerializer(serializers.HyperlinkedModelSerializer):
     user = serializers.HyperlinkedIdentityField(view_name='user-detail')
     credits = serializers.IntegerField(read_only=True)
     level = serializers.SerializerMethodField()
+    seen_instructions = serializers.SlugRelatedField(
+        slug_field='name',
+        many=True,
+        queryset=Instruction.objects.all())
     active_credits = serializers.SerializerMethodField()
     practice_overview = serializers.HyperlinkedIdentityField(
         view_name='student-practice-overview')
@@ -73,7 +85,7 @@ class StudentSerializer(serializers.HyperlinkedModelSerializer):
         model = Student
         fields = (
             'id', 'url', 'username', 'user', 'credits', 'level', 'active_credits',
-            'practice_overview',
+            'seen_instructions', 'practice_overview',
             'start_task', 'watch_instruction', 'edit_program', 'run_program')
 
     def get_active_credits(self, student):
