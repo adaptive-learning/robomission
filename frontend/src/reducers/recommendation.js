@@ -20,6 +20,6 @@ export default function reduceRecommendation(state = initial, action) {
 function parseRecommendation(data) {
   return {
     available: data['available'],
-    task: data['task_id'],
+    task: data['task'],
   };
 }

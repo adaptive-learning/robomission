@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const tasksApiUrl = '/api/tasks/';
+const tasksApiUrl = '/learn/api/tasks/';
 
 export function fetchTasks() {
   return {

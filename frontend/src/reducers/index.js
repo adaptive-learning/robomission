@@ -8,6 +8,7 @@ import reduceInstructions from './instructions';
 import reduceLevels from './levels';
 import reduceTasks from './tasks';
 import reduceToolboxes from './toolboxes';
+import reduceUser from './user';
 import reduceStudent from './student';
 import reduceRecommendation from './recommendation';
 import reduceMenu from './menu';
@@ -24,6 +25,7 @@ export const reducers = combineReducers({
   levels: reduceLevels,
   tasks: reduceTasks,
   toolboxes: reduceToolboxes,
+  user: reduceUser,
   student: reduceStudent,
   recommendation: reduceRecommendation,
   menu: reduceMenu,

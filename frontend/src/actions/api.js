@@ -13,8 +13,8 @@ import { generateMiniRoboCode } from '../core/miniRoboCodeGenerator';
 
 
 export function fetchStaticData() {
-  const entityNames = ['blocks', 'toolboxes', 'categories', 'tasks', 'levels', 'instructions'];
-  const urls = entityNames.map(name => `/api/${name}`);
+  const entityNames = ['blocks', 'toolboxes', 'tasks', 'levels', 'instructions'];
+  const urls = entityNames.map(name => `/learn/api/${name}`);
   const requests = urls.map(url => axios.get(url));
   return {
     type: FETCH_STATIC_DATA,
@@ -33,7 +33,7 @@ export function startSession() {
   return dispatch => {
     const action = {
       type: START_SESSION,
-      payload: postAction('start-session').then(parseStartSessionResponse),
+      payload: getOrCreateUser().then(parseUserResponse),
     };
     return dispatch(action)
       .then(() => dispatch(updateStudent()))
@@ -42,13 +42,29 @@ export function startSession() {
 }
 
 
+function getOrCreateUser() {
+  // TODO: should be post (but it requires BE change)
+  return axios.get('/learn/api/users/current');
+}
+
+
+function parseUserResponse(response) {
+  const data = response.data;
+  return {
+    student_url: data['student'],
+  };
+}
+
+
 // TODO: factor out non-api (taskEnvironment) part
 export function startTask(taskId, taskEnvironmentId) {
-  return dispatch => {
-    const data = { 'task-id': taskId };
+  return (dispatch, getState) => {
+    const state = getState();
+    const { startTaskUrl } = state.student;
+    const data = { 'task': taskId };
     const action = {
       type: START_TASK,
-      payload: postAction('start-task', data)
+      payload: axios.post(startTaskUrl, data)
         .then(parseStartTaskResponse)
         .then(payload => ({ ...payload, taskEnvironmentId })),
     };
@@ -108,12 +124,14 @@ export function reportProgramExecution(taskSessionId, program, solved, taskEnvir
 
 
 export function seeInstruction(instructionId) {
-  return dispatch => {
-    const data = { 'instruction-id': instructionId };
+  return (dispatch, getState) => {
+    const state = getState();
+    const { watchInstructionUrl } = state.student;
+    const data = { 'instruction': instructionId };
     const action = {
       type: SEE_INSTRUCTION,
       payload: {
-        promise: postAction('see-instruction', data),
+        promise: axios.post(watchInstructionUrl, data),
         data: { instructionId },
       },
     };
@@ -123,25 +141,17 @@ export function seeInstruction(instructionId) {
 
 
 function postAction(type, data = {}) {
-  const requestData = {
-    type,
-    data: JSON.stringify(data),
-  };
-  return axios.post('/api/actions/', requestData);
-}
-
-
-function parseStartSessionResponse(response) {
-  const data = response.data.data;  // response data -> action data
-  return {
-    studentId: data['student_id'],
-    sessionId: data['session_id'],
-  };
+  throw new Error("Posting actions directly is not supported anymore.");
+  //const requestData = {
+  //  type,
+  //  data: JSON.stringify(data),
+  //};
+  //return axios.post('/api/actions/', requestData);
 }
 
 
 function parseStartTaskResponse(response) {
-  const data = response.data.data;  // response data -> action data
+  const { data } = response;
   return {
     taskSessionId: data['task_session_id'],
   };
@@ -184,8 +194,7 @@ export function fetchPraticeOverview() {
 
 // TODO: move to selectors
 function getStudentUrl(state) {
-  const { id } = state.student;
-  return `/api/students/${id}/`;
+  return state.user.student_url;
 }
 
 function getPracticeOverviewUrl(state) {
@@ -212,6 +221,8 @@ function parseStudentResponse(response) {
     level: data['level'],
     seenInstructions: data['seen_instructions'],
     practiceOverviewUrl: data['practice_overview'],
+    watchInstructionUrl: data['watch_instruction'],
+    startTaskUrl: data['start_task'],
     reportProgramEditUrl: data['edit_program'],
     reportProgramExecutionUrl: data['run_program'],
   };

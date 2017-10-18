@@ -16,7 +16,7 @@ export default function reduceToolboxes(state = {}, action) {
 
 function parseToolbox(data) {
   const toolbox = {
-    id: data['toolbox_id'],
+    id: data['name'],
     blocks: data['blocks'],
   };
   return toolbox;

@@ -30,8 +30,8 @@ export default function reduceTasks(state = {}, action) {
 
 function parseTask(data) {
   const task = {
-    id: data['task_id'],
-    category: data['category'],
+    id: data['name'],
+    category: data['level'],  // TODO: rename category to level
     setting: jsonToObject(data.setting),
     // solution: jsonToObject(data.solution), // TODO: requires to fix json fields first
   };
@@ -45,7 +45,7 @@ function jsonToObject(jsonStr) {
 
 function parseStudentTask(data) {
   const task = {
-    id: data['task_id'],
+    id: data['name'],
     solved: data['solved'],
     time: data['time'],
   };

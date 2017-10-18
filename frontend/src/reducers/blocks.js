@@ -16,7 +16,7 @@ export default function reduceBlocks(state = {}, action) {
 
 function parseBlock(data) {
   const block = {
-    id: data['block_id'],
+    id: data['name'],
   };
   return block;
 }

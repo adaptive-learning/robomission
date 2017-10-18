@@ -16,7 +16,7 @@ export default function reduceLevels(state = {}, action) {
 
 function parseLevel(data) {
   const level = {
-    id: data['level_id'],
+    id: data['level'],
     credits: data['credits'],
   };
   return level;

@@ -172,7 +172,7 @@ const viewData = {
 
 
 function parseInstruction(data) {
-  const instructionId = data['instruction_id'];
+  const instructionId = data['name'];
   if (viewData[instructionId] === undefined) {
     console.warn(`Missing view data for instruction '${instructionId}'`);
   }
