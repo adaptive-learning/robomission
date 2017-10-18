@@ -4,6 +4,8 @@ from random import randrange
 from datetime import datetime, timedelta
 from django.db import models
 from django.contrib.auth.models import User
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from django.utils.functional import cached_property
 from jsonfield import JSONField
 
@@ -80,6 +82,14 @@ class Student(models.Model):
 
     def __str__(self):
         return '[{pk}] {username}'.format(pk=self.pk, username=self.user.username)
+
+
+@receiver(post_save, sender=User)
+def create_student(sender, instance, created, **kwargs):
+    """Student is automatically created for a new user.
+    """
+    if created:
+        Student.objects.create(user=instance)
 
 
 class TaskSession(models.Model):
