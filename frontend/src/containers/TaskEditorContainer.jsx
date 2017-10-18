@@ -27,7 +27,7 @@ TaskEditorWrapper.propTypes = {
 
 const defaultInitialTask = {
   id: 'nameless-task',
-  category: 'uncategorized',
+  category: 'final-challenge',
   setting: {
     fields: parseSpaceWorld(`\
       |b |b |b |b |b |

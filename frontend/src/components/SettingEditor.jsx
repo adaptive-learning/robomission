@@ -62,7 +62,6 @@ function SettingEditor({
             value={category}
             onChange={onCategoryChange}
           >
-            <MenuItem value={'uncategorized'} primaryText="uncategorized" />
             <MenuItem value={'moves'} primaryText="L1 Moves" />
             <MenuItem value={'world'} primaryText="L2 World" />
             <MenuItem value={'repeat'} primaryText="L3 Repeat" />

@@ -99,7 +99,6 @@ export default {
   'category.comparing': 'Porovnávání',
   'category.if-else': 'Pokud-jinak',
   'category.final-challenge': 'Závěrečná výzva',
-  'category.uncategorized': 'Nezařazené úlohy',
 
   'fail-reason.crashed-last-row': 'Raketka musí v cílové rovince zastavit',
   'fail-reason.crashed-edge': 'Raketka vyletěla z vesmírné dráhy a rozbila se',
