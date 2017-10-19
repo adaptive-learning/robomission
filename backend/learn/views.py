@@ -90,7 +90,7 @@ class ToolboxViewSet(viewsets.ReadOnlyModelViewSet):
 
 class LevelViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = LevelSerializer
-    queryset = Level.objects.all().prefetch_related('tasks')
+    queryset = Level.objects.select_related('toolbox').prefetch_related('tasks').all()
 
 
 class InstructionViewSet(viewsets.ReadOnlyModelViewSet):
@@ -151,8 +151,7 @@ class StudentViewSet(viewsets.ModelViewSet):
             .select_related('task', 'student')
             .get(pk=task_session_id))
         assert task_session.student_id == int(pk)
-        world = get_world()
-        action = actions.edit_program(world, task_session, program)
+        action = actions.edit_program(task_session, program)
         #serializer = ActionSerializer(action, context={'request': request})
         return Response()
 
@@ -167,10 +166,15 @@ class StudentViewSet(viewsets.ModelViewSet):
             .get(pk=task_session_id))
         student = task_session.student
         assert student.pk == int(pk)
+        action = actions.run_program(task_session, program, correct)
         world = get_world()
-        action = actions.run_program(world, task_session, program, correct)
         response = {'correct': correct}
         if correct:
+            prefetch_related_objects(
+                [student],
+                Prefetch(
+                    'task_sessions',
+                    queryset=TaskSession.objects.select_related('task')))
             response['recommendation'] = get_recommendation(world, student)
             response['progress'] = {
                 'level': get_level_value(world, student),

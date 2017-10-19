@@ -44,12 +44,12 @@ def watch_instruction(world, student, instruction_name):
     return action
 
 
-def edit_program(world, task_session, program):
+def edit_program(task_session, program):
     if task_session.solved:
         return
 
     student = task_session.student
-    task = world.tasks.get(name=task_session.task.name)
+    task = task_session.task
 
     task_session.end = timezone.now()
     snapshot = ProgramSnapshot(
@@ -72,17 +72,18 @@ def edit_program(world, task_session, program):
     return action
 
 
-def run_program(world, task_session, program, correct):
+def run_program(task_session, program, correct):
     if task_session.solved:
         return
 
     student = task_session.student
-    task = world.tasks.get(name=task_session.task.name)
+    task = task_session.task
 
     task_session.end = timezone.now()
     if correct:
         task_session.solved = True
         student.credits += get_earned_credits(student, task)
+
     snapshot = ProgramSnapshot(
         task_session_id=task_session.pk,
         granularity=ProgramSnapshot.EXECUTION,
@@ -98,7 +99,8 @@ def run_program(world, task_session, program, correct):
             'correct': correct})
 
     # TODO: factor db updates out
-    student.save()
+    if correct:
+        student.save()
     task_session.save()
     snapshot.save()
     action.save()
