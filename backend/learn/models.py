@@ -72,16 +72,13 @@ class Task(models.Model):
 class Student(models.Model):
     """Entity for a learner.
     """
-    user = models.OneToOneField(
-        User,
-        primary_key=True,
-        on_delete=models.CASCADE)
+    user = models.OneToOneField(User, null=True, on_delete=models.CASCADE)
     credits = models.IntegerField(default=0)
     seen_instructions = models.ManyToManyField(Instruction)
     # task_sessions = m:n relation with tasks through learn.TaskSession
 
     def __str__(self):
-        return '[{pk}] {username}'.format(pk=self.pk, username=self.user.username)
+        return 's{pk}'.format(pk=self.pk)
 
 
 @receiver(post_save, sender=User)
