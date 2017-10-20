@@ -39,10 +39,13 @@ pexpect==4.2.1
 pickleshare==0.7.4
 prompt-toolkit==1.0.15
 ptyprocess==0.5.2
+py==1.4.34
 Pygments==2.2.0
 pylint==1.7.4
 pylint-django==0.7.2
 pylint-plugin-utils==0.2.6
+pytest==3.2.3
+pytest-django==3.1.2
 python-dateutil==2.6.1
 pytz==2017.2
 pyzmq==16.0.2

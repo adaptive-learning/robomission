@@ -45,8 +45,7 @@ test: test-backend test-frontend
 
 .PHONY: test-backend
 test-backend:
-	@echo "===== Backend tests ====="
-	pytest
+	cd backend; pytest
 
 
 .PHONY: test-frontend
