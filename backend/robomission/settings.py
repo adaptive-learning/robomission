@@ -16,7 +16,7 @@ SHOW_SQL_QUERIES = os.getenv('SHOW_SQL_QUERIES', 'False') == 'True'
 
 SECRET_KEY = 'q6!cfknp62=d71he3@&kv1)8b@lkfh0#6wo^gt18i5twx01r2%'
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTOCOL', 'https')
-ALLOWED_HOSTS = ['.robomise.cz', '.localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['.robomise.cz', '.localhost', '127.0.0.1', 'testserver']
 
 
 ON_STAGING = os.getenv('ON_STAGING', "False") == "True"
