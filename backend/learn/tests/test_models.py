@@ -15,5 +15,5 @@ class BlockTestCase(TestCase):
         assert first_retrieved_blocks == first_expected_blocks
 
     def test_str_returns_name(self):
-        fly_block = Block.objects.get(name='fly')
-        assert str(fly_block) == 'fly'
+        carrot_block = Block(name='carrot', order=4)
+        assert str(carrot_block) == 'carrot'
