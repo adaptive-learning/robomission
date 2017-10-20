@@ -7,7 +7,10 @@ from learn.world import get_world
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
-    student = serializers.HyperlinkedIdentityField(view_name='student-detail')
+    student = serializers.HyperlinkedRelatedField(
+        view_name='student-detail',
+        read_only=True)
+
     class Meta:
         model = User
         fields = ('id', 'url', 'username', 'email', 'is_staff', 'student')
