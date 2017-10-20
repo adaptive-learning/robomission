@@ -1,5 +1,8 @@
 astroid==1.5.3
 bleach==2.1.1
+certifi==2017.7.27.1
+chardet==3.0.4
+click==6.7
 decorator==4.1.2
 dj-database-url==0.4.2
 Django==1.11.5
@@ -9,12 +12,17 @@ django-lazysignup==1.1.2
 django-webpack-loader==0.5.0
 djangorestframework==3.6.4
 entrypoints==0.2.3
+Flask==0.12.2
+gevent==1.2.2
+greenlet==0.4.12
 html5lib==1.0b10
+idna==2.6
 ipykernel==4.6.1
 ipython==6.2.1
 ipython-genutils==0.2.0
 ipywidgets==7.0.1
 isort==4.2.15
+itsdangerous==0.24
 jedi==0.11.0
 Jinja2==2.9.6
 jsonfield==2.0.2
@@ -24,10 +32,12 @@ jupyter-client==5.1.0
 jupyter-console==5.2.0
 jupyter-core==4.3.0
 lazy-object-proxy==1.3.1
+locustio==0.8.1
 Markdown==2.6.9
 MarkupSafe==1.0
 mccabe==0.6.1
 mistune==0.7.4
+msgpack-python==0.4.8
 nbconvert==5.3.1
 nbformat==4.4.0
 notebook==5.1.0
@@ -50,6 +60,7 @@ python-dateutil==2.6.1
 pytz==2017.2
 pyzmq==16.0.2
 qtconsole==4.3.1
+requests==2.18.4
 rest-pandas==1.0.0
 simplegeneric==0.8.1
 six==1.11.0
@@ -57,7 +68,9 @@ terminado==0.6
 testpath==0.3.1
 tornado==4.5.2
 traitlets==4.3.2
+urllib3==1.22
 wcwidth==0.1.7
 webencodings==0.5.1
+Werkzeug==0.12.2
 widgetsnbextension==3.0.3
 wrapt==1.10.11

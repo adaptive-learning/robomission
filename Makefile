@@ -54,6 +54,13 @@ test-frontend:
 	@echo "TBA"
 
 
+.PHONY: test-load
+test-load:
+	# assumes that server is already running at http://127.0.0.1:8000
+	locust -f backend/learn/tests/locustfile.py --host=http://127.0.0.1:8000
+	# test setting at: http://127.0.0.1:8089/
+
+
 .PHONY: lint
 lint: lint-backend lint-frontend
 
