@@ -25,7 +25,12 @@ frontend-dependencies:
 
 .PHONY: server
 server:
-	#python backend/manage.py runserver
+	python backend/manage.py runserver
+
+
+.PHONY: liveserver
+liveserver:
+	# Run both Django and Webpack servers simultaneously:
 	python backend/manage.py run_liveserver
 
 
@@ -75,6 +80,11 @@ lint-backend:
 lint-frontend:
 	@echo "===== Frontend linting ====="
 	@echo "TBA"
+
+
+.PHONY: storybook
+storybook:
+	cd frontend; npm run storybook
 
 
 .PHONY: db
