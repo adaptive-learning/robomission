@@ -1,18 +1,40 @@
 import { combineReducers } from 'redux';
-import * as actionType from '../actions/types';
+import { intlReducer } from 'react-intl-redux';
+import { routerReducer } from 'react-router-redux';
+import reduceApp from './app';
+import reduceBlocks from './blocks';
+import reduceCategories from './categories';
+import reduceInstructions from './instructions';
+import reduceLevels from './levels';
+import reduceTasks from './tasks';
+import reduceToolboxes from './toolboxes';
+import reduceUser from './user';
+import reduceStudent from './student';
+import reduceRecommendation from './recommendation';
+import reduceMenu from './menu';
+import reduceTaskEnvironments from './taskEnvironments';
+import reduceTaskEditor from './taskEditor';
+import reducePractice from './practice';
 
-const worldInitialState = null;
-const reduceWorld = (state = worldInitialState, action) => {
-  switch(action.type) {
-    case actionType.FETCH_WORLD_FULFILLED:
-      return action.data;
-    default:
-      return state;
-  }
-}
 
-const rootReducer = combineReducers({
-  world: reduceWorld,
+export const reducers = combineReducers({
+  app: reduceApp,
+  blocks: reduceBlocks,
+  categories: reduceCategories,
+  instructions: reduceInstructions,
+  levels: reduceLevels,
+  tasks: reduceTasks,
+  toolboxes: reduceToolboxes,
+  user: reduceUser,
+  student: reduceStudent,
+  recommendation: reduceRecommendation,
+  menu: reduceMenu,
+  taskEnvironments: reduceTaskEnvironments,
+  taskEditor: reduceTaskEditor,
+  practice: reducePractice,
+  intl: intlReducer,
+  routing: routerReducer,
 });
 
-export default rootReducer;
+
+export default reducers;
