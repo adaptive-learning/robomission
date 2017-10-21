@@ -5,11 +5,24 @@
   "proxy": "http://localhost:8000",
   "dependencies": {
     "axios": "^0.16.2",
+    "js-interpreter": "github:effa/JS-Interpreter#f7afaf9d4862f85394bf4860f8ba8e57f67fbdf2",
+    "material-ui": "^0.19.4",
+    "node-blockly": "^1.0.29",
+    "normalize.css": "^7.0.0",
+    "rc-progress": "^2.2.2",
     "react": "^16.0.0",
+    "react-ace": "^5.4.0",
+    "react-blockly-component": "^2.0.1",
     "react-dom": "^16.0.0",
+    "react-ga": "^2.3.5",
+    "react-intl": "^2.4.0",
+    "react-intl-redux": "^0.6.0",
+    "react-joyride": "^1.10.1",
     "react-redux": "^5.0.6",
     "react-router-dom": "^4.2.2",
+    "react-router-redux": "^4.0.8",
     "react-scripts": "1.0.14",
+    "react-split-pane": "^0.1.66",
     "redux": "^3.7.2",
     "redux-logger": "^3.0.6",
     "redux-saga": "^0.16.0"
@@ -18,6 +31,13 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "storybook": "start-storybook -p 9009 -s public",
+    "build-storybook": "build-storybook -s public"
+  },
+  "devDependencies": {
+    "@storybook/react": "^3.2.13",
+    "@storybook/addon-actions": "^3.2.13",
+    "@storybook/addon-links": "^3.2.13"
   }
 }
