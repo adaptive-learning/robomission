@@ -13,8 +13,8 @@ import neuronsBackgroundPath from 'images/neurons-tile.png';
 import fiBackgroundPath from 'images/fi-slide.jpg';
 
 
-@muiThemeable()
-export default class Home extends React.Component {
+
+class Home extends React.Component {
   renderSlide({ style, content, footer }, index) {
     return (
       <Scroll.Element key={index} name={`intro-slide-${index}`}>
@@ -251,3 +251,7 @@ const slideFooterStyle = {
   height: 90,
   textAlign: 'center',
 };
+
+Home = muiThemeable()(Home);
+
+export default Home;

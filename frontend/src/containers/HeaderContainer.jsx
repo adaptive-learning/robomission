@@ -5,11 +5,14 @@ import { getLevelStatus } from '../selectors/student';
 import Header from '../components/Header';
 
 
-@connect(state => ({
+const getProps = state => ({
   levelStatus: getLevelStatus(state),
-}), {
+});
+
+const actionCreators = {
   setOpenMenu
-})
+};
+
 class HeaderContainer extends React.Component {
   constructor(props) {
     super(props);
@@ -24,5 +27,7 @@ class HeaderContainer extends React.Component {
       />
   )}
 }
+
+HeaderContainer = connect(getProps, actionCreators)(HeaderContainer);
 
 export default HeaderContainer;

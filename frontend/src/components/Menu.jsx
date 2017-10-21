@@ -9,8 +9,8 @@ import { Link } from 'react-router';
 import Text from '../localization/Text';
 
 
-@muiThemeable()
-export default class Menu extends React.Component {
+
+class Menu extends React.Component {
   constructor(props) {
     super(props);
     this.setOpen = this.props.setOpen.bind(this);
@@ -72,3 +72,7 @@ export default class Menu extends React.Component {
     );
   }
 }
+
+Menu = muiThemeable()(Menu);
+
+export default Menu;

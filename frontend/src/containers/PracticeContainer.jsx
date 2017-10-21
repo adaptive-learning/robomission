@@ -29,8 +29,7 @@ const actionCreators = {
   resetGame,
 };
 
-@connect(getProps, actionCreators)
-export default class PracticeContainer extends React.Component {
+class PracticeContainer extends React.Component {
   constructor(props) {
     super(props);
     this.closeTaskCompletionDialog = this.props.closeTaskCompletionDialog.bind(this, this.props.taskEnvironmentId);
@@ -94,3 +93,5 @@ PracticeContainer.defaultProps = {
   containerStyle: {},
 };
 
+PracticeContainer = connect(getProps, actionCreators)(PracticeContainer)
+export default PracticeContainer;

@@ -15,8 +15,7 @@ const defaultProps = {
   mini: false,
 };
 
-@muiThemeable()
-export default class LevelBar extends React.Component {
+class LevelBar extends React.Component {
   render() {
     const styleDefault = {
       display: 'inline-block',
@@ -77,3 +76,6 @@ export default class LevelBar extends React.Component {
 
 LevelBar.propTypes = propTypes;
 LevelBar.defaultProps = defaultProps;
+LevelBar = muiThemeable()(LevelBar);
+
+export default LevelBar;

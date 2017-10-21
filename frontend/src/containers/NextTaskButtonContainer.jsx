@@ -8,7 +8,6 @@ function getProps(state) {
   return { task };
 }
 
-@connect(getProps)
 class NextTaskButtonContainer extends React.Component {
   render() {
     return (
@@ -20,5 +19,7 @@ class NextTaskButtonContainer extends React.Component {
 NextTaskButtonContainer.propTypes = {
   task: PropTypes.object,
 };
+
+NextTaskButtonContainer = connect(getProps)(NextTaskButtonContainer);
 
 export default NextTaskButtonContainer;

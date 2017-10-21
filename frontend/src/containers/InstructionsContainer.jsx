@@ -18,8 +18,6 @@ const getProps = (state) => ({
 });
 const actionCreators = { showInstructions, seeInstruction };
 
-@connect(getProps, actionCreators)
-@muiThemeable()
 class InstructionsContainer extends React.Component {
   static propTypes = {
     muiTheme: PropTypes.object,
@@ -135,6 +133,9 @@ class InstructionsContainer extends React.Component {
   }
 
 }
+
+InstructionsContainer = connect(getProps, actionCreators)(InstructionsContainer);
+InstructionsContainer = muiThemeable()(InstructionsContainer);
 
 
 export default InstructionsContainer;

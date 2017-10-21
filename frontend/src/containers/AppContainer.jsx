@@ -13,22 +13,24 @@ const propTypes = {
   startSession: PropTypes.func,
 };
 
-
 const defaultProps = {
   loaded: false,
 };
 
-
-@connect(state => ({
+const getProps = state => ({
   loaded: isLoaded(state),
-}), {
+});
+
+const actionCreators = {
   fetchStaticData,
   startSession,
-})
+};
+
+
 class AppContainer extends React.Component {
-  componentDidMount() {
-    this.props.fetchStaticData().then(() => this.props.startSession());
-  }
+  //componentDidMount() {
+  //  this.props.fetchStaticData().then(() => this.props.startSession());
+  //}
 
   render() {
     if (!this.props.loaded) {
@@ -56,5 +58,7 @@ class AppContainer extends React.Component {
 
 AppContainer.propTypes = propTypes;
 AppContainer.defaultProps = defaultProps;
+
+AppContainer = connect(getProps, actionCreators)(AppContainer);
 
 export default AppContainer;

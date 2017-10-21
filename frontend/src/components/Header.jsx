@@ -6,8 +6,8 @@ import logo from 'images/logo.png'
 import LevelBar from '../components/LevelBar';
 
 
-@muiThemeable()
-export default class Header extends React.Component {
+
+class Header extends React.Component {
   render() {
     const logoImg = (
       <img
@@ -40,3 +40,7 @@ export default class Header extends React.Component {
     );
   }
 }
+
+Header = muiThemeable()(Header);
+
+export default Header;

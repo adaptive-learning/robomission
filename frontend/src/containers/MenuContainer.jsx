@@ -6,13 +6,16 @@ import { getRecommendedTask } from '../selectors/practice';
 import { getMode } from '../selectors/app';
 
 
-@connect(state => ({
+const getProps = state => ({
   mode: getMode(state),
   open: state.menu.open,
   recommendedTask: getRecommendedTask(state)
-}), {
+});
+
+const actionCreators = {
   setOpenMenu
-})
+};
+
 class MenuContainer extends React.Component {
   constructor(props) {
     super(props);
@@ -29,5 +32,7 @@ class MenuContainer extends React.Component {
       />
   )}
 }
+
+MenuContainer = connect(getProps, actionCreators)(MenuContainer);
 
 export default MenuContainer;

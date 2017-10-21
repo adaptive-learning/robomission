@@ -6,7 +6,7 @@ import { fetchPraticeOverview } from '../actions/api';
 import { isPracticeOverviewInvalidated } from '../selectors/app';
 
 
-function mapStateToProps(state) {
+function getProps(state) {
   return {
     tasks: state.tasks,
     categories: state.categories,
@@ -15,10 +15,9 @@ function mapStateToProps(state) {
   };
 }
 
+const actionCreators = { fetchPraticeOverview };
 
-@connect(mapStateToProps, { fetchPraticeOverview })
-@muiThemeable()
-export default class TasksTableContainer extends React.Component {
+class TasksTableContainer extends React.Component {
   componentWillMount() {
     // make sure to load updated practiceOverivew on transition to this page
     if (this.props.isPracticeOverviewInvalidated) {
@@ -60,3 +59,8 @@ export default class TasksTableContainer extends React.Component {
     );
   }
 }
+
+TasksTableContainer = muiThemeable()(TasksTableContainer);
+TasksTableContainer = connect(getProps, actionCreators)(TasksTableContainer);
+
+export default TasksTableContainer;

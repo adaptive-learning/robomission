@@ -13,13 +13,15 @@ const propTypes = {
   setTaskById: PropTypes.func,
 };
 
-
-@connect(state => ({
+const getProps = state => ({
   spaceWorldDemoSolved: isSpaceWorldDemoSolved(state),
   programDemoSolved: isProgramDemoSolved(state),
   newStudent: isNewStudent(state),
-}), { setTaskById })
-export default class HomeContainer extends React.Component {
+});
+
+const actionCreators = { setTaskById };
+
+class HomeContainer extends React.Component {
   componentDidMount() {
     this.props.setTaskById('home-commands', 'beware-of-asteroid');
     this.props.setTaskById('home-program', 'three-steps-forward');
@@ -37,3 +39,6 @@ export default class HomeContainer extends React.Component {
 }
 
 HomeContainer.propTypes = propTypes;
+HomeContainer = connect(getProps, actionCreators)(HomeContainer);
+
+export default HomeContainer;

@@ -10,8 +10,7 @@ function getProps(state, props) {
   };
 }
 
-@connect(getProps)
-export default class PracticePage extends React.Component {
+class PracticePage extends React.Component {
   render() {
     return (
       <div
@@ -31,3 +30,7 @@ export default class PracticePage extends React.Component {
     );
   }
 }
+
+PracticePage = connect(getProps)(PracticePage);
+
+export default PracticePage;

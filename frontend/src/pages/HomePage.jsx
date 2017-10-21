@@ -7,11 +7,14 @@ function getProps(state, props) {
   return {};
 }
 
-@connect(getProps, {})
-export default class HomePage extends React.Component {
+class HomePage extends React.Component {
   render() {
     return (
       <HomeContainer />
     );
   }
 }
+
+HomePage = connect(getProps)(HomePage);
+
+export default HomePage;
