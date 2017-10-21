@@ -1,0 +1,34 @@
+/**
+ * Global styles
+ */
+
+* {
+  box-sizing: border-box;
+}
+
+h2 {
+  font-weight: 500;
+}
+
+/* ---- Blockly  ----- */
+
+.flocs-blockly {
+  height: 100%;
+}
+
+.blocklySvg {
+  background-color: #37474F;
+}
+
+.blocklyFlyoutBackground {
+  fill: #263238;
+}
+
+.blocklyScrollbarHandle {
+  fill: #37474F;
+}
+
+.blocklyScrollbarBackground:hover+.blocklyScrollbarHandle,
+.blocklyScrollbarHandle:hover {
+  fill: #455A64;
+}
