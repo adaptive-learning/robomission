@@ -1,16 +1,37 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Provider } from 'react-redux'
-
+import { Route, IndexRoute } from 'react-router';
+import AppContainer from './containers/AppContainer';
+import HomePage from './pages/HomePage';
+import PracticePage from './pages/PracticePage';
+import TaskEditorPage from './pages/TaskEditorPage';
+import TasksTableContainer from './containers/TasksTableContainer';
+import FlocsProvider from './FlocsProvider';
+import { globalConfiguration } from './config';
+import { createFlocsStore } from './store';
 import './index.css';
-import App from './App';
-import store from './store';
 import registerServiceWorker from './registerServiceWorker';
 
-const app = (
-  <Provider store={store}>
-    <App />
-  </Provider>
+
+globalConfiguration();
+
+const store = createFlocsStore();
+
+const routes = (
+  <Route path="/" component={AppContainer}>
+    <IndexRoute component={HomePage} />
+    <Route path="/tasks" component={TasksTableContainer} />
+    <Route path="/task/:taskId" component={PracticePage} />
+    <Route path="/task-editor" component={TaskEditorPage} />
+  </Route>
 );
-ReactDOM.render(app, document.getElementById('root'));
+
+const app = (
+  <FlocsProvider store={store} router>
+    {routes}
+  </FlocsProvider>
+);
+
+const mountElement = document.getElementById('flocsApp');
+ReactDOM.render(app, mountElement);
 registerServiceWorker();
