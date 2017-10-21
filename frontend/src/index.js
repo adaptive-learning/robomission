@@ -7,9 +7,6 @@ import App from './App';
 import store from './store';
 import registerServiceWorker from './registerServiceWorker';
 
-// test:
-import { fetchWorld } from './actions';
-
 const app = (
   <Provider store={store}>
     <App />
@@ -17,4 +14,3 @@ const app = (
 );
 ReactDOM.render(app, document.getElementById('root'));
 registerServiceWorker();
-store.dispatch(fetchWorld());
