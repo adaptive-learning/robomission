@@ -1,19 +1,34 @@
 import * as at from '../action-types';
 
+
 function action(type, payload = {}) {
   return {type, payload}
 }
 
 
 export const fetchWorld = {
-  //request: login => action(at.FETCH_WORLD_REQUEST),
+  //request: () => action(at.FETCH_WORLD_REQUEST),
   success: (world) => action(at.FETCH_WORLD_SUCCESS, world),
   failure: (error) => action(at.FETCH_WORLD_FAILURE, {error}),
 }
 
 
 export const fetchUser = {
-  request: login => action(at.FETCH_USER_REQUEST),
+  request: () => action(at.FETCH_USER_REQUEST),
   success: (user) => action(at.FETCH_USER_SUCCESS, user),
   failure: (error) => action(at.FETCH_USER_FAILURE, {error}),
+}
+
+
+export const fetchStudent = {
+  request: (url) => action(at.FETCH_STUDENT_REQUEST, {url}),
+  success: (student) => action(at.FETCH_STUDENT_SUCCESS, student),
+  failure: (error) => action(at.FETCH_STUDENT_FAILURE, {error}),
+}
+
+
+export const fetchPracticeOverview = {
+  request: (url) => action(at.FETCH_PRACTICE_OVERVIEW_REQUEST, {url}),
+  success: (practiceOverivew) => action(at.FETCH_PRACTICE_OVERVIEW_SUCCESS, practiceOverivew),
+  failure: (error) => action(at.FETCH_PRACTICE_OVERVIEW_FAILURE, {error}),
 }

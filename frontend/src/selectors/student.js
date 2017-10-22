@@ -13,7 +13,6 @@ export function isNewStudent(state) {
 
 
 export function getStudentUrl(state) {
-  // TODO:  move studentUrl to student substate
   return state.user.studentUrl;
 }
 
