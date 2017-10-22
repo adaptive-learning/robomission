@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import FieldBackground from './FieldBackground';
-import spaceBackgroundPath from '../../assets/images/background-space.png';
+import spaceBackgroundPath from '../images/background-space.png';
 
 export default function SpaceBackgroundGrid({ backgroundColors, fieldSize }) {
   const backgroundGridStyle = {
