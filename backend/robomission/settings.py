@@ -198,3 +198,13 @@ AUTHENTICATION_BACKENDS = (
     #'social_core.backends.facebook.FacebookOAuth2',
     'lazysignup.backends.LazySignupBackend',
 )
+
+# Setup CORS headers for development.
+# This allows to run FE server on one port and sending request to BE server
+# running on another port (so-called "cross-site requests").
+if DEVELOPMENT:
+    INSTALLED_APPS.append('corsheaders')
+    MIDDLEWARE.insert(0, 'corsheaders.middleware.CorsMiddleware')
+    CORS_ORIGIN_WHITELIST = (
+        'localhost:8000',
+        'localhost:3000',)
