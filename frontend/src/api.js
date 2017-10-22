@@ -22,13 +22,12 @@ export function fetchWorld() {
 
 export function fetchUser() {
   return axios.get(`${API_PATH}/users/current`).then(response => ({
-    studentUrl: response.data['student'],
+    studentUrl: relativizeUrl(response.data['student']),
   }));
 }
 
 
 export function fetchStudent(url) {
-  //const url = getStudentUrl(state);
   return axios.get(url).then(response => {
     const { data } = response;
     return {
@@ -36,18 +35,17 @@ export function fetchStudent(url) {
       activeCredits: data['active_credits'],
       level: data['level'],
       seenInstructions: data['seen_instructions'],
-      practiceOverviewUrl: data['practice_overview'],
-      watchInstructionUrl: data['watch_instruction'],
-      startTaskUrl: data['start_task'],
-      reportProgramEditUrl: data['edit_program'],
-      reportProgramExecutionUrl: data['run_program'],
+      practiceOverviewUrl: relativizeUrl(data['practice_overview']),
+      watchInstructionUrl: relativizeUrl(data['watch_instruction']),
+      startTaskUrl: relativizeUrl(data['start_task']),
+      reportProgramEditUrl: relativizeUrl(data['edit_program']),
+      reportProgramExecutionUrl: relativizeUrl(data['run_program']),
     };
   });
 }
 
 
 export function fetchPraticeOverview(url) {
-  // const url = getPracticeOverviewUrl(state);
   return axios.get(url).then(response => {
     const { data } = response;
     return {
@@ -58,4 +56,25 @@ export function fetchPraticeOverview(url) {
       recommendation: data['recommendation'],
     };
   });
+}
+
+
+function relativizeUrl(url) {
+  // During development, use only the relative path of the url. This is
+  // currently necessary during FE development, when there are separate FE and
+  // BE server running on different ports. This transformation makes sure that
+  // the absolute URLs passed by the BE will be treated the same way as the
+  // relative urls hardcoded in the FE (i.e. they will be proxied from FE port
+  // 3000 to the BE port 8000, as set in the package.json) and so they will use
+  // same set of cookies. (As a side benefit, it also means that we don't have
+  // to care about cross-site requests during development.)
+  // TODO: Find a better solution for the missing-cookies-with-different-ports
+  // problem. This works, but is error prone, e.g. it's easy to forget
+  // relativize a new url and it increases a discrepancy between development
+  // and production (which will use some relative and some absolute URLs).
+  const parts = url.split('localhost:8000');
+  if (parts.length == 2) {
+    return parts[1];
+  }
+  return url;
 }

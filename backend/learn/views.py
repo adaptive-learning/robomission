@@ -32,6 +32,7 @@ from learn import actions
 
 
 @ensure_csrf_cookie
+@allow_lazy_user
 def frontend_app(request, *_):
     response = render(request, 'index.html')
     delete_invalid_session_cookie_from_response(request, response)
@@ -57,6 +58,11 @@ def delete_invalid_session_cookie_from_response(request, response):
 @allow_lazy_user
 def get_or_create_user(request):
     """Return a current user and create one if it doesn't exist
+
+    Lazy user is generally created already when loading the frontend app.
+    However, there are at least two cases when the frontend-app view is not
+    loaded: one scenario is a manual testing through the browsable api, and
+    second is FE development, when the home page is served from the FE server.
     """
     return request.user
 
@@ -103,10 +109,10 @@ class TaskViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Task.objects.all().select_related('level')
 
 
-class StudentViewSet(viewsets.ModelViewSet):
+class StudentViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
-    permission_classes = (permissions.IsAuthenticated, IsOwnerOrAdmin)
+    permission_classes = (IsOwnerOrAdmin,)
 
     @detail_route(url_path='practice-overview')
     def practice_overview(self, request, pk):
@@ -189,14 +195,14 @@ class StudentViewSet(viewsets.ModelViewSet):
             return Student.objects.all()
         return Student.objects.filter(user=user)
 
-    def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+    #def perform_create(self, serializer):
+    #    serializer.save(user=self.request.user)
 
 
-class TaskSessionsViewSet(viewsets.ModelViewSet):
+class TaskSessionsViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = TaskSession.objects.all()
     serializer_class = TaskSessionSerializer
-    permission_classes = (permissions.IsAuthenticated, IsOwnerOrAdmin)
+    permission_classes = (IsOwnerOrAdmin,)
 
     def get_queryset(self):
         user = self.request.user
@@ -208,11 +214,11 @@ class TaskSessionsViewSet(viewsets.ModelViewSet):
         serializer.save(student=self.request.user.student)
 
 
-class ActionsViewSet(viewsets.ModelViewSet):
+class ActionsViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Action.objects.all()
     serializer_class = ActionSerializer
 
 
-class ProgramSnapshotsViewSet(viewsets.ModelViewSet):
+class ProgramSnapshotsViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = ProgramSnapshot.objects.all()
     serializer_class = ProgramSnapshotSerializer

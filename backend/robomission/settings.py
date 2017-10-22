@@ -186,9 +186,14 @@ LOGGING = {
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
-    ]
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly',
+    ),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        #'rest_framework.authentication.BasicAuthentication',
+        # Currently, we use only SessionAuthentication using LazyUsers
+        'rest_framework.authentication.SessionAuthentication',
+    ),
 }
 
 
@@ -199,12 +204,15 @@ AUTHENTICATION_BACKENDS = (
     'lazysignup.backends.LazySignupBackend',
 )
 
+
 # Setup CORS headers for development.
 # This allows to run FE server on one port and sending request to BE server
 # running on another port (so-called "cross-site requests").
-if DEVELOPMENT:
-    INSTALLED_APPS.append('corsheaders')
-    MIDDLEWARE.insert(0, 'corsheaders.middleware.CorsMiddleware')
-    CORS_ORIGIN_WHITELIST = (
-        'localhost:8000',
-        'localhost:3000',)
+# The CORS setting is currently not needed, because all requests from FE server
+# are proxied to the port 8000.
+#if DEVELOPMENT:
+#    INSTALLED_APPS.append('corsheaders')
+#    MIDDLEWARE.insert(0, 'corsheaders.middleware.CorsMiddleware')
+#    CORS_ORIGIN_WHITELIST = (
+#        'localhost:8000',
+#        'localhost:3000',)
