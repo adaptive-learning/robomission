@@ -63,9 +63,10 @@ class TaskSerializer(serializers.ModelSerializer):
 
 
 class StudentSerializer(serializers.HyperlinkedModelSerializer):
-    id = serializers.ReadOnlyField(source='user.id')
-    username = serializers.ReadOnlyField(source='user.username')
-    user = serializers.HyperlinkedIdentityField(view_name='user-detail')
+    user = serializers.HyperlinkedRelatedField(
+        view_name='user-detail',
+        read_only=True,
+        required=False)
     credits = serializers.IntegerField(read_only=True)
     level = serializers.SerializerMethodField()
     seen_instructions = serializers.SlugRelatedField(
@@ -87,7 +88,7 @@ class StudentSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Student
         fields = (
-            'id', 'url', 'username', 'user', 'credits', 'level', 'active_credits',
+            'id', 'url', 'user', 'credits', 'level', 'active_credits',
             'seen_instructions', 'practice_overview',
             'start_task', 'watch_instruction', 'edit_program', 'run_program')
 
