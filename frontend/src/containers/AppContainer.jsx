@@ -2,14 +2,12 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import App from '../components/App';
 import LoadingIndicator from '../components/LoadingIndicator';
-import { fetchStaticData, startSession } from '../actions/api';
 import { isLoaded } from '../selectors/app';
 
 
 const propTypes = {
   loaded: PropTypes.bool.isRequired,
   children: PropTypes.node,
-  fetchStaticData: PropTypes.func,
   startSession: PropTypes.func,
 };
 
@@ -21,16 +19,11 @@ const getProps = state => ({
   loaded: isLoaded(state),
 });
 
-const actionCreators = {
-  fetchStaticData,
-  startSession,
-};
-
+const actionCreators = {};
 
 class AppContainer extends React.Component {
-  //componentDidMount() {
-  //  this.props.fetchStaticData().then(() => this.props.startSession());
-  //}
+  // Previusly, global data was fetched on mount of this top-level container,
+  // but we have moved this logic into the root saga.
 
   render() {
     if (!this.props.loaded) {
