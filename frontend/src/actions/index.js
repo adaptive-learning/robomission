@@ -6,6 +6,13 @@ function action(type, payload = {}) {
 }
 
 
+export const fetchApiRoot = {
+  //request: () => action(at.FETCH_API_ROOT_REQUEST),
+  success: (apiRoot) => action(at.FETCH_API_ROOT_SUCCESS, apiRoot),
+  failure: (error) => action(at.FETCH_API_ROOT_FAILURE, {error}),
+}
+
+
 export const fetchWorld = {
   //request: () => action(at.FETCH_WORLD_REQUEST),
   success: (world) => action(at.FETCH_WORLD_SUCCESS, world),
@@ -14,7 +21,7 @@ export const fetchWorld = {
 
 
 export const fetchUser = {
-  request: () => action(at.FETCH_USER_REQUEST),
+  request: (url) => action(at.FETCH_USER_REQUEST, {url}),
   success: (user) => action(at.FETCH_USER_SUCCESS, user),
   failure: (error) => action(at.FETCH_USER_FAILURE, {error}),
 }

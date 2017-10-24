@@ -1,6 +1,7 @@
 import { combineReducers } from 'redux';
 import { intlReducer } from 'react-intl-redux';
 import { routerReducer } from 'react-router-redux';
+import reduceApi from './api';
 import reduceApp from './app';
 import reduceBlocks from './blocks';
 import reduceCategories from './categories';
@@ -18,6 +19,7 @@ import reducePractice from './practice';
 
 
 export const reducers = combineReducers({
+  api: reduceApi,
   app: reduceApp,
   blocks: reduceBlocks,
   categories: reduceCategories,

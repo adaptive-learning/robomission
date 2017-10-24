@@ -208,8 +208,6 @@ AUTHENTICATION_BACKENDS = (
 # Setup CORS headers for development.
 # This allows to run FE server on one port and sending request to BE server
 # running on another port (so-called "cross-site requests").
-# The CORS setting is currently not needed, because all requests from FE server
-# are proxied to the port 8000.
 #if DEVELOPMENT:
 #    INSTALLED_APPS.append('corsheaders')
 #    MIDDLEWARE.insert(0, 'corsheaders.middleware.CorsMiddleware')

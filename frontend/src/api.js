@@ -6,6 +6,23 @@ import { API_PATH } from './config';
 import { getStudentUrl, getPracticeOverviewUrl } from './selectors/student';
 
 
+export function fetchApiRoot() {
+  return axios.get(API_PATH).then(response => ({
+    apiRoot: parseApiRoot(response.data),
+  }));
+}
+
+
+function parseApiRoot(data) {
+  return {
+    // hack to make cookies work correctly
+    // TODO: fix it to allow for data['current_user']
+    currentUserUrl: `${API_PATH}/users/current/`, // relativizeUrl(data['current_user']),
+    worldUrl: relativizeUrl(data['world']),
+  }
+}
+
+
 export function fetchWorld() {
   const entityNames = ['blocks', 'toolboxes', 'tasks', 'levels', 'instructions'];
   const urls = entityNames.map(name => `${API_PATH}/${name}`);
@@ -20,8 +37,8 @@ export function fetchWorld() {
 }
 
 
-export function fetchUser() {
-  return axios.get(`${API_PATH}/users/current`).then(response => ({
+export function fetchUser(url) {
+  return axios.get(url).then(response => ({
     studentUrl: relativizeUrl(response.data['student']),
   }));
 }
