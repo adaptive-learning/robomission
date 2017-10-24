@@ -62,6 +62,14 @@ class TaskSerializer(serializers.ModelSerializer):
         fields = ('url', 'id', 'name', 'level', 'setting', 'solution')
 
 
+class WorldSerializer(serializers.Serializer):
+    blocks = BlockSerializer(many=True)
+    toolboxes = ToolboxSerializer(many=True)
+    instructions = InstructionSerializer(many=True)
+    levels = LevelSerializer(many=True)
+    tasks = TaskSerializer(many=True)
+
+
 class StudentSerializer(serializers.HyperlinkedModelSerializer):
     user = serializers.HyperlinkedRelatedField(
         view_name='user-detail',

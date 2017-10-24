@@ -15,6 +15,8 @@ apiRouter.register(r'students', views.StudentViewSet, base_name='student')
 apiRouter.register(r'task_sessions', views.TaskSessionsViewSet, base_name='tasksession')
 apiRouter.register(r'program_snapshots', views.ProgramSnapshotsViewSet, base_name='programsnapshot')
 apiRouter.register(r'actions', views.ActionsViewSet, base_name='action')
+apiRouter.register(r'current_user', views.CurrentUserViewSet, base_name='current_user')
+apiRouter.register(r'world', views.WorldViewSet, base_name='world')
 
 
 exportRouter = DefaultRouter()

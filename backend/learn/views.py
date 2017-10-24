@@ -2,14 +2,16 @@ from django.conf import global_settings, settings
 from django.contrib.auth.models import User
 from django.db.models import prefetch_related_objects, Prefetch
 from django.contrib.sessions.models import Session
+from django.shortcuts import redirect
 from django.shortcuts import render
 from django.views.decorators.csrf import ensure_csrf_cookie
 from lazysignup.decorators import allow_lazy_user
 from rest_framework import permissions
 from rest_framework import viewsets
 from rest_framework.decorators import detail_route
-from rest_framework.response import Response
 from rest_framework.decorators import list_route
+from rest_framework.response import Response
+from rest_framework.reverse import reverse
 from learn.credits import get_active_credits, get_level_value
 from learn.models import Block, Toolbox, Level, Task, Instruction
 from learn.models import Action, Student, TaskSession, ProgramSnapshot
@@ -26,6 +28,7 @@ from learn.serializers import StudentSerializer
 from learn.serializers import TaskSerializer
 from learn.serializers import TaskSessionSerializer
 from learn.serializers import UserSerializer
+from learn.serializers import WorldSerializer
 from learn.serializers import RunProgramResponseSerializer
 from learn.world import get_world
 from learn import actions
@@ -84,6 +87,17 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
         return Response(serializer.data)
 
 
+class CurrentUserViewSet(viewsets.ViewSet):
+    """Phony ViewSet to specify a custom "current_user" entry for the API root.
+    """
+    # DRF can't derive DjangoModelPermissions for ViewSets without a queryset,
+    # so we need to explicitly define them.
+    permission_classes = ()
+
+    def list(self, request, format=None):
+        return redirect(reverse('user-current', request=request))
+
+
 class BlockViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Block.objects.all()
     serializer_class = BlockSerializer
@@ -107,6 +121,18 @@ class InstructionViewSet(viewsets.ReadOnlyModelViewSet):
 class TaskViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = TaskSerializer
     queryset = Task.objects.all().select_related('level')
+
+
+class WorldViewSet(viewsets.ViewSet):
+    serializer_class = WorldSerializer
+    # DRF can't derive DjangoModelPermissions for ViewSets without a queryset,
+    # so we need to explicitly define them.
+    permission_classes = ()
+
+    def list(self, request, format=None):
+        world = get_world()
+        serializer = WorldSerializer(world, context={'request': request})
+        return Response(serializer.data)
 
 
 class StudentViewSet(viewsets.ReadOnlyModelViewSet):
