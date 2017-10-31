@@ -1,8 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Route, BrowserRouter } from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom';
 import AppContainer from './containers/AppContainer';
-import HomePage from './pages/HomePage';
 //import PracticePage from './pages/PracticePage';
 //import TaskEditorPage from './pages/TaskEditorPage';
 //import TasksTableContainer from './containers/TasksTableContainer';
@@ -14,12 +13,14 @@ import { createFlocsStore } from './store';
 import FlocsThemeProvider from './theme/FlocsThemeProvider';
 import './index.css';
 import registerServiceWorker from './registerServiceWorker';
-// for testing:
-import App from './App';
 
 globalConfiguration();
 
 const store = createFlocsStore();
+// store.dispatch(
+//     {type: 'SET_TASK',
+//       payload: {taskEnvironmentId: 'home-commands', taskId: 'beware-of-asteroid'}
+//     });
 
 //const routes = (
 //  <Route path="/" component={AppContainer}>

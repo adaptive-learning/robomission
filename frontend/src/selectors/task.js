@@ -6,6 +6,11 @@ export function getCategoryId(state, taskId) {
 }
 
 
+export function getTaskById(state, taskId) {
+  return state.tasks[taskId];
+}
+
+
 export function getToolbox(state, taskId) {
   const categoryId = getCategoryId(state, taskId);
   const toolboxId = getToolboxId(state, categoryId);

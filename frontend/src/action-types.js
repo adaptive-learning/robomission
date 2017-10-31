@@ -49,11 +49,14 @@ export const REPORT_PROGRAM_EDIT_PENDING = 'REPORT_PROGRAM_EDIT_PENDING';
 
 export const CREATE_TASK_ENVIRONMENT = 'CREATE_TASK_ENVIRONMENT';
 export const SET_TASK = 'SET_TASK';
+export const SET_TASK_BY_ID = 'SET_TASK_BY_ID';
 export const SET_TASK_SESSION = 'SET_TASK_SESSION';
 export const CHANGE_SETTING = 'CHANGE_SETTING';
 export const CHANGE_CODE = 'CHANGE_CODE';
 export const CHANGE_ROBO_AST = 'CHANGE_ROBO_AST';
+export const RUN_PROGRAM = 'RUN_PROGRAM';
 export const RESET_GAME = 'RESET_GAME';
+export const DO_ACTION_MOVE = 'DO_ACTION_MOVE';
 export const DO_ACTION = 'DO_ACTION';
 export const MOVE = 'MOVE';
 export const EVOLVE_WORLD = 'EVOLVE_WORLD';

@@ -1,8 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Switch, Route } from 'react-router-dom';
 import { connect } from 'react-redux';
 import App from '../components/App';
 import LoadingIndicator from '../components/LoadingIndicator';
+import HomePage from '../pages/HomePage';
 import { isLoaded } from '../selectors/app';
 
 
@@ -23,7 +25,7 @@ const getProps = state => ({
 const actionCreators = {};
 
 class AppContainer extends React.Component {
-  // Previusly, global data was fetched on mount of this top-level container,
+  // Previously, global data was fetched on mount of this top-level container,
   // but we have moved this logic into the root saga.
 
   render() {
@@ -44,7 +46,9 @@ class AppContainer extends React.Component {
     }
     return (
       <App>
-        { this.props.children }
+        <Switch>
+          <Route exact path='/' component={HomePage}/>
+        </Switch>
       </App>
     );
   }

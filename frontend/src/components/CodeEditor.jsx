@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import AceEditor from 'react-ace';
 
 import 'brace/theme/solarized_dark';

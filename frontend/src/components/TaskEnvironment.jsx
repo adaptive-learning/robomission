@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import SplitPane from 'react-split-pane';
 import { Scrollbars } from 'react-custom-scrollbars';
 import CodeEditorContainer from '../containers/CodeEditorContainer';

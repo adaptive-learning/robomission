@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 import muiThemeable from 'material-ui/styles/muiThemeable';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import Paper from 'material-ui/Paper';
@@ -9,8 +9,9 @@ import Scroll from 'react-scroll';
 import SpaceGameContainer from '../containers/SpaceGameContainer';
 import TaskEnvironmentContainer from '../containers/TaskEnvironmentContainer';
 import NextTaskButtonContainer from '../containers/NextTaskButtonContainer';
-import neuronsBackgroundPath from 'images/neurons-tile.png';
-import fiBackgroundPath from 'images/fi-slide.jpg';
+import neuronsBackgroundPath from '../images/neurons-tile.png';
+import fiBackgroundPath from '../images/fi-slide.jpg';
+import spaceBackgroundPath from '../images/background-space.png';
 
 
 
@@ -45,7 +46,7 @@ class Home extends React.Component {
       // slide 0
       {
         style: {
-          backgroundImage: `url(/static/images/background-space.png)`,
+          backgroundImage: `url(${spaceBackgroundPath})`,
           backgroundSize: '500px auto',
           backgroundColor: '#111122',
           color: '#fff',
@@ -198,7 +199,7 @@ class Home extends React.Component {
       // slide 5
       {
         style: {
-          backgroundImage: `url(/static/images/background-space.png)`,
+          backgroundImage: `url(${spaceBackgroundPath})`,
           backgroundSize: '500px auto',
           backgroundColor: '#111122',
           color: '#fff',

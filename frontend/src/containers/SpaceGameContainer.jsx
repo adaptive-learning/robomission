@@ -1,10 +1,11 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import SpaceGame from '../components/SpaceGame';
 import { createTaskEnvironment,
          runProgram,
          resetGame,
-         doActionMove } from '../actions/taskEnvironment';
+         doActionMove } from '../actions';
 import { getGameState } from '../selectors/gameState';
 import { getTaskId, getLengthLimit, getGamePanelWidth } from '../selectors/taskEnvironment';
 

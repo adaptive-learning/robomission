@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import blueBackgroundPath from '../images/background-blue-goal.png';
 import redBackgroundPath from '../images/background-red.png';
 import greenBackgroundPath from '../images/background-green.png';

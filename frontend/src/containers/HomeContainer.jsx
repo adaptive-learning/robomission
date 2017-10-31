@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Home from '../components/Home';
-import { setTaskById } from '../actions/taskEnvironment';
+import { setTaskById } from '../actions';
 import { isNewStudent } from '../selectors/student';
 import { isSpaceWorldDemoSolved, isProgramDemoSolved } from '../selectors/home';
 
