@@ -10,8 +10,10 @@ export default function reduceToolboxes(state = {}, action) {
       }
       return toolboxes;
     }
+    default: {
+      return state;
+    }
   }
-  return state;
 }
 
 function parseToolbox(data) {

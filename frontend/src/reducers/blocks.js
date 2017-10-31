@@ -10,8 +10,10 @@ export default function reduceBlocks(state = {}, action) {
       }
       return blocks;
     }
+    default: {
+      return state;
+    }
   }
-  return state;
 }
 
 function parseBlock(data) {

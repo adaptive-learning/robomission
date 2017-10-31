@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import BlocklyEditor from '../components/BlocklyEditor';
 import { getRoboAst, getEditorSessionId, getLengthLimit, getToolbox } from '../selectors/taskEnvironment';

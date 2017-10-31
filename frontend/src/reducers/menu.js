@@ -16,6 +16,8 @@ export default function reduceMenu(state = initialState, action) {
         ...state,
         open: false,
       };
+    default: {
+      return state;
+    }
   }
-  return state;
 }

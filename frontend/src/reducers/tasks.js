@@ -24,8 +24,10 @@ export default function reduceTasks(state = {}, action) {
       }
       return tasks;
     }
+    default: {
+      return state;
+    }
   }
-  return state;
 }
 
 function parseTask(data) {

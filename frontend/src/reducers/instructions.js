@@ -82,8 +82,10 @@ export default function reduceInstructions(state = initial, action) {
         activeIndex: 0,
       };
     }
+    default: {
+      return state;
+    }
   }
-  return state;
 }
 
 

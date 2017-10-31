@@ -11,8 +11,10 @@ export default function reduceCategories(state = {}, action) {
       }
       return categories;
     }
+    default: {
+      return state;
+    }
   }
-  return state;
 }
 
 function parseCategory(data) {

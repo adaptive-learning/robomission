@@ -1,8 +1,8 @@
 import React, { PropTypes } from 'react';
-import blueBackgroundPath from '../../assets/images/background-blue-goal.png';
-import redBackgroundPath from '../../assets/images/background-red.png';
-import greenBackgroundPath from '../../assets/images/background-green.png';
-import yellowBackgroundPath from '../../assets/images/background-yellow.png';
+import blueBackgroundPath from '../images/background-blue-goal.png';
+import redBackgroundPath from '../images/background-red.png';
+import greenBackgroundPath from '../images/background-green.png';
+import yellowBackgroundPath from '../images/background-yellow.png';
 
 export default function FieldBackground({ color, size }) {
   const backgroundImgPath = {

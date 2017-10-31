@@ -3,7 +3,6 @@
  */
 import axios from 'axios';
 import { API_PATH } from './config';
-import { getStudentUrl, getPracticeOverviewUrl } from './selectors/student';
 
 
 export function fetchApiRoot() {
@@ -62,7 +61,7 @@ export function fetchStudent(url) {
 }
 
 
-export function fetchPraticeOverview(url) {
+export function fetchPracticeOverview(url) {
   return axios.get(url).then(response => {
     const { data } = response;
     return {
@@ -90,7 +89,7 @@ function relativizeUrl(url) {
   // relativize a new url and it increases a discrepancy between development
   // and production (which will use some relative and some absolute URLs).
   const parts = url.split('localhost:8000');
-  if (parts.length == 2) {
+  if (parts.length === 2) {
     return parts[1];
   }
   return url;

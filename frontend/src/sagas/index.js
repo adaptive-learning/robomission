@@ -1,4 +1,4 @@
-import { call, put, select, takeEvery, takeLatest } from 'redux-saga/effects';
+import { call, put, select, takeLatest } from 'redux-saga/effects';
 
 import * as api from '../api';
 import * as actions from '../actions';
@@ -49,15 +49,29 @@ function* fetchStudent(action) {
 }
 
 
+function* fetchPracticeOverview(action) {
+  try {
+    const { url } = action.payload;
+    const practiceOverview = yield call(api.fetchPracticeOverview, url);
+    yield put(actions.fetchPracticeOverview.success(practiceOverview));
+  } catch (error) {
+    yield put(actions.fetchPracticeOverview.failure(error));
+  }
+}
+
+
 function* rootSaga() {
   yield* fetchApiRoot();
-  //yield* fetchWorld();
+  yield* fetchWorld();
   const currentUserUrl = yield select(getCurrentUserUrl);
   yield* fetchUser(actions.fetchUser.request(currentUserUrl));
   const studentUrl = yield select(getStudentUrl);
   yield* fetchStudent(actions.fetchStudent.request(studentUrl));
-  //yield* fetchPracticeOverview();
-  //yield takeLatest(actionType.FETCH_USER_REQUEST, fetchUser);
+  const practiceOverviewUrl = yield select(getPracticeOverviewUrl);
+  const practiceOverviewAction = actions.fetchPracticeOverview.request(practiceOverviewUrl);
+  yield* fetchPracticeOverview(practiceOverviewAction);
+  yield takeLatest(actionType.FETCH_STUDENT_REQUEST, fetchStudent);
+  yield takeLatest(actionType.FETCH_PRACTICE_OVERVIEW_REQUEST, fetchPracticeOverview);
 }
 
 export default rootSaga;

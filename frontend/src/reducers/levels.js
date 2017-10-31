@@ -10,8 +10,10 @@ export default function reduceLevels(state = {}, action) {
       }
       return levels;
     }
+    default: {
+      return state;
+    }
   }
-  return state;
 }
 
 function parseLevel(data) {

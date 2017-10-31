@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import HomeContainer from '../containers/HomeContainer';
+//import HomeContainer from '../containers/HomeContainer';
 
 
 function getProps(state, props) {
@@ -10,8 +10,13 @@ function getProps(state, props) {
 class HomePage extends React.Component {
   render() {
     return (
+      <h1>home page</h1>
+    );
+    /*
+    return (
       <HomeContainer />
     );
+    */
   }
 }
 
