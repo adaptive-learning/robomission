@@ -76,8 +76,23 @@ export function runProgram(taskEnvironmentId) {
 }
 
 
-export function doActionMove(taskEnvironmentId, action, interruptible = true) {
-  return action(at.DO_ACTION_MOVE, { taskEnvironmentId, action, interruptible });
+export function doActionMove(taskEnvironmentId, actionName, interruptible = true) {
+  return action(at.DO_ACTION_MOVE, { taskEnvironmentId, action: actionName, interruptible });
+}
+
+
+export function doAction(taskEnvironmentId, actionName) {
+  return action(at.DO_ACTION, { taskEnvironmentId, action: actionName });
+}
+
+
+export function move(taskEnvironmentId) {
+  return action(at.MOVE, { taskEnvironmentId });
+}
+
+
+export function evolveWorld(taskEnvironmentId) {
+  return action(at.EVOLVE_WORLD, { taskEnvironmentId });
 }
 
 

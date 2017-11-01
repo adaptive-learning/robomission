@@ -1,5 +1,5 @@
-import { all, call, put, select, takeEvery, takeLatest } from 'redux-saga/effects';
-
+import { delay } from 'redux-saga'
+import { all, call, cancel, fork, put, select, take, takeEvery, takeLatest } from 'redux-saga/effects';
 import * as api from '../api';
 import * as actions from '../actions';
 import * as actionType from '../action-types';
@@ -61,6 +61,40 @@ function* fetchPracticeOverview(action) {
 }
 
 
+function* watchTasks() {
+  const openTaskFlows = {};
+  while (true) {
+    const action = yield take(actionType.SET_TASK);
+    const { taskEnvironmentId, task } = action.payload;
+    const oldFlow = openTaskFlows[taskEnvironmentId];
+    if (oldFlow) {
+      console.log('closing old flow');
+      yield cancel(oldFlow);
+    }
+    console.log('forking new flow');
+    const newFlow = yield fork(taskFlow, taskEnvironmentId, task);
+    openTaskFlows[taskEnvironmentId] = newFlow;
+    console.log('openTaskFlows:', openTaskFlows);
+  }
+}
+
+
+function* taskFlow(taskEnvironmentId, task) {
+  console.log('task flow', taskEnvironmentId);
+  while (true) {
+    const action = yield take(actionType.DO_ACTION_MOVE);
+    if (action.payload.taskEnvironmentId === taskEnvironmentId) {
+      console.log(action);
+      yield put(actions.doAction(taskEnvironmentId, action.payload.action));
+      //yield call(delay, 200);
+      yield put(actions.move(taskEnvironmentId));
+      //yield call(delay, 200);
+      yield put(actions.evolveWorld(taskEnvironmentId));
+    }
+  }
+}
+
+
 // Intercept setTask action to add complete task record
 // (which is currently required by some reducers).
 function* setTask(action) {
@@ -97,6 +131,7 @@ function* rootSaga() {
   yield all([
     initializeApp(),
     watchActions(),
+    watchTasks(),
   ]);
 }
 
