@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-//import BlocklyEditor from '../components/BlocklyEditor';
+import BlocklyEditor from '../components/BlocklyEditor';
 import { getRoboAst, getEditorSessionId, getLengthLimit, getToolbox } from '../selectors/taskEnvironment';
 import { changeRoboAst } from '../actions';
 import { expandBlocks } from '../core/toolbox';
@@ -19,10 +19,6 @@ class BlocklyEditorWrapper extends React.Component {
 
   render() {
     return (
-      <p>TBA: Blockly</p>
-    );
-    /*
-    return (
       <BlocklyEditor
         ref={ref => { this.blocklyEditor = ref; }}
         roboAst={this.props.roboAst}
@@ -32,7 +28,6 @@ class BlocklyEditorWrapper extends React.Component {
         onChange={this.changeRoboAst}
       />
     );
-    */
   }
 }
 
