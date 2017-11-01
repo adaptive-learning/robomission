@@ -16,6 +16,8 @@ export function createFlocsStore(initialState) {
   const loggerMiddleware = createLogger();
   const middleware = applyMiddleware(sagaMiddleware, loggerMiddleware);
   const store = createStore(rootReducer, initialStateWithLocalization, middleware);
-  sagaMiddleware.run(rootSaga);
+  // TODO: Rewrite all sagas without need for dispatch and getState;
+  //       then remove these two parameters.
+  sagaMiddleware.run(rootSaga, store.dispatch, store.getState);
   return store;
 }

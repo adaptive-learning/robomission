@@ -76,6 +76,11 @@ export function runProgram(taskEnvironmentId) {
 }
 
 
+export function interpretationStarted(taskEnvironmentId) {
+  return action(at.INTERPRETATION_STARTED,  { taskEnvironmentId });
+}
+
+
 export function doActionMove(taskEnvironmentId, actionName, interruptible = true) {
   return action(at.DO_ACTION_MOVE, { taskEnvironmentId, action: actionName, interruptible });
 }
