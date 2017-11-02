@@ -2,8 +2,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 import muiThemeable from 'material-ui/styles/muiThemeable';
 import TasksTable from '../components/TasksTable';
-import { fetchPraticeOverview } from '../actions/api';
+import { fetchPracticeOverview } from '../actions';
 import { isPracticeOverviewInvalidated } from '../selectors/app';
+import { getPracticeOverviewUrl } from '../selectors/student';
 
 
 function getProps(state) {
@@ -12,16 +13,19 @@ function getProps(state) {
     categories: state.categories,
     recommendation: state.recommendation,
     isPracticeOverviewInvalidated: isPracticeOverviewInvalidated(state),
+    practiceOverviewUrl: getPracticeOverviewUrl(state),
   };
 }
 
-const actionCreators = { fetchPraticeOverview };
+const actionCreators = {
+  fetchPracticeOverview: fetchPracticeOverview.request
+};
 
 class TasksTableContainer extends React.Component {
   componentWillMount() {
     // make sure to load updated practiceOverivew on transition to this page
     if (this.props.isPracticeOverviewInvalidated) {
-      this.props.fetchPraticeOverview();
+      this.props.fetchPracticeOverview(this.props.practiceOverviewUrl);
     }
   }
 

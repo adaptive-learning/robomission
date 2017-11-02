@@ -1,5 +1,5 @@
-import { LOCATION_CHANGE } from 'react-router-redux';
-import { CREATE_TASK_ENVIRONMENT,
+import { CHANGE_LOCATION,
+         CREATE_TASK_ENVIRONMENT,
          CLOSE_TASK_COMPLETION_DIALOG,
          SET_TASK,
          START_TASK_FULFILLED,
@@ -28,7 +28,7 @@ export default function reduceTaskEnvironments(state = {}, action) {
       return createTaskEnvironment(state, action.payload.taskEnvironmentId);
     case CLOSE_TASK_COMPLETION_DIALOG:
       return updateTaskEnvironment(state, closeTaskCompletionDialog, action.payload);
-    case LOCATION_CHANGE:
+    case CHANGE_LOCATION:
       // make sure that task completion modal is closed when leave the practice
       // page e.g. by clicking on "tasks overview" button
       return updateTaskEnvironment(state, closeTaskCompletionDialog,

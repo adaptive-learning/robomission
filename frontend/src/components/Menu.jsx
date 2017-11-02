@@ -5,7 +5,7 @@ import MenuItem from 'material-ui/MenuItem';
 import Divider from 'material-ui/Divider';
 import Subheader from 'material-ui/Subheader';
 import muiThemeable from 'material-ui/styles/muiThemeable';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 import Text from '../localization/Text';
 
 

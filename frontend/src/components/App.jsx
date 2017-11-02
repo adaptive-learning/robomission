@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import backgroundPath from '../images/background-space.png';
-//import HeaderContainer from '../containers/HeaderContainer';
-//import MenuContainer from '../containers/MenuContainer';
+import HeaderContainer from '../containers/HeaderContainer';
+import MenuContainer from '../containers/MenuContainer';
 //import InstructionsContainer from '../containers/InstructionsContainer';
 
 const propTypes = {
@@ -22,9 +22,9 @@ export default class App extends React.Component {
       >
         {/*
         <InstructionsContainer />
+        */}
         <HeaderContainer />
         <MenuContainer />
-        */}
         { this.props.children }
       </div>
     );

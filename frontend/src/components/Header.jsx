@@ -2,7 +2,7 @@ import React from 'react';
 import AppBar from 'material-ui/AppBar';
 import { Toolbar, ToolbarGroup, ToolbarTitle } from 'material-ui/Toolbar';
 import muiThemeable from 'material-ui/styles/muiThemeable';
-import logo from 'images/logo.png'
+import logo from '../images/logo.png'
 import LevelBar from '../components/LevelBar';
 
 

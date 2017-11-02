@@ -1,5 +1,5 @@
-import { LOCATION_CHANGE } from 'react-router-redux';
 import {
+  CHANGE_LOCATION,
   FETCH_WORLD_SUCCESS,
   FETCH_STUDENT_SUCCESS,
   SET_TASK,
@@ -45,7 +45,7 @@ export default function reduceInstructions(state = initial, action) {
         activeIndex: (scheduled.length > 0) ? 0 : null,
       };
     }
-    case LOCATION_CHANGE: {
+    case CHANGE_LOCATION: {
       if (action.payload.pathname === '/task-editor') {
         const scheduled = state.seen.includes('env.task-editor') ? [] : ['env.task-editor'];
         return {

@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { setOpenMenu } from '../actions/menu';
+import { setOpenMenu } from '../actions';
 import Menu from '../components/Menu';
 import { getRecommendedTask } from '../selectors/practice';
 import { getMode } from '../selectors/app';

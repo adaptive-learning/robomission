@@ -1,12 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter, Link, Route } from 'react-router-dom';
 import AppContainer from './containers/AppContainer';
-//import PracticePage from './pages/PracticePage';
-//import TaskEditorPage from './pages/TaskEditorPage';
-//import TasksTableContainer from './containers/TasksTableContainer';
 //import FlocsProvider from './FlocsProvider';
 import { Provider } from 'react-intl-redux';
+
+import HomePage from './pages/HomePage';
+//import PracticePage from './pages/PracticePage';
+//import TaskEditorPage from './pages/TaskEditorPage';
+import TasksTableContainer from './containers/TasksTableContainer';
 
 import { globalConfiguration } from './config';
 import { createFlocsStore } from './store';
@@ -41,7 +43,10 @@ const app = (
   <Provider store={store}>
     <FlocsThemeProvider>
       <BrowserRouter>
-        <AppContainer />
+        <AppContainer>
+          <Route exact path='/' component={HomePage}/>
+          <Route exact path="/tasks" component={TasksTableContainer} />
+        </AppContainer>
       </BrowserRouter>
     </FlocsThemeProvider>
   </Provider>

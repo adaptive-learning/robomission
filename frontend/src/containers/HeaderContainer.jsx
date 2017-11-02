@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { setOpenMenu } from '../actions/menu';
+import { setOpenMenu } from '../actions';
 import { getLevelStatus } from '../selectors/student';
 import Header from '../components/Header';
 

@@ -109,3 +109,13 @@ export function evolveWorld(taskEnvironmentId) {
 export function resetGame(taskEnvironmentId) {
   return action(at.RESET_GAME, { taskEnvironmentId });
 }
+
+
+export function setOpenMenu(open) {
+  return action(at.TOGGLE_MENU, { open });
+}
+
+
+export function changeLocation(newLocation) {
+  return action(at.CHANGE_LOCATION, newLocation);
+}

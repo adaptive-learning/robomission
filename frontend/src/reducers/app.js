@@ -1,5 +1,5 @@
-import { LOCATION_CHANGE } from 'react-router-redux';
-import { FETCH_WORLD_SUCCESS,
+import { CHANGE_LOCATION,
+         FETCH_WORLD_SUCCESS,
          FETCH_PRACTICE_OVERVIEW_REQUEST,
          FETCH_PRACTICE_OVERVIEW_SUCCESS,
          REPORT_PROGRAM_EDIT_PENDING,
@@ -44,7 +44,7 @@ export default function reduceApp(state = initial, action) {
         ...state,
         practiceOverviewInvalidated: true,
       };
-    case LOCATION_CHANGE:
+    case CHANGE_LOCATION:
       return {
         ...state,
         mode: getMode(action.payload.pathname),

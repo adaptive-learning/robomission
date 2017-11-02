@@ -1,4 +1,4 @@
-import { LOCATION_CHANGE } from 'react-router-redux';
+import { CHANGE_LOCATION, TOGGLE_MENU } from '../action-types';
 
 const initialState = {
   open: false,
@@ -6,12 +6,12 @@ const initialState = {
 
 export default function reduceMenu(state = initialState, action) {
   switch (action.type) {
-    case 'MENU.SET_OPEN':
+    case TOGGLE_MENU:
       return {
         ...state,
         open: action.payload.open,
       };
-    case LOCATION_CHANGE:
+    case CHANGE_LOCATION:
       return {
         ...state,
         open: false,
