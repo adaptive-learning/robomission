@@ -7,7 +7,7 @@ import { Provider } from 'react-intl-redux';
 
 import HomePage from './pages/HomePage';
 //import PracticePage from './pages/PracticePage';
-//import TaskEditorPage from './pages/TaskEditorPage';
+import TaskEditorPage from './pages/TaskEditorPage';
 import TasksTableContainer from './containers/TasksTableContainer';
 
 import { globalConfiguration } from './config';
@@ -32,7 +32,6 @@ const store = createFlocsStore();
 // TODO: add following routes:
 //    <Route path="/tasks" component={TasksTableContainer} />
 //    <Route path="/task/:taskId" component={PracticePage} />
-//    <Route path="/task-editor" component={TaskEditorPage} />
 
 //const app = (
 //  <FlocsProvider store={store} router>
@@ -46,6 +45,7 @@ const app = (
         <AppContainer>
           <Route exact path='/' component={HomePage}/>
           <Route exact path="/tasks" component={TasksTableContainer} />
+          <Route path="/task-editor" component={TaskEditorPage} />
         </AppContainer>
       </BrowserRouter>
     </FlocsThemeProvider>

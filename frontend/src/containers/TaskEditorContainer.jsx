@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import TaskEditor from '../components/TaskEditor';
 import { parseSpaceWorld } from '../core/spaceWorldDescription';
-import { setTask } from '../actions/taskEnvironment';
+import { setTask } from '../actions';
 
 
 class TaskEditorWrapper extends React.Component {

@@ -4,8 +4,8 @@ import SettingEditor from '../components/SettingEditor';
 import { changeSetting,
          importTask,
          exportTask,
-         setEditorType } from '../actions/taskEnvironment';
-import { switchVimMode } from '../actions/taskEditor';
+         setEditorType,
+         switchVimMode } from '../actions';
 import { getSpaceWorldText,
          isSpaceWorldTextValid,
          getTask,

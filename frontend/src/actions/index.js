@@ -119,3 +119,28 @@ export function setOpenMenu(open) {
 export function changeLocation(newLocation) {
   return action(at.CHANGE_LOCATION, newLocation);
 }
+
+
+export function changeSetting(taskEnvironmentId, taskSource) {
+  return action(at.CHANGE_SETTING, { taskEnvironmentId, taskSource });
+}
+
+
+export function setEditorType(taskEnvironmentId, editorType) {
+  return action(at.SET_EDITOR_TYPE, { taskEnvironmentId, editorType });
+}
+
+
+export function switchVimMode() {
+  return action(at.SWITCH_VIM_MODE);
+}
+
+
+export function exportTask(taskEnvironmentId) {
+  return action(at.EXPORT_TASK, { taskEnvironmentId });
+}
+
+
+export function importTask(taskEnvironmentId) {
+  return action(at.IMPORT_TASK, { taskEnvironmentId });
+}
