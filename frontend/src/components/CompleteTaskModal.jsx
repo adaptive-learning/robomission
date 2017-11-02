@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 import Dialog from 'material-ui/Dialog';
 import RaisedButton from 'material-ui/RaisedButton';
 import NextTaskButtonContainer from '../containers/NextTaskButtonContainer';
@@ -66,7 +66,7 @@ export default class CompleteTaskModal extends React.Component {
       <RaisedButton
         label="Pokračovat"
         primary={true}
-        onTouchTap={this.showLevelProgress}
+        onClick={this.showLevelProgress}
         disabled={!active}
       />
     );

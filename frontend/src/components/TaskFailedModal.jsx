@@ -11,7 +11,7 @@ export default class TaskFailedModal extends React.Component {
         label="Reset"
         secondary={true}
         keyboardFocused={true}
-        onTouchTap={this.props.resetGame}
+        onClick={this.props.resetGame}
       />,
     ];
     return (

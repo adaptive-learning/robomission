@@ -41,6 +41,24 @@ export const fetchPracticeOverview = {
 }
 
 
+export const startTask = {
+  request: (taskEnvironmentId, taskId) => action(at.START_TASK_REQUEST, {taskEnvironmentId, taskId}),
+  success: (taskSessionId) => action(at.START_TASK_SUCCESS, {taskSessionId}),
+}
+
+
+export const seeInstruction = {
+  request: (instructionId) => action(at.SEE_INSTRUCTION_REQUEST, {instructionId}),
+  success: (instructionId) => action(at.SEE_INSTRUCTION_SUCCESS, {instructionId}),
+}
+
+
+export const showLevelProgress = {
+  start: () => action(at.SHOW_LEVEL_PROGRESS_START),
+  next: (levelStatus) => action(at.SHOW_NEXT_LEVEL_STATUS, levelStatus),
+}
+
+
 export function createTaskEnvironment(taskEnvironmentId) {
   return action(at.CREATE_TASK_ENVIRONMENT, { taskEnvironmentId });
 }
@@ -143,4 +161,14 @@ export function exportTask(taskEnvironmentId) {
 
 export function importTask(taskEnvironmentId) {
   return action(at.IMPORT_TASK, { taskEnvironmentId });
+}
+
+
+export function closeTaskCompletionDialog(taskEnvironmentId) {
+  return action(at.CLOSE_TASK_COMPLETION_DIALOG, { taskEnvironmentId });
+}
+
+
+export function showInstructions() {
+  return action(at.SHOW_INSTRUCTIONS);
 }

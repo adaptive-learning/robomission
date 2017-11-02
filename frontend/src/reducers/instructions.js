@@ -3,7 +3,7 @@ import {
   FETCH_WORLD_SUCCESS,
   FETCH_STUDENT_SUCCESS,
   SET_TASK,
-  SEE_INSTRUCTION_PENDING,
+  SEE_INSTRUCTION_REQUEST,
   SHOW_INSTRUCTIONS,
   } from '../action-types';
 import { practicePageTaskEnvironmentId } from '../selectors/taskEnvironment';
@@ -56,7 +56,7 @@ export default function reduceInstructions(state = initial, action) {
       }
       return state;
     }
-    case SEE_INSTRUCTION_PENDING: {
+    case SEE_INSTRUCTION_REQUEST: {
       if (action.payload.instructionId !== state.scheduled[state.activeIndex]) {
         return state;
       }

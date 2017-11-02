@@ -2,7 +2,7 @@ import { CHANGE_LOCATION,
          CREATE_TASK_ENVIRONMENT,
          CLOSE_TASK_COMPLETION_DIALOG,
          SET_TASK,
-         START_TASK_FULFILLED,
+         START_TASK_SUCCESS,
          SET_TASK_SESSION,
          CHANGE_SETTING,
          CHANGE_CODE,
@@ -33,7 +33,7 @@ export default function reduceTaskEnvironments(state = {}, action) {
       // page e.g. by clicking on "tasks overview" button
       return updateTaskEnvironment(state, closeTaskCompletionDialog,
         { taskEnvironmentId: practicePageTaskEnvironmentId });
-    case START_TASK_FULFILLED:
+    case START_TASK_SUCCESS:
       return updateTaskEnvironment(state, setTaskSessionId, action.payload);
     case SET_TASK:
       return updateTaskEnvironment(state, setTask, action.payload);

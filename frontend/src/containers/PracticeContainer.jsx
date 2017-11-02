@@ -4,8 +4,10 @@ import TaskEnvironmentContainer from './TaskEnvironmentContainer';
 import { isSolved, getFailReason } from '../selectors/gameState';
 import { isTaskCompletionDialogOpen } from '../selectors/taskEnvironment';
 import { getLevelStatus } from '../selectors/practice';
-import { startTaskInTaskEnvironment, closeTaskCompletionDialog, resetGame } from '../actions/taskEnvironment';
-import { showLevelProgress } from '../actions/practice';
+import { closeTaskCompletionDialog,
+         resetGame,
+         showLevelProgress,
+         startTask } from '../actions';
 import CompleteTaskModal from '../components/CompleteTaskModal';
 import TaskFailedModal from '../components/TaskFailedModal';
 
@@ -23,9 +25,9 @@ function getProps(state, props) {
 
 
 const actionCreators = {
-  startTaskInTaskEnvironment,
+  showLevelProgress: showLevelProgress.start,
+  startTask: startTask.request,
   closeTaskCompletionDialog,
-  showLevelProgress,
   resetGame,
 };
 
@@ -50,7 +52,7 @@ class PracticeContainer extends React.Component {
   }
 
   startTask(taskId) {
-    this.props.startTaskInTaskEnvironment(this.props.taskEnvironmentId, taskId);
+    this.props.startTask(this.props.taskEnvironmentId, taskId);
   }
 
   render() {

@@ -14,6 +14,7 @@ import { getTaskId,
          getEditorType,
          getTaskSourceText,
          isInterpreting } from '../selectors/taskEnvironment';
+import { getToolbox } from '../selectors/task';
 import { getColor, getPosition, isSolved, isDead, getGameStage } from '../selectors/gameState';
 import { interpretRoboAst, interpretRoboCode, InterpreterError } from '../core/roboCodeInterpreter';
 
@@ -130,11 +131,23 @@ function handleInterpreterError(error) {
 }
 
 
+function* startTask(action) {
+  // TODO: report to server
+  const { taskEnvironmentId, taskId } = action.payload;
+  const setTaskByIdAction = actions.setTaskById(taskEnvironmentId, taskId);
+  yield put(setTaskByIdAction);
+}
+
+
 // Intercept setTask action to add complete task record
 // (which is currently required by some reducers).
 function* setTask(action) {
   const { taskEnvironmentId, taskId } = action.payload;
   const task = yield select(getTaskById, taskId);
+
+  // inject toolbox - needed for some reducers
+  task.toolbox = yield select(getToolbox, taskId);
+
   const setTaskAction = actions.setTask(taskEnvironmentId, task);
   yield put(setTaskAction);
 }
@@ -158,6 +171,7 @@ function* initializeApp() {
 function* watchActions() {
   yield takeLatest(actionType.FETCH_STUDENT_REQUEST, fetchStudent);
   yield takeLatest(actionType.FETCH_PRACTICE_OVERVIEW_REQUEST, fetchPracticeOverview);
+  yield takeEvery(actionType.START_TASK_REQUEST, startTask);
   yield takeEvery(actionType.SET_TASK_BY_ID, setTask);
 }
 

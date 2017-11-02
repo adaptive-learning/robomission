@@ -6,7 +6,7 @@ import IconButton from 'material-ui/IconButton';
 import Joyride from 'react-joyride';
 import 'react-joyride/lib/react-joyride-compiled.css';
 import { translate } from '../localization';
-import { showInstructions, seeInstruction } from '../actions/instructions';
+import { showInstructions, seeInstruction } from '../actions';
 import { inMode } from '../selectors/app';
 import { getScheduledInstructions } from '../selectors/instructions';
 
@@ -16,7 +16,10 @@ const getProps = (state) => ({
   scheduledInstructions: getScheduledInstructions(state),
   showInstructionsButton: inMode(state, 'task') && getScheduledInstructions(state).length > 0,
 });
-const actionCreators = { showInstructions, seeInstruction };
+const actionCreators = {
+  showInstructions,
+  seeInstruction: seeInstruction.request,
+};
 
 class InstructionsContainer extends React.Component {
   static propTypes = {
@@ -85,7 +88,7 @@ class InstructionsContainer extends React.Component {
     const blocklyTrashcanColor = '#576065';
     return (
       <IconButton
-        onTouchTap={this.showInstructions}
+        onClick={this.showInstructions}
         style={{
           position: 'fixed',
           bottom: 31,

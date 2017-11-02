@@ -6,7 +6,7 @@ import { practicePageTaskEnvironmentId } from '../selectors/taskEnvironment';
 
 function getProps(state, props) {
   return {
-    taskId: props.routeParams.taskId,
+    taskId: props.match.params.taskId,
   };
 }
 
