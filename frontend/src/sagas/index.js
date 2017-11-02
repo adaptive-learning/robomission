@@ -78,13 +78,10 @@ function* watchTasks(dispatch, getState) {
     const { taskEnvironmentId, task } = action.payload;
     const oldFlow = openTaskFlows[taskEnvironmentId];
     if (oldFlow) {
-      console.log('closing old flow');
       yield cancel(oldFlow);
     }
-    console.log('forking new flow');
     const newFlow = yield fork(taskFlow, dispatch, getState, taskEnvironmentId, task);
     openTaskFlows[taskEnvironmentId] = newFlow;
-    console.log('openTaskFlows:', openTaskFlows);
   }
 }
 
@@ -92,14 +89,12 @@ function* watchTasks(dispatch, getState) {
 // TODO: Rewrite this saga without calling dispatch and getState;
 //       then remove these two parameters.
 function* taskFlow(dispatch, getState, taskEnvironmentId, task) {
-  console.log('task flow', taskEnvironmentId);
   while (true) {
     const action = yield take([actionType.RUN_PROGRAM, actionType.DO_ACTION_MOVE]);
     if (action.payload.taskEnvironmentId !== taskEnvironmentId) {
       continue;
     }
     if (action.type == actionType.DO_ACTION_MOVE) {
-      console.log(action);
       yield put(actions.doAction(taskEnvironmentId, action.payload.action));
       //yield call(delay, 200);
       yield put(actions.move(taskEnvironmentId));
@@ -107,10 +102,8 @@ function* taskFlow(dispatch, getState, taskEnvironmentId, task) {
       yield put(actions.evolveWorld(taskEnvironmentId));
     }
     if (action.type == actionType.RUN_PROGRAM) {
-      console.log(action);
-      // TODO: check length limit, editor type, finish interpreation, report, allow cancelation
+      // TODO: check length limit, editor type, report, allow cancelation
       const roboAst = yield select(getRoboAst, taskEnvironmentId);
-      console.log(roboAst);
       yield put(actions.interpretationStarted(taskEnvironmentId));
       const context = {
         doActionMove: (action) => dispatch(actions.doActionMove(taskEnvironmentId, action)),
@@ -120,8 +113,19 @@ function* taskFlow(dispatch, getState, taskEnvironmentId, task) {
         isDead: () => isDead(getState(), taskEnvironmentId),
         interrupted: () => getGameStage(getState(), taskEnvironmentId) === 'initial',
       };
-      interpretRoboAst(roboAst, context);
+      interpretRoboAst(roboAst, context)
+        .catch(handleInterpreterError)
+        .then(() => dispatch(actions.interpretationFinished(taskEnvironmentId)));
     }
+  }
+}
+
+
+function handleInterpreterError(error) {
+  if (error instanceof InterpreterError) {
+    alert(error.message);
+  } else {
+    throw error;
   }
 }
 
