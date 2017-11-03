@@ -10,16 +10,16 @@ import { getStudentUrl,
          getReportProgramEditUrl,
          getReportProgramExecutionUrl,
          getWatchInstructionUrl } from '../selectors/student';
-import { getTaskById } from '../selectors/task';
+import { getTaskById,
+         getToolbox } from '../selectors/task';
 import { getTaskId,
-         getTaskSessionId,
          getRoboAst,
          getMiniRoboCode,
          getLengthLimit,
          getTaskSourceText,
          isInterpreting } from '../selectors/taskEnvironment';
-import { getToolbox } from '../selectors/task';
 import { getColor, getPosition, isSolved, isDead, getGameStage } from '../selectors/gameState';
+import { getNextLevelStatus } from '../selectors/practice';
 import { interpretRoboAst, InterpreterError } from '../core/roboCodeInterpreter';
 import { parseTaskSourceText } from '../core/taskSourceParser';
 import { downloadTextFile, loadTextFile } from '../utils/files';
@@ -276,6 +276,14 @@ function* importTask(action) {
 }
 
 
+function* showLevelProgress() {
+  const nextLevelStatus = yield select(getNextLevelStatus);
+  if (nextLevelStatus !== null) {
+    yield put(actions.showLevelProgress.next(nextLevelStatus));
+  }
+}
+
+
 function* watchActions() {
   yield takeLatest(actionType.FETCH_STUDENT_REQUEST, fetchStudent);
   yield takeLatest(actionType.FETCH_PRACTICE_OVERVIEW_REQUEST, fetchPracticeOverview);
@@ -285,8 +293,8 @@ function* watchActions() {
 
   yield takeEvery(actionType.START_TASK_REQUEST, startTask);
   yield takeEvery(actionType.SET_TASK_BY_ID, setTask);
-
   yield takeEvery(actionType.SEE_INSTRUCTION_REQUEST, watchInstruction);
+  yield takeLatest(actionType.SHOW_LEVEL_PROGRESS_START, showLevelProgress);
 }
 
 
