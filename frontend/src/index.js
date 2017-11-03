@@ -6,7 +6,6 @@ import { Provider } from 'react-intl-redux';
 import { globalConfiguration } from './config';
 import { createFlocsStore } from './store';
 import FlocsThemeProvider from './theme/FlocsThemeProvider';
-import './index.css';
 import HomePage from './pages/HomePage';
 import PracticePage from './pages/PracticePage';
 import TaskEditorPage from './pages/TaskEditorPage';
