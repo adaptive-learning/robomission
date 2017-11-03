@@ -1,5 +1,6 @@
 import { countStatements } from '../core/roboCodeSyntaxChecker';
 import { generateSpaceWorldText } from '../core/spaceWorldDescription';
+import { generateMiniRoboCode } from '../core/miniRoboCodeGenerator';
 import { stripIndentation } from '../utils/text';
 import { initialTaskEnvironment } from '../reducers/taskEnvironments';
 import { getToolboxId } from '../selectors/category';
@@ -137,6 +138,13 @@ export function getCode(state, taskEnvironmentId) {
 export function getRoboAst(state, taskEnvironmentId) {
   const taskEnvironment = getTaskEnvironment(state, taskEnvironmentId);
   return taskEnvironment.roboAst;
+}
+
+
+export function getMiniRoboCode(state, taskEnvironmentId) {
+  const roboAst = getRoboAst(state, taskEnvironmentId)
+  const miniRoboCode = generateMiniRoboCode(roboAst);
+  return miniRoboCode;
 }
 
 

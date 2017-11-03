@@ -3,10 +3,9 @@ import { CHANGE_LOCATION,
          CLOSE_TASK_COMPLETION_DIALOG,
          SET_TASK,
          START_TASK_SUCCESS,
-         SET_TASK_SESSION,
          CHANGE_SETTING,
-         CHANGE_CODE,
-         CHANGE_ROBO_AST,
+         EDIT_PROGRAM_CODE,
+         EDIT_PROGRAM_AST,
          RESET_GAME,
          DO_ACTION,
          MOVE,
@@ -15,7 +14,7 @@ import { CHANGE_LOCATION,
          INTERPRETATION_FINISHED,
          CHANGE_GAME_PANEL_WIDTH,
          SET_EDITOR_TYPE,
-         SOLVE_TASK_FULFILLED } from '../action-types';
+         RUN_PROGRAM_SOLVED_REPORT } from '../action-types';
 import { parseSpaceWorld } from '../core/spaceWorldDescription';
 import { parseRoboCode, RoboCodeSyntaxError } from '../core/roboCodeParser';
 import { generateRoboCode } from '../core/roboCodeGenerator';
@@ -37,9 +36,7 @@ export default function reduceTaskEnvironments(state = {}, action) {
       return updateTaskEnvironment(state, setTaskSessionId, action.payload);
     case SET_TASK:
       return updateTaskEnvironment(state, setTask, action.payload);
-    case SET_TASK_SESSION:
-      return updateTaskEnvironment(state, setTask, { task: action.payload.taskSession.task });
-    case CHANGE_SETTING:
+   case CHANGE_SETTING:
       return updateTaskEnvironment(state, changeSetting, action.payload);
     case DO_ACTION:
       return updateTaskEnvironment(state, doAction, action.payload);
@@ -49,9 +46,9 @@ export default function reduceTaskEnvironments(state = {}, action) {
       return updateTaskEnvironment(state, evolveWorld, action.payload);
     case RESET_GAME:
       return updateTaskEnvironment(state, resetGame, action.payload);
-    case CHANGE_CODE:
+    case EDIT_PROGRAM_CODE:
       return updateTaskEnvironment(state, changeCode, action.payload);
-    case CHANGE_ROBO_AST:
+    case EDIT_PROGRAM_AST:
       return updateTaskEnvironment(state, changeRoboAst, action.payload);
     case INTERPRETATION_STARTED:
       return updateTaskEnvironment(state, startInterpretation, action.payload);
@@ -61,7 +58,7 @@ export default function reduceTaskEnvironments(state = {}, action) {
       return updateTaskEnvironment(state, changeGamePanelWidth, action.payload);
     case SET_EDITOR_TYPE:
       return updateTaskEnvironment(state, setEditorType, action.payload);
-    case SOLVE_TASK_FULFILLED:
+    case RUN_PROGRAM_SOLVED_REPORT:
       return updateTaskEnvironment(state, solveTask, action.payload);
     default:
       return state;

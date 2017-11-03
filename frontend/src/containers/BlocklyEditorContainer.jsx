@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import BlocklyEditor from '../components/BlocklyEditor';
 import { getRoboAst, getEditorSessionId, getLengthLimit, getToolbox } from '../selectors/taskEnvironment';
-import { changeRoboAst } from '../actions';
+import { editProgramAst } from '../actions';
 import { expandBlocks } from '../core/toolbox';
 
 
@@ -50,7 +50,9 @@ function mapStateToProps(state, props) {
 }
 
 
-const actionCreators = { changeRoboAst };
+const actionCreators = {
+  changeRoboAst: editProgramAst,
+};
 const BlocklyEditorContainer = connect(mapStateToProps,
                                        actionCreators,
                                        null,

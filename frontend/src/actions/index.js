@@ -44,6 +44,7 @@ export const fetchPracticeOverview = {
 export const startTask = {
   request: (taskEnvironmentId, taskId) => action(at.START_TASK_REQUEST, {taskEnvironmentId, taskId}),
   success: (taskSessionId) => action(at.START_TASK_SUCCESS, {taskSessionId}),
+  failure: (error) => action(at.START_TASK_FAILURE, {error}),
 }
 
 
@@ -57,6 +58,25 @@ export const seeInstruction = {
 export const showLevelProgress = {
   start: () => action(at.SHOW_LEVEL_PROGRESS_START),
   next: (levelStatus) => action(at.SHOW_NEXT_LEVEL_STATUS, levelStatus),
+}
+
+
+export function editProgramAst(taskEnvironmentId, roboAst) {
+  return action(at.EDIT_PROGRAM_AST, { taskEnvironmentId, roboAst });
+}
+
+export function editProgramCode(taskEnvironmentId, code) {
+  return action(at.EDIT_PROGRAM_CODE, { taskEnvironmentId, code });
+}
+
+
+export const runProgram = {
+  start: (taskEnvironmentId) => action(at.RUN_PROGRAM_START, {taskEnvironmentId}),
+  //solved: (taskEnvironmentId) => action(at.RUN_PROGRAM_SOLVED, {taskEnvironmentId}),
+  solvedReport: (taskEnvironmentId, report) => action(
+    at.RUN_PROGRAM_SOLVED_REPORT,
+    {taskEnvironmentId, ...report}
+  ),
 }
 
 
@@ -77,21 +97,6 @@ export function setTaskById(taskEnvironmentId, taskId) {
 
 export function changeGamePanelWidth(taskEnvironmentId, gamePanelWidth) {
   return action(at.CHANGE_GAME_PANEL_WIDTH, { taskEnvironmentId, gamePanelWidth });
-}
-
-
-export function changeCode(taskEnvironmentId, code) {
-  return action(at.CHANGE_CODE, { taskEnvironmentId, code });
-}
-
-
-export function changeRoboAst(taskEnvironmentId, roboAst) {
-  return action(at.CHANGE_ROBO_AST, { taskEnvironmentId, roboAst });
-}
-
-
-export function runProgram(taskEnvironmentId) {
-  return action(at.RUN_PROGRAM, { taskEnvironmentId });
 }
 
 

@@ -81,6 +81,59 @@ export function seeInstruction(url, instructionId) {
 }
 
 
+export function startTask(url, taskId) {
+  const data = { 'task': taskId };
+  return axios.post(url, data).then(response => parseStartTask(response.data));
+}
+
+
+function parseStartTask(data) {
+  return {
+    taskSessionId: data['task_session_id'],
+  };
+}
+
+
+export function reportProgramEdit(url, taskSessionId, newMiniCode) {
+  const data = {
+    'task-session-id': taskSessionId,
+    'program': newMiniCode,
+  };
+  return axios.post(url, data);
+}
+
+
+export function reportProgramExecution(url, taskSessionId, miniCode, solved) {
+  const data = {
+    'task-session-id': taskSessionId,
+    'program': miniCode,
+    'correct': solved,
+  };
+  return axios.post(url, data).then(response => parseProgramExecution(response.data));
+}
+
+
+function parseProgramExecution(data) {
+  if (!data.solved) {
+    return { solved: false };
+  }
+  return {
+    solved: true,
+    recommendation: data['recommendation'],
+    progress: parseProgress(data['progress']),
+  };
+}
+
+
+function parseProgress(data) {
+  return {
+    level: data['level'],
+    credits: data['credits'],
+    activeCredits: data['active_credits'],
+  };
+}
+
+
 function relativizeUrl(url) {
   // During development, use only the relative path of the url. This is
   // currently necessary during FE development, when there are separate FE and

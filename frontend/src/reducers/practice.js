@@ -1,4 +1,4 @@
-import { SOLVE_TASK_FULFILLED,
+import { RUN_PROGRAM_SOLVED_REPORT,
          SHOW_NEXT_LEVEL_STATUS,
          FETCH_STUDENT_SUCCESS } from '../action-types';
 
@@ -21,7 +21,7 @@ export default function reducePractice(state = initial, action) {
           activeCredits: action.payload.activeCredits,
         },
       };
-    case SOLVE_TASK_FULFILLED:
+    case RUN_PROGRAM_SOLVED_REPORT:
       return {
         ...state,
         // shownLevelStatus: state.targetLevelStatus,

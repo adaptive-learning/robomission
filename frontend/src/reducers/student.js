@@ -1,5 +1,5 @@
 import { FETCH_STUDENT_SUCCESS,
-         SOLVE_TASK_FULFILLED } from '../action-types';
+         RUN_PROGRAM_SOLVED_REPORT } from '../action-types';
 
 
 export default function reduceStudent(state = {}, action) {
@@ -16,7 +16,7 @@ export default function reduceStudent(state = {}, action) {
         reportProgramEditUrl: action.payload.reportProgramEditUrl,
         reportProgramExecutionUrl: action.payload.reportProgramExecutionUrl,
       };
-    case SOLVE_TASK_FULFILLED:
+    case RUN_PROGRAM_SOLVED_REPORT:
       return {
         ...state,
         level: action.payload.progress.level,

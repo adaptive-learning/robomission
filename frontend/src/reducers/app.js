@@ -2,7 +2,8 @@ import { CHANGE_LOCATION,
          FETCH_WORLD_SUCCESS,
          FETCH_PRACTICE_OVERVIEW_REQUEST,
          FETCH_PRACTICE_OVERVIEW_SUCCESS,
-         REPORT_PROGRAM_EDIT_PENDING,
+         EDIT_PROGRAM_AST,
+         EDIT_PROGRAM_CODE,
          FETCH_STUDENT_SUCCESS } from '../action-types';
 
 
@@ -38,7 +39,8 @@ export default function reduceApp(state = initial, action) {
         practiceOverviewLoaded: true,
         practiceOverviewInvalidated: false,
       };
-    case REPORT_PROGRAM_EDIT_PENDING:
+    case EDIT_PROGRAM_AST:
+    case EDIT_PROGRAM_CODE:
       // whenever a code is changed, solving time is updated
       return {
         ...state,

@@ -1,9 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import CodeEditor from '../components/CodeEditor';
-import { changeCode } from '../actions';
+import { editProgramCode } from '../actions';
 
 
 class CodeEditorWrapper extends React.Component {
@@ -35,11 +34,10 @@ function mapStateToProps(state, props) {
   return { taskEnvironmentId, code };
 }
 
-
-function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ changeCode }, dispatch);
+const actionCreators = {
+  changeCode: editProgramCode,
 }
 
 
-const CodeEditorContainer = connect(mapStateToProps, mapDispatchToProps)(CodeEditorWrapper);
+const CodeEditorContainer = connect(mapStateToProps, actionCreators)(CodeEditorWrapper);
 export default CodeEditorContainer;

@@ -77,6 +77,11 @@ function mapStateToProps(state, props) {
 }
 
 
-const actionCreators = { createTaskEnvironment, runProgram, resetGame, doActionMove };
+const actionCreators = {
+  runProgram: runProgram.start,
+  createTaskEnvironment,
+  resetGame,
+  doActionMove,
+};
 const SpaceGameContainer = connect(mapStateToProps, actionCreators)(SpaceGameWrapper);
 export default SpaceGameContainer;

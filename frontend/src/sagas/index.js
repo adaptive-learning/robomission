@@ -6,11 +6,15 @@ import * as actionType from '../action-types';
 import { getCurrentUserUrl } from '../selectors/api';
 import { getStudentUrl,
          getPracticeOverviewUrl,
+         getStartTaskUrl,
+         getReportProgramEditUrl,
+         getReportProgramExecutionUrl,
          getWatchInstructionUrl } from '../selectors/student';
 import { getTaskById } from '../selectors/task';
 import { getTaskId,
          getTaskSessionId,
          getRoboAst,
+         getMiniRoboCode,
          getLengthLimit,
          getTaskSourceText,
          isInterpreting } from '../selectors/taskEnvironment';
@@ -105,7 +109,7 @@ function* watchTasks(dispatch, getState) {
 //       then remove these two parameters.
 function* taskFlow(dispatch, getState, taskEnvironmentId, task) {
   while (true) {
-    const action = yield take([actionType.RUN_PROGRAM, actionType.DO_ACTION_MOVE]);
+    const action = yield take([actionType.RUN_PROGRAM_START, actionType.DO_ACTION_MOVE]);
     if (action.payload.taskEnvironmentId !== taskEnvironmentId) {
       continue;
     }
@@ -134,7 +138,7 @@ function* taskFlow(dispatch, getState, taskEnvironmentId, task) {
       yield put(actions.evolveWorld(taskEnvironmentId));
     }
 
-    if (action.type === actionType.RUN_PROGRAM) {
+    if (action.type === actionType.RUN_PROGRAM_START) {
       // TODO: editor type, report
 
       // TODO: factor out limit check
@@ -175,10 +179,40 @@ function handleInterpreterError(error) {
 
 
 function* startTask(action) {
-  // TODO: report to server
   const { taskEnvironmentId, taskId } = action.payload;
   const setTaskByIdAction = actions.setTaskById(taskEnvironmentId, taskId);
   yield put(setTaskByIdAction);
+  const startTaskUrl = yield select(getStartTaskUrl);
+  const { taskSessionId } = yield call(api.startTask, startTaskUrl, taskId);
+  const programEditUrl = yield select(getReportProgramEditUrl);
+  const programExecutionUrl = yield select(getReportProgramExecutionUrl);
+  let prevMiniCode = null;
+  let miniCode = null;
+  while (true) {
+    const action = yield take([
+      actionType.START_TASK_REQUEST,
+      actionType.RUN_PROGRAM_START,
+      actionType.EDIT_PROGRAM_AST,
+      actionType.EDIT_PROGRAM_CODE,
+    ]);
+    if (action.payload.taskEnvironmentId !== taskEnvironmentId) {
+      continue;
+    }
+    if (action.type === actionType.START_TASK_REQUEST) {
+      // Terminate current saga when new task starts in this task environment.
+      break;
+    } else if (action.type === actionType.EDIT_PROGRAM_AST) {
+      prevMiniCode = miniCode;
+      miniCode = yield select(getMiniRoboCode, taskEnvironmentId);
+      if (prevMiniCode !== null && prevMiniCode !== miniCode) {
+        yield call(api.reportProgramEdit, programEditUrl, taskSessionId, miniCode);
+      }
+    } else if (action.type === actionType.EDIT_PROGRAM_CODE) {
+      // TODO: Report code edits.
+      console.warn('Reporting code edits not implemented yet.')
+    } else if (action.type === actionType.RUN_PROGRAM_START) {
+    }
+  }
 }
 
 
