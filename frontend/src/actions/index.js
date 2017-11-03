@@ -50,6 +50,7 @@ export const startTask = {
 export const seeInstruction = {
   request: (instructionId) => action(at.SEE_INSTRUCTION_REQUEST, {instructionId}),
   success: (instructionId) => action(at.SEE_INSTRUCTION_SUCCESS, {instructionId}),
+  failure: (error) => action(at.SEE_INSTRUCTION_FAILURE, {error}),
 }
 
 

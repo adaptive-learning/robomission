@@ -22,8 +22,8 @@ export function getPracticeOverviewUrl(state) {
 }
 
 
-export function getSolveTaskUrl(state) {
-  return state.student.solveTaskUrl;
+export function getStartTaskUrl(state) {
+  return state.student.startTaskUrl;
 }
 
 
@@ -34,4 +34,9 @@ export function getReportProgramExecutionUrl(state) {
 
 export function getReportProgramEditUrl(state) {
   return state.student.reportProgramEditUrl;
+}
+
+
+export function getWatchInstructionUrl(state) {
+  return state.student.watchInstructionUrl;
 }

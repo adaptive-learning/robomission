@@ -75,6 +75,12 @@ export function fetchPracticeOverview(url) {
 }
 
 
+export function seeInstruction(url, instructionId) {
+  const data = { 'instruction': instructionId };
+  return axios.post(url, data);
+}
+
+
 function relativizeUrl(url) {
   // During development, use only the relative path of the url. This is
   // currently necessary during FE development, when there are separate FE and

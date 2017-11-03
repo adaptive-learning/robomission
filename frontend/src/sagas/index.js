@@ -4,19 +4,19 @@ import * as api from '../api';
 import * as actions from '../actions';
 import * as actionType from '../action-types';
 import { getCurrentUserUrl } from '../selectors/api';
-import { getStudentUrl, getPracticeOverviewUrl } from '../selectors/student';
+import { getStudentUrl,
+         getPracticeOverviewUrl,
+         getWatchInstructionUrl } from '../selectors/student';
 import { getTaskById } from '../selectors/task';
 import { getTaskId,
          getTaskSessionId,
          getRoboAst,
-         getCode,
          getLengthLimit,
-         getEditorType,
          getTaskSourceText,
          isInterpreting } from '../selectors/taskEnvironment';
 import { getToolbox } from '../selectors/task';
 import { getColor, getPosition, isSolved, isDead, getGameStage } from '../selectors/gameState';
-import { interpretRoboAst, interpretRoboCode, InterpreterError } from '../core/roboCodeInterpreter';
+import { interpretRoboAst, InterpreterError } from '../core/roboCodeInterpreter';
 import { parseTaskSourceText } from '../core/taskSourceParser';
 import { downloadTextFile, loadTextFile } from '../utils/files';
 
@@ -70,6 +70,18 @@ function* fetchPracticeOverview(action) {
     yield put(actions.fetchPracticeOverview.success(practiceOverview));
   } catch (error) {
     yield put(actions.fetchPracticeOverview.failure(error));
+  }
+}
+
+
+function* watchInstruction(action) {
+  try {
+    const { instructionId } = action.payload;
+    const url = yield select(getWatchInstructionUrl);
+    yield call(api.seeInstruction, url, instructionId);
+    yield put(actions.seeInstruction.success(instructionId));
+  } catch (error) {
+    yield put(actions.seeInstruction.failure(error));
   }
 }
 
@@ -232,6 +244,8 @@ function* watchActions() {
 
   yield takeEvery(actionType.START_TASK_REQUEST, startTask);
   yield takeEvery(actionType.SET_TASK_BY_ID, setTask);
+
+  yield takeEvery(actionType.SEE_INSTRUCTION_REQUEST, watchInstruction);
 }
 
 
