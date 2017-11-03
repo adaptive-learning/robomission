@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { Line as ProgressBar } from 'rc-progress';
 import muiThemeable from 'material-ui/styles/muiThemeable';
 
