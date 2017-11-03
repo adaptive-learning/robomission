@@ -139,8 +139,6 @@ function* taskFlow(dispatch, getState, taskEnvironmentId, task) {
     }
 
     if (action.type === actionType.RUN_PROGRAM_START) {
-      // TODO: editor type, report
-
       // TODO: factor out limit check
       const { limit, used } = yield select(getLengthLimit, taskEnvironmentId);
       if (limit !== null && used > limit) {
