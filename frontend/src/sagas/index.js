@@ -17,6 +17,8 @@ import { getTaskId,
 import { getToolbox } from '../selectors/task';
 import { getColor, getPosition, isSolved, isDead, getGameStage } from '../selectors/gameState';
 import { interpretRoboAst, interpretRoboCode, InterpreterError } from '../core/roboCodeInterpreter';
+import { parseTaskSourceText } from '../core/taskSourceParser';
+import { downloadTextFile, loadTextFile } from '../utils/files';
 
 
 function* fetchApiRoot() {
@@ -168,9 +170,37 @@ function* initializeApp() {
 }
 
 
+function* exportTask(action) {
+  const { taskEnvironmentId } = action.payload;
+  try {
+    const taskId = yield select(getTaskId, taskEnvironmentId);
+    const taskSourceText = yield select(getTaskSourceText, taskEnvironmentId);
+    downloadTextFile(`${taskId}.md`, taskSourceText);
+  } catch (err) {
+    alert(`Export failed: ${err.message}`);
+  }
+}
+
+
+function* importTask(action) {
+  const { taskEnvironmentId } = action.payload;
+  try {
+    const taskSourceText = yield call(loadTextFile);
+    const task = parseTaskSourceText(taskSourceText);
+    yield put(actions.setTask(taskEnvironmentId, task));
+  } catch (err) {
+    alert(`Import failed: ${err.message}`);
+  }
+}
+
+
 function* watchActions() {
   yield takeLatest(actionType.FETCH_STUDENT_REQUEST, fetchStudent);
   yield takeLatest(actionType.FETCH_PRACTICE_OVERVIEW_REQUEST, fetchPracticeOverview);
+
+  yield takeLatest(actionType.EXPORT_TASK, exportTask);
+  yield takeLatest(actionType.IMPORT_TASK, importTask);
+
   yield takeEvery(actionType.START_TASK_REQUEST, startTask);
   yield takeEvery(actionType.SET_TASK_BY_ID, setTask);
 }
