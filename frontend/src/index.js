@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter, Link, Route } from 'react-router-dom';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import AppContainer from './containers/AppContainer';
 import { Provider } from 'react-intl-redux';
 import { globalConfiguration } from './config';
@@ -20,10 +20,12 @@ const app = (
     <FlocsThemeProvider>
       <BrowserRouter>
         <AppContainer>
-          <Route exact path='/' component={HomePage}/>
-          <Route exact path="/tasks" component={TasksTableContainer} />
-          <Route exact path="/task-editor" component={TaskEditorPage} />
-          <Route path="/task/:taskId" component={PracticePage} />
+          <Switch>
+            <Route exact path='/' component={HomePage}/>
+            <Route exact path="/tasks" component={TasksTableContainer} />
+            <Route exact path="/task-editor" component={TaskEditorPage} />
+            <Route path="/task/:taskId" component={PracticePage} />
+          </Switch>
         </AppContainer>
       </BrowserRouter>
     </FlocsThemeProvider>
