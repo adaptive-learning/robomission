@@ -97,15 +97,41 @@ function* taskFlow(dispatch, getState, taskEnvironmentId, task) {
     if (action.payload.taskEnvironmentId !== taskEnvironmentId) {
       continue;
     }
+
     if (action.type === actionType.DO_ACTION_MOVE) {
+      const { interruptible } = action.payload;
+      // TODO: dry repeated interruption check
+      let interpreting = yield select(isInterpreting, taskEnvironmentId);
+      if (interruptible && !interpreting) {
+        continue;
+      }
       yield put(actions.doAction(taskEnvironmentId, action.payload.action));
-      //yield call(delay, 200);
+      yield call(delay, 200);
+
+      interpreting = yield select(isInterpreting, taskEnvironmentId);
+      if (interruptible && !interpreting) {
+        continue;
+      }
       yield put(actions.move(taskEnvironmentId));
-      //yield call(delay, 200);
+      yield call(delay, 200);
+
+      interpreting = yield select(isInterpreting, taskEnvironmentId);
+      if (interruptible && !interpreting) {
+        continue;
+      }
       yield put(actions.evolveWorld(taskEnvironmentId));
     }
+
     if (action.type === actionType.RUN_PROGRAM) {
-      // TODO: check length limit, editor type, report, allow cancelation
+      // TODO: editor type, report
+
+      // TODO: factor out limit check
+      const { limit, used } = yield select(getLengthLimit, taskEnvironmentId);
+      if (limit !== null && used > limit) {
+        alert(`Violated actions limit: ${used}/${limit}`);
+        continue;
+      }
+
       const roboAst = yield select(getRoboAst, taskEnvironmentId);
       yield put(actions.interpretationStarted(taskEnvironmentId));
       const context = {
@@ -114,7 +140,10 @@ function* taskFlow(dispatch, getState, taskEnvironmentId, task) {
         position: () => getPosition(getState(), taskEnvironmentId),
         isSolved: () => isSolved(getState(), taskEnvironmentId),
         isDead: () => isDead(getState(), taskEnvironmentId),
-        interrupted: () => getGameStage(getState(), taskEnvironmentId) === 'initial',
+        interrupted: () => {
+          const stage = getGameStage(getState(), taskEnvironmentId);
+          return stage === 'initial';
+        }
       };
       interpretRoboAst(roboAst, context)
         .catch(handleInterpreterError)
