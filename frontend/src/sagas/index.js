@@ -191,7 +191,7 @@ function* startTask(action) {
   while (true) {
     const action = yield take([
       actionType.START_TASK_REQUEST,
-      actionType.RUN_PROGRAM_START,
+      actionType.INTERPRETATION_FINISHED,
       actionType.EDIT_PROGRAM_AST,
       actionType.EDIT_PROGRAM_CODE,
     ]);
@@ -210,7 +210,14 @@ function* startTask(action) {
     } else if (action.type === actionType.EDIT_PROGRAM_CODE) {
       // TODO: Report code edits.
       console.warn('Reporting code edits not implemented yet.')
-    } else if (action.type === actionType.RUN_PROGRAM_START) {
+    } else if (action.type === actionType.INTERPRETATION_FINISHED) {
+      const program = yield select(getMiniRoboCode, taskEnvironmentId);
+      const solved = yield select(isSolved, taskEnvironmentId);
+      const report = yield call(api.reportProgramExecution,
+        programExecutionUrl, taskSessionId, program, solved);
+      if (solved) {
+        yield put(actions.runProgram.solvedReport(taskEnvironmentId, report));
+      }
     }
   }
 }

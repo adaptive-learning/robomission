@@ -114,7 +114,7 @@ export function reportProgramExecution(url, taskSessionId, miniCode, solved) {
 
 
 function parseProgramExecution(data) {
-  if (!data.solved) {
+  if (!data.correct) {
     return { solved: false };
   }
   return {
