@@ -1,6 +1,6 @@
 import React from 'react';
 import AppBar from 'material-ui/AppBar';
-import { Toolbar, ToolbarGroup, ToolbarTitle } from 'material-ui/Toolbar';
+import { Toolbar, ToolbarGroup } from 'material-ui/Toolbar';
 import muiThemeable from 'material-ui/styles/muiThemeable';
 import logo from '../images/logo.png'
 import LevelBar from '../components/LevelBar';
@@ -11,6 +11,7 @@ class Header extends React.Component {
   render() {
     const logoImg = (
       <img
+        alt='RoboMission logo'
         src={ logo }
         style={{
           height: '100%',
@@ -19,7 +20,6 @@ class Header extends React.Component {
         }}
       />
     );
-    const { level, activeCredits, maxCredits } = this.props.levelInfo;
     const toolbar = (
       <Toolbar style={{ backgroundColor: 'transparent', color: 'white' }}>
         <ToolbarGroup>

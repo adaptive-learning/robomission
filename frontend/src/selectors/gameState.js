@@ -13,6 +13,7 @@ export function getColor(state, taskEnvironmentId) {
 export function getPosition(state, taskEnvironmentId) {
   const gameState = getGameState(state, taskEnvironmentId);
   const { fields } = gameState;
+  // eslint-disable-next-line no-unused-vars
   const [_y, x] = findSpaceshipPosition(fields);
   const position = x + 1;
   return position;
@@ -443,12 +444,14 @@ function outsideWorld(fields, position) {
 
 
 function beyondLastRow(fields, position) {
+  // eslint-disable-next-line no-unused-vars
   const [y, x] = position;
   return y < 0;
 }
 
 
 function beyondEdges(fields, position) {
+  // eslint-disable-next-line no-unused-vars
   const [y, x] = position;
   const [minX, maxX] = [0, fields[0].length - 1];
   return (x < minX || x > maxX);

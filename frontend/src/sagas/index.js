@@ -95,14 +95,14 @@ function* taskFlow(dispatch, getState, taskEnvironmentId, task) {
     if (action.payload.taskEnvironmentId !== taskEnvironmentId) {
       continue;
     }
-    if (action.type == actionType.DO_ACTION_MOVE) {
+    if (action.type === actionType.DO_ACTION_MOVE) {
       yield put(actions.doAction(taskEnvironmentId, action.payload.action));
       //yield call(delay, 200);
       yield put(actions.move(taskEnvironmentId));
       //yield call(delay, 200);
       yield put(actions.evolveWorld(taskEnvironmentId));
     }
-    if (action.type == actionType.RUN_PROGRAM) {
+    if (action.type === actionType.RUN_PROGRAM) {
       // TODO: check length limit, editor type, report, allow cancelation
       const roboAst = yield select(getRoboAst, taskEnvironmentId);
       yield put(actions.interpretationStarted(taskEnvironmentId));
