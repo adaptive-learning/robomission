@@ -4,6 +4,7 @@ from django.db.models import prefetch_related_objects, Prefetch
 from django.contrib.sessions.models import Session
 from django.shortcuts import redirect
 from django.shortcuts import render
+from django.template.exceptions import TemplateDoesNotExist
 from django.views.decorators.csrf import ensure_csrf_cookie
 from lazysignup.decorators import allow_lazy_user
 from rest_framework import permissions
@@ -37,9 +38,15 @@ from learn import actions
 @ensure_csrf_cookie
 @allow_lazy_user
 def frontend_app(request, *_):
-    response = render(request, 'index.html')
-    delete_invalid_session_cookie_from_response(request, response)
-    return response
+    try:
+        response = render(request, 'index.html')
+    except TemplateDoesNotExist as exc:
+        raise Exception(
+            'Missing index.html template in frontend build directory.\n'
+            'Use `make frontend` or `make liveserver`.') from exc
+    else:
+        delete_invalid_session_cookie_from_response(request, response)
+        return response
 
 
 def delete_invalid_session_cookie_from_response(request, response):

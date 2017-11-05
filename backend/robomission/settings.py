@@ -56,7 +56,8 @@ ROOT_URLCONF = 'robomission.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        # Frontend build directory contains template for index.html
+        'DIRS': [os.path.join(FRONTEND_DIR, 'build')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -114,7 +115,7 @@ LANGUAGE_CODE = 'cs'
 
 # Static files (CSS, JavaScript, Images)
 STATIC_URL = '/static/'
-STATICFILES_DIRS = (os.path.join(FRONTEND_DIR, 'static'),)
+STATICFILES_DIRS = (os.path.join(FRONTEND_DIR, 'build', 'static'),)
 STATIC_ROOT = os.path.join(REPO_DIR, '..', 'static')
 WEBPACK_LOADER = {
     'DEFAULT': {
