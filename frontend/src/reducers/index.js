@@ -1,6 +1,5 @@
 import { combineReducers } from 'redux';
 import { intlReducer } from 'react-intl-redux';
-import { routerReducer } from 'react-router-redux';
 import reduceApi from './api';
 import reduceApp from './app';
 import reduceBlocks from './blocks';
@@ -35,7 +34,6 @@ export const reducers = combineReducers({
   taskEditor: reduceTaskEditor,
   practice: reducePractice,
   intl: intlReducer,
-  routing: routerReducer,
 });
 
 
