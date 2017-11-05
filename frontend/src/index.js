@@ -10,7 +10,10 @@ import HomePage from './pages/HomePage';
 import PracticePage from './pages/PracticePage';
 import TaskEditorPage from './pages/TaskEditorPage';
 import TasksTableContainer from './containers/TasksTableContainer';
-import registerServiceWorker from './registerServiceWorker';
+
+//TODO: setup service worker to work in production
+// (see create-react-app for details)
+//import registerServiceWorker from './registerServiceWorker';
 
 globalConfiguration();
 
@@ -34,4 +37,4 @@ const app = (
 
 const mountElement = document.getElementById('flocsApp');
 ReactDOM.render(app, mountElement);
-registerServiceWorker();
+//registerServiceWorker();

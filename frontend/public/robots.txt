@@ -1,0 +1,3 @@
+User-agent: *
+Disallow: /learn/api/
+Disallow: /admin/

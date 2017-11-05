@@ -113,9 +113,14 @@ LANGUAGES = [
 LANGUAGE_CODE = 'cs'
 
 
-# Static files (CSS, JavaScript, Images)
+# Static files
 STATIC_URL = '/static/'
-STATICFILES_DIRS = (os.path.join(FRONTEND_DIR, 'build', 'static'),)
+STATICFILES_DIRS = (
+    # Top-level public files (such as favicon.ico) are marked as static files
+    # under `public` namespace (e.g. /static/public/favicon.ico).
+    ('public', os.path.join(FRONTEND_DIR, 'build')),
+    # Webpack-controlled files (js, css, images) are copied to /static directly.
+    os.path.join(FRONTEND_DIR, 'build', 'static'),)
 STATIC_ROOT = os.path.join(REPO_DIR, '..', 'static')
 WEBPACK_LOADER = {
     'DEFAULT': {
