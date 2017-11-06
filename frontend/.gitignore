@@ -1,13 +1,14 @@
 # Frontend files/dirs not to version-control
 
+/compiled-core
+/build
+
 # dependencies
 /node_modules
 
 # testing
 /coverage
 
-# production
-/build
 
 # misc
 .DS_Store
