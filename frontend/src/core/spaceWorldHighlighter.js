@@ -21,7 +21,7 @@ ace.define('ace/mode/spaceworld_highlight_rules',
     const TextHighlightRules = acequire('./text_highlight_rules').TextHighlightRules;
     const colorTokens = {
       black: 'text',
-      gray: 'comment',
+      gray: 'comment',  // comment also implies italics font-variant
       red: 'constant.character',
       green: 'keyword',
       blue: 'variable',
@@ -58,10 +58,10 @@ ace.define('ace/mode/spaceworld_highlight_rules',
             regex: '(S|D|A|M|W|X|Y|Z)',
           }, {
           }, {
-            token: colorTokens.gray,
+            token: colorTokens.black,
             regex: '\\|',
           }, {
-            token: colorTokens.gray,
+            token: colorTokens.black,
             regex: '.',
           },
         ],

@@ -4,11 +4,13 @@
 
 * {
   box-sizing: border-box;
+  font-family: Roboto, sans-serif;
 }
 
 h2 {
   font-weight: 500;
 }
+
 
 /* ---- Blockly  ----- */
 
@@ -31,4 +33,11 @@ h2 {
 .blocklyScrollbarBackground:hover+.blocklyScrollbarHandle,
 .blocklyScrollbarHandle:hover {
   fill: #455A64;
+}
+
+
+/* ---- Ace editor  ----- */
+
+.ace_editor * {
+  font-family: monospace;
 }
