@@ -2,7 +2,7 @@
 
 Most static files (JS, CSS, images)
 are located in `//frontend/src`,
-server under `/static/` URL prefix,
+served under `/static/` URL prefix,
 and accessed from ES6 modules via relative imports:
 
 ```
@@ -13,7 +13,7 @@ These files are handled completely automatically,
 either by Webpack live server (`make liveserver`) during development,
 or by Webpack + Django + Nginx on production
 (orchestrated by `//deploy.sh` script,
-which is called automatically after a push to server).
+which is called automatically after each push to the server).
 
 ## Static Assets Pipeline
 
@@ -21,7 +21,7 @@ which is called automatically after a push to server).
 and creates bundles to `//frontend/build/static`.
 This step can be achieved locally by any of the following commands:
 
-`make install` -> `make frontend` -> `npm run build`
+    `make install` → `make frontend` →- `npm run build`
 
 2. Django is instructed to search for static files in this directory
 (see `STATICFILES_DIRS` in `settings.py`).
@@ -49,14 +49,14 @@ Top-level public assets which needs to be accessed without `/static/` prefix
 (such as `/favicon.ico` and `/robots.txt`)
 resides in `//frontend/public` directory.
 These files are not handled automatically
-and each new top-level file requires change in the server configuration.
+and each new top-level file requires a change in the server configuration.
 
 When frontend is built, these files are copied into `//frontend/build`.
 Django then moves them further into backend static directory
 under dedicated `public` namespace.
-Each files requires a location record in `nginx.conf`
+Each file requires a location record in `nginx.conf`
 mapping URL (such as `/favicon.ico`)
-to the respective location on server (`.../flocs/static/public/favicon.ico`)
+to the respective location on server (`[path-to-project]/static/public/favicon.ico`)
 
 For local testing, Django development server
 can be instructed to serve these files by redirecting
