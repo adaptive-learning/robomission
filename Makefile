@@ -20,7 +20,7 @@ backend-dependencies:
 .PHONY: frontend-dependencies
 frontend-dependencies:
 	@echo "== Install frontend dependencies. =="
-	cd frontend && npm update
+	cd frontend && npm install
 
 
 .PHONY: server
