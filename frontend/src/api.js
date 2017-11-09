@@ -22,17 +22,9 @@ function parseApiRoot(data) {
 }
 
 
-export function fetchWorld() {
-  const entityNames = ['blocks', 'toolboxes', 'tasks', 'levels', 'instructions'];
-  const urls = entityNames.map(name => `${API_PATH}/${name}`);
-  const requests = urls.map(url => axios.get(url));
-  return axios.all(requests).then(results => {
-    const namedResults = {};
-    for (const [i, name] of entityNames.entries()) {
-      namedResults[name] = results[i].data;
-    }
-    return namedResults;
-  });
+export function fetchWorld(url) {
+  // TODO: hoist world parsing from reducers to this api module
+  return axios.get(url).then(response => response.data);
 }
 
 

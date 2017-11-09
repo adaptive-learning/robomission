@@ -3,7 +3,7 @@ import { all, call, cancel, fork, put, select, take, takeEvery, takeLatest } fro
 import * as api from '../api';
 import * as actions from '../actions';
 import * as actionType from '../action-types';
-import { getCurrentUserUrl } from '../selectors/api';
+import { getCurrentUserUrl, getWorldUrl } from '../selectors/api';
 import { getStudentUrl,
          getPracticeOverviewUrl,
          getStartTaskUrl,
@@ -35,9 +35,9 @@ function* fetchApiRoot() {
 }
 
 
-function* fetchWorld() {
+function* fetchWorld(action) {
   try {
-    const world = yield call(api.fetchWorld);
+    const world = yield call(api.fetchWorld, action.payload.url);
     yield put(actions.fetchWorld.success(world));
   } catch (error) {
     yield put(actions.fetchWorld.failure(error));
@@ -237,7 +237,8 @@ function* setTask(action) {
 
 function* initializeApp() {
   yield* fetchApiRoot();
-  yield* fetchWorld();
+  const worldUrl = yield select(getWorldUrl);
+  yield* fetchWorld(actions.fetchWorld.request(worldUrl));
   const currentUserUrl = yield select(getCurrentUserUrl);
   yield* fetchUser(actions.fetchUser.request(currentUserUrl));
 

@@ -14,7 +14,7 @@ export const fetchApiRoot = {
 
 
 export const fetchWorld = {
-  //request: () => action(at.FETCH_WORLD_REQUEST),
+  request: (url) => action(at.FETCH_WORLD_REQUEST, {url}),
   success: (world) => action(at.FETCH_WORLD_SUCCESS, world),
   failure: (error) => action(at.FETCH_WORLD_FAILURE, {error}),
 }
