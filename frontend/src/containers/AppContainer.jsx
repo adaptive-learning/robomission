@@ -28,6 +28,7 @@ class AppContainer extends React.Component {
   // but we have moved this logic into the root saga.
   constructor(props) {
     super(props);
+    this.props.changeLocation(props.location);  // report initial location
     this.props.history.listen((location, action) => {
       this.props.changeLocation(location);
     });
