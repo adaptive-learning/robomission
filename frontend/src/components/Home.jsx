@@ -12,6 +12,7 @@ import NextTaskButtonContainer from '../containers/NextTaskButtonContainer';
 import neuronsBackgroundPath from '../images/neurons-tile.png';
 import fiBackgroundPath from '../images/fi-slide.jpg';
 import spaceBackgroundPath from '../images/background-space.png';
+import spaceshipInSpaceWorldPath from '../images/spaceship-in-spaceworld.png';
 
 
 
@@ -46,8 +47,8 @@ class Home extends React.Component {
       // slide 0
       {
         style: {
-          backgroundImage: `url(${spaceBackgroundPath})`,
-          backgroundSize: '500px auto',
+          backgroundImage: `url(${spaceshipInSpaceWorldPath})`,
+          backgroundSize: 'cover',
           backgroundColor: '#111122',
           color: '#fff',
         },
