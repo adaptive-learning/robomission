@@ -56,7 +56,8 @@ Django then moves them further into backend static directory
 under dedicated `public` namespace.
 Each file requires a location record in `nginx.conf`
 mapping URL (such as `/favicon.ico`)
-to the respective location on server (`[path-to-project]/static/public/favicon.ico`)
+to the respective location on server (`[path-to-project]/static/public/favicon.ico`).
+To activate changes, run `sudo service nginx reload`.
 
 For local testing, Django development server
 can be instructed to serve these files by redirecting
