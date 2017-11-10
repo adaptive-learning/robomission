@@ -20,7 +20,7 @@
 ```
 while color() != 'b':
     if color() == 'k':
-        fly()
+        fly()
     if color() == 'y':
         right()
     if color() == 'r':
