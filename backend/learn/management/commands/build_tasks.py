@@ -18,17 +18,18 @@ class Command(BaseCommand):
             name for name in os.listdir(settings.TASKS_DIR)
             if name.endswith('.md')]
         names = [file_name[:-3] for file_name in file_names]
-        sources = [read_task_source(name) for name in names]
-        for source in sources:
+        sources = [self.read_task_source(name) for name in names]
+        for name, source in zip(names, sources):
+            self.stdout.write('Building task: {}'.format(name))
             build_task_from_source(source)
         self.stdout.write(self.style.SUCCESS('{n} tasks built.'.format(n=len(sources))))
 
-
-def read_task_source(name):
-    path = task_name_to_path(name)
-    with open(path) as infile:
-        content = infile.read()
-    return content
+    def read_task_source(self, name):
+        path = task_name_to_path(name)
+        self.stdout.write('Reading source: {}'.format(path))
+        with open(path) as infile:
+            content = infile.read()
+        return content
 
 
 def task_name_to_path(name):
