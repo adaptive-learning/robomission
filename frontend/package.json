@@ -5,6 +5,9 @@
   "proxy": "http://localhost:8000",
   "dependencies": {
     "axios": "^0.16.2",
+    "babel-cli": "^6.26.0",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
     "js-interpreter": "github:effa/JS-Interpreter#f7afaf9d4862f85394bf4860f8ba8e57f67fbdf2",
     "material-ui": "^0.19.4",
     "node-blockly": "^1.0.29",
@@ -40,9 +43,6 @@
   "devDependencies": {
     "@storybook/addon-actions": "^3.2.13",
     "@storybook/addon-links": "^3.2.13",
-    "@storybook/react": "^3.2.13",
-    "babel-cli": "^6.26.0",
-    "babel-plugin-transform-object-rest-spread": "^6.26.0",
-    "babel-preset-env": "^1.6.1"
+    "@storybook/react": "^3.2.13"
   }
 }
