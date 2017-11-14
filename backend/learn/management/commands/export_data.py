@@ -1,5 +1,5 @@
 from datetime import datetime
-from shutil import make_archive
+from shutil import make_archive, copyfile
 import os
 from django.conf import settings
 from django.core.management.base import BaseCommand
@@ -30,7 +30,8 @@ class Command(BaseCommand):
         os.makedirs(full_dirpath, exist_ok=True)
         for entity_name in self.entities_to_export:
             self.export_entity(entity_name, full_dirpath)
-        self.zip_bundle(full_dirpath)
+        bundle_path = self.zip_bundle(full_dirpath)
+        self.mark_zip_bundle_as_latest(bundle_path)
 
     def export_entity(self, entity_name, dirpath):
         file_name = entity_name + '.csv'
@@ -52,3 +53,9 @@ class Command(BaseCommand):
         bundle_dirname = os.path.basename(bundle_base)
         path = make_archive(bundle_base, 'zip', root_dir=root_dir, base_dir=bundle_dirname)
         self.stdout.write('Created bundle to {path}'.format(path=path))
+        return path
+
+    def mark_zip_bundle_as_latest(self, bundle_path):
+        latest_bundle_path = os.path.join(settings.EXPORTS_DIR, 'robomission-latest.zip')
+        copyfile(bundle_path, latest_bundle_path)
+        self.stdout.write('Copied as latest bundle to {path}'.format(path=latest_bundle_path))
