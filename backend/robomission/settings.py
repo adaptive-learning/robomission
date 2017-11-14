@@ -126,6 +126,7 @@ STATIC_ROOT = os.path.join(REPO_DIR, '..', 'static')
 
 SERVER_DIR = os.path.join(REPO_DIR, '.server') if DEVELOPMENT else os.path.join(REPO_DIR, '..')
 MEDIA_ROOT = os.path.join(SERVER_DIR, 'media')
+MEDIA_URL = '/media/'
 EXPORTS_DIR = os.path.join(MEDIA_ROOT, 'exports')
 
 
