@@ -41,7 +41,7 @@ class Command(BaseCommand):
             .format(entity=entity_name, file_name=file_name))
         # TODO: Create dataframes directly without url client, then use df.to_csv(path)
         client = APIClient()
-        data = client.get('/learn/export/' + file_name).content.decode('utf-8')
+        data = client.get('/learn/export/current/' + file_name).content.decode('utf-8')
         with open(file_path, 'w') as csvfile:
             csvfile.write(data)
 

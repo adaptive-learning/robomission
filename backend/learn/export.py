@@ -1,6 +1,8 @@
 """Views and utilities for exporting data to csv.
 """
+from django.shortcuts import redirect
 from rest_framework import serializers
+from rest_framework import viewsets
 from rest_pandas import PandasViewSet
 from learn.models import Block, Toolbox, Level, Task, Instruction
 from learn.models import Action, Student, TaskSession, ProgramSnapshot
@@ -125,3 +127,14 @@ class ActionSerializer(serializers.ModelSerializer):
 class ActionsViewSet(PandasViewSet):
     queryset = Action.objects.all()
     serializer_class = ActionSerializer
+
+
+class LatestBundleViewSet(viewsets.ViewSet):
+    """Phony ViewSet to specify a custom entry in the rest API.
+    """
+    # DRF can't derive DjangoModelPermissions for ViewSets without a queryset,
+    # so we need to explicitly define them.
+    permission_classes = ()
+
+    def list(self, request, format=None):
+        return redirect('/media/exports/robomission-latest.zip')

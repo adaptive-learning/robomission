@@ -20,15 +20,19 @@ apiRouter.register(r'world', views.WorldViewSet, base_name='world')
 
 
 exportRouter = DefaultRouter()
-exportRouter.register(r'blocks', export.BlockViewSet)
-exportRouter.register(r'toolboxes', export.ToolboxViewSet)
-exportRouter.register(r'levels', export.LevelViewSet)
-exportRouter.register(r'instructions', export.InstructionViewSet)
-exportRouter.register(r'tasks', export.TaskViewSet)
-exportRouter.register(r'students', export.StudentViewSet)
-exportRouter.register(r'task_sessions', export.TaskSessionsViewSet)
-exportRouter.register(r'program_snapshots', export.ProgramSnapshotsViewSet)
-exportRouter.register(r'actions', export.ActionsViewSet)
+exportRouter.register(
+    r'latest/bundle',
+    export.LatestBundleViewSet,
+    base_name='latest/bundle')
+exportRouter.register(r'current/blocks', export.BlockViewSet)
+exportRouter.register(r'current/toolboxes', export.ToolboxViewSet)
+exportRouter.register(r'current/levels', export.LevelViewSet)
+exportRouter.register(r'current/instructions', export.InstructionViewSet)
+exportRouter.register(r'current/tasks', export.TaskViewSet)
+exportRouter.register(r'current/students', export.StudentViewSet)
+exportRouter.register(r'current/task_sessions', export.TaskSessionsViewSet)
+exportRouter.register(r'current/program_snapshots', export.ProgramSnapshotsViewSet)
+exportRouter.register(r'current/actions', export.ActionsViewSet)
 
 
 urlpatterns = [
