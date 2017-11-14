@@ -118,7 +118,7 @@ data:
 
 .PHONY: export
 export:
-	python manage.py export_data
+	python backend/manage.py export_data
 
 
 .PHONY: frontend

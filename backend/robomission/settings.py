@@ -122,9 +122,11 @@ STATICFILES_DIRS = (
     # Webpack-controlled files (js, css, images) are copied to /static directly.
     os.path.join(FRONTEND_DIR, 'build', 'static'),)
 STATIC_ROOT = os.path.join(REPO_DIR, '..', 'static')
-WEBPACK_LOADER = {
-    'DEFAULT': {
-        'STATS_FILE': os.path.join(FRONTEND_DIR, 'webpack-stats.json')}}
+
+
+SERVER_DIR = os.path.join(REPO_DIR, '.server') if DEVELOPMENT else os.path.join(REPO_DIR, '..')
+MEDIA_ROOT = os.path.join(SERVER_DIR, 'media')
+EXPORTS_DIR = os.path.join(MEDIA_ROOT, 'exports')
 
 
 LOGGING = {
