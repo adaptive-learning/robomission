@@ -1,15 +1,18 @@
 """Credits and levels computations.
 """
 from itertools import accumulate, chain
+from typing import Iterator, Tuple, List
+
+from learn.models import Student, Task, Level
 
 
-def total_credits_for_levels(levels):
+def total_credits_for_levels(levels: List[Level]) -> Iterator[Tuple[Level, int]]:
     needed_credits = accumulate(chain([0], levels), lambda c, l: c + l.credits)
     # last accumulated value is not used - student can't go beyond the last level
     return zip(levels, needed_credits)
 
 
-def get_needed_credits(levels, which_level):
+def get_needed_credits(levels: List[Level], which_level: Level) -> int:
     for level, credits in total_credits_for_levels(levels):
         if level == which_level:
             return credits
@@ -38,7 +41,7 @@ def get_active_credits(world, student):
     return active_credits
 
 
-def get_credits(task):
+def get_credits(task: Task) -> int:
     """Number of credits for solving given task.
     """
     level = task.level.level
@@ -46,7 +49,7 @@ def get_credits(task):
     return credits
 
 
-def get_earned_credits(student, task):
+def get_earned_credits(student: Student, task: Task) -> int:
     """Number of credits earned for solving given task by given student.
 
     It is 0 if the student has already solved this task before.
