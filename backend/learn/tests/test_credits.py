@@ -1,26 +1,8 @@
-from django.test import TestCase
-from learn.models import Block, Task, Level, Student, Toolbox, TaskSession
-from learn.credits import get_credits, get_earned_credits, \
-    total_credits_for_levels
-
 import pytest
 
-
-class BlockTestCase(TestCase):
-    def test_blocks_exists(self):
-        assert Block.objects.exists()
-
-    def test_blocks_are_ordered(self):
-        first_retrieved_blocks = list(Block.objects.all())[:3]
-        first_expected_blocks = [
-            Block.objects.get(name='fly'),
-            Block.objects.get(name='shoot'),
-            Block.objects.get(name='repeat')]
-        assert first_retrieved_blocks == first_expected_blocks
-
-    def test_str_returns_name(self):
-        carrot_block = Block(name='carrot', order=4)
-        assert str(carrot_block) == 'carrot'
+from learn.models import Task, Level, Student, Toolbox, TaskSession
+from learn.credits import get_credits, get_earned_credits, \
+    total_credits_for_levels
 
 
 @pytest.fixture
