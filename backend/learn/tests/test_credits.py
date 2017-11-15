@@ -26,22 +26,20 @@ def student():
 
 
 @pytest.mark.django_db
-@pytest.fixture(scope='function')
+@pytest.fixture
 def solved_task_for_student():
-    toolbox = Toolbox(name="some toolbox")
-    toolbox.save()
+    toolbox = Toolbox.objects.create(name="some toolbox")
 
-    level = Level(level=5, name="some level", toolbox=toolbox, credits=20)
-    level.save()
+    level = Level.objects.create(level=5, name="some level", toolbox=toolbox,
+                                 credits=20)
 
-    task = Task(name="some task", level=level, setting="", solution="")
-    task.save()
+    task = Task.objects.create(name="some task", level=level, setting="",
+                               solution="")
 
-    student = Student(user=None)
-    student.save()
+    student = Student.objects.create(user=None)
 
-    task_session = TaskSession(student=student, task=task, solved=True)
-    task_session.save()
+    TaskSession.objects.create(student=student, task=task, solved=True)
+
     return student, task
 
 
