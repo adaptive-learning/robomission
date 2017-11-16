@@ -102,15 +102,16 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # Internationalization
 
-TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_L10N = True
-USE_TZ = True
 LANGUAGES = [
     ('cs', 'Czech'),
     ('en', 'English')
 ]
 LANGUAGE_CODE = 'cs'
+
+TIME_ZONE = 'UTC'
+USE_TZ = True
 
 
 # Static files

@@ -1,11 +1,12 @@
 """DB entities definitions.
 """
 from random import randrange
-from datetime import datetime, timedelta
+from datetime import timedelta
 from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.utils import timezone
 from django.utils.functional import cached_property
 from jsonfield import JSONField
 
@@ -95,8 +96,8 @@ class TaskSession(models.Model):
     student = models.ForeignKey(Student, related_name='task_sessions')
     task = models.ForeignKey(Task, related_name='sessions')
     solved = models.BooleanField(default=False)
-    start = models.DateTimeField(default=datetime.now)
-    end = models.DateTimeField(default=datetime.now)
+    start = models.DateTimeField(default=timezone.now)
+    end = models.DateTimeField(default=timezone.now)
 
     @property
     def time_spent(self):
