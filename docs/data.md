@@ -1,12 +1,17 @@
 # Data
 
-To download a zip bundle with both static and collected data, access:
+Zip bundle with both static and collected data:
 
 <https://robomise.cz/learn/export/latest/bundle>
 
-To generate and download CSV tables from current data, use the export API at:
+Complete export API,
+which allows to generate and download CSV tables from the current data:
 
 <https://robomise.cz/learn/export>
+
+Data description (as a jupyter notebook):
+
+<https://github.com/adaptive-learning/robomission/blob/master/docs/data.ipynb>
 
 ## Exporting Data
 
