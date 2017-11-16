@@ -56,6 +56,6 @@ class Command(BaseCommand):
         return path
 
     def mark_zip_bundle_as_latest(self, bundle_path):
-        latest_bundle_path = os.path.join(settings.EXPORTS_DIR, 'robomission-latest.zip')
+        latest_bundle_path = os.path.join(settings.EXPORTS_DIR, settings.EXPORT_BUNDLE_NAME)
         copyfile(bundle_path, latest_bundle_path)
         self.stdout.write('Copied as latest bundle to {path}'.format(path=latest_bundle_path))

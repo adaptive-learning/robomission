@@ -1,5 +1,6 @@
 """Views and utilities for exporting data to csv.
 """
+from django.conf import settings
 from django.shortcuts import redirect
 from rest_framework import serializers
 from rest_framework import viewsets
@@ -155,4 +156,7 @@ class LatestBundleViewSet(viewsets.ViewSet):
     permission_classes = ()
 
     def list(self, request, format=None):
-        return redirect('/media/exports/robomission-latest.zip')
+        bundle_url = '{media}exports/{bundle_name}'.format(
+            media=settings.MEDIA_URL,
+            bundle_name=settings.EXPORT_BUNDLE_NAME)
+        return redirect(bundle_url)
