@@ -99,7 +99,7 @@ class StudentViewSet(PandasViewSet):
 class TaskSessionSerializer(serializers.ModelSerializer):
     class Meta:
         model = TaskSession
-        fields = ('id', 'student', 'task', 'solved', 'start', 'end')
+        fields = ('id', 'student', 'task', 'solved', 'start', 'end', 'time_spent')
 
 
 class TaskSessionsViewSet(PandasViewSet):
