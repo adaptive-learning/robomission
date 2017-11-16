@@ -154,7 +154,7 @@ class ProgramSnapshot(models.Model):
         """Number of seconds from the point when the student started the task session.
         """
         delta = self.time - self.task_session.start
-        seconds = max(int(delta.total_seconds()), 1)
+        seconds = int(delta.total_seconds())
         return seconds
 
     def __str__(self):

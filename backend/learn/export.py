@@ -3,7 +3,7 @@
 from django.shortcuts import redirect
 from rest_framework import serializers
 from rest_framework import viewsets
-from rest_pandas import PandasViewSet
+from rest_pandas import PandasSerializer, PandasViewSet
 from learn.models import Block, Toolbox, Level, Task, Instruction
 from learn.models import Action, Student, TaskSession, ProgramSnapshot
 
@@ -110,12 +110,30 @@ class TaskSessionsViewSet(PandasViewSet):
 class ProgramSnapshotSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProgramSnapshot
-        fields = ('id', 'task_session', 'time', 'program', 'granularity', 'correct')
+        fields = (
+            'id', 'task_session', 'time', 'program',
+            'granularity', 'order', 'correct', 'time_from_start')
+
+
+def to_delta(times):
+    deltas = times.diff()
+    deltas.iat[0] = times.iat[0]
+    return deltas
+
+
+class ProgramSnapshotPandasSerializer(PandasSerializer):
+    def transform_dataframe(self, dataframe):
+        """Add a column with time since last snapshot of the same granularity.
+        """
+        grouped_programs = dataframe.groupby(['task_session', 'granularity'])
+        dataframe['time_delta'] = grouped_programs.time_from_start.transform(to_delta)
+        return dataframe
 
 
 class ProgramSnapshotsViewSet(PandasViewSet):
     queryset = ProgramSnapshot.objects.all()
     serializer_class = ProgramSnapshotSerializer
+    pandas_serializer_class = ProgramSnapshotPandasSerializer
 
 
 class ActionSerializer(serializers.ModelSerializer):
