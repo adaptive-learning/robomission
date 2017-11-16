@@ -92,7 +92,7 @@ class StudentSerializer(serializers.ModelSerializer):
 
 
 class StudentViewSet(PandasViewSet):
-    queryset = Student.objects.all()
+    queryset = Student.objects.prefetch_related('seen_instructions').all()
     serializer_class = StudentSerializer
 
 
