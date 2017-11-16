@@ -1,7 +1,6 @@
 """DB entities definitions.
 """
 from random import randrange
-from datetime import timedelta
 from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
@@ -101,7 +100,7 @@ class TaskSession(models.Model):
 
     @property
     def time_spent(self):
-        delta = max(self.end - self.start, timedelta(seconds=1))
+        delta = self.end - self.start
         seconds = int(delta.total_seconds())
         return seconds
 
