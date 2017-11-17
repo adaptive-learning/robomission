@@ -1,6 +1,7 @@
 import pegTaskSourceParser from './pegTaskSourceParser';
 import { parseRoboCode } from './roboCodeParser';
 import { parseSpaceWorld } from './spaceWorldDescription';
+import { generateMiniRoboCode } from './miniRoboCodeGenerator';
 
 /**
  * Parse task source text (markdown) and returned js object representing the
@@ -15,7 +16,7 @@ export function parseTaskSourceText(sourceText) {
       ...chunkedTaskSource.setting,
       fields: parseSpaceWorld(chunkedTaskSource.setting.fields),
     },
-    solution: parseRoboCode(chunkedTaskSource.solution),
+    solution: generateMiniRoboCode(parseRoboCode(chunkedTaskSource.solution)),
   };
   return task;
 }

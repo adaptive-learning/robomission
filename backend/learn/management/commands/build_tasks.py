@@ -45,7 +45,7 @@ def build_task_from_source(text):
         'name': name,
         'level': data['category'],
         'setting': json.dumps(data['setting']),
-        'solution': json.dumps(data['solution']),
+        'solution': data['solution'],
     }
     if Task.objects.filter(name=name).exists():
         task = Task.objects.get(name=name)

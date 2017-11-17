@@ -62,7 +62,7 @@ class Task(models.Model):
     name = models.SlugField(max_length=100, unique=True)
     level = models.ForeignKey(Level, null=True, default=None, related_name='tasks')
     setting = JSONField()
-    solution = JSONField()
+    solution = models.TextField()
     # sessions = m:n relation with students through learn.TaskSession
 
     def __str__(self):
