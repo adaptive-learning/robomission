@@ -29,6 +29,9 @@ DEBUG = (not ON_PRODUCTION) or (os.getenv('DJANGO_DEBUG', "False") == "True")
 
 INSTALLED_APPS = [
     'learn.apps.LearnConfig',
+    # TODO: Include monitoring app into the project. Probably requries hoisting
+    # the project 1 level up (which is desirable anyway).
+    #'monitoring.apps.MonitoringConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
