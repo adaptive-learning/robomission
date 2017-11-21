@@ -9,8 +9,15 @@ Deployment process has 3 steps:
 ## Adaptive Learning Server
 
 To access the Adaptive Learning server and publish new versions:
+
 1. Ask an admin to create an account on the server for you.
-   He will also need to add your public ssh key to a list of known public keys.
+   (The account is not necessary to push new versions to the server,
+    but sometimes you will need to ssh to the server
+    to view logs and solve on-server issues.)
+
+2. Generate a [ssh key pair](https://help.github.com/articles/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent/).
+  Give your public key to the admin and he will add it to the list of authorized keys
+  (`/var/git/.ssh/authorized_keys`).
 
 2. Add the production and staging remotes to your local repository:
 
