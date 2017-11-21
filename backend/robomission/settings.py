@@ -134,10 +134,43 @@ MEDIA_URL = '/media/'
 EXPORTS_DIR = os.path.join(MEDIA_ROOT, 'exports')
 EXPORT_BUNDLE_NAME = 'robomission-latest.zip'
 
+# --------------------------------------------------------------------------
+# Email
+# --------------------------------------------------------------------------
+EMAIL_HOST = 'localhost'
+EMAIL_PORT = 25
+EMAIL_SUBJECT_PREFIX = '[RoboMission] '
+SERVER_EMAIL = 'reporting@robomise.cz'
 
+# Where to send reports about unhandled exceptions ([name, email]):
+ADMINS = (('Errors', 'adaptive-programming-errors@googlegroups.com'),)
+
+## Where to send feedback messages [not-djanogo-setting]
+#EMAIL_ADMINS = ['adaptive-programming@googlegroups.com']
+
+# In development, do not send mails - just print them to the console.
+if DEVELOPMENT:
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+# --------------------------------------------------------------------------
+# Logging
+# --------------------------------------------------------------------------
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
+    'formatters': {
+        'simple': {
+            'format': '[%(asctime)s] %(levelname)s "%(message)s"'
+        }
+    },
+    'filters': {
+        'require_debug_true': {
+            '()': 'django.utils.log.RequireDebugTrue',
+        },
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse'
+        }
+    },
     'handlers': {
         'console': {
             'level': 'DEBUG',
@@ -153,15 +186,12 @@ LOGGING = {
         },
         'mail_admins': {
             'level': 'ERROR',
+            # The following filter can be commented out to see in console which
+            # mails would be send in production.
             'filters': ['require_debug_false'],
             'class': 'django.utils.log.AdminEmailHandler',
             'include_html': True,
         },
-    },
-    'formatters': {
-        'simple': {
-            'format': '[%(asctime)s] %(levelname)s "%(message)s"'
-        }
     },
     'loggers': {
         'django.request': {
@@ -178,14 +208,6 @@ LOGGING = {
             'level': 'DEBUG',
             'propagate': True,
         },
-    },
-    'filters': {
-        'require_debug_true': {
-            '()': 'django.utils.log.RequireDebugTrue',
-        },
-        'require_debug_false': {
-            '()': 'django.utils.log.RequireDebugFalse'
-        }
     },
 }
 
