@@ -1,9 +1,13 @@
 from datetime import datetime
+import logging
 from shutil import make_archive, copyfile
 import os
 from django.conf import settings
 from django.core.management.base import BaseCommand
 from rest_framework.test import APIClient
+
+
+logger = logging.getLogger(__name__)
 
 
 class Command(BaseCommand):
@@ -22,6 +26,7 @@ class Command(BaseCommand):
     ]
 
     def handle(self, *args, **options):
+        logger.info('Management command called: export_data')
         datestamp = datetime.now().strftime('%Y-%m-%d')
         dirname = 'robomission-' + datestamp
         # The last empty path ('') is there to make it a directory, not a file.

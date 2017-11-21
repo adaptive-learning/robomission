@@ -203,7 +203,7 @@ LOGGING = {
             'handlers': ['console'],
             'level': 'DEBUG' if SHOW_SQL_QUERIES else 'INFO',
         },
-        'robomission': {
+        'learn': {
             'handlers': ['console', 'file'],
             'level': 'DEBUG',
             'propagate': True,
