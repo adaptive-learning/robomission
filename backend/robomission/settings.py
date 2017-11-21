@@ -197,11 +197,17 @@ LOGGING = {
         'django.request': {
             'handlers': ['console', 'mail_admins', 'file'],
             'level': 'DEBUG',
-            'propagate': True,
+            'propagate': False,
         },
         'django.db.backends': {
             'handlers': ['console'],
             'level': 'DEBUG' if SHOW_SQL_QUERIES else 'INFO',
+            'propagate': False,
+        },
+        'django': {
+            'handlers': ['console', 'file'],
+            'level': 'INFO',
+            'propagate': True,
         },
         'learn': {
             'handlers': ['console', 'file'],
