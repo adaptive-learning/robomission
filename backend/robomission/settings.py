@@ -200,7 +200,7 @@ LOGGING = {
             'propagate': False,
         },
         'django.db.backends': {
-            'handlers': ['console'],
+            'handlers': ['console', 'file'],
             'level': 'DEBUG' if SHOW_SQL_QUERIES else 'INFO',
             'propagate': False,
         },
