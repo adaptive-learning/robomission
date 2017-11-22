@@ -31,8 +31,10 @@ Feedback from users: [adaptive-programming google group](https://groups.google.c
 ## Collected Data Investigation
 
 To explore collected data, follow instructions in [//docs/data.md](./data.md).
-In case you need to generate current data to investigate an issue,
-run `make monitoring`.
+To generate current data to investigate an issue, run:
+```
+make monitoring
+```
 It will switch to the `monitoring` branch
 and create a new jupyter notebook at `//monitoring/notebooks/analysis_datestamp.ipynb`
 from [analysis_template.ipynb](../monitoring/notebooks/analysis_template.ipynb).
@@ -51,7 +53,11 @@ allows you to send a link to the investigation
 
 ## Google Analytics
 
-TBA
+* [Google Analytics - Romobission](https://analytics.google.com/analytics/web/#embed/report-home/a81667720w121094822p126691725/)
+* [Google Analytics: Events Overview](https://analytics.google.com/analytics/web/#report/content-event-overview/a81667720w121094822p126691725/%3Foverview-dimensionSummary.selectedGroup%3Dvisitors%26overview-dimensionSummary.selectedDimension%3Danalytics.eventAction/)
+* [//frontend/src/sagas/googleAnalytics.js](../frontend/src/sagas/googleAnalytics.js) - defines all messages sent to Google Analytics.
+* You can set sending reports by mail (e.g. weekly).
+
 
 ## Admin Stats
 
