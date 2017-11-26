@@ -217,3 +217,24 @@ class Action(models.Model):
 
     class Meta:
         ordering = ('time',)
+
+
+class Feedback(models.Model):
+    """Feedback message provided by a user.
+    """
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    email = models.EmailField(null=True, blank=True)
+    comment = models.TextField(null=False, blank=False)
+    url = models.URLField(null=False, blank=False)
+    inserted = models.DateTimeField(auto_now_add=True)
+
+    @property
+    def comment_shortened(self):
+        if len(self.comment) > 60:
+            return self.comment[:60] + '...'
+        return self.comment
+
+    def __str__(self):
+        return '[{pk}] {comment}'.format(
+            pk=self.pk,
+            comment=self.comment_shortened)

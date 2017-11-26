@@ -17,6 +17,7 @@ apiRouter.register(r'program_snapshots', views.ProgramSnapshotsViewSet, base_nam
 apiRouter.register(r'actions', views.ActionsViewSet, base_name='action')
 apiRouter.register(r'current_user', views.CurrentUserViewSet, base_name='current_user')
 apiRouter.register(r'world', views.WorldViewSet, base_name='world')
+apiRouter.register(r'feedback', views.FeedbackViewSet, base_name='feedback')
 
 
 exportRouter = DefaultRouter()

@@ -16,6 +16,7 @@ from rest_framework.reverse import reverse
 from learn.credits import get_active_credits, get_level_value
 from learn.models import Block, Toolbox, Level, Task, Instruction
 from learn.models import Action, Student, TaskSession, ProgramSnapshot
+from learn.models import Feedback
 from learn.permissions import IsOwnerOrAdmin
 from learn.practice_overview import get_practice_overview, get_recommendation
 from learn.serializers import ActionSerializer
@@ -31,6 +32,7 @@ from learn.serializers import TaskSessionSerializer
 from learn.serializers import UserSerializer
 from learn.serializers import WorldSerializer
 from learn.serializers import RunProgramResponseSerializer
+from learn.serializers import FeedbackSerializer
 from learn.world import get_world
 from learn import actions
 
@@ -255,3 +257,13 @@ class ActionsViewSet(viewsets.ReadOnlyModelViewSet):
 class ProgramSnapshotsViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = ProgramSnapshot.objects.all()
     serializer_class = ProgramSnapshotSerializer
+
+
+class FeedbackViewSet(viewsets.ModelViewSet):
+    queryset = Feedback.objects.all()
+    serializer_class = FeedbackSerializer
+    permission_classes = (IsOwnerOrAdmin,)
+
+    def perform_create(self, serializer):
+        user = self.request.user if self.request.user.is_authenticated() else None
+        feedback = serializer.save(user=user)
