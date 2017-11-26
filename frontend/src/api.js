@@ -18,6 +18,7 @@ function parseApiRoot(data) {
     // TODO: fix it to allow for data['current_user']
     currentUserUrl: `${API_PATH}/users/current/`, // relativizeUrl(data['current_user']),
     worldUrl: relativizeUrl(data['world']),
+    feedbackUrl: relativizeUrl(data['feedback']),
   }
 }
 
@@ -123,6 +124,12 @@ function parseProgress(data) {
     credits: data['credits'],
     activeCredits: data['active_credits'],
   };
+}
+
+
+export function sendFeedback(feedbackUrl, comment, email, url) {
+  const data = { comment, email, url };
+  return axios.post(feedbackUrl, data);
 }
 
 

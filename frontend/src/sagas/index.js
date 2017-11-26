@@ -24,6 +24,7 @@ import { interpretRoboAst, InterpreterError } from '../core/roboCodeInterpreter'
 import { parseTaskSourceText } from '../core/taskSourceParser';
 import { downloadTextFile, loadTextFile } from '../utils/files';
 import googleAnalyticsSaga from './googleAnalytics';
+import feedbackSaga from './feedback';
 
 
 function* fetchApiRoot() {
@@ -306,6 +307,7 @@ function* rootSaga(dispatch, getState) {
     watchActions(),
     watchTasks(dispatch, getState),
     googleAnalyticsSaga(),
+    feedbackSaga(),
   ]);
 }
 
