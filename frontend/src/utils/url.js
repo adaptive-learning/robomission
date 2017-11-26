@@ -6,6 +6,12 @@ export function getDomainLabels() {
   return labelsWithoutWWW;
 }
 
+
 function getHostName() {
   return window.location.hostname;
+}
+
+
+export function getCurrentUrl() {
+  return window.location.href;
 }

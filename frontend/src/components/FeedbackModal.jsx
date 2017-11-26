@@ -1,39 +1,64 @@
 import React from 'react';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
-import { FormattedMessage } from 'react-intl';
+import TextField from 'material-ui/TextField';
+import { translate } from '../localization';
 
 
 export default class FeedbackModal extends React.Component {
   render() {
+    const changeComment = (event) => {
+      const feedback = {
+        comment: event.target.value,
+        email: this.props.email,
+      };
+      this.props.changeFeedback(feedback);
+    }
+    const changeEmail = (event) => {
+      const feedback = {
+        comment: this.props.comment,
+        email: event.target.value,
+      };
+      this.props.changeFeedback(feedback);
+    }
+    const submitFeedback = () => {
+      const feedback = {
+        comment: this.props.comment,
+        email: this.props.email,
+      };
+      this.props.submitFeedback(feedback);
+    };
     const actions = [
       <FlatButton
-        label="Reset"
-        secondary={true}
-        keyboardFocused={true}
-        onClick={this.props.resetGame}
-      />,
-     <FlatButton
-        label="Cancel"
+        label={translate('feedback.submit')}
         primary={true}
-        onClick={this.props.closeFeedbackModal}
-      />,
-      <FlatButton
-        label="Submit"
-        primary={true}
-        onClick={this.props.submitFeedback}
+        onClick={submitFeedback}
       />,
     ];
     return (
       <Dialog
-        title="Dialog With Actions"
+        title={translate('feedback.title')}
         actions={actions}
         open={this.props.open}
         onRequestClose={this.props.closeFeedbackModal}
-        overlayStyle={{ backgroundColor: 'transparent' }}
         contentStyle={{ width: 500 }}
       >
-        tba: inner text
+        <TextField
+          id='feedback-comment'
+          floatingLabelText={translate('feedback.question')}
+          value={this.props.comment}
+          onChange={changeComment}
+          multiLine={true}
+          rows={5}
+          fullWidth={true}
+        />
+        <TextField
+          id='feedback-email'
+          floatingLabelText={translate('feedback.email')}
+          value={this.props.email}
+          onChange={changeEmail}
+          fullWidth={true}
+        />
       </Dialog>
     );
   }

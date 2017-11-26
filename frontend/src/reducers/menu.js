@@ -1,4 +1,4 @@
-import { CHANGE_LOCATION, TOGGLE_MENU } from '../action-types';
+import { CHANGE_LOCATION, TOGGLE_MENU, TOGGLE_FEEDBACK_MODAL } from '../action-types';
 
 const initialState = {
   open: false,
@@ -12,6 +12,7 @@ export default function reduceMenu(state = initialState, action) {
         open: action.payload.open,
       };
     case CHANGE_LOCATION:
+    case TOGGLE_FEEDBACK_MODAL:
       return {
         ...state,
         open: false,

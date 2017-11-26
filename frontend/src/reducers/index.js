@@ -15,6 +15,7 @@ import reduceMenu from './menu';
 import reduceTaskEnvironments from './taskEnvironments';
 import reduceTaskEditor from './taskEditor';
 import reducePractice from './practice';
+import reduceFeedback from './feedback';
 
 
 export const reducers = combineReducers({
@@ -33,6 +34,7 @@ export const reducers = combineReducers({
   taskEnvironments: reduceTaskEnvironments,
   taskEditor: reduceTaskEditor,
   practice: reducePractice,
+  feedback: reduceFeedback,
   intl: intlReducer,
 });
 

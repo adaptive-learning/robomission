@@ -1,4 +1,5 @@
 import * as at from '../action-types';
+import { getCurrentUrl } from '../utils/url';
 
 
 function action(type, payload = {}) {
@@ -142,6 +143,19 @@ export function setOpenMenu(open) {
 
 export function toggleFeedbackModal(open) {
   return action(at.TOGGLE_FEEDBACK_MODAL, { open });
+}
+
+
+export function changeFeedback(feedback) {
+  return action(at.CHANGE_FEEDBACK, { feedback });
+}
+
+
+export const submitFeedback = {
+  request: (feedback) => action(at.SUBMIT_FEEDBACK_REQUEST,
+    { feedback, url: getCurrentUrl() }),
+  success: () => action(at.SUBMIT_FEEDBACK_SUCCESS),
+  failure: (error) => action(at.SUBMIT_FEEDBACK_FAILURE, {error}),
 }
 
 

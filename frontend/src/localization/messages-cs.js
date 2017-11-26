@@ -105,6 +105,11 @@ export default {
   'category.if-else': 'Pokud-jinak',
   'category.final-challenge': 'Závěrečná výzva',
 
+  'feedback.title': 'Napište nám',
+  'feedback.question': 'Narazili jste na chybu v aplikaci? Máte nápad na vylepšení?',
+  'feedback.email': 'E-mail (prosím vyplňte, ať Vám můžeme dát vědět odpověď)',
+  'feedback.submit': 'Odeslat',
+
   'fail-reason.crashed-last-row': 'Raketka musí v cílové rovince zastavit',
   'fail-reason.crashed-edge': 'Raketka vyletěla z vesmírné dráhy a rozbila se',
   'fail-reason.crashed-meteoroid': 'Raketka narazila do meteoroidu a rozbila se',
