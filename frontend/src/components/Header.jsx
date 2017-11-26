@@ -1,10 +1,12 @@
 import React from 'react';
 import AppBar from 'material-ui/AppBar';
-import { Toolbar, ToolbarGroup } from 'material-ui/Toolbar';
+import { Toolbar, ToolbarGroup, ToolbarSeparator } from 'material-ui/Toolbar';
+import FeedbackIcon from 'material-ui/svg-icons/action/feedback';
+import IconButton from 'material-ui/IconButton';
 import muiThemeable from 'material-ui/styles/muiThemeable';
 import logo from '../images/logo.png'
 import LevelBar from '../components/LevelBar';
-
+import { translate } from '../localization';
 
 
 class Header extends React.Component {
@@ -24,6 +26,20 @@ class Header extends React.Component {
       <Toolbar style={{ backgroundColor: 'transparent', color: 'white' }}>
         <ToolbarGroup>
           <LevelBar mini {...this.props.levelInfo} />
+        </ToolbarGroup>
+        <ToolbarSeparator
+          style={{
+            position: 'relative',
+            top: 9,
+          }}
+        />
+        <ToolbarGroup lastChild={true}>
+          <IconButton
+            tooltip={translate('Feedback')}
+            onClick={this.props.openFeedbackModal}
+          >
+            <FeedbackIcon />
+          </IconButton>
         </ToolbarGroup>
       </Toolbar>
     );
