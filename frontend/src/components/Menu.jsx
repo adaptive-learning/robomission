@@ -14,6 +14,7 @@ class Menu extends React.Component {
   constructor(props) {
     super(props);
     this.setOpen = this.props.setOpen.bind(this);
+    this.openFeedbackModal = this.props.openFeedbackModal.bind(this);
   }
 
   render() {
@@ -66,6 +67,13 @@ class Menu extends React.Component {
             containerElement={<Link to="/task-editor" />}
           >
             <Text id="Task Editor" />
+          </MenuItem>
+          <Divider />
+          <MenuItem
+            value="feedback"
+            onClick={this.openFeedbackModal}
+          >
+            <Text id="Feedback" />
           </MenuItem>
         </MaterialMenu>
       </Drawer>

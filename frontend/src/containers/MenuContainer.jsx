@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { setOpenMenu } from '../actions';
+import { setOpenMenu, toggleFeedbackModal } from '../actions';
 import Menu from '../components/Menu';
 import { getRecommendedTask } from '../selectors/practice';
 import { getMode } from '../selectors/app';
@@ -13,13 +13,15 @@ const getProps = state => ({
 });
 
 const actionCreators = {
-  setOpenMenu
+  setOpenMenu,
+  toggleFeedbackModal,
 };
 
 class MenuContainer extends React.Component {
   constructor(props) {
     super(props);
     this.setOpen = this.props.setOpenMenu.bind(this);
+    this.openFeedbackModal = this.props.toggleFeedbackModal.bind(this, true);
   }
 
   render(){
@@ -28,6 +30,7 @@ class MenuContainer extends React.Component {
         mode={this.props.mode}
         open={this.props.open}
         setOpen={this.setOpen}
+        openFeedbackModal={this.openFeedbackModal}
         recommendedTask={this.props.recommendedTask}
       />
   )}

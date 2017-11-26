@@ -8,6 +8,7 @@ export default {
   'Task Editor': 'Editor úloh',
   'Practice': 'Trénink',
   'Previous': 'Předchozí',
+  'Feedback': 'Napište nám',
 
   'not tackled': 'neřešeno',
   'recommended': 'doporučujeme',

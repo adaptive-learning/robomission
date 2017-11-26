@@ -140,6 +140,11 @@ export function setOpenMenu(open) {
 }
 
 
+export function toggleFeedbackModal(open) {
+  return action(at.TOGGLE_FEEDBACK_MODAL, { open });
+}
+
+
 export function changeLocation(newLocation) {
   return action(at.CHANGE_LOCATION, newLocation);
 }
