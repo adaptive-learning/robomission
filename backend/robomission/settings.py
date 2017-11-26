@@ -145,8 +145,8 @@ SERVER_EMAIL = 'reporting@robomise.cz'
 # Where to send reports about unhandled exceptions ([name, email]):
 ADMINS = (('Errors', 'adaptive-programming-errors@googlegroups.com'),)
 
-## Where to send feedback messages [not-djanogo-setting]
-#EMAIL_ADMINS = ['adaptive-programming@googlegroups.com']
+# Where to send feedback messages ([name, email])
+MANAGERS = (('Reports', 'adaptive-programming@googlegroups.com'),)
 
 # In development, do not send mails - just print them to the console.
 if DEVELOPMENT:
@@ -184,6 +184,12 @@ LOGGING = {
             'filename': os.path.join(REPO_DIR, 'logs', 'robomission.log'),
             'formatter': 'simple',
         },
+        'feedback.log': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(REPO_DIR, 'logs', 'feedback.log'),
+            'formatter': 'simple',
+        },
         'mail_admins': {
             'level': 'ERROR',
             # The following filter can be commented out to see in console which
@@ -211,6 +217,11 @@ LOGGING = {
         },
         'learn': {
             'handlers': ['console', 'file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'learn.feedback': {
+            'handlers': ['feedback.log'],
             'level': 'DEBUG',
             'propagate': True,
         },

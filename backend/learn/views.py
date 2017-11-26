@@ -35,6 +35,7 @@ from learn.serializers import RunProgramResponseSerializer
 from learn.serializers import FeedbackSerializer
 from learn.world import get_world
 from learn import actions
+from learn import feedback
 
 
 @ensure_csrf_cookie
@@ -266,4 +267,5 @@ class FeedbackViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         user = self.request.user if self.request.user.is_authenticated() else None
-        feedback = serializer.save(user=user)
+        new_feedback = serializer.save(user=user)
+        feedback.log_and_send(new_feedback)

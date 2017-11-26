@@ -138,4 +138,3 @@ frontend:
 .PHONY: logs
 logs:
 	mkdir -p logs
-	touch logs/robomission.log
