@@ -75,6 +75,13 @@ class Teacher(models.Model):
     user = models.OneToOneField(User, on_delete=models.SET_NULL, blank=True, null=True)
     # classrooms = 1:n relationship with Classroom entities
 
+    @property
+    def name(self):
+        return self.user.get_full_name() if self.user else 'anonymous'
+
+    def __str__(self):
+        return '[{pk}] {name}'.format(pk=self.pk, name=self.name)
+
 
 class Classroom(models.Model):
     """A group of students with a single teacher.
@@ -82,6 +89,9 @@ class Classroom(models.Model):
     name = models.CharField(max_length=256, unique=True)
     teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE, null=False, related_name='classrooms')
     # students = 1:n relationship with Student entities
+
+    def __str__(self):
+        return self.name
 
 
 class Student(models.Model):
