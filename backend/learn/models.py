@@ -69,12 +69,29 @@ class Task(models.Model):
         return self.name
 
 
+class Teacher(models.Model):
+    """Teacher can create classrooms and see progress of the students.
+    """
+    user = models.OneToOneField(User, on_delete=models.SET_NULL, blank=True, null=True)
+    # classrooms = 1:n relationship with Classroom entities
+
+
+class Classroom(models.Model):
+    """A group of students with a single teacher.
+    """
+    name = models.CharField(max_length=256, unique=True)
+    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE, null=False, related_name='classrooms')
+    # students = 1:n relationship with Student entities
+
+
 class Student(models.Model):
     """Entity for a learner.
     """
     user = models.OneToOneField(User, null=True, on_delete=models.CASCADE)
     credits = models.IntegerField(default=0)
     seen_instructions = models.ManyToManyField(Instruction)
+    classroom = models.ForeignKey(Classroom, on_delete=models.SET_NULL,
+        null=True, blank=True, related_name='students')
     # task_sessions = m:n relation with tasks through learn.TaskSession
 
     def __str__(self):
