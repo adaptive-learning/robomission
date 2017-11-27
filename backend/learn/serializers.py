@@ -3,7 +3,7 @@ from rest_framework import serializers
 from learn.credits import get_active_credits, get_level_value
 from learn.models import Block, Toolbox, Level, Task, Instruction
 from learn.models import Action, ProgramSnapshot, Student, TaskSession
-from learn.models import Feedback, Teacher
+from learn.models import Feedback, Teacher, Classroom
 from learn.world import get_world
 
 
@@ -79,10 +79,14 @@ class TeacherSerializer(serializers.HyperlinkedModelSerializer):
         view_name='user-detail',
         read_only=True,
         required=False)
+    classrooms = serializers.SlugRelatedField(
+        slug_field='name',
+        many=True,
+        queryset=Classroom.objects.all())
 
     class Meta:
         model = Teacher
-        fields = ('id', 'url', 'user')
+        fields = ('id', 'url', 'user', 'classrooms')
 
 
 class StudentSerializer(serializers.HyperlinkedModelSerializer):
@@ -96,6 +100,9 @@ class StudentSerializer(serializers.HyperlinkedModelSerializer):
         slug_field='name',
         many=True,
         queryset=Instruction.objects.all())
+    classroom = serializers.SlugRelatedField(
+        slug_field='name',
+        queryset=Classroom.objects.all())
     active_credits = serializers.SerializerMethodField()
     practice_overview = serializers.HyperlinkedIdentityField(
         view_name='student-practice-overview')
@@ -112,7 +119,7 @@ class StudentSerializer(serializers.HyperlinkedModelSerializer):
         model = Student
         fields = (
             'id', 'url', 'user', 'credits', 'level', 'active_credits',
-            'seen_instructions', 'practice_overview',
+            'seen_instructions', 'classroom', 'practice_overview',
             'start_task', 'watch_instruction', 'edit_program', 'run_program')
 
     def get_active_credits(self, student):
