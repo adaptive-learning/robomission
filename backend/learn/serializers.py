@@ -3,7 +3,7 @@ from rest_framework import serializers
 from learn.credits import get_active_credits, get_level_value
 from learn.models import Block, Toolbox, Level, Task, Instruction
 from learn.models import Action, ProgramSnapshot, Student, TaskSession
-from learn.models import Feedback
+from learn.models import Feedback, Teacher
 from learn.world import get_world
 
 
@@ -11,10 +11,13 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
     student = serializers.HyperlinkedRelatedField(
         view_name='student-detail',
         read_only=True)
+    teacher = serializers.HyperlinkedRelatedField(
+        view_name='teacher-detail',
+        read_only=True)
 
     class Meta:
         model = User
-        fields = ('id', 'url', 'username', 'email', 'is_staff', 'student')
+        fields = ('id', 'url', 'username', 'email', 'is_staff', 'student', 'teacher')
 
 
 class BlockSerializer(serializers.ModelSerializer):
@@ -69,6 +72,17 @@ class WorldSerializer(serializers.Serializer):
     instructions = InstructionSerializer(many=True)
     levels = LevelSerializer(many=True)
     tasks = TaskSerializer(many=True)
+
+
+class TeacherSerializer(serializers.HyperlinkedModelSerializer):
+    user = serializers.HyperlinkedRelatedField(
+        view_name='user-detail',
+        read_only=True,
+        required=False)
+
+    class Meta:
+        model = Teacher
+        fields = ('id', 'url', 'user')
 
 
 class StudentSerializer(serializers.HyperlinkedModelSerializer):

@@ -16,7 +16,7 @@ from rest_framework.reverse import reverse
 from learn.credits import get_active_credits, get_level_value
 from learn.models import Block, Toolbox, Level, Task, Instruction
 from learn.models import Action, Student, TaskSession, ProgramSnapshot
-from learn.models import Feedback
+from learn.models import Feedback, Classroom, Teacher
 from learn.permissions import IsOwnerOrAdmin
 from learn.practice_overview import get_practice_overview, get_recommendation
 from learn.serializers import ActionSerializer
@@ -33,6 +33,7 @@ from learn.serializers import UserSerializer
 from learn.serializers import WorldSerializer
 from learn.serializers import RunProgramResponseSerializer
 from learn.serializers import FeedbackSerializer
+from learn.serializers import TeacherSerializer
 from learn.world import get_world
 from learn import actions
 from learn import feedback
@@ -143,6 +144,12 @@ class WorldViewSet(viewsets.ViewSet):
         world = get_world()
         serializer = WorldSerializer(world, context={'request': request})
         return Response(serializer.data)
+
+
+class TeacherViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Teacher.objects.all()
+    serializer_class = TeacherSerializer
+    permission_classes = (IsOwnerOrAdmin,)
 
 
 class StudentViewSet(viewsets.ReadOnlyModelViewSet):
