@@ -1,4 +1,5 @@
 from django.contrib.auth.models import User
+from lazysignup.utils import is_lazy_user
 from rest_framework import serializers
 from learn.credits import get_active_credits, get_level_value
 from learn.models import Block, Toolbox, Level, Task, Instruction
@@ -8,6 +9,8 @@ from learn.world import get_world
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
+    nickname = serializers.CharField(read_only=True, source='first_name')
+    is_lazy = serializers.SerializerMethodField()
     student = serializers.HyperlinkedRelatedField(
         view_name='student-detail',
         read_only=True)
@@ -17,7 +20,12 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = User
-        fields = ('id', 'url', 'username', 'email', 'is_staff', 'student', 'teacher')
+        fields = (
+            'id', 'url', 'username', 'email', 'nickname', 'is_staff', 'is_lazy',
+            'student', 'teacher')
+
+    def get_is_lazy(self, user):
+        return is_lazy_user(user)
 
 
 class BlockSerializer(serializers.ModelSerializer):
