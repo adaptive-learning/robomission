@@ -42,6 +42,7 @@ export default class SignUpModal extends React.Component {
           value={this.props.credentials.email}
           onChange={changeEmail}
           fullWidth={true}
+          type="email"
         />
         <TextField
           id='signup-nickname'
@@ -56,6 +57,7 @@ export default class SignUpModal extends React.Component {
           value={this.props.credentials.password}
           onChange={changePassword}
           fullWidth={true}
+          type="password"
         />
       </Dialog>
     );

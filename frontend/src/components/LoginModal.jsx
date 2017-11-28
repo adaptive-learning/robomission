@@ -41,6 +41,7 @@ export default class LoginModal extends React.Component {
           value={this.props.credentials.email}
           onChange={changeEmail}
           fullWidth={true}
+          type="email"
         />
         <TextField
           id='login-password'
@@ -48,6 +49,7 @@ export default class LoginModal extends React.Component {
           value={this.props.credentials.password}
           onChange={changePassword}
           fullWidth={true}
+          type="password"
         />
         <RaisedButton
           label={translate('user.signup')}
