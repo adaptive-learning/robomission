@@ -18,7 +18,8 @@ export default class App extends React.Component {
           backgroundImage: `url(${backgroundPath})`,
           backgroundSize: '500px auto',
           backgroundColor: '#111122',
-          paddingBottom: 5,
+          paddingBottom: 25,
+          overflowX: 'hidden',
         }}
       >
         <InstructionsContainer />

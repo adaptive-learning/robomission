@@ -122,7 +122,8 @@ class Home extends React.Component {
               style={{
                 position: 'relative',
                 height: 350,
-                width: 800,
+                width: '94%',
+                maxWidth: 800,
                 margin: '0 auto',
                 border: '2px solid #777'
               }}
