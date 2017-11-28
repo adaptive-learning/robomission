@@ -5,6 +5,7 @@ import { CHANGE_LOCATION,
          EDIT_PROGRAM_AST,
          EDIT_PROGRAM_CODE,
          TOGGLE_LOGIN_MODAL,
+         TOGGLE_SIGNUP_MODAL,
          FETCH_STUDENT_SUCCESS } from '../action-types';
 
 
@@ -15,6 +16,7 @@ const initial = {
   practiceOverviewLoaded: false,
   practiceOverviewInvalidated: false,
   isLoginModalOpen: false,
+  isSignUpModalOpen: false,
 };
 
 
@@ -57,6 +59,11 @@ export default function reduceApp(state = initial, action) {
       return {
         ...state,
         isLoginModalOpen: action.payload.open,
+      };
+    case TOGGLE_SIGNUP_MODAL:
+      return {
+        ...state,
+        isSignUpModalOpen: action.payload.open,
       };
     default:
       return state;

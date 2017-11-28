@@ -4,14 +4,22 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import App from '../components/App';
 import LoadingIndicator from '../components/LoadingIndicator';
-import { isLoaded, isLoginModalOpen } from '../selectors/app';
-import { getCredentials } from '../selectors/user';
-import { changeLocation, changeCredentials, login, toggleLoginModal } from '../actions';
+import { isLoaded, isLoginModalOpen, isSignUpModalOpen } from '../selectors/app';
+import { getProfile, getCredentials } from '../selectors/user';
+import {
+  changeLocation,
+  changeCredentials,
+  changeNickname,
+  login,
+  signUp,
+  toggleLoginModal,
+  toggleSignUpModal } from '../actions';
 
 
 const propTypes = {
   loaded: PropTypes.bool.isRequired,
   showLoginModal: PropTypes.bool.isRequired,
+  showSignUpModal: PropTypes.bool.isRequired,
   children: PropTypes.node,
 };
 
@@ -22,14 +30,19 @@ const defaultProps = {
 const getProps = state => ({
   loaded: isLoaded(state),
   showLoginModal: isLoginModalOpen(state),
+  showSignUpModal: isSignUpModalOpen(state),
   credentials: getCredentials(state),
+  profile: getProfile(state),
 });
 
 const actionCreators = {
   changeLocation,
   toggleLoginModal,
+  toggleSignUpModal,
   changeCredentials,
+  changeNickname,
   login: login.request,
+  signUp: signUp.request,
 };
 
 class AppContainer extends React.Component {
@@ -38,8 +51,11 @@ class AppContainer extends React.Component {
   constructor(props) {
     super(props);
     this.closeLoginModal = this.props.toggleLoginModal.bind(this, false);
+    this.closeSignUpModal = this.props.toggleSignUpModal.bind(this, false);
     this.changeCredentials = this.props.changeCredentials.bind(this);
+    this.changeProfile = ({ nickname }) => { this.props.changeNickname(this, nickname); };
     this.login = this.props.login.bind(this);
+    this.signUp = this.props.signUp.bind(this);
     this.props.changeLocation(props.location);  // report initial location
     this.props.history.listen((location, action) => {
       this.props.changeLocation(location);
@@ -65,10 +81,15 @@ class AppContainer extends React.Component {
     return (
       <App
         showLoginModal={this.props.showLoginModal}
+        showSignUpModal={this.props.showSignUpModal}
         credentials={this.props.credentials}
+        profile={this.props.profile}
         changeCredentials={this.changeCredentials}
+        changeProfile={this.changeProfile}
         login={this.login}
+        signUp={this.signUp}
         closeLoginModal={this.closeLoginModal}
+        closeSignUpModal={this.closeSignUpModal}
       >
         {this.props.children}
       </App>

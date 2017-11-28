@@ -151,6 +151,11 @@ export function toggleLoginModal(open) {
 }
 
 
+export function toggleSignUpModal(open) {
+  return action(at.TOGGLE_SIGNUP_MODAL, { open });
+}
+
+
 export function changeFeedback(feedback) {
   return action(at.CHANGE_FEEDBACK, { feedback });
 }
@@ -182,7 +187,7 @@ export const login = {
 
 
 export const signUp = {
-  request: (credentials, nickname) => action(at.SIGNUP_REQUEST, { credentials, nickname }),
+  request: (profile, credentials) => action(at.SIGNUP_REQUEST, { profile, credentials }),
   success: () => action(at.SIGNUP_SUCCESS),
   failure: (error) => action(at.SIGNUP_FAILURE, {error}),
 }

@@ -6,6 +6,7 @@ import MenuContainer from '../containers/MenuContainer';
 import InstructionsContainer from '../containers/InstructionsContainer';
 import FeedbackModalContainer  from '../containers/FeedbackModalContainer';
 import LoginModal from '../components/LoginModal';
+import SignUpModal from '../components/SignUpModal';
 
 
 const propTypes = {
@@ -36,6 +37,15 @@ export default class App extends React.Component {
           changeCredentials={this.props.changeCredentials}
           closeLoginModal={this.props.closeLoginModal}
           login={this.props.login}
+        />
+        <SignUpModal
+          open={this.props.showSignUpModal}
+          credentials={this.props.credentials}
+          profile={this.props.profile}
+          changeCredentials={this.props.changeCredentials}
+          changeProfile={this.props.changeProfile}
+          closeSignUpModal={this.props.closeSignUpModal}
+          signup={this.props.signUp}
         />
       </div>
     );

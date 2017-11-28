@@ -21,3 +21,8 @@ export function getMode(state) {
 export function isLoginModalOpen(state) {
   return state.app.isLoginModalOpen;
 }
+
+
+export function isSignUpModalOpen(state) {
+  return state.app.isSignUpModalOpen;
+}
