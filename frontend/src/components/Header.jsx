@@ -2,6 +2,7 @@ import React from 'react';
 import AppBar from 'material-ui/AppBar';
 import { Toolbar, ToolbarGroup, ToolbarSeparator } from 'material-ui/Toolbar';
 import FeedbackIcon from 'material-ui/svg-icons/action/feedback';
+import UserIcon from 'material-ui/svg-icons/social/person';
 import IconButton from 'material-ui/IconButton';
 import muiThemeable from 'material-ui/styles/muiThemeable';
 import logo from '../images/logo.png'
@@ -39,6 +40,12 @@ class Header extends React.Component {
             onClick={this.props.openFeedbackModal}
           >
             <FeedbackIcon />
+          </IconButton>
+          <IconButton
+            tooltip={translate('user.login')}
+            onClick={this.props.openLoginModal}
+          >
+            <UserIcon />
           </IconButton>
         </ToolbarGroup>
       </Toolbar>

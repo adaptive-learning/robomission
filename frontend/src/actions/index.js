@@ -146,8 +146,23 @@ export function toggleFeedbackModal(open) {
 }
 
 
+export function toggleLoginModal(open) {
+  return action(at.TOGGLE_LOGIN_MODAL, { open });
+}
+
+
 export function changeFeedback(feedback) {
   return action(at.CHANGE_FEEDBACK, { feedback });
+}
+
+
+export function changeCredentials(credentials) {
+  return action(at.CHANGE_CREDENTIALS, { credentials });
+}
+
+
+export function changeNickname(nickname) {
+  return action(at.CHANGE_NICKNAME, { nickname });
 }
 
 
@@ -156,6 +171,20 @@ export const submitFeedback = {
     { feedback, url: getCurrentUrl() }),
   success: () => action(at.SUBMIT_FEEDBACK_SUCCESS),
   failure: (error) => action(at.SUBMIT_FEEDBACK_FAILURE, {error}),
+}
+
+
+export const login = {
+  request: (credentials) => action(at.LOGIN_REQUEST, { credentials }),
+  success: () => action(at.LOGIN_SUCCESS),
+  failure: (error) => action(at.LOGIN_FAILURE, {error}),
+}
+
+
+export const signUp = {
+  request: (credentials, nickname) => action(at.SIGNUP_REQUEST, { credentials, nickname }),
+  success: () => action(at.SIGNUP_SUCCESS),
+  failure: (error) => action(at.SIGNUP_FAILURE, {error}),
 }
 
 

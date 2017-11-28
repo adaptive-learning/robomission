@@ -4,6 +4,7 @@ import { CHANGE_LOCATION,
          FETCH_PRACTICE_OVERVIEW_SUCCESS,
          EDIT_PROGRAM_AST,
          EDIT_PROGRAM_CODE,
+         TOGGLE_LOGIN_MODAL,
          FETCH_STUDENT_SUCCESS } from '../action-types';
 
 
@@ -13,6 +14,7 @@ const initial = {
   studentLoaded: false,
   practiceOverviewLoaded: false,
   practiceOverviewInvalidated: false,
+  isLoginModalOpen: false,
 };
 
 
@@ -50,6 +52,11 @@ export default function reduceApp(state = initial, action) {
       return {
         ...state,
         mode: getMode(action.payload.pathname),
+      };
+    case TOGGLE_LOGIN_MODAL:
+      return {
+        ...state,
+        isLoginModalOpen: action.payload.open,
       };
     default:
       return state;

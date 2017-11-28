@@ -5,9 +5,12 @@ import HeaderContainer from '../containers/HeaderContainer';
 import MenuContainer from '../containers/MenuContainer';
 import InstructionsContainer from '../containers/InstructionsContainer';
 import FeedbackModalContainer  from '../containers/FeedbackModalContainer';
+import LoginModal from '../components/LoginModal';
+
 
 const propTypes = {
   children: PropTypes.node,
+  showLoginModal: PropTypes.bool.isRequired,
 };
 
 export default class App extends React.Component {
@@ -27,6 +30,13 @@ export default class App extends React.Component {
         <MenuContainer />
         { this.props.children }
         <FeedbackModalContainer />
+        <LoginModal
+          open={this.props.showLoginModal}
+          credentials={this.props.credentials}
+          changeCredentials={this.props.changeCredentials}
+          closeLoginModal={this.props.closeLoginModal}
+          login={this.props.login}
+        />
       </div>
     );
   }

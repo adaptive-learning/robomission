@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { setOpenMenu, toggleFeedbackModal } from '../actions';
+import { setOpenMenu, toggleFeedbackModal, toggleLoginModal } from '../actions';
 import { getLevelStatus } from '../selectors/student';
 import Header from '../components/Header';
 
@@ -12,6 +12,7 @@ const getProps = state => ({
 const actionCreators = {
   setOpenMenu,
   toggleFeedbackModal,
+  toggleLoginModal,
 };
 
 class HeaderContainer extends React.Component {
@@ -19,6 +20,7 @@ class HeaderContainer extends React.Component {
     super(props);
     this.openMenu = this.props.setOpenMenu.bind(this, true);
     this.openFeedbackModal = this.props.toggleFeedbackModal.bind(this, true);
+    this.openLoginModal = this.props.toggleLoginModal.bind(this, true);
   }
 
   render(){
@@ -27,6 +29,7 @@ class HeaderContainer extends React.Component {
         onMenuIconTouchTap={this.openMenu}
         levelInfo={this.props.levelStatus}
         openFeedbackModal={this.openFeedbackModal}
+        openLoginModal={this.openLoginModal}
       />
   )}
 }

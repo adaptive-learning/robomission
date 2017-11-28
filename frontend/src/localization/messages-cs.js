@@ -137,4 +137,11 @@ export default {
   'instruction.block.position': 'Test na aktuální sloupec, ve kterém se raketka nachází. Sloupce jsou číslovány zleva 1, 2, 3, ...',
   'instruction.block.if': 'Podmíněný příkaz. Umožňuje nám říct, že chceme vykonat nějaké příkazy, pouze pokud platí určitá podmínka.',
   'instruction.block.if-else': 'Úplný podmíněný příkaz. Umožňuje nám říct, že chceme vykonat nějaké příkazy, pokud platí určitá podmínka, a jiné příkazy, pokud podmínka neplatí.',
+
+  'user.email': 'Email',
+  'user.login': 'Přihlásit se',
+  'user.logout': 'Odhlásit se',
+  'user.nickname': 'Přezdívka',
+  'user.password': 'Heslo',
+  'user.signup': 'Registrace',
 };

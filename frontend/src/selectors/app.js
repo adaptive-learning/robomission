@@ -16,3 +16,8 @@ export function inMode(state, mode) {
 export function getMode(state) {
   return state.app.mode;
 }
+
+
+export function isLoginModalOpen(state) {
+  return state.app.isLoginModalOpen;
+}
