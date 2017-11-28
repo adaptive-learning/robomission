@@ -12,6 +12,7 @@ import SignUpModal from '../components/SignUpModal';
 const propTypes = {
   children: PropTypes.node,
   showLoginModal: PropTypes.bool.isRequired,
+  openSignUpModal: PropTypes.func.isRequired,
 };
 
 export default class App extends React.Component {
@@ -36,6 +37,7 @@ export default class App extends React.Component {
           credentials={this.props.credentials}
           changeCredentials={this.props.changeCredentials}
           closeLoginModal={this.props.closeLoginModal}
+          openSignUpModal={this.props.openSignUpModal}
           login={this.props.login}
         />
         <SignUpModal

@@ -52,8 +52,9 @@ class AppContainer extends React.Component {
     super(props);
     this.closeLoginModal = this.props.toggleLoginModal.bind(this, false);
     this.closeSignUpModal = this.props.toggleSignUpModal.bind(this, false);
+    this.openSignUpModal = this.props.toggleSignUpModal.bind(this, true);
     this.changeCredentials = this.props.changeCredentials.bind(this);
-    this.changeProfile = ({ nickname }) => { this.props.changeNickname(this, nickname); };
+    this.changeProfile = ({ nickname }) => { this.props.changeNickname(nickname); };
     this.login = this.props.login.bind(this);
     this.signUp = this.props.signUp.bind(this);
     this.props.changeLocation(props.location);  // report initial location
@@ -90,6 +91,7 @@ class AppContainer extends React.Component {
         signUp={this.signUp}
         closeLoginModal={this.closeLoginModal}
         closeSignUpModal={this.closeSignUpModal}
+        openSignUpModal={this.openSignUpModal}
       >
         {this.props.children}
       </App>

@@ -1,7 +1,9 @@
 import React from 'react';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
+import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
+import EmailIcon from 'material-ui/svg-icons/communication/email';
 import { translate } from '../localization';
 
 
@@ -46,6 +48,12 @@ export default class LoginModal extends React.Component {
           value={this.props.credentials.password}
           onChange={changePassword}
           fullWidth={true}
+        />
+        <RaisedButton
+          label={translate('user.signup')}
+          primary={true}
+          onClick={this.props.openSignUpModal}
+          icon={<EmailIcon />}
         />
       </Dialog>
     );
