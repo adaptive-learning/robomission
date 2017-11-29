@@ -4,6 +4,20 @@
 import os
 import dj_database_url
 
+# Secret settings.
+try:
+    from .settings_secrett import (
+        SECRET_KEY,
+        SOCIAL_AUTH_GOOGLE_OAUTH2_KEY,
+        SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET,
+        SOCIAL_AUTH_FACEBOOK_KEY,
+        SOCIAL_AUTH_FACEBOOK_SECRET)
+except ImportError as exc:
+    raise ImportError(
+        'Missing or invalid settings_secret.py. '
+        'See //backend/robomission/settings_secret_template.py '
+        'for details.') from exc
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 REPO_DIR = os.path.dirname(BASE_DIR)
 TASKS_DIR = os.path.join(REPO_DIR, 'tasks')
