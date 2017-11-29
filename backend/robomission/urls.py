@@ -7,6 +7,7 @@ from django.contrib import admin
 from django.contrib.staticfiles.storage import staticfiles_storage
 from django.views.generic.base import RedirectView
 import learn
+from learn import social
 
 
 urlpatterns = [
@@ -31,6 +32,8 @@ urlpatterns = [
     url(r'^rest-framework-auth/', include('rest_framework.urls')),
     url(r'^rest-auth/', include('rest_auth.urls')),
     url(r'^rest-auth/registration/', include('rest_auth.registration.urls')),
+    url(r'^rest-auth/facebook/$', social.FacebookLogin.as_view(), name='fb_login'),
+    url(r'^rest-auth/google/$', social.GoogleLogin.as_view(), name='google_login'),
     url(r'^admin/', admin.site.urls),
     url(r'^($|about|task)', learn.views.frontend_app, name='frontend_app'),
 ]
