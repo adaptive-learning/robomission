@@ -56,9 +56,16 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'rest_auth',
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'rest_auth.registration',
     'lazysignup',
     'webpack_loader',
 ]
+
+# Site Id is `django.contrib.sites` setting required for `rest_auth.registration`
+SITE_ID = 1
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
