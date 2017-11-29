@@ -6,7 +6,7 @@ import dj_database_url
 
 # Secret settings.
 try:
-    from .settings_secrett import (
+    from .settings_secret import (
         SECRET_KEY,
         SOCIAL_AUTH_GOOGLE_OAUTH2_KEY,
         SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET,
@@ -54,6 +54,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_extensions',
     'rest_framework',
+    'rest_framework.authtoken',
+    'rest_auth',
     'lazysignup',
     'webpack_loader',
 ]

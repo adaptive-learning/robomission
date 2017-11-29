@@ -29,6 +29,7 @@ urlpatterns = [
 
     url(r'^learn/', include('learn.urls')),
     url(r'^rest-framework-auth/', include('rest_framework.urls')),
+    url(r'^rest-auth/', include('rest_auth.urls')),
     url(r'^admin/', admin.site.urls),
     url(r'^($|about|task)', learn.views.frontend_app, name='frontend_app'),
 ]
