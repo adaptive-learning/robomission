@@ -140,6 +140,8 @@ export default {
 
   'user.email': 'Email',
   'user.login': 'Přihlásit se',
+  'user.via-facebook': 'Skrze Facebook',
+  'user.via-google': 'Skrze Google',
   'user.logout': 'Odhlásit se',
   'user.nickname': 'Přezdívka',
   'user.password': 'Heslo',

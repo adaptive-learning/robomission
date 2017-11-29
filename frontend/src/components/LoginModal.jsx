@@ -4,6 +4,7 @@ import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 import EmailIcon from 'material-ui/svg-icons/communication/email';
+import { FacebookLoginButton, GoogleLoginButton } from 'react-social-login-buttons';
 import { translate } from '../localization';
 
 
@@ -27,6 +28,13 @@ export default class LoginModal extends React.Component {
         onClick={login}
       />,
     ];
+    const buttonStyle = {
+      boxShadow: 'none',
+      margin: 0,
+      height: 50,
+      width: 250,
+      textAlign: 'left',
+    };
     return (
       <Dialog
         title={translate('user.login')}
@@ -54,8 +62,19 @@ export default class LoginModal extends React.Component {
         <RaisedButton
           label={translate('user.signup')}
           primary={true}
+          style={buttonStyle}
           onClick={this.props.openSignUpModal}
           icon={<EmailIcon />}
+        />
+        <GoogleLoginButton
+          text={translate('user.via-google')}
+          style={buttonStyle}
+          onClick={() => alert('todo: google login')}
+        />
+        <FacebookLoginButton
+          text={translate('user.via-facebook')}
+          style={buttonStyle}
+          onClick={() => alert('todo: fb login')}
         />
       </Dialog>
     );
