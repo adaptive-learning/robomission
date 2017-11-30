@@ -33,6 +33,6 @@ export function signUp({ email, password }) {
     password2: password,
   };
   return axios.post(url, data).then(response => ({
-    token: response.data['key']),
+    token: response.data['key'],
   }));
 }

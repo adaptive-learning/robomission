@@ -18,7 +18,7 @@ export default function reduceUser(state = initialState, action) {
     case FETCH_USER_SUCCESS:
       return {
         ...state,
-        studentUrl: action.payload.studentUrl,
+        ...action.payload,
       };
     case CHANGE_CREDENTIALS:
       return {

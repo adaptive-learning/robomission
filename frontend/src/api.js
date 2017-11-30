@@ -32,6 +32,11 @@ export function fetchWorld(url) {
 export function fetchUser(url) {
   return axios.get(url).then(response => ({
     studentUrl: relativizeUrl(response.data['student']),
+    teacherUrl: relativizeUrl(response.data['teacher']),
+    email: response.data['email'],
+    nickname: response.data['nickname'],
+    isStaff: response.data['is_staff'],
+    isLazy: response.data['is_lazy'],
   }));
 }
 
@@ -146,6 +151,9 @@ function relativizeUrl(url) {
   // problem. This works, but is error prone, e.g. it's easy to forget
   // relativize a new url and it increases a discrepancy between development
   // and production (which will use some relative and some absolute URLs).
+  if (!url) {
+    return url;
+  }
   const parts = url.split('localhost:8000');
   if (parts.length === 2) {
     return parts[1];
