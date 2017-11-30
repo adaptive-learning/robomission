@@ -1,7 +1,7 @@
 import React from 'react';
 import Dialog from 'material-ui/Dialog';
-import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
+import {GridList, GridTile} from 'material-ui/GridList';
 import TextField from 'material-ui/TextField';
 import EmailIcon from 'material-ui/svg-icons/communication/email';
 import { FacebookLoginButton, GoogleLoginButton } from 'react-social-login-buttons';
@@ -21,61 +21,71 @@ export default class LoginModal extends React.Component {
     const login = () => {
       this.props.login(this.props.credentials);
     };
-    const actions = [
-      <FlatButton
-        label={translate('user.login')}
-        primary={true}
-        onClick={login}
-      />,
-    ];
     const buttonStyle = {
       boxShadow: 'none',
       margin: 0,
+      marginBottom: 10,
       height: 50,
-      width: 250,
-      textAlign: 'left',
     };
     return (
       <Dialog
         title={translate('user.login')}
-        actions={actions}
         open={this.props.open}
         onRequestClose={this.props.closeLoginModal}
-        contentStyle={{ width: 500 }}
+        contentStyle={{ width: 540 }}
       >
-        <TextField
-          id='login-email'
-          floatingLabelText={translate('user.email')}
-          value={this.props.credentials.email}
-          onChange={changeEmail}
-          fullWidth={true}
-          type="email"
-        />
-        <TextField
-          id='login-password'
-          floatingLabelText={translate('user.password')}
-          value={this.props.credentials.password}
-          onChange={changePassword}
-          fullWidth={true}
-          type="password"
-        />
-        <RaisedButton
-          label={translate('user.signup')}
-          primary={true}
-          style={buttonStyle}
-          onClick={this.props.openSignUpModal}
-          icon={<EmailIcon />}
-        />
-        <GoogleLoginButton
-          text={translate('user.via-google')}
-          style={buttonStyle}
-          onClick={() => alert('todo: google login')}
-        />
-        <FacebookLoginButton
-          text={translate('user.via-facebook')}
-          style={buttonStyle}
-          onClick={() => alert('todo: fb login')}
-        />
+        <GridList
+          cellHeight="auto"
+          cols={2}
+          padding={20}
+        >
+          <GridTile>
+            <GoogleLoginButton
+              text={translate('user.via-google')}
+              style={buttonStyle}
+              onClick={() => alert('todo: google login')}
+            />
+            <FacebookLoginButton
+              text={translate('user.via-facebook')}
+              style={buttonStyle}
+              onClick={() => alert('todo: fb login')}
+            />
+            <RaisedButton
+              label={translate('user.signup')}
+              primary={true}
+              style={{ height: 50 }}
+              buttonStyle={{ textAlign: 'left' }}
+              fullWidth={true}
+              onClick={this.props.openSignUpModal}
+              icon={<EmailIcon />}
+            />
+          </GridTile>
+          <GridTile>
+            <TextField
+              id='login-email'
+              floatingLabelText={translate('user.email')}
+              value={this.props.credentials.email}
+              onChange={changeEmail}
+              fullWidth={true}
+              type="email"
+            />
+            <TextField
+              id='login-password'
+              floatingLabelText={translate('user.password')}
+              value={this.props.credentials.password}
+              onChange={changePassword}
+              fullWidth={true}
+              type="password"
+            />
+            <RaisedButton
+              label={translate('user.login')}
+              primary={true}
+              onClick={login}
+              fullWidth={true}
+              style={{ marginTop: 10 }}
+            />
+          </GridTile>
+        </GridList>
       </Dialog>
     );
   }
