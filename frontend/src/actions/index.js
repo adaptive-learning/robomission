@@ -186,6 +186,13 @@ export const login = {
 }
 
 
+export const logout = {
+  request: () => action(at.LOGOUT_REQUEST),
+  success: () => action(at.LOGOUT_SUCCESS),
+  failure: (error) => action(at.LOGOUT_FAILURE, {error}),
+}
+
+
 export const signUp = {
   request: (profile, credentials) => action(at.SIGNUP_REQUEST, { profile, credentials }),
   success: () => action(at.SIGNUP_SUCCESS),
