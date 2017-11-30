@@ -23,6 +23,7 @@ import { getNextLevelStatus } from '../selectors/practice';
 import { interpretRoboAst, InterpreterError } from '../core/roboCodeInterpreter';
 import { parseTaskSourceText } from '../core/taskSourceParser';
 import { downloadTextFile, loadTextFile } from '../utils/files';
+import authSaga from './auth';
 import googleAnalyticsSaga from './googleAnalytics';
 import feedbackSaga from './feedback';
 
@@ -306,6 +307,7 @@ function* rootSaga(dispatch, getState) {
     initializeApp(),
     watchActions(),
     watchTasks(dispatch, getState),
+    authSaga(),
     googleAnalyticsSaga(),
     feedbackSaga(),
   ]);
