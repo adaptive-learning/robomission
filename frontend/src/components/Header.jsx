@@ -1,5 +1,6 @@
 import React from 'react';
 import AppBar from 'material-ui/AppBar';
+import Avatar from 'material-ui/Avatar';
 import { Toolbar, ToolbarGroup, ToolbarSeparator } from 'material-ui/Toolbar';
 import FeedbackIcon from 'material-ui/svg-icons/action/feedback';
 import UserIcon from 'material-ui/svg-icons/social/person';
@@ -23,6 +24,10 @@ class Header extends React.Component {
         }}
       />
     );
+    let userIcon = (<UserIcon />);
+    if (!this.props.user.isLazy) {
+      userIcon = this.props.user.initial;
+    }
     const toolbar = (
       <Toolbar style={{ backgroundColor: 'transparent', color: 'white' }}>
         <ToolbarGroup>
@@ -41,12 +46,11 @@ class Header extends React.Component {
           >
             <FeedbackIcon />
           </IconButton>
-          <IconButton
-            tooltip={translate('user.login')}
+          <Avatar
             onClick={this.props.openLoginModal}
           >
-            <UserIcon />
-          </IconButton>
+            {userIcon}
+          </Avatar>
         </ToolbarGroup>
       </Toolbar>
     );
