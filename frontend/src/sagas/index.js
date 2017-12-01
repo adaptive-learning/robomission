@@ -289,6 +289,7 @@ function* showLevelProgress() {
 function* watchActions() {
   yield takeLatest(actionType.FETCH_STUDENT_REQUEST, fetchStudent);
   yield takeLatest(actionType.FETCH_PRACTICE_OVERVIEW_REQUEST, fetchPracticeOverview);
+  yield takeLatest([actionType.LOGIN_SUCCESS, actionType.LOGOUT_SUCCESS], initializeApp);
 
   yield takeLatest(actionType.EXPORT_TASK, exportTask);
   yield takeLatest(actionType.IMPORT_TASK, importTask);

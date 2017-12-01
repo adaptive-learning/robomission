@@ -32,7 +32,22 @@ export function* loginFlow () {
   }
 }
 
+
+export function* logoutFlow () {
+  while (true) {
+    const action = yield take(actionType.LOGOUT_REQUEST)
+    try {
+      const response = yield call(authApi.logout);
+      yield put(actions.logout.success());
+    } catch (error) {
+      yield put(actions.logout.failure(error));
+    }
+  }
+}
+
+
 export default function* authSaga () {
   yield fork(signUpFlow);
   yield fork(loginFlow);
+  yield fork(logoutFlow);
 }
