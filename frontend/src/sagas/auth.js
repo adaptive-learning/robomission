@@ -9,7 +9,7 @@ export function * signUpFlow () {
     const action = yield take(actionType.SIGNUP_REQUEST)
     const { credentials, profile } = action.payload;
     try {
-      const response = yield call(authApi.signUp, credentials);
+      yield call(authApi.signUp, credentials);
       // TODO: set profile
       yield put(actions.signUp.success());
       yield put(actions.login.success());
@@ -25,7 +25,7 @@ export function* loginFlow () {
     const action = yield take(actionType.LOGIN_REQUEST)
     const { credentials } = action.payload;
     try {
-      const response = yield call(authApi.login, credentials);
+      yield call(authApi.login, credentials);
       yield put(actions.login.success());
     } catch (error) {
       yield put(actions.login.failure(error));
@@ -36,9 +36,9 @@ export function* loginFlow () {
 
 export function* logoutFlow () {
   while (true) {
-    const action = yield take(actionType.LOGOUT_REQUEST)
+    yield take(actionType.LOGOUT_REQUEST)
     try {
-      const response = yield call(authApi.logout);
+      yield call(authApi.logout);
       yield put(actions.logout.success());
     } catch (error) {
       yield put(actions.logout.failure(error));
