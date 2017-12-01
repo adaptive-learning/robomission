@@ -10,7 +10,7 @@ export function * signUpFlow () {
     const { credentials, profile } = action.payload;
     try {
       yield call(authApi.signUp, credentials);
-      // TODO: set profile
+      yield call(authApi.updateProfile, profile);
       yield put(actions.signUp.success());
       yield put(actions.login.success());
     } catch (error) {

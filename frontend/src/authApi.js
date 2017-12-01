@@ -36,3 +36,12 @@ export function signUp({ email, password }) {
     token: response.data['key'],
   }));
 }
+
+
+export function updateProfile({ nickname }) {
+  const url = `${AUTH_API_PATH}user/`;
+  const data = {
+    first_name: nickname,
+  };
+  return axios.patch(url, data);
+}
