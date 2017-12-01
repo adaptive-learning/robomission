@@ -10,7 +10,6 @@ export function * signUpFlow () {
     const { credentials, profile } = action.payload;
     try {
       const response = yield call(authApi.signUp, credentials);
-      console.log('response', response);
       yield put(actions.signUp.success());
       yield put(actions.login.success());
     } catch (error) {
@@ -19,6 +18,21 @@ export function * signUpFlow () {
   }
 }
 
+
+export function* loginFlow () {
+  while (true) {
+    const action = yield take(actionType.LOGIN_REQUEST)
+    const { credentials } = action.payload;
+    try {
+      const response = yield call(authApi.login, credentials);
+      yield put(actions.login.success());
+    } catch (error) {
+      yield put(actions.login.failure(error));
+    }
+  }
+}
+
 export default function* authSaga () {
-  yield fork(signUpFlow)
+  yield fork(signUpFlow);
+  yield fork(loginFlow);
 }

@@ -7,7 +7,7 @@ import axios from 'axios';
 const AUTH_API_PATH = '/rest-auth/';
 
 
-export function login(email, password) {
+export function login({ email, password }) {
   const url = `${AUTH_API_PATH}login/`;
   const data = {
     username: email,
