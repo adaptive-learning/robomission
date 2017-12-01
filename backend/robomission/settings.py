@@ -270,6 +270,11 @@ REST_FRAMEWORK = {
 }
 
 
+REST_AUTH_SERIALIZERS = {
+    'REGISTER_SERIALIZER': 'learn.serializers.LazyRegisterSerializer',
+}
+
+
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
     #'social_core.backends.google.GoogleOAuth2',

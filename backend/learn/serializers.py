@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from lazysignup.utils import is_lazy_user
 from rest_framework import serializers
+from rest_auth.registration.serializers import RegisterSerializer
 from learn.credits import get_active_credits, get_level_value
 from learn.models import Block, Toolbox, Level, Task, Instruction
 from learn.models import Action, ProgramSnapshot, Student, TaskSession
@@ -26,6 +27,14 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 
     def get_is_lazy(self, user):
         return is_lazy_user(user)
+
+
+class LazyRegisterSerializer(RegisterSerializer):
+    """Extends RegisterSerializer to convert lazy users to registered users.
+    """
+    def custom_signup(self, request, user):
+        # TODO: implement conversion
+        print('custom signup with user', user, 'request', request)
 
 
 class BlockSerializer(serializers.ModelSerializer):
