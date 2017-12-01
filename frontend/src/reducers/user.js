@@ -1,4 +1,9 @@
-import { FETCH_USER_SUCCESS, CHANGE_NICKNAME, CHANGE_CREDENTIALS } from '../action-types';
+import {
+  FETCH_USER_SUCCESS,
+  CHANGE_NICKNAME,
+  CHANGE_CREDENTIALS,
+  LOGIN_SUCCESS,
+  LOGIN_FAILURE } from '../action-types';
 
 
 const emptyCredentials = {
@@ -24,6 +29,12 @@ export default function reduceUser(state = initialState, action) {
       return {
         ...state,
         credentials: action.payload.credentials,
+      };
+    case LOGIN_SUCCESS:
+    case LOGIN_FAILURE:
+      return {
+        ...state,
+        credentials: emptyCredentials,
       };
     case CHANGE_NICKNAME:
       return {

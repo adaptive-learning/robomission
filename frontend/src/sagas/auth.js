@@ -1,4 +1,4 @@
-import {take, call, put, fork, race} from 'redux-saga/effects';
+import {take, call, put, fork} from 'redux-saga/effects';
 import * as authApi from '../authApi';
 import * as actions from '../actions';
 import * as actionType from '../action-types';
@@ -10,6 +10,7 @@ export function * signUpFlow () {
     const { credentials, profile } = action.payload;
     try {
       const response = yield call(authApi.signUp, credentials);
+      // TODO: set profile
       yield put(actions.signUp.success());
       yield put(actions.login.success());
     } catch (error) {
