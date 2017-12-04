@@ -1,4 +1,6 @@
+from django.contrib.auth import login
 from django.contrib.auth.models import User
+from lazysignup.models import LazyUser
 from lazysignup.utils import is_lazy_user
 from rest_framework import serializers
 from rest_auth.registration.serializers import RegisterSerializer
@@ -33,8 +35,52 @@ class LazyRegisterSerializer(RegisterSerializer):
     """Extends RegisterSerializer to convert lazy users to registered users.
     """
     def custom_signup(self, request, user):
-        # TODO: implement conversion
-        print('custom signup with user', user, 'request', request)
+        assert is_lazy_user(request.user)
+        lazy_user = request.user
+        if hasattr(lazy_user, 'student'):
+            # TODO: Don't create students automatically with new users, then
+            # remove the following line, which prevents error (unique
+            # constraint vialation) due to 2 students for 1 user.
+            user.student.delete()
+            lazy_user.student.user = user
+            lazy_user.student.save()
+        # TODO: rewire teacher as well
+        delete_lazy_user(lazy_user)
+
+    #def save(self, request):
+    #    user = request.user
+    #    data = self.get_cleaned_data()
+    #    username = data['username']
+    #    email = data['email']
+    #    password = data['password1']
+    #    assert email == username
+    #    user = convert_lazy_user(user, email, password)
+    #    # Automatically login the user after succesful registration.
+    #    login(request, user)
+    #    return user
+
+
+#def convert_lazy_user(user, email, password):
+#    """Convert a lazy user into a registered user.
+#
+#    Sets email and password.
+#    Deletes the LazyUser record to mark the user as non-lazy.
+#    """
+#    assert is_lazy_user(user)
+#    # We use email as the unique username.
+#    user.username = email
+#    user.email = email
+#    user.set_password(password)
+#    delete_lazy_user(user)
+#    # Set default authentication backend.
+#    user.backend = None
+#    user.save()
+#    assert not is_lazy_user(user)
+#    return user
+
+
+def delete_lazy_user(user):
+    LazyUser.objects.filter(user=user).delete()
 
 
 class BlockSerializer(serializers.ModelSerializer):
