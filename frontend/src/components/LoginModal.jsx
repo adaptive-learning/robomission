@@ -74,6 +74,7 @@ export default class LoginModal extends React.Component {
               onChange={changeEmail}
               fullWidth={true}
               type="email"
+              style={{ marginTop: -20 }}
             />
             <TextField
               id='login-password'
