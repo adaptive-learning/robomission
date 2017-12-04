@@ -46,6 +46,9 @@ export function* logoutFlow () {
     try {
       yield call(authApi.logout);
       yield put(actions.logout.success());
+      // To make sure there are absolutely no leftovers in the state after the
+      // logout, the page is reloaded.
+      window.location.reload(true);
     } catch (error) {
       yield put(actions.logout.failure(error));
     }
