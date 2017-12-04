@@ -31,10 +31,14 @@ export default function reduceUser(state = initialState, action) {
         credentials: action.payload.credentials,
       };
     case LOGIN_SUCCESS:
-    case LOGIN_FAILURE:
       return {
         ...state,
         credentials: emptyCredentials,
+      };
+    case LOGIN_FAILURE:
+      return {
+        ...state,
+        credentials: { email: state.credentials.email, password: '' },
       };
     case CHANGE_NICKNAME:
       return {
