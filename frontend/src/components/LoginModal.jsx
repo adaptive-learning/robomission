@@ -19,7 +19,13 @@ export default class LoginModal extends React.Component {
       this.props.changeCredentials(credentials);
     }
     const login = () => {
-      this.props.login(this.props.credentials);
+      this.props.login({ credentials: this.props.credentials });
+    };
+    const loginViaFacebook = () => {
+      this.props.login({ provider: 'facebook' });
+    };
+    const loginViaGoogle = () => {
+      this.props.login({ provider: 'google' });
     };
     const buttonStyle = {
       boxShadow: 'none',
@@ -43,12 +49,12 @@ export default class LoginModal extends React.Component {
             <GoogleLoginButton
               text={translate('user.via-google')}
               style={buttonStyle}
-              onClick={() => alert('todo: google login')}
+              onClick={loginViaGoogle}
             />
             <FacebookLoginButton
               text={translate('user.via-facebook')}
               style={buttonStyle}
-              onClick={() => alert('todo: fb login')}
+              onClick={loginViaFacebook}
             />
             <RaisedButton
               label={translate('user.signup')}

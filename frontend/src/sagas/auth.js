@@ -4,7 +4,7 @@ import * as actions from '../actions';
 import * as actionType from '../action-types';
 
 
-export function * signUpFlow () {
+export function* signUpFlow () {
   while (true) {
     const action = yield take(actionType.SIGNUP_REQUEST)
     const { credentials, profile } = action.payload;
@@ -23,9 +23,15 @@ export function * signUpFlow () {
 export function* loginFlow () {
   while (true) {
     const action = yield take(actionType.LOGIN_REQUEST)
-    const { credentials } = action.payload;
+    const { credentials, provider } = action.payload;
     try {
-      yield call(authApi.login, credentials);
+      if (provider === 'facebook') {
+        yield call(authApi.loginViaFacebook);
+      } else if (provider === 'google') {
+        yield call(authApi.loginViaGoogle);
+      } else {
+        yield call(authApi.login, credentials);
+      }
       yield put(actions.login.success());
     } catch (error) {
       yield put(actions.login.failure(error));

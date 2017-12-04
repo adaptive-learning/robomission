@@ -180,7 +180,9 @@ export const submitFeedback = {
 
 
 export const login = {
-  request: (credentials) => action(at.LOGIN_REQUEST, { credentials }),
+  request: ({ credentials, provider }) => action(
+    at.LOGIN_REQUEST,
+    { credentials, provider }),
   success: () => action(at.LOGIN_SUCCESS),
   failure: (error) => action(at.LOGIN_FAILURE, {error}),
 }
