@@ -138,3 +138,8 @@ frontend:
 .PHONY: logs
 logs:
 	mkdir -p logs
+
+
+.PHONY: socialapps
+socialapps:
+	python backend/manage.py create_social_apps
