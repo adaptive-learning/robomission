@@ -8,7 +8,8 @@ import {
   isLoaded,
   isLoginModalOpen,
   isSignUpModalOpen,
-  getSignUpModalErrors
+  getLoginFailed,
+  getSignUpModalErrors,
   } from '../selectors/app';
 import { getProfile, getCredentials } from '../selectors/user';
 import {
@@ -25,6 +26,7 @@ import {
 const propTypes = {
   loaded: PropTypes.bool.isRequired,
   showLoginModal: PropTypes.bool.isRequired,
+  loginFailed: PropTypes.bool.isRequired,
   showSignUpModal: PropTypes.bool.isRequired,
   signUpModalErrors: PropTypes.object.isRequired,
   children: PropTypes.node,
@@ -37,6 +39,7 @@ const defaultProps = {
 const getProps = state => ({
   loaded: isLoaded(state),
   showLoginModal: isLoginModalOpen(state),
+  loginFailed: getLoginFailed(state),
   showSignUpModal: isSignUpModalOpen(state),
   signUpModalErrors: getSignUpModalErrors(state),
   credentials: getCredentials(state),
@@ -90,6 +93,7 @@ class AppContainer extends React.Component {
     return (
       <App
         showLoginModal={this.props.showLoginModal}
+        loginFailed={this.props.loginFailed}
         showSignUpModal={this.props.showSignUpModal}
         signUpModalErrors={this.props.signUpModalErrors}
         credentials={this.props.credentials}

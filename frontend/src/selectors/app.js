@@ -23,6 +23,11 @@ export function isLoginModalOpen(state) {
 }
 
 
+export function getLoginFailed(state) {
+  return state.app.loginFailed;
+}
+
+
 export function isSignUpModalOpen(state) {
   return state.app.isSignUpModalOpen;
 }

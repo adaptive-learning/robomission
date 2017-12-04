@@ -82,6 +82,7 @@ export default class LoginModal extends React.Component {
               onChange={changePassword}
               fullWidth={true}
               type="password"
+              errorText={this.props.loginFailed ? translate('user.login-failed') : null}
             />
             <RaisedButton
               label={translate('user.login')}

@@ -7,6 +7,7 @@ import { CHANGE_LOCATION,
          TOGGLE_LOGIN_MODAL,
          TOGGLE_SIGNUP_MODAL,
          FETCH_STUDENT_SUCCESS,
+         LOGIN_FAILURE,
          LOGIN_SUCCESS,
          SIGNUP_FAILURE } from '../action-types';
 
@@ -20,6 +21,7 @@ const initial = {
   isLoginModalOpen: false,
   isSignUpModalOpen: false,
   signUpModalErrors: {},
+  loginFailed: false,
 };
 
 
@@ -63,11 +65,17 @@ export default function reduceApp(state = initial, action) {
         ...state,
         isLoginModalOpen: action.payload.open,
       };
+    case LOGIN_FAILURE:
+      return {
+        ...state,
+        loginFailed: true,
+      };
     case LOGIN_SUCCESS:
       return {
         ...state,
         isSignUpModalOpen: false,
         isLoginModalOpen: false,
+        loginFailed: false,
       };
     case TOGGLE_SIGNUP_MODAL:
       return {

@@ -146,4 +146,5 @@ export default {
   'user.nickname': 'Přezdívka',
   'user.password': 'Heslo',
   'user.signup': 'Registrace',
+  'user.login-failed': 'Nesprávný email nebo heslo.',
 };
