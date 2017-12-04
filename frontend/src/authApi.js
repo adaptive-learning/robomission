@@ -5,8 +5,6 @@ import axios from 'axios';
 
 
 const AUTH_API_PATH = '/rest-auth/';
-const FB_APP_ID = '1705808839684479';
-const GOOGLE_APP_ID = '398125540084-8866rbhsa81j25das3euqe6ifcd31dgg.apps.googleusercontent.com';
 
 
 export function login({ email, password }) {
@@ -21,20 +19,16 @@ export function login({ email, password }) {
 
 
 export function loginViaFacebook() {
-  const url = `${AUTH_API_PATH}facebook/`;
-  const data = {
-    code: FB_APP_ID,
-  };
-  return axios.post(url, data);
+  const path = window.location.pathname;
+  const facebookLoginUrl = `/accounts/facebook/login?next=${path}`
+  window.location = facebookLoginUrl;
 }
 
 
 export function loginViaGoogle() {
-  const url = `${AUTH_API_PATH}google/`;
-  const data = {
-    code: GOOGLE_APP_ID,
-  };
-  return axios.post(url, data);
+  const path = window.location.pathname;
+  const googleLoginUrl = `/accounts/google/login?next=${path}`
+  window.location = googleLoginUrl;
 }
 
 

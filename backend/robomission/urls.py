@@ -34,6 +34,7 @@ urlpatterns = [
     url(r'^rest-auth/registration/', include('rest_auth.registration.urls')),
     url(r'^rest-auth/facebook/$', social.FacebookLogin.as_view(), name='fb_login'),
     url(r'^rest-auth/google/$', social.GoogleLogin.as_view(), name='google_login'),
+    url(r'^accounts/', include('allauth.urls')),
     url(r'^admin/', admin.site.urls),
     url(r'^($|about|task)', learn.views.frontend_app, name='frontend_app'),
 ]
