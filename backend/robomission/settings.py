@@ -283,6 +283,9 @@ AUTHENTICATION_BACKENDS = (
 )
 
 
+ACCOUNT_EMAIL_VERIFICATION = 'none'
+
+
 # Setup CORS headers for development.
 # This allows to run FE server on one port and sending request to BE server
 # running on another port (so-called "cross-site requests").
