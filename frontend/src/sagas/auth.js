@@ -14,7 +14,7 @@ export function* signUpFlow () {
       yield put(actions.signUp.success());
       yield put(actions.login.success());
     } catch (error) {
-      yield put(actions.signUp.failure(error));
+      yield put(actions.signUp.failure(error.fieldErrors));
     }
   }
 }

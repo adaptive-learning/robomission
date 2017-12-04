@@ -54,7 +54,14 @@ export function signUp({ email, password }) {
   };
   return axios.post(url, data).then(response => ({
     token: response.data['key'],
-  }));
+  })).catch(error => {
+    const { data } = error.response;
+    error.fieldErrors = {
+      email: (data.email) ? data.email[0] : null,
+      password: (data.password1) ? data.password1[0] : null,
+    };
+    throw error;
+  });
 }
 
 

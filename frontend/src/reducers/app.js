@@ -7,7 +7,8 @@ import { CHANGE_LOCATION,
          TOGGLE_LOGIN_MODAL,
          TOGGLE_SIGNUP_MODAL,
          FETCH_STUDENT_SUCCESS,
-         LOGIN_SUCCESS } from '../action-types';
+         LOGIN_SUCCESS,
+         SIGNUP_FAILURE } from '../action-types';
 
 
 const initial = {
@@ -18,6 +19,7 @@ const initial = {
   practiceOverviewInvalidated: false,
   isLoginModalOpen: false,
   isSignUpModalOpen: false,
+  signUpModalErrors: {},
 };
 
 
@@ -71,6 +73,11 @@ export default function reduceApp(state = initial, action) {
       return {
         ...state,
         isSignUpModalOpen: action.payload.open,
+      };
+    case SIGNUP_FAILURE:
+      return {
+        ...state,
+        signUpModalErrors: action.payload.fieldErrors,
       };
     default:
       return state;

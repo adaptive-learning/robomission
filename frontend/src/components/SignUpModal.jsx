@@ -43,6 +43,7 @@ export default class SignUpModal extends React.Component {
           onChange={changeEmail}
           fullWidth={true}
           type="email"
+          errorText={this.props.fieldErrors.email}
         />
         <TextField
           id='signup-nickname'
@@ -58,6 +59,7 @@ export default class SignUpModal extends React.Component {
           onChange={changePassword}
           fullWidth={true}
           type="password"
+          errorText={this.props.fieldErrors.password}
         />
       </Dialog>
     );

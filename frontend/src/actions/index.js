@@ -198,7 +198,7 @@ export const logout = {
 export const signUp = {
   request: (profile, credentials) => action(at.SIGNUP_REQUEST, { profile, credentials }),
   success: () => action(at.SIGNUP_SUCCESS),
-  failure: (error) => action(at.SIGNUP_FAILURE, {error}),
+  failure: (fieldErrors) => action(at.SIGNUP_FAILURE, {fieldErrors}),
 }
 
 

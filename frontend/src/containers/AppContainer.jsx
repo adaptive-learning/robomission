@@ -4,7 +4,12 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import App from '../components/App';
 import LoadingIndicator from '../components/LoadingIndicator';
-import { isLoaded, isLoginModalOpen, isSignUpModalOpen } from '../selectors/app';
+import {
+  isLoaded,
+  isLoginModalOpen,
+  isSignUpModalOpen,
+  getSignUpModalErrors
+  } from '../selectors/app';
 import { getProfile, getCredentials } from '../selectors/user';
 import {
   changeLocation,
@@ -13,13 +18,15 @@ import {
   login,
   signUp,
   toggleLoginModal,
-  toggleSignUpModal } from '../actions';
+  toggleSignUpModal
+  } from '../actions';
 
 
 const propTypes = {
   loaded: PropTypes.bool.isRequired,
   showLoginModal: PropTypes.bool.isRequired,
   showSignUpModal: PropTypes.bool.isRequired,
+  signUpModalErrors: PropTypes.object.isRequired,
   children: PropTypes.node,
 };
 
@@ -31,6 +38,7 @@ const getProps = state => ({
   loaded: isLoaded(state),
   showLoginModal: isLoginModalOpen(state),
   showSignUpModal: isSignUpModalOpen(state),
+  signUpModalErrors: getSignUpModalErrors(state),
   credentials: getCredentials(state),
   profile: getProfile(state),
 });
@@ -83,6 +91,7 @@ class AppContainer extends React.Component {
       <App
         showLoginModal={this.props.showLoginModal}
         showSignUpModal={this.props.showSignUpModal}
+        signUpModalErrors={this.props.signUpModalErrors}
         credentials={this.props.credentials}
         profile={this.props.profile}
         changeCredentials={this.changeCredentials}

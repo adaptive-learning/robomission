@@ -44,6 +44,7 @@ export default class App extends React.Component {
           open={this.props.showSignUpModal}
           credentials={this.props.credentials}
           profile={this.props.profile}
+          fieldErrors={this.props.signUpModalErrors}
           changeCredentials={this.props.changeCredentials}
           changeProfile={this.props.changeProfile}
           closeSignUpModal={this.props.closeSignUpModal}

@@ -26,3 +26,8 @@ export function isLoginModalOpen(state) {
 export function isSignUpModalOpen(state) {
   return state.app.isSignUpModalOpen;
 }
+
+
+export function getSignUpModalErrors(state) {
+  return state.app.signUpModalErrors;
+}
