@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Snackbar from 'material-ui/Snackbar';
 import backgroundPath from '../images/background-space.png';
 import HeaderContainer from '../containers/HeaderContainer';
 import MenuContainer from '../containers/MenuContainer';
@@ -7,6 +8,7 @@ import InstructionsContainer from '../containers/InstructionsContainer';
 import FeedbackModalContainer  from '../containers/FeedbackModalContainer';
 import LoginModal from '../components/LoginModal';
 import SignUpModal from '../components/SignUpModal';
+import { translate } from '../localization';
 
 
 const propTypes = {
@@ -50,6 +52,11 @@ export default class App extends React.Component {
           changeProfile={this.props.changeProfile}
           closeSignUpModal={this.props.closeSignUpModal}
           signup={this.props.signUp}
+        />
+        <Snackbar
+          open={this.props.snackbarMessageId !== null}
+          message={this.props.snackbarMessageId ? translate(this.props.snackbarMessageId) : ''}
+          autoHideDuration={4000}
         />
       </div>
     );

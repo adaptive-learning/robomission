@@ -36,3 +36,8 @@ export function isSignUpModalOpen(state) {
 export function getSignUpModalErrors(state) {
   return state.app.signUpModalErrors;
 }
+
+
+export function getSnackbarMessageId(state) {
+  return state.app.snackbarMessageId;
+}

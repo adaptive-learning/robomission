@@ -10,6 +10,7 @@ import {
   isSignUpModalOpen,
   getLoginFailed,
   getSignUpModalErrors,
+  getSnackbarMessageId,
   } from '../selectors/app';
 import { getProfile, getCredentials } from '../selectors/user';
 import {
@@ -29,6 +30,7 @@ const propTypes = {
   loginFailed: PropTypes.bool.isRequired,
   showSignUpModal: PropTypes.bool.isRequired,
   signUpModalErrors: PropTypes.object.isRequired,
+  snackbarMessageId: PropTypes.string,
   children: PropTypes.node,
 };
 
@@ -44,6 +46,7 @@ const getProps = state => ({
   signUpModalErrors: getSignUpModalErrors(state),
   credentials: getCredentials(state),
   profile: getProfile(state),
+  snackbarMessageId: getSnackbarMessageId(state),
 });
 
 const actionCreators = {
@@ -105,6 +108,7 @@ class AppContainer extends React.Component {
         closeLoginModal={this.closeLoginModal}
         closeSignUpModal={this.closeSignUpModal}
         openSignUpModal={this.openSignUpModal}
+        snackbarMessageId={this.props.snackbarMessageId}
       >
         {this.props.children}
       </App>

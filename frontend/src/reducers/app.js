@@ -9,6 +9,7 @@ import { CHANGE_LOCATION,
          FETCH_STUDENT_SUCCESS,
          LOGIN_FAILURE,
          LOGIN_SUCCESS,
+         SIGNUP_SUCCESS,
          SIGNUP_FAILURE } from '../action-types';
 
 
@@ -22,6 +23,7 @@ const initial = {
   isSignUpModalOpen: false,
   signUpModalErrors: {},
   loginFailed: false,
+  snackbarMessageId: null,
 };
 
 
@@ -81,6 +83,11 @@ export default function reduceApp(state = initial, action) {
       return {
         ...state,
         isSignUpModalOpen: action.payload.open,
+      };
+    case SIGNUP_SUCCESS:
+      return {
+        ...state,
+        snackbarMessageId: 'user.signup-success',
       };
     case SIGNUP_FAILURE:
       return {

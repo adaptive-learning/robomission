@@ -147,4 +147,5 @@ export default {
   'user.password': 'Heslo',
   'user.signup': 'Registrace',
   'user.login-failed': 'Nesprávný email nebo heslo.',
+  'user.signup-success': 'Registrace proběhla úspěšně!',
 };
