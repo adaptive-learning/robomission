@@ -284,6 +284,7 @@ AUTHENTICATION_BACKENDS = (
 
 
 ACCOUNT_EMAIL_VERIFICATION = 'none'
+SOCIALACCOUNT_ADAPTER = 'learn.social.SocialAccountAdapter'
 
 
 # Setup CORS headers for development.
