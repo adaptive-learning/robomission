@@ -1,3 +1,4 @@
+from functools import wraps
 from django.contrib.auth.models import User
 from lazysignup.decorators import allow_lazy_user
 from lazysignup.models import LazyUser
@@ -6,14 +7,21 @@ from lazysignup.utils import is_lazy_user
 
 @allow_lazy_user
 def get_or_create_user(request):
-    """Return a current user and create one if it doesn't exist
-
-    Lazy user is generally created already when loading the frontend app.
-    However, there are at least two cases when the frontend-app view is not
-    loaded: one scenario is a manual testing through the browsable api, and
-    second is FE development, when the home page is served from the FE server.
+    """Return a current user and create a new one if doesn't exist.
     """
     return request.user
+
+
+def create_user_student(method):
+    """Method decorator creating new user if there is none in the request.
+
+    Students are created automatically with a new user via signals.
+    """
+    @wraps(method)
+    def wrapper(self, request, *args, **kwargs):
+        request.user = get_or_create_user(request)
+        return method(self, request, *args, **kwargs)
+    return wrapper
 
 
 def is_initial_user(user):

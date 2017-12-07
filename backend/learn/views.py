@@ -33,7 +33,7 @@ from learn.serializers import WorldSerializer
 from learn.serializers import RunProgramResponseSerializer
 from learn.serializers import FeedbackSerializer
 from learn.serializers import TeacherSerializer
-from learn.users import get_or_fake_user
+from learn.users import get_or_fake_user, create_user_student
 from learn.world import get_world
 from learn import actions
 from learn import feedback
@@ -156,6 +156,7 @@ class StudentViewSet(viewsets.ReadOnlyModelViewSet):
         return Response(serializer.data)
 
     @detail_route(methods=['post'])
+    @create_user_student
     def start_task(self, request, pk=None):
         student = self.get_object()
         assert student.pk == int(pk)
@@ -166,6 +167,7 @@ class StudentViewSet(viewsets.ReadOnlyModelViewSet):
         return Response(response_data)
 
     @detail_route(methods=['post'])
+    @create_user_student
     def watch_instruction(self, request, pk=None):
         student = self.get_object()
         assert student.pk == int(pk)
@@ -176,6 +178,7 @@ class StudentViewSet(viewsets.ReadOnlyModelViewSet):
         return Response()
 
     @detail_route(methods=['post'])
+    @create_user_student
     def edit_program(self, request, pk=None):
         task_session_id = request.data['task-session-id']
         program = request.data['program']
@@ -189,6 +192,7 @@ class StudentViewSet(viewsets.ReadOnlyModelViewSet):
         return Response()
 
     @detail_route(methods=['post'])
+    @create_user_student
     def run_program(self, request, pk=None):
         task_session_id = request.data['task-session-id']
         program = request.data['program']
