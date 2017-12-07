@@ -6,7 +6,6 @@ from django.shortcuts import redirect
 from django.shortcuts import render
 from django.template.exceptions import TemplateDoesNotExist
 from django.views.decorators.csrf import ensure_csrf_cookie
-from lazysignup.decorators import allow_lazy_user
 from rest_framework import permissions
 from rest_framework import viewsets
 from rest_framework.decorators import detail_route
@@ -17,7 +16,7 @@ from learn.credits import get_active_credits, get_level_value
 from learn.models import Block, Toolbox, Level, Task, Instruction
 from learn.models import Action, Student, TaskSession, ProgramSnapshot
 from learn.models import Feedback, Classroom, Teacher
-from learn.permissions import IsOwnerOrAdmin
+from learn.permissions import IsOwnerOrAdmin, IsOwnerOrAdminOrReadOnly
 from learn.practice_overview import get_practice_overview, get_recommendation
 from learn.serializers import ActionSerializer
 from learn.serializers import BlockSerializer
@@ -34,13 +33,13 @@ from learn.serializers import WorldSerializer
 from learn.serializers import RunProgramResponseSerializer
 from learn.serializers import FeedbackSerializer
 from learn.serializers import TeacherSerializer
+from learn.users import get_or_fake_user
 from learn.world import get_world
 from learn import actions
 from learn import feedback
 
 
 @ensure_csrf_cookie
-@allow_lazy_user
 def frontend_app(request, *_):
     try:
         response = render(request, 'index.html')
@@ -69,31 +68,17 @@ def delete_invalid_session_cookie_from_response(request, response):
     response.delete_cookie(cookie_name)
 
 
-@allow_lazy_user
-def get_or_create_user(request):
-    """Return a current user and create one if it doesn't exist
-
-    Lazy user is generally created already when loading the frontend app.
-    However, there are at least two cases when the frontend-app view is not
-    loaded: one scenario is a manual testing through the browsable api, and
-    second is FE development, when the home page is served from the FE server.
-    """
-    return request.user
-
 
 class UserViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = User.objects.all()
     serializer_class = UserSerializer
 
     def get_queryset(self):
-        user = get_or_create_user(self.request)
-        if user and user.is_staff:
-            return User.objects.all()
+        user = self.request.user
         return User.objects.filter(pk=user.pk)
 
     @list_route(url_path='current')
     def current_user(self, request):
-        user = get_or_create_user(request)
+        user = get_or_fake_user(request)
         serializer = UserSerializer(user, context={'request': request})
         return Response(serializer.data)
 
@@ -153,9 +138,8 @@ class TeacherViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 class StudentViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Student.objects.all()
     serializer_class = StudentSerializer
-    permission_classes = (IsOwnerOrAdmin,)
+    permission_classes = (IsOwnerOrAdminOrReadOnly,)
 
     @detail_route(url_path='practice-overview')
     def practice_overview(self, request, pk):
@@ -233,9 +217,7 @@ class StudentViewSet(viewsets.ReadOnlyModelViewSet):
         return Response(serializer.data)
 
     def get_queryset(self):
-        user = self.request.user
-        if user and user.is_staff:
-            return Student.objects.all()
+        user = get_or_fake_user(self.request)
         return Student.objects.filter(user=user)
 
     #def perform_create(self, serializer):

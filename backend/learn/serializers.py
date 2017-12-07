@@ -7,7 +7,7 @@ from learn.credits import get_active_credits, get_level_value
 from learn.models import Block, Toolbox, Level, Task, Instruction
 from learn.models import Action, ProgramSnapshot, Student, TaskSession
 from learn.models import Feedback, Teacher, Classroom
-from learn.users import convert_lazy_user
+from learn.users import convert_lazy_user, is_initial_user
 from learn.world import get_world
 
 
@@ -28,7 +28,8 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
             'student', 'teacher')
 
     def get_is_lazy(self, user):
-        return is_lazy_user(user)
+        # TODO: rename to is_anonymous
+        return is_lazy_user(user) or user.is_anonymous() or is_initial_user(user)
 
 
 class LazyRegisterSerializer(RegisterSerializer):
@@ -138,7 +139,7 @@ class StudentSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Student
         fields = (
-            'id', 'url', 'user', 'credits', 'level', 'active_credits',
+            'url', 'user', 'credits', 'level', 'active_credits',
             'seen_instructions', 'classroom', 'practice_overview',
             'start_task', 'watch_instruction', 'edit_program', 'run_program')
 
