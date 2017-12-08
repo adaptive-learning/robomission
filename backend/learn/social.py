@@ -32,5 +32,5 @@ class SocialAccountAdapter(DefaultSocialAccountAdapter):
         if hasattr(request, 'robomission_lazy_user'):
             lazy_user = request.robomission_lazy_user
             convert_lazy_user(lazy_user, user)
-        del request.robomission_lazy_user
+            del request.robomission_lazy_user
         return user
