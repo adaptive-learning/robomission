@@ -20,6 +20,7 @@ import { getTaskId,
          isInterpreting } from '../selectors/taskEnvironment';
 import { getColor, getPosition, isSolved, isDead, getGameStage } from '../selectors/gameState';
 import { getNextLevelStatus } from '../selectors/practice';
+import { getUser } from '../selectors/user';
 import { interpretRoboAst, InterpreterError } from '../core/roboCodeInterpreter';
 import { parseTaskSourceText } from '../core/taskSourceParser';
 import { downloadTextFile, loadTextFile } from '../utils/files';
@@ -83,6 +84,7 @@ function* fetchPracticeOverview(action) {
 
 function* watchInstruction(action) {
   try {
+    yield* createNewUserIfNeeded();
     const { instructionId } = action.payload;
     const url = yield select(getWatchInstructionUrl);
     yield call(api.seeInstruction, url, instructionId);
@@ -179,10 +181,30 @@ function handleInterpreterError(error) {
 }
 
 
+function* createNewUserIfNeeded() {
+  let user = yield select(getUser);
+  if (!user.created) {
+    // TODO: move createUserUrl to the API module
+    const createUserUrl = '/learn/api/users/create';
+    yield* fetchUser(actions.fetchUser.request(createUserUrl));
+    user = yield select(getUser);
+    if (!user.created) {
+      throw new Error('Failed to create a user.')
+    } else {
+      const studentUrl = yield select(getStudentUrl);
+      yield* fetchStudent(actions.fetchStudent.request(studentUrl));
+    }
+  }
+}
+
+
 function* startTask(action) {
   const { taskEnvironmentId, taskId } = action.payload;
   const setTaskByIdAction = actions.setTaskById(taskEnvironmentId, taskId);
   yield put(setTaskByIdAction);
+
+  yield* createNewUserIfNeeded();
+
   const startTaskUrl = yield select(getStartTaskUrl);
   const { taskSessionId } = yield call(api.startTask, startTaskUrl, taskId);
   const programEditUrl = yield select(getReportProgramEditUrl);

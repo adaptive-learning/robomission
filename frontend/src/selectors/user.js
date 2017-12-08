@@ -10,6 +10,7 @@ export function getUser(state) {
   const user = state.user;
   return {
     isLazy: user.isLazy,
+    created: user.created,
     initial: getInitial(user),
   };
 }
