@@ -276,6 +276,11 @@ function* initializeApp() {
 }
 
 
+function* initializeAppOnLocationChange() {
+  yield takeLatest(actionType.CHANGE_LOCATION, initializeApp);
+}
+
+
 function* exportTask(action) {
   const { taskEnvironmentId } = action.payload;
   try {
@@ -327,7 +332,7 @@ function* watchActions() {
 //       then remove these two parameters.
 function* rootSaga(dispatch, getState) {
   yield all([
-    initializeApp(),
+    initializeAppOnLocationChange(),
     watchActions(),
     watchTasks(dispatch, getState),
     authSaga(),

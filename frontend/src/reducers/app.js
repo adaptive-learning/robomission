@@ -60,6 +60,10 @@ export default function reduceApp(state = initial, action) {
     case CHANGE_LOCATION:
       return {
         ...state,
+        // all data should be reloaded after a transtion
+        staticDataLoaded: false,
+        studentLoaded: false,
+        practiceOverviewLoaded: false,
         mode: getMode(action.payload.pathname),
       };
     case TOGGLE_LOGIN_MODAL:
