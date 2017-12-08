@@ -7,6 +7,24 @@ import { translate } from '../localization';
 
 export default class FeedbackModal extends React.Component {
   render() {
+    if (this.props.justSent) {
+      const actions = [
+        <FlatButton
+          label={translate('Close')}
+          primary={true}
+          onClick={this.props.closeFeedbackModal}
+        />,
+      ];
+      return (
+        <Dialog
+          title={translate('feedback.thanks')}
+          open={this.props.open}
+          actions={actions}
+          onRequestClose={this.props.closeFeedbackModal}
+        >
+        </Dialog>
+      );
+    }
     const changeComment = (event) => {
       const feedback = {
         comment: event.target.value,

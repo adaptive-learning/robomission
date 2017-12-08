@@ -15,6 +15,7 @@ const initialState = {
   comment: '',
   email: '',
   fieldErrors: emptyFieldErrors,
+  justSent: false,
 };
 
 export default function reduceMenu(state = initialState, action) {
@@ -22,6 +23,7 @@ export default function reduceMenu(state = initialState, action) {
     case TOGGLE_FEEDBACK_MODAL:
       return {
         ...state,
+        justSent: false,
         open: action.payload.open,
       };
     case CHANGE_FEEDBACK:
@@ -34,6 +36,7 @@ export default function reduceMenu(state = initialState, action) {
       return {
         ...state,
         comment: '',
+        justSent: true,
         fieldErrors: emptyFieldErrors,
       };
     case SUBMIT_FEEDBACK_FAILURE:

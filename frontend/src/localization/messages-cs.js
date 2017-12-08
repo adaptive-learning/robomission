@@ -1,5 +1,6 @@
 /* eslint-disable quote-props, max-len */
 export default {
+  'Close': 'Zavřít',
   'I understand': 'Rozumím',
   'Intro': 'Intro',
   'Run': 'Spusť program',
@@ -109,6 +110,7 @@ export default {
   'feedback.question': 'Narazili jste na chybu v aplikaci? Máte nápad na vylepšení?',
   'feedback.email': 'E-mail (prosím vyplňte, ať Vám můžeme dát vědět odpověď)',
   'feedback.submit': 'Odeslat',
+  'feedback.thanks': 'Děkujeme za zpětnou vazbu!',
 
   'fail-reason.crashed-last-row': 'Raketka musí v cílové rovince zastavit',
   'fail-reason.crashed-edge': 'Raketka vyletěla z vesmírné dráhy a rozbila se',

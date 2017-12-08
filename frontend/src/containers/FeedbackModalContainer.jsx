@@ -7,12 +7,15 @@ import {
   isFeedbackModalOpen,
   getFeedback,
   getFeedbackFieldErrors,
+  getIfJustSent,
   } from '../selectors/feedback';
 
 
 const propTypes = {
   open: PropTypes.bool.isRequired,
   feedback: PropTypes.object.isRequired,
+  fieldErrors: PropTypes.object.isRequired,
+  justSent: PropTypes.bool.isRequired,
   changeFeedback: PropTypes.func.isRequired,
   submitFeedback: PropTypes.func.isRequired,
   toggleFeedbackModal: PropTypes.func.isRequired,
@@ -23,6 +26,7 @@ const getProps = state => ({
   open: isFeedbackModalOpen(state),
   feedback: getFeedback(state),
   fieldErrors: getFeedbackFieldErrors(state),
+  justSent: getIfJustSent(state),
 });
 
 const actionCreators = {
@@ -46,6 +50,7 @@ class FeedbackModalContainer extends React.Component {
         comment={this.props.feedback.comment}
         email={this.props.feedback.email}
         fieldErrors={this.props.fieldErrors}
+        justSent={this.props.justSent}
         changeFeedback={this.changeFeedback}
         submitFeedback={this.submitFeedback}
         closeFeedbackModal={this.closeFeedbackModal}

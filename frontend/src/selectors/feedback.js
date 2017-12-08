@@ -11,3 +11,8 @@ export function getFeedback(state) {
 export function getFeedbackFieldErrors(state) {
   return state.feedback.fieldErrors;
 }
+
+
+export function getIfJustSent(state) {
+  return state.feedback.justSent;
+}
