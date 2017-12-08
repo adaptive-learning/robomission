@@ -13,6 +13,7 @@ from learn.world import get_world
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     nickname = serializers.CharField(read_only=True, source='first_name')
+    created = serializers.SerializerMethodField()
     is_lazy = serializers.SerializerMethodField()
     student = serializers.HyperlinkedRelatedField(
         view_name='student-detail',
@@ -24,12 +25,16 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = User
         fields = (
-            'id', 'url', 'username', 'email', 'nickname', 'is_staff', 'is_lazy',
+            'id', 'url', 'username', 'email', 'nickname',
+            'is_staff', 'is_lazy', 'created',
             'student', 'teacher')
 
     def get_is_lazy(self, user):
         # TODO: rename to is_anonymous
         return is_lazy_user(user) or user.is_anonymous() or is_initial_user(user)
+
+    def get_created(self, user):
+        return not is_initial_user(user)
 
 
 class LazyRegisterSerializer(RegisterSerializer):

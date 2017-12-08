@@ -37,6 +37,7 @@ export function fetchUser(url) {
     nickname: response.data['nickname'],
     isStaff: response.data['is_staff'],
     isLazy: response.data['is_lazy'],
+    created: response.data['created'],
   }));
 }
 

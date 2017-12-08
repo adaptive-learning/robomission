@@ -82,6 +82,12 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
         serializer = UserSerializer(user, context={'request': request})
         return Response(serializer.data)
 
+    @list_route(url_path='create')
+    @create_user_student
+    def create_user(self, request):
+        serializer = UserSerializer(request.user, context={'request': request})
+        return Response(serializer.data)
+
 
 class CurrentUserViewSet(viewsets.ViewSet):
     """Phony ViewSet to specify a custom "current_user" entry for the API root.
@@ -156,7 +162,6 @@ class StudentViewSet(viewsets.ReadOnlyModelViewSet):
         return Response(serializer.data)
 
     @detail_route(methods=['post'])
-    @create_user_student
     def start_task(self, request, pk=None):
         student = self.get_object()
         assert student.pk == int(pk)
@@ -167,7 +172,6 @@ class StudentViewSet(viewsets.ReadOnlyModelViewSet):
         return Response(response_data)
 
     @detail_route(methods=['post'])
-    @create_user_student
     def watch_instruction(self, request, pk=None):
         student = self.get_object()
         assert student.pk == int(pk)
@@ -178,7 +182,6 @@ class StudentViewSet(viewsets.ReadOnlyModelViewSet):
         return Response()
 
     @detail_route(methods=['post'])
-    @create_user_student
     def edit_program(self, request, pk=None):
         task_session_id = request.data['task-session-id']
         program = request.data['program']
@@ -192,7 +195,6 @@ class StudentViewSet(viewsets.ReadOnlyModelViewSet):
         return Response()
 
     @detail_route(methods=['post'])
-    @create_user_student
     def run_program(self, request, pk=None):
         task_session_id = request.data['task-session-id']
         program = request.data['program']
