@@ -48,7 +48,7 @@ export function* logoutFlow () {
       yield put(actions.logout.success());
       // To make sure there are absolutely no leftovers in the state after the
       // logout, the page is reloaded.
-      window.location.reload(true);
+      window.location.href = '/';
     } catch (error) {
       yield put(actions.logout.failure(error));
     }
