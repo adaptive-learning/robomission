@@ -6,3 +6,8 @@ export function getFeedback(state) {
   const { comment, email } = state.feedback;
   return { comment, email };
 }
+
+
+export function getFeedbackFieldErrors(state) {
+  return state.feedback.fieldErrors;
+}

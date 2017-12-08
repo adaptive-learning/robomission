@@ -175,7 +175,7 @@ export const submitFeedback = {
   request: (feedback) => action(at.SUBMIT_FEEDBACK_REQUEST,
     { feedback, url: getCurrentUrl() }),
   success: () => action(at.SUBMIT_FEEDBACK_SUCCESS),
-  failure: (error) => action(at.SUBMIT_FEEDBACK_FAILURE, {error}),
+  failure: (fieldErrors) => action(at.SUBMIT_FEEDBACK_FAILURE, {fieldErrors}),
 }
 
 

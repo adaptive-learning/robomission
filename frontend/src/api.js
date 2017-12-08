@@ -135,7 +135,15 @@ function parseProgress(data) {
 
 export function sendFeedback(feedbackUrl, comment, email, url) {
   const data = { comment, email, url };
-  return axios.post(feedbackUrl, data);
+  return axios.post(feedbackUrl, data)
+    .catch(error => {
+      const { data } = error.response;
+      error.fieldErrors = {
+        email: (data.email) ? data.email[0] : null,
+        comment: (data.comment) ? data.comment[0] : null,
+      };
+      throw error;
+    });
 }
 
 

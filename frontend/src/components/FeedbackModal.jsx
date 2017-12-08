@@ -51,6 +51,7 @@ export default class FeedbackModal extends React.Component {
           multiLine={true}
           rows={5}
           fullWidth={true}
+          errorText={this.props.fieldErrors.comment}
         />
         <TextField
           id='feedback-email'
@@ -58,6 +59,7 @@ export default class FeedbackModal extends React.Component {
           value={this.props.email}
           onChange={changeEmail}
           fullWidth={true}
+          errorText={this.props.fieldErrors.email}
         />
       </Dialog>
     );

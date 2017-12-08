@@ -15,7 +15,7 @@ function* submitFeedback(action) {
     yield put(actions.submitFeedback.success());
   }
   catch (error) {
-    yield put(actions.submitFeedback.failure(error));
+    yield put(actions.submitFeedback.failure(error.fieldErrors));
   }
 }
 

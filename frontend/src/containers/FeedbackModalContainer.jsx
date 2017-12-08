@@ -3,7 +3,11 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import FeedbackModal from '../components/FeedbackModal';
 import { changeFeedback, submitFeedback, toggleFeedbackModal } from '../actions';
-import { isFeedbackModalOpen, getFeedback } from '../selectors/feedback';
+import {
+  isFeedbackModalOpen,
+  getFeedback,
+  getFeedbackFieldErrors,
+  } from '../selectors/feedback';
 
 
 const propTypes = {
@@ -18,6 +22,7 @@ const propTypes = {
 const getProps = state => ({
   open: isFeedbackModalOpen(state),
   feedback: getFeedback(state),
+  fieldErrors: getFeedbackFieldErrors(state),
 });
 
 const actionCreators = {
@@ -40,6 +45,7 @@ class FeedbackModalContainer extends React.Component {
         open={this.props.open}
         comment={this.props.feedback.comment}
         email={this.props.feedback.email}
+        fieldErrors={this.props.fieldErrors}
         changeFeedback={this.changeFeedback}
         submitFeedback={this.submitFeedback}
         closeFeedbackModal={this.closeFeedbackModal}
