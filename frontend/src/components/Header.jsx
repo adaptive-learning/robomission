@@ -47,6 +47,10 @@ class Header extends React.Component {
           primaryText={translate('user.signup')}
           onClick={this.props.openSignUpModal}
         />
+        <MenuItem
+          primaryText={translate('user.delete-history')}
+          onClick={this.props.logout}
+        />
       </IconMenu>
     );
     if (!this.props.user.isLazy) {
@@ -54,7 +58,7 @@ class Header extends React.Component {
         <IconMenu iconButtonElement={avatar}>
           <MenuItem
             primaryText={translate('user.logout')}
-          onClick={this.props.logout}
+            onClick={this.props.logout}
           />
         </IconMenu>
       );

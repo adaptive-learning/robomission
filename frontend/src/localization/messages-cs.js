@@ -143,6 +143,7 @@ export default {
   'user.via-facebook': 'Skrze Facebook',
   'user.via-google': 'Skrze Google',
   'user.logout': 'Odhlásit se',
+  'user.delete-history': 'Smazat historii',
   'user.nickname': 'Přezdívka',
   'user.password': 'Heslo',
   'user.signup': 'Registrace',
