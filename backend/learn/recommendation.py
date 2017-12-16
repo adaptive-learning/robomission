@@ -34,7 +34,7 @@ def randomly_by_level(world, student):
 
 
 def _exponentially_weighted_tasks(tasks, preferred_level,
-                                  decay_factor=0.5, max_weight=1000):
+                                  decay_factor=0.3, max_weight=1000):
     """Give weights to the tasks based on their levels.
 
     Args:
