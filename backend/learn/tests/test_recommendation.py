@@ -28,11 +28,11 @@ def test_exponentially_weighted_tasks__prefer_preferred_level():
 def test_exponentially_weighted_tasks__decay_factor():
     tasks = [task_at_level(3), task_at_level(4), task_at_level(5)]
     weighted_tasks = _exponentially_weighted_tasks(
-        tasks, preferred_level=5, decay_factor=0.9)
+        tasks, preferred_level=5, decay_factor=0.9, max_weight=1000)
     weight3, weight4, weight5 = [weight for _task, weight in weighted_tasks]
-    assert weight5 == 100
-    assert weight4 == 90
-    assert weight3 == 81
+    assert weight5 == 1000
+    assert weight4 == 900
+    assert weight3 == 810
 
 
 def test_exponentially_weighted_tasks__always_positive_weight():

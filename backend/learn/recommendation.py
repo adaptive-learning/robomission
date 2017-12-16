@@ -33,7 +33,8 @@ def randomly_by_level(world, student):
     return _roulette_wheel_selection(weighted_tasks, number)
 
 
-def _exponentially_weighted_tasks(tasks, preferred_level, decay_factor=0.5):
+def _exponentially_weighted_tasks(tasks, preferred_level,
+                                  decay_factor=0.5, max_weight=1000):
     """Give weights to the tasks based on their levels.
 
     Args:
@@ -46,7 +47,7 @@ def _exponentially_weighted_tasks(tasks, preferred_level, decay_factor=0.5):
     """
     def weight(task):
         real_weight = decay_factor ** abs(task.level.level - preferred_level)
-        int_weight = max(1, int(100 * real_weight))
+        int_weight = max(1, int(max_weight * real_weight))
         return int_weight
 
     weighted_tasks = [(task, weight(task)) for task in tasks]
