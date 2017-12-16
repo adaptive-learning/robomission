@@ -4,6 +4,7 @@ import Dialog from 'material-ui/Dialog';
 import RaisedButton from 'material-ui/RaisedButton';
 import NextTaskButtonContainer from '../containers/NextTaskButtonContainer';
 import LevelBar from '../components/LevelBar';
+import Text from '../localization/Text';
 
 
 export default class CompleteTaskModal extends React.Component {
@@ -75,11 +76,15 @@ export default class CompleteTaskModal extends React.Component {
   render() {
     const message = 'Výborně, úloha vyřešena!';
     let actions = [];
+    let bottomMessage = null;
     if (this.props.levelStatus.hasNext && !this.state.animating) {
       actions = [this.renderContinueButton(true)];
     } else if (this.state.animating) {
       actions = [this.renderContinueButton(false)];
     } else {
+      if (this.props.recommendation.isEasy) {
+        bottomMessage = <Text id="easy-task-challenge" />
+      }
       actions = [
         <NextTaskButtonContainer />,
         <Link to="/tasks"><RaisedButton label="Přehled úloh" style={{ marginLeft: 10 }} /></Link>
@@ -100,6 +105,11 @@ export default class CompleteTaskModal extends React.Component {
           maxCredits={this.props.levelStatus.maxCredits}
           percent={this.state.shownPercent}
         />
+        {bottomMessage && (
+          <div style={{ marginTop: 25 }}>
+            {bottomMessage}
+          </div>
+        )}
       </Dialog>
     );
   }

@@ -11,6 +11,8 @@ export default {
   'Previous': 'Předchozí',
   'Feedback': 'Napište nám',
 
+  'easy-task-challenge': 'Pro změnu něco jednoduššího. Zvládneš to vyřešit do minuty?',
+
   'not tackled': 'neřešeno',
   'recommended': 'doporučujeme',
 

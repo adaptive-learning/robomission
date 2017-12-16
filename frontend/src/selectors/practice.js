@@ -1,9 +1,19 @@
 import { getPracticePageTaskId } from '../selectors/taskEnvironment';
 import { getMode } from '../selectors/app';
+import { getStudentLevel } from '../selectors/student';
+import { getTaskLevel } from '../selectors/task';
 
+
+function isTaskEasy(taskLevel, studentLevel) {
+  return taskLevel <= studentLevel / 2;
+}
 
 export function getRecommendation(state) {
-  return state.recommendation;
+  const recommendation = { ...state.recommendation };
+  const taskLevel = getTaskLevel(state, recommendation.task);
+  const studentLevel = getStudentLevel(state);
+  recommendation.isEasy = isTaskEasy(taskLevel, studentLevel);
+  return recommendation;
 }
 
 

@@ -1,4 +1,4 @@
-import { getToolboxId } from '../selectors/category';
+import { getCategoryLevel, getToolboxId } from '../selectors/category';
 
 
 export function getCategoryId(state, taskId) {
@@ -8,6 +8,13 @@ export function getCategoryId(state, taskId) {
 
 export function getTaskById(state, taskId) {
   return state.tasks[taskId];
+}
+
+
+export function getTaskLevel(state, taskId) {
+  const categoryId = getCategoryId(state, taskId);
+  const level = getCategoryLevel(state, categoryId);
+  return level;
 }
 
 

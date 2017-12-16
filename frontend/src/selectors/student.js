@@ -7,6 +7,11 @@ export function getLevelStatus(state) {
 }
 
 
+export function getStudentLevel(state) {
+  return state.student.level;
+}
+
+
 export function isNewStudent(state) {
   return state.student.credits === 0;
 }
