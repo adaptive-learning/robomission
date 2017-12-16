@@ -13,7 +13,7 @@ import neuronsBackgroundPath from '../images/neurons-tile.png';
 import fiBackgroundPath from '../images/fi-slide.jpg';
 import spaceBackgroundPath from '../images/background-space.png';
 import spaceshipInSpaceWorldPath from '../images/spaceship-in-spaceworld.png';
-
+import Text from '../localization/Text';
 
 
 class Home extends React.Component {
@@ -65,12 +65,12 @@ class Home extends React.Component {
             }}
             zDepth={2}
           >
-            <h2>Nauč se programovat!</h2>
+            <h2><Text id="intro.learn-programming" /></h2>
             <span style={{ marginRight: 20 }}>
               <NextTaskButtonContainer />
             </span>
             <Link to="/tasks">
-              <RaisedButton label="Přehled úloh" />
+              <RaisedButton label={<Text id="Tasks" />} />
             </Link>
           </Paper>
         ),
@@ -90,7 +90,7 @@ class Home extends React.Component {
         },
         content: (
           <div>
-            <h2>Prozkoumej tajemný vesmír<br />a posbírej všechny diamanty</h2>
+            <h2><Text id="intro.explore-universe" /><br /><Text id="intro.collect-diamonds" /></h2>
             <div>
               <SpaceGameContainer
                 taskEnvironmentId="home-commands"
@@ -99,7 +99,7 @@ class Home extends React.Component {
               />
             </div>
             <p style={{ visibility: this.props.spaceWorldDemoSolved ? 'visible' : 'hidden' }}>
-              Skvěle, úloha vyřešena!
+            <Text id='excellent-task-solved' />
             </p>
           </div>
         ),
@@ -118,7 +118,11 @@ class Home extends React.Component {
         },
         content: (
           <div>
-            <h2>Nauč se ovládat vesmírnou loď<br />pomocí počítačových programů</h2>
+            <h2>
+              <Text id="intro.learn-program-spaceship" />
+              <br />
+              <Text id="intro.using-computer-programs" />
+            </h2>
             <div
               style={{
                 position: 'relative',
@@ -132,7 +136,7 @@ class Home extends React.Component {
               <TaskEnvironmentContainer taskEnvironmentId="home-program" />
             </div>
             <p style={{ visibility: this.props.programDemoSolved ? 'visible' : 'hidden' }}>
-              Skvěle, úloha vyřešena!
+              <Text id='excellent-task-solved' />
             </p>
           </div>
         ),
@@ -151,7 +155,11 @@ class Home extends React.Component {
         },
         content: (
           <div>
-            <h2>Hra je poháněna umělou inteligencí,<br />díky které se hra přizpůsobuje tvým dovednostem</h2>
+            <h2>
+              <Text id="intro.game-driven-by-ai" />
+              <br />
+              <Text id="intro.adapting-to-your-skills" />
+            </h2>
           </div>
         ),
         footer: (
@@ -180,14 +188,18 @@ class Home extends React.Component {
             }}
             zDepth={1}
           >
-            <h2>Aplikaci vyvíjí tým Adaptabilního učení<br />na Fakultě informatiky Masarykovy Univerzity</h2>
+            <h2>
+              <Text id="intro.developed-by-alg" />
+              <br />
+              <Text id="intro.at-fi-mu" />
+            </h2>
             <span style={{ marginRight: 20 }}>
               <a href="https://www.fi.muni.cz/adaptivelearning/?a=projects" target="_blank" rel="noreferrer noopener">
-                <RaisedButton label="Laboratoř adaptabilního učení" />
+                <RaisedButton label={<Text id="ALG" />} />
               </a>
             </span>
             <a href="https://www.fi.muni.cz/about/index.xhtml.cs" target="_blank" rel="noreferrer noopener">
-              <RaisedButton label="Fakulta informatiky MU" style={{ minWidth: 265 }} />
+              <RaisedButton label={<Text id="FI-MU" />} style={{ minWidth: 265 }} />
             </a>
           </Paper>
         ),
@@ -209,7 +221,7 @@ class Home extends React.Component {
         },
         content: (
           <div>
-            <h2>Vyleť do vesmíru!</h2>
+            <h2><Text id="intro.fly-into-space" /></h2>
             <NextTaskButtonContainer />
           </div>
         ),

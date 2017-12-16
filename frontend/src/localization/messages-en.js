@@ -10,11 +10,25 @@ export default {
   'Practice': 'Practice',
   'Previous': 'Previous',
   'Feedback': 'Feedback',
+  'ALG': 'Adaptive Learning group',
+  'FI-MU': 'Faculty of Informatics MU',
 
   'easy-task-challenge': 'And now something easier. Will you solve it within 1 minute?',
+  'excellent-task-solved': 'Excellent! Task solved.',
 
   'not tackled': 'not tackled',
   'recommended': 'recommended',
+
+  'intro.learn-programming': 'Learn programming!',
+  'intro.explore-universe': 'Explore mysterious universe',
+  'intro.collect-diamonds': 'and collect all diamonds',
+  'intro.learn-program-spaceship': 'Learn to program a spaceship',
+  'intro.using-computer-programs': 'using computer programs',
+  'intro.game-driven-by-ai': 'The game is driven by artificial intelligence',
+  'intro.adapting-to-your-skills': 'and adapts to your skills',
+  'intro.developed-by-alg': 'The app is developed by Adaptive Learning group',
+  'intro.at-fi-mu': 'at Faculty of Informatics, Masaryk University.',
+  'intro.fly-into-space': 'Fly into the space!',
 
   'task.2diamonds-2meteorids': '2 Diamonds, 2 Meteoroids',
   'task.arrow': 'Arrow',

@@ -10,11 +10,25 @@ export default {
   'Practice': 'Trénink',
   'Previous': 'Předchozí',
   'Feedback': 'Napište nám',
+  'ALG': 'Laboratoř adaptabilního učení',
+  'FI-MU': 'Fakulta informatiky MU',
 
   'easy-task-challenge': 'Pro změnu něco jednoduššího. Zvládneš to vyřešit do minuty?',
+  'excellent-task-solved': 'Skvěle, úloha vyřešena!',
 
   'not tackled': 'neřešeno',
   'recommended': 'doporučujeme',
+
+  'intro.learn-programming': 'Nauč se programovat!',
+  'intro.explore-universe': 'Prozkoumej tajemný vesmír',
+  'intro.collect-diamonds': 'a posbírej všechny diamanty',
+  'intro.learn-program-spaceship': 'Nauč se ovládat vesmírnou loď',
+  'intro.using-computer-programs': 'pomocí počítačových programů',
+  'intro.game-driven-by-ai': 'Hra je poháněna umělou inteligencí,',
+  'intro.adapting-to-your-skills': 'díky které se hra přizpůsobuje tvým dovednostem',
+  'intro.developed-by-alg': 'Aplikaci vyvíjí tým Adaptabilního učení',
+  'intro.at-fi-mu': 'na Fakultě informatiky Masarykovy Univerzity',
+  'intro.fly-into-space': 'Vyleť do vesmíru!',
 
   'task.2diamonds-2meteorids': '2 diamanty, 2 meteoroidy',
   'task.arrow': 'Šipka',
