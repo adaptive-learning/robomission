@@ -2,12 +2,12 @@
 [RoboMission][1] is an intelligent web application for learning elementary programming,
 aiming at creating a [flow experience][2].
 RoboMission is developed by [Adaptive Learning group][3]
-at [Faculty of informatics, Masaryk university][4].
+at [Masaryk University][4].
 
   [1]: https://en.staging.robomise.cz/
   [2]: https://en.wikipedia.org/wiki/Flow_(psychology)
   [3]: http://www.fi.muni.cz/adaptivelearning/
-  [4]: https://www.fi.muni.cz/index.html.en
+  [4]: https://www.muni.cz/en
 
 ## Start working on the project
 
