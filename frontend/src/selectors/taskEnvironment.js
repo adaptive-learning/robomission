@@ -37,6 +37,18 @@ export function getTaskId(state, taskEnvironmentId) {
 }
 
 
+export function getTaskLevel(state, taskEnvironmentId) {
+  const task = getTask(state, taskEnvironmentId);
+  const categoryId = task.category;
+  if (!categoryId) {
+    return 0;
+  }
+  const category = state.categories[categoryId];
+  const level = category.level;
+  return level;
+}
+
+
 export function getToolbox(state, taskEnvironmentId) {
   // using task version stored in the environment to make it work in task
   // editor as well

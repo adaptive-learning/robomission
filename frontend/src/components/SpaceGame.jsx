@@ -7,11 +7,13 @@ import GameControls from './GameControls';
 
 export default function SpaceGame({
     taskId,
+    level,
     gameState,
     lengthLimit,
     width,
     controls,
     onControlClicked,
+    showHeader,
   }) {
   const { fields, stage, diamonds, energy } = gameState;
   const gameOver = (stage === 'solved' || stage === 'dead');
@@ -37,16 +39,20 @@ export default function SpaceGame({
       controls.indexOf('reset') < 0 || preparing || (initialStage && controls.indexOf('run') >= 0),
       initialStage),
   };
+  const gameStatus = (
+    <GameStatus
+      taskId={taskId}
+      level={level}
+      diamonds={diamonds}
+      energy={energy}
+      length={lengthLimit}
+      solved={stage === 'solved'}
+      dead={stage === 'dead'}
+    />
+  );
   return (
     <span style={{ display: 'inline-block', verticalAlign: 'top' }}>
-      <GameStatus
-        taskId={taskId}
-        diamonds={diamonds}
-        energy={energy}
-        length={lengthLimit}
-        solved={stage === 'solved'}
-        dead={stage === 'dead'}
-      />
+      {showHeader && gameStatus}
       <SpaceWorld
         fields={fields}
         width={width}
@@ -63,6 +69,7 @@ SpaceGame.propTypes = {
   onControlClicked: PropTypes.func,
   controls: PropTypes.array,
   width: PropTypes.number,
+  showHeader: PropTypes.bool,
 };
 
 SpaceGame.defaultProps = {
@@ -70,6 +77,7 @@ SpaceGame.defaultProps = {
   lengthLimit: { limit: null },
   controls: [],
   width: 280,
+  showHeader: false,
 };
 
 

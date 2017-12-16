@@ -7,7 +7,12 @@ import { createTaskEnvironment,
          resetGame,
          doActionMove } from '../actions';
 import { getGameState } from '../selectors/gameState';
-import { getTaskId, getLengthLimit, getGamePanelWidth } from '../selectors/taskEnvironment';
+import {
+  getTaskId,
+  getTaskLevel,
+  getLengthLimit,
+  getGamePanelWidth
+  } from '../selectors/taskEnvironment';
 
 
 class SpaceGameWrapper extends React.Component {
@@ -43,11 +48,13 @@ class SpaceGameWrapper extends React.Component {
     return (
       <SpaceGame
         taskId={this.props.taskId}
+        level={this.props.level}
         gameState={this.props.gameState}
         lengthLimit={this.props.lengthLimit}
         width={this.props.width}
         controls={this.props.controls}
         onControlClicked={this.handleControlClicked}
+        showHeader={this.props.showHeader}
       />
     );
   }
@@ -65,15 +72,21 @@ SpaceGameWrapper.propTypes = {
   resetGame: PropTypes.func.isRequired,
   doActionMove: PropTypes.func.isRequired,
   createTaskEnvironment: PropTypes.func.isRequired,
+  showHeader: PropTypes.bool,
 };
+
+SpaceGameWrapper.defaultProps = {
+  showHeader: true,
+}
 
 function mapStateToProps(state, props) {
   const { taskEnvironmentId, controls } = props;
   const gameState = getGameState(state, taskEnvironmentId);
   const lengthLimit = getLengthLimit(state, taskEnvironmentId);
   const taskId = getTaskId(state, taskEnvironmentId);
+  const level = getTaskLevel(state, taskEnvironmentId);
   const width = getGamePanelWidth(state, taskEnvironmentId);
-  return { taskEnvironmentId, taskId, gameState, lengthLimit, width, controls };
+  return { taskEnvironmentId, taskId, level, gameState, lengthLimit, width, controls };
 }
 
 

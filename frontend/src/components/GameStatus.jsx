@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import TaskName from './TaskName';
 import Icon from './Icon';
 
-export default function GameStatus({ taskId, solved, dead, diamonds, energy, length }) {
+export default function GameStatus({ taskId, level, solved, dead, diamonds, energy, length }) {
   const counterStyle = {
     paddingRight: 4,
     marginRight: 6,
@@ -19,6 +19,9 @@ export default function GameStatus({ taskId, solved, dead, diamonds, energy, len
     >
       <span style={{ display: 'block' }}>
         <TaskName taskId={taskId} />
+        <span style={{ float: 'right', marginRight: 5 }}>
+          L{level}
+        </span>
         {solved && <span style={{ float: 'right' }}>&#10003;</span>}
         {dead && <span style={{ float: 'right' }}>&#10005;</span>}
       </span>

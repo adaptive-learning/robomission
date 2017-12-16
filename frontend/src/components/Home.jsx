@@ -94,6 +94,7 @@ class Home extends React.Component {
             <div>
               <SpaceGameContainer
                 taskEnvironmentId="home-commands"
+                showHeader={false}
                 controls={['fly', 'left', 'right', 'reset']}
               />
             </div>
