@@ -44,9 +44,12 @@ def _exponentially_weighted_tasks(tasks, preferred_level, decay_factor=0.5):
     Return:
         list of tuples (task, weight)
     """
-    weighted_tasks = [
-        (task, int(100 * decay_factor ** abs(task.level.level - preferred_level)))
-        for task in tasks]
+    def weight(task):
+        real_weight = decay_factor ** abs(task.level.level - preferred_level)
+        int_weight = max(1, int(100 * real_weight))
+        return int_weight
+
+    weighted_tasks = [(task, weight(task)) for task in tasks]
     return weighted_tasks
 
 
