@@ -12,6 +12,7 @@ export default {
   'Feedback': 'Feedback',
   'ALG': 'Adaptive Learning group',
   'FI-MU': 'Faculty of Informatics MU',
+  'For hackers': 'For hackers',
 
   'easy-task-challenge': 'And now something easier. Will you solve it within 1 minute?',
   'excellent-task-solved': 'Excellent! Task solved.',

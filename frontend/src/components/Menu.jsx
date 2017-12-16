@@ -69,7 +69,9 @@ class Menu extends React.Component {
             <Text id="Tasks" />
           </MenuItem>
           <Divider />
-          <Subheader>Pro hackery</Subheader>
+          <Subheader>
+            <Text id="For hackers" />
+          </Subheader>
           <MenuItem
             value="task-editor"
             leftIcon={<TaskEditorIcon />}

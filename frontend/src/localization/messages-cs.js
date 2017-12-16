@@ -12,6 +12,7 @@ export default {
   'Feedback': 'Napište nám',
   'ALG': 'Laboratoř adaptabilního učení',
   'FI-MU': 'Fakulta informatiky MU',
+  'For hackers': 'Pro hackery',
 
   'easy-task-challenge': 'Pro změnu něco jednoduššího. Zvládneš to vyřešit do minuty?',
   'excellent-task-solved': 'Skvěle, úloha vyřešena!',
