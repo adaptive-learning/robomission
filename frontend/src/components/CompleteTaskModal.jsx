@@ -5,6 +5,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import NextTaskButtonContainer from '../containers/NextTaskButtonContainer';
 import LevelBar from '../components/LevelBar';
 import Text from '../localization/Text';
+import { translate } from '../localization';
 
 
 export default class CompleteTaskModal extends React.Component {
@@ -74,7 +75,6 @@ export default class CompleteTaskModal extends React.Component {
   }
 
   render() {
-    const message = 'Výborně, úloha vyřešena!';
     let actions = [];
     let bottomMessage = null;
     if (this.props.levelStatus.hasNext && !this.state.animating) {
@@ -87,12 +87,14 @@ export default class CompleteTaskModal extends React.Component {
       }
       actions = [
         <NextTaskButtonContainer />,
-        <Link to="/tasks"><RaisedButton label="Přehled úloh" style={{ marginLeft: 10 }} /></Link>
+        <Link to="/tasks">
+          <RaisedButton label={<Text id="Tasks" />} style={{ marginLeft: 10 }} />
+        </Link>
       ];
     }
     return (
       <Dialog
-        title={message}
+        title={translate('excellent-task-solved')}
         actions={actions}
         open={this.props.open}
         onRequestClose={this.props.handleClose}

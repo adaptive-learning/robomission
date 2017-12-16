@@ -147,7 +147,7 @@ export default {
   'instruction.length-limit': 'This is a program length status. The spaceship has a limited memmory, so the program cannot be too long.',
   'instruction.diamonds-status': 'This indicator shows how many diamonds the spaceship already collected.',
   'instruction.energy-status': 'This is energy status. Ever shot takes 1 unit of energy.',
-  'instruction.block.fly': 'Command to flight 1 step ahead.',
+  'instruction.block.fly': 'Command to fly 1 step ahead.',
   'instruction.block.shoot': 'Spaceship shoots and then moves 1 step ahead.',
   'instruction.block.repeat': 'Use this block to repeat a sequence of commands N-times.',
   'instruction.block.while': 'Use this block to repeat a sequence of commands while given condition is true.',
