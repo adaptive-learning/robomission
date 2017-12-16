@@ -1,4 +1,5 @@
-import csLocaleData from 'react-intl/locale-data/cs.js';
+import csLocaleData from 'react-intl/locale-data/cs';
+import enLocaleData from 'react-intl/locale-data/en';
 import { addLocaleData, IntlProvider } from 'react-intl';
 import { getDomainLabels } from '../utils/url';
 import messagesCs from './messages-cs';
@@ -6,7 +7,7 @@ import messagesEn from './messages-en';
 import Text from './Text';
 
 
-addLocaleData(csLocaleData);
+addLocaleData([...csLocaleData, ...enLocaleData]);
 const availableDomains = ['cs', 'en'];
 const defaultLocale = 'cs';
 const allMessages = {
