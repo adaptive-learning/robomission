@@ -20,7 +20,7 @@ function getInitial(user) {
   if (user.isLazy) {
     return 'a'
   };
-  const name = (user.nickname.length > 0) ? user.nickname : user.email;
+  const name = user.nickname || user.email || 'A';
   const letter = name[0];
   return letter.toUpperCase();
 }
