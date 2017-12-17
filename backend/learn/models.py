@@ -43,6 +43,9 @@ class Level(models.Model):
         help_text="Number of credits needed to complete this level.")
     # tasks = 1:n relation, see learn.models.Task
 
+    class Meta:
+        ordering = ['level']
+
     def __str__(self):
         return 'L{level} {name}'.format(level=self.level, name=self.name)
 
