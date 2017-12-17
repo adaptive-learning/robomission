@@ -8,11 +8,13 @@ from learn.models import TaskSession, ProgramSnapshot, Action, Feedback
 @admin.register(Level)
 class LevelAdmin(admin.ModelAdmin):
     list_display = ('level', 'name', 'toolbox', 'credits')
+    list_display_links = ('level', 'name')
 
 
 @admin.register(Task)
 class TaskAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', 'level')
+    list_display_links = ('id', 'name')
 
 
 @admin.register(TaskSession)
