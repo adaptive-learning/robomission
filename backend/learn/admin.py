@@ -5,13 +5,25 @@ from learn.models import Block, Toolbox, Level, Task, Instruction, Student
 from learn.models import TaskSession, ProgramSnapshot, Action, Feedback
 
 
+@admin.register(Level)
+class LevelAdmin(admin.ModelAdmin):
+    list_display = ('level', 'name', 'toolbox', 'credits')
+
+
+@admin.register(Task)
+class TaskAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name', 'level')
+
+
 @admin.register(TaskSession)
 class TaskSessionAdmin(admin.ModelAdmin):
+    list_display = ('id', 'student', 'task', 'solved', 'start', 'end')
     date_hierarchy = 'start'
 
 
 @admin.register(ProgramSnapshot)
 class ProgramSnapshotAdmin(admin.ModelAdmin):
+    list_display = ('id', 'task_session', 'program', 'granularity', 'correct')
     date_hierarchy = 'time'
 
 
@@ -27,7 +39,5 @@ class FeedbackAdmin(admin.ModelAdmin):
 
 admin.site.register(Block)
 admin.site.register(Toolbox)
-admin.site.register(Level)
-admin.site.register(Task)
 admin.site.register(Instruction)
 admin.site.register(Student)
