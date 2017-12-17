@@ -7,6 +7,7 @@ from django.contrib import admin
 from django.contrib.staticfiles.storage import staticfiles_storage
 from django.views.generic.base import RedirectView
 import learn
+import learn.admin
 from learn import social
 
 
@@ -36,6 +37,7 @@ urlpatterns = [
     url(r'^rest-auth/google/$', social.GoogleLogin.as_view(), name='google_login'),
     url(r'^accounts/', include('allauth.urls')),
     url(r'^admin/', admin.site.urls),
+    url(r'^learn/admin/', learn.admin.admin_site.urls),
     url(r'^($|about|task)', learn.views.frontend_app, name='frontend_app'),
 ]
 

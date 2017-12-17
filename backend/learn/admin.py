@@ -5,13 +5,21 @@ from learn.models import Block, Toolbox, Level, Task, Instruction, Student
 from learn.models import TaskSession, ProgramSnapshot, Action, Feedback
 
 
-@admin.register(Level)
+class AdminSite(admin.AdminSite):
+    site_header = 'RoboMission Admin'
+    site_title = 'RoboMission Admin'
+
+
+admin_site = AdminSite(name='robomission-admin')
+
+
+@admin.register(Level, site=admin_site)
 class LevelAdmin(admin.ModelAdmin):
     list_display = ('level', 'name', 'toolbox', 'credits')
     list_display_links = ('level', 'name')
 
 
-@admin.register(Task)
+@admin.register(Task, site=admin_site)
 class TaskAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', 'level')
     list_display_links = ('id', 'name')
@@ -19,24 +27,24 @@ class TaskAdmin(admin.ModelAdmin):
     search_fields = ['name']
 
 
-@admin.register(Toolbox)
+@admin.register(Toolbox, site=admin_site)
 class ToolboxAdmin(admin.ModelAdmin):
     list_filter = ('blocks',)
 
 
-@admin.register(Instruction)
+@admin.register(Instruction, site=admin_site)
 class InstructionAdmin(admin.ModelAdmin):
     search_fields = ['name']
 
 
-@admin.register(TaskSession)
+@admin.register(TaskSession, site=admin_site)
 class TaskSessionAdmin(admin.ModelAdmin):
     list_display = ('id', 'student', 'task', 'solved', 'start', 'end')
     date_hierarchy = 'start'
     list_filter = ('task', 'solved', 'start')
 
 
-@admin.register(ProgramSnapshot)
+@admin.register(ProgramSnapshot, site=admin_site)
 class ProgramSnapshotAdmin(admin.ModelAdmin):
     list_display = ('id', 'task_session', 'program', 'granularity', 'correct')
     date_hierarchy = 'time'
@@ -44,18 +52,18 @@ class ProgramSnapshotAdmin(admin.ModelAdmin):
     search_fields = ['program']
 
 
-@admin.register(Action)
+@admin.register(Action, site=admin_site)
 class ActionAdmin(admin.ModelAdmin):
     date_hierarchy = 'time'
     list_filter = ('name',)
 
 
-@admin.register(Feedback)
+@admin.register(Feedback, site=admin_site)
 class FeedbackAdmin(admin.ModelAdmin):
     date_hierarchy = 'inserted'
     list_filter = ('inserted', 'url')
     search_fields = ['comment']
 
 
-admin.site.register(Block)
-admin.site.register(Student)
+admin_site.register(Block)
+admin_site.register(Student)
