@@ -16,11 +16,17 @@ class TaskAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', 'level')
     list_display_links = ('id', 'name')
     list_filter = ('level',)
+    search_fields = ['name']
 
 
 @admin.register(Toolbox)
 class ToolboxAdmin(admin.ModelAdmin):
     list_filter = ('blocks',)
+
+
+@admin.register(Instruction)
+class InstructionAdmin(admin.ModelAdmin):
+    search_fields = ['name']
 
 
 @admin.register(TaskSession)
@@ -35,6 +41,7 @@ class ProgramSnapshotAdmin(admin.ModelAdmin):
     list_display = ('id', 'task_session', 'program', 'granularity', 'correct')
     date_hierarchy = 'time'
     list_filter = ('granularity', 'correct')
+    search_fields = ['program']
 
 
 @admin.register(Action)
@@ -47,8 +54,8 @@ class ActionAdmin(admin.ModelAdmin):
 class FeedbackAdmin(admin.ModelAdmin):
     date_hierarchy = 'inserted'
     list_filter = ('inserted', 'url')
+    search_fields = ['comment']
 
 
 admin.site.register(Block)
-admin.site.register(Instruction)
 admin.site.register(Student)
