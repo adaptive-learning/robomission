@@ -68,6 +68,9 @@ class Task(models.Model):
     solution = models.TextField()
     # sessions = m:n relation with students through learn.TaskSession
 
+    def get_absolute_url(self):
+        return '/task/{name}/'.format(name=self.name)
+
     def __str__(self):
         return self.name
 
