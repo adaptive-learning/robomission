@@ -17,7 +17,7 @@ export default function GameStatus({ taskId, level, solved, dead, diamonds, ener
         marginTop: 1,
       }}
     >
-      <span style={{ display: 'block' }}>
+      <span className="text" style={{ display: 'block' }}>
         <TaskName taskId={taskId} />
         <span style={{ float: 'right', marginRight: 5 }}>
           L{level}

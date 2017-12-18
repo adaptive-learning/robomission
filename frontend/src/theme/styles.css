@@ -4,11 +4,15 @@
 
 * {
   box-sizing: border-box;
-  font-family: Roboto, sans-serif;
 }
 
 h2 {
   font-weight: 500;
+}
+
+p, h1, h2, h3, h4, h5, h6,
+.text, .joyride-tooltip__main {
+  font-family: Roboto, sans-serif;
 }
 
 
@@ -33,11 +37,4 @@ h2 {
 .blocklyScrollbarBackground:hover+.blocklyScrollbarHandle,
 .blocklyScrollbarHandle:hover {
   fill: #455A64;
-}
-
-
-/* ---- Ace editor  ----- */
-
-.ace_editor * {
-  font-family: monospace;
 }
