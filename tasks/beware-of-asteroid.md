@@ -1,5 +1,5 @@
 # beware-of-asteroid
-- category: world
+- category: moves
 
 ## Setting
 
