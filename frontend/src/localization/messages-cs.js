@@ -157,7 +157,7 @@ export default {
   'fail-reason.crashed-last-row': 'Raketka musí v cílové rovince zastavit',
   'fail-reason.crashed-edge': 'Raketka vyletěla z vesmírné dráhy a rozbila se',
   'fail-reason.crashed-meteoroid': 'Raketka narazila do meteoroidu a rozbila se',
-  'fail-reason.crashed-asteoroid': 'Raketka narazila do asteoroidu a rozbila se',
+  'fail-reason.crashed-asteoroid': 'Raketka narazila do asteroidu a rozbila se',
   'fail-reason.last-row-not-reached': 'Raketka musí doledět do cílové rovinky',
   'fail-reason.missing-diamonds': 'Raketka musí posbírat všechny diamanty',
 
