@@ -110,6 +110,15 @@ flush:
 	python backend/manage.py flush --noinput
 
 
+.PHONY: reset_db
+reset_db:
+	python backend/manage.py reset_db
+	python backend/manage.py migrate
+	python backend/manage.py build_tasks
+	python backend/manage.py create_admin
+	python backend/manage.py create_social_apps
+
+
 .PHONY: admin
 admin:
 	python backend/manage.py create_admin
