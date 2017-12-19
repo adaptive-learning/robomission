@@ -20,7 +20,7 @@
 ## Solution
 
 ```python
-while color() != 'b':
+repeat 4:
     fly()
     shoot()
 ```
