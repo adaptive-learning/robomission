@@ -30,7 +30,6 @@ repeat 3:
     left()
 repeat 3:
     right()
-repeat 5:
+repeat 4:
     left()
-
 ```
