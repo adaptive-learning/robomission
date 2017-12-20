@@ -159,6 +159,7 @@ function* taskFlow(dispatch, getState, taskEnvironmentId, task) {
         position: () => getPosition(getState(), taskEnvironmentId),
         isSolved: () => isSolved(getState(), taskEnvironmentId),
         isDead: () => isDead(getState(), taskEnvironmentId),
+        highlightBlock: (blockId) => dispatch(actions.highlightBlock(taskEnvironmentId, blockId)),
         interrupted: () => {
           const stage = getGameStage(getState(), taskEnvironmentId);
           return stage === 'initial';

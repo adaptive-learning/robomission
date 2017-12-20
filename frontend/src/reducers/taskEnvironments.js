@@ -10,6 +10,7 @@ import { CHANGE_LOCATION,
          DO_ACTION,
          MOVE,
          EVOLVE_WORLD,
+         HIGHLIGHT_BLOCK,
          INTERPRETATION_STARTED,
          INTERPRETATION_FINISHED,
          CHANGE_GAME_PANEL_WIDTH,
@@ -44,6 +45,8 @@ export default function reduceTaskEnvironments(state = {}, action) {
       return updateTaskEnvironment(state, move, action.payload);
     case EVOLVE_WORLD:
       return updateTaskEnvironment(state, evolveWorld, action.payload);
+    case HIGHLIGHT_BLOCK:
+      return updateTaskEnvironment(state, highlightBlock, action.payload);
     case RESET_GAME:
       return updateTaskEnvironment(state, resetGame, action.payload);
     case EDIT_PROGRAM_CODE:
@@ -92,6 +95,7 @@ const initialTaskEnvironment = {
   currentAction: null,
   gamePanelWidth: 280,
   isTaskCompletionDialogOpen: false,
+  highlightedBlock: null,
 };
 
 
@@ -137,6 +141,7 @@ function setTask(taskEnvironment, { task }) {
     currentAction: null,
     interpreting: false,
     isTaskCompletionDialogOpen: false,
+    highlightedBlock: null,
   };
 }
 
@@ -240,6 +245,15 @@ function evolveWorld(taskEnvironment) {
 }
 
 
+function highlightBlock(taskEnvironment, { blockId }) {
+  const updatedTaskEnvironment = {
+    ...taskEnvironment,
+    highlightedBlock: blockId,
+  };
+  return updatedTaskEnvironment;
+}
+
+
 function resetGame(taskEnvironment) {
   return {
     ...taskEnvironment,
@@ -256,7 +270,7 @@ function startInterpretation(taskEnvironment) {
 
 
 function endInterpretation(taskEnvironment) {
-  return { ...taskEnvironment, interpreting: false };
+  return { ...taskEnvironment, interpreting: false, highlightedBlock: null };
 }
 
 

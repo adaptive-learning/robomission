@@ -17,6 +17,7 @@ const workspaceConfiguration = {
 export default class BlocklyEditor extends React.Component {
   componentDidMount() {
     this.registerInstructables();
+    this.setHighlight();
   }
 
   // Sometimes, we need to set a new program, e.g. when a new task is set.
@@ -33,6 +34,7 @@ export default class BlocklyEditor extends React.Component {
       this.registerInstructables();
     }
     this.checkLengthLimit(this.props.roboAst);
+    this.setHighlight();
   }
 
   setRoboAst(roboAst) {
@@ -86,6 +88,10 @@ export default class BlocklyEditor extends React.Component {
         }
       }
     }
+  }
+
+  setHighlight() {
+    this.blocklyWorkspace.highlightBlock(this.props.highlightedBlock);
   }
 
   // Return Blockly.Toolbox
@@ -145,6 +151,7 @@ BlocklyEditor.propTypes = {
   onChange: PropTypes.func,
   editorSessionId: PropTypes.number,
   lengthLimit: PropTypes.number,
+  highlightedBlock: PropTypes.string,
 };
 
 BlocklyEditor.defaultProps = {
@@ -153,4 +160,5 @@ BlocklyEditor.defaultProps = {
   onChange: null,
   editorSessionId: 0,
   lengthLimit: null,
+  highlightedBlock: null,
 };

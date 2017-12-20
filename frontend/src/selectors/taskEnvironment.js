@@ -185,6 +185,12 @@ export function isTaskCompletionDialogOpen(state, taskEnvironmentId) {
 }
 
 
+export function getHighlightedBlock(state, taskEnvironmentId) {
+  const taskEnvironment = getTaskEnvironment(state, taskEnvironmentId);
+  return taskEnvironment.highlightedBlock;
+}
+
+
 // FIXME: not a selector function, should be somewhere else
 export function getInitialFieldsFromTaskEnvironment(taskEnvironment) {
   return taskEnvironment.task.setting.fields;

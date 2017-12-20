@@ -131,6 +131,11 @@ export function evolveWorld(taskEnvironmentId) {
 }
 
 
+export function highlightBlock(taskEnvironmentId, blockId) {
+  return action(at.HIGHLIGHT_BLOCK, { taskEnvironmentId, blockId });
+}
+
+
 export function resetGame(taskEnvironmentId) {
   return action(at.RESET_GAME, { taskEnvironmentId });
 }

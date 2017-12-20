@@ -72,6 +72,14 @@ function steppingJsCode(jsCode, context, pauseLength) {
     interpreter.setProperty(scope, 'position',
       interpreter.createNativeFunction(() => interpreter.createPrimitive(context.position()))
     );
+
+    interpreter.setProperty(scope, 'highlightBlock',
+      interpreter.createNativeFunction((blockIdValue) => {
+        const blockId = blockIdValue.toString();
+        context.highlightBlock(blockId);
+        return interpreter.createPrimitive();
+      })
+    );
   }
 
   const jsInterpreter = new Interpreter(jsCode, initApi);

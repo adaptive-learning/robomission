@@ -19,17 +19,26 @@ function generateSequence(nodes) {
 }
 
 
-function generateStatement({ statement }) {
+function generateStatement({ statement, location }) {
+  const { blockId } = location;
+  let generatedCode = '';
+  if (blockId !== null && blockId !== undefined) {
+    generatedCode += `highlightBlock('${blockId}');\n`;
+  }
   switch (statement.head) {
     case 'repeat':
-      return generateRepeatLoop(statement);
+      generatedCode += generateRepeatLoop(statement);
+      break;
     case 'while':
-      return generateWhileLoop(statement);
+      generatedCode += generateWhileLoop(statement);
+      break;
     case 'if':
-      return generateIfStatement(statement);
+      generatedCode += generateIfStatement(statement);
+      break;
     default:
-      return generateSimpleStatement(statement);
+      generatedCode += generateSimpleStatement(statement);
   }
+  return generatedCode;
 }
 
 function generateSimpleStatement({ head }) {
