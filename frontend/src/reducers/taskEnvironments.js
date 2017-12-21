@@ -15,6 +15,7 @@ import { CHANGE_LOCATION,
          INTERPRETATION_FINISHED,
          CHANGE_GAME_PANEL_WIDTH,
          SET_EDITOR_TYPE,
+         SET_SPEED,
          RUN_PROGRAM_SOLVED_REPORT } from '../action-types';
 import { parseSpaceWorld } from '../core/spaceWorldDescription';
 import { parseRoboCode, RoboCodeSyntaxError } from '../core/roboCodeParser';
@@ -49,6 +50,8 @@ export default function reduceTaskEnvironments(state = {}, action) {
       return updateTaskEnvironment(state, highlightBlock, action.payload);
     case RESET_GAME:
       return updateTaskEnvironment(state, resetGame, action.payload);
+    case SET_SPEED:
+      return updateTaskEnvironment(state, setSpeed, action.payload);
     case EDIT_PROGRAM_CODE:
       return updateTaskEnvironment(state, changeCode, action.payload);
     case EDIT_PROGRAM_AST:
@@ -96,6 +99,7 @@ const initialTaskEnvironment = {
   gamePanelWidth: 280,
   isTaskCompletionDialogOpen: false,
   highlightedBlock: null,
+  speed: 3,
 };
 
 
@@ -260,6 +264,14 @@ function resetGame(taskEnvironment) {
     interpreting: false,
     pastActions: [],
     currentAction: null,
+  };
+}
+
+
+function setSpeed(taskEnvironment, { speed }) {
+  return {
+    ...taskEnvironment,
+    speed,
   };
 }
 

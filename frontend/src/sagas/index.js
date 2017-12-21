@@ -17,6 +17,7 @@ import { getTaskId,
          getMiniRoboCode,
          getLengthLimit,
          getTaskSourceText,
+         getPauseLength,
          isInterpreting } from '../selectors/taskEnvironment';
 import { getColor, getPosition, isSolved, isDead, getGameStage } from '../selectors/gameState';
 import { getNextLevelStatus } from '../selectors/practice';
@@ -165,7 +166,10 @@ function* taskFlow(dispatch, getState, taskEnvironmentId, task) {
           return stage === 'initial';
         }
       };
-      interpretRoboAst(roboAst, context)
+      const settings = {
+        pauseLength: yield select(getPauseLength, taskEnvironmentId),
+      };
+      interpretRoboAst(roboAst, context, settings)
         .catch(handleInterpreterError)
         .then(() => dispatch(actions.interpretationFinished(taskEnvironmentId)));
     }

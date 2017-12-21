@@ -1,15 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import RaisedButton from 'material-ui/RaisedButton';
+import SpeedControl from '../components/SpeedControl';
 import { translate } from '../localization';
 
-export default function GameControls({ controls, onClick }) {
+export default function GameControls({ controls, speed, onClick }) {
   function visible(controlName) {
     return controls[controlName] === 'active' || controls[controlName] === 'passive';
   }
 
   function disabled(controlName) {
     return controls[controlName] === 'passive';
+  }
+
+  function handleSpeedChange(speed) {
+    return onClick('speed', speed);
   }
 
   function conditionallyRenderControlButton(name, label, emph = null, minWidth = 50) {
@@ -28,6 +33,15 @@ export default function GameControls({ controls, onClick }) {
     );
   }
 
+  function conditionallyRenderSpeedControl() {
+    return (
+      <SpeedControl
+        speed={speed}
+        onChange={handleSpeedChange}
+      />
+    );
+  }
+
   return (
     <span className="instructionable-env-controls" style={{ display: 'block', margin: '5px 4px' }}>
       {(visible('fly') || visible('left') || visible('right') || visible('shoot')) &&
@@ -40,6 +54,7 @@ export default function GameControls({ controls, onClick }) {
       }
       {conditionallyRenderControlButton('run', translate('Run'), 'primary', 88)}
       {conditionallyRenderControlButton('reset', 'Reset', 'accent', false, 88)}
+      {conditionallyRenderSpeedControl()}
     </span>
   );
 }

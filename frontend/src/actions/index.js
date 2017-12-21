@@ -141,6 +141,11 @@ export function resetGame(taskEnvironmentId) {
 }
 
 
+export function setSpeed(taskEnvironmentId, speed) {
+  return action(at.SET_SPEED, { taskEnvironmentId, speed });
+}
+
+
 export function setOpenMenu(open) {
   return action(at.TOGGLE_MENU, { open });
 }

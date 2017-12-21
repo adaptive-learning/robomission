@@ -12,6 +12,7 @@ export default function SpaceGame({
     lengthLimit,
     width,
     controls,
+    speed,
     onControlClicked,
     showHeader,
   }) {
@@ -57,7 +58,11 @@ export default function SpaceGame({
         fields={fields}
         width={width}
       />
-      <GameControls controls={controlsSetting} onClick={onControlClicked} />
+      <GameControls
+        controls={controlsSetting}
+        speed={speed}
+        onClick={onControlClicked}
+      />
     </span>
   );
 }
@@ -68,6 +73,7 @@ SpaceGame.propTypes = {
   lengthLimit: PropTypes.object,
   onControlClicked: PropTypes.func,
   controls: PropTypes.array,
+  speed: PropTypes.number.isRequired,
   width: PropTypes.number,
   showHeader: PropTypes.bool,
 };

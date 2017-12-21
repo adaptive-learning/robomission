@@ -5,13 +5,15 @@ import SpaceGame from '../components/SpaceGame';
 import { createTaskEnvironment,
          runProgram,
          resetGame,
+         setSpeed,
          doActionMove } from '../actions';
 import { getGameState } from '../selectors/gameState';
 import {
   getTaskId,
   getTaskLevel,
   getLengthLimit,
-  getGamePanelWidth
+  getGamePanelWidth,
+  getSpeed,
   } from '../selectors/taskEnvironment';
 
 
@@ -25,7 +27,7 @@ class SpaceGameWrapper extends React.Component {
     this.props.createTaskEnvironment(this.props.taskEnvironmentId);
   }
 
-  handleControlClicked(control) {
+  handleControlClicked(control, value) {
     switch (control) {
       case 'fly':
       case 'left':
@@ -38,6 +40,9 @@ class SpaceGameWrapper extends React.Component {
         break;
       case 'reset':
         this.props.resetGame(this.props.taskEnvironmentId);
+        break;
+      case 'speed':
+        this.props.setSpeed(this.props.taskEnvironmentId, value);
         break;
       default:
         throw new Error(`Undefined control ${control}`);
@@ -53,6 +58,7 @@ class SpaceGameWrapper extends React.Component {
         lengthLimit={this.props.lengthLimit}
         width={this.props.width}
         controls={this.props.controls}
+        speed={this.props.speed}
         onControlClicked={this.handleControlClicked}
         showHeader={this.props.showHeader}
       />
@@ -65,11 +71,13 @@ SpaceGameWrapper.propTypes = {
   taskEnvironmentId: PropTypes.string.isRequired,
   taskId: PropTypes.string,
   controls: PropTypes.array,
+  speed: PropTypes.number.isRequired,
   gameState: PropTypes.object.isRequired,
   lengthLimit: PropTypes.object.isRequired,
   width: PropTypes.number.isRequired,
   runProgram: PropTypes.func.isRequired,
   resetGame: PropTypes.func.isRequired,
+  setSpeed: PropTypes.func.isRequired,
   doActionMove: PropTypes.func.isRequired,
   createTaskEnvironment: PropTypes.func.isRequired,
   showHeader: PropTypes.bool,
@@ -86,7 +94,8 @@ function mapStateToProps(state, props) {
   const taskId = getTaskId(state, taskEnvironmentId);
   const level = getTaskLevel(state, taskEnvironmentId);
   const width = getGamePanelWidth(state, taskEnvironmentId);
-  return { taskEnvironmentId, taskId, level, gameState, lengthLimit, width, controls };
+  const speed = getSpeed(state, taskEnvironmentId);
+  return { taskEnvironmentId, taskId, level, gameState, lengthLimit, width, controls, speed };
 }
 
 
@@ -94,6 +103,7 @@ const actionCreators = {
   runProgram: runProgram.start,
   createTaskEnvironment,
   resetGame,
+  setSpeed,
   doActionMove,
 };
 const SpaceGameContainer = connect(mapStateToProps, actionCreators)(SpaceGameWrapper);

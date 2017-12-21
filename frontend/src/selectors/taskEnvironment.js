@@ -191,6 +191,26 @@ export function getHighlightedBlock(state, taskEnvironmentId) {
 }
 
 
+export function getSpeed(state, taskEnvironmentId) {
+  const taskEnvironment = getTaskEnvironment(state, taskEnvironmentId);
+  return taskEnvironment.speed;
+}
+
+
+export function getPauseLength(state, taskEnvironmentId) {
+  const speed = getSpeed(state, taskEnvironmentId);
+  const speedToPause = {
+    1: 1500,
+    2: 1000,
+    3: 600,
+    4: 400,
+    5: 200,
+  };
+  const pause = speedToPause[speed];
+  return pause;
+}
+
+
 // FIXME: not a selector function, should be somewhere else
 export function getInitialFieldsFromTaskEnvironment(taskEnvironment) {
   return taskEnvironment.task.setting.fields;
