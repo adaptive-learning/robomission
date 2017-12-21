@@ -67,18 +67,6 @@ function* stepJsCode(jsCode, effects) {
   let next = true;
   let step = 0;
   while (next) {
-    const interrupted = yield effects.interrupted();
-    if (interrupted) {
-      break;
-    }
-    const isSolved = yield effects.isSolved();
-    if (isSolved) {
-      break;
-    }
-    const isDead = yield effects.isDead();
-    if (isDead) {
-      break;
-    }
     try {
       next = jsInterpreter.step();
     } catch (error) {
@@ -97,6 +85,18 @@ function* stepJsCode(jsCode, effects) {
     if (effect) {
       const effectResult = yield effect;
       effect = null;
+      const interrupted = yield effects.interrupted();
+      if (interrupted) {
+        break;
+      }
+      const isSolved = yield effects.isSolved();
+      if (isSolved) {
+        break;
+      }
+      const isDead = yield effects.isDead();
+      if (isDead) {
+        break;
+      }
       interpreterCallback(jsInterpreter.createPrimitive(effectResult));
     }
     // simple hack to avoid infinite loops:
