@@ -200,10 +200,10 @@ export function getSpeed(state, taskEnvironmentId) {
 export function getPauseLength(state, taskEnvironmentId) {
   const speed = getSpeed(state, taskEnvironmentId);
   const speedToPause = {
-    1: 1500,
-    2: 1000,
-    3: 500,
-    4: 200,
+    1: 1400,
+    2: 800,
+    3: 400,
+    4: 100,
     5: 0,
   };
   const pause = speedToPause[speed];
