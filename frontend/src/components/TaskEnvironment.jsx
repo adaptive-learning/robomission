@@ -96,6 +96,6 @@ TaskEnvironment.propTypes = {
 
 
 TaskEnvironment.defaultProps = {
-  controls: ['run', 'reset'],
+  controls: ['run', 'reset', 'speed'],
   gamePanelWidth: 280,
 };

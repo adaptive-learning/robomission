@@ -133,7 +133,10 @@ class Home extends React.Component {
                 border: '2px solid #777'
               }}
             >
-              <TaskEnvironmentContainer taskEnvironmentId="home-program" />
+              <TaskEnvironmentContainer
+                taskEnvironmentId="home-program"
+                controls={['run', 'reset']}
+              />
             </div>
             <p style={{ visibility: this.props.programDemoSolved ? 'visible' : 'hidden' }}>
               <Text id='excellent-task-solved' />

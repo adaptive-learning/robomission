@@ -34,6 +34,9 @@ export default function GameControls({ controls, speed, onClick }) {
   }
 
   function conditionallyRenderSpeedControl() {
+    if (!(visible('speed'))) {
+      return null;
+    }
     return (
       <SpeedControl
         speed={speed}

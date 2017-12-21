@@ -39,6 +39,7 @@ export default function SpaceGame({
     reset: evaluateVisibility(
       controls.indexOf('reset') < 0 || preparing || (initialStage && controls.indexOf('run') >= 0),
       initialStage),
+    speed: (controls.indexOf('speed') >= 0) ? 'active' : 'hidden',
   };
   const gameStatus = (
     <GameStatus
