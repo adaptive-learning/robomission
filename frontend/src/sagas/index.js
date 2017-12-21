@@ -19,10 +19,16 @@ import { getTaskId,
          getTaskSourceText,
          getPauseLength,
          isInterpreting } from '../selectors/taskEnvironment';
-import { getColor, getPosition, isSolved, isDead, getGameStage } from '../selectors/gameState';
+import {
+  getColor,
+  getPosition,
+  isSolved,
+  isDead,
+  isInInitialStage
+  } from '../selectors/gameState';
 import { getNextLevelStatus } from '../selectors/practice';
 import { getUser } from '../selectors/user';
-import { interpretRoboAst, InterpreterError } from '../core/roboCodeInterpreter';
+import { interpretRoboAst, InterpreterError } from '../sagas/roboCodeInterpreter';
 import { parseTaskSourceText } from '../core/taskSourceParser';
 import { downloadTextFile, loadTextFile } from '../utils/files';
 import authSaga from './auth';
@@ -111,6 +117,30 @@ function* watchTasks(dispatch, getState) {
 }
 
 
+function* doActionMove(taskEnvironmentId, actionName, interruptible, length) {
+  // TODO: dry repeated interruption check
+  let interpreting = yield select(isInterpreting, taskEnvironmentId);
+  if (interruptible && !interpreting) {
+    return;
+  }
+  yield put(actions.doAction(taskEnvironmentId, actionName));
+  yield call(delay, length/3);
+
+  interpreting = yield select(isInterpreting, taskEnvironmentId);
+  if (interruptible && !interpreting) {
+    return;
+  }
+  yield put(actions.move(taskEnvironmentId));
+  yield call(delay, length/3);
+
+  interpreting = yield select(isInterpreting, taskEnvironmentId);
+  if (interruptible && !interpreting) {
+    return;
+  }
+  yield put(actions.evolveWorld(taskEnvironmentId));
+  yield call(delay, length/3);
+}
+
 // TODO: Rewrite this saga without calling dispatch and getState;
 //       then remove these two parameters.
 function* taskFlow(dispatch, getState, taskEnvironmentId, task) {
@@ -121,27 +151,9 @@ function* taskFlow(dispatch, getState, taskEnvironmentId, task) {
     }
     const pauseLength = yield select(getPauseLength, taskEnvironmentId);
     if (action.type === actionType.DO_ACTION_MOVE) {
-      const { interruptible } = action.payload;
-      // TODO: dry repeated interruption check
-      let interpreting = yield select(isInterpreting, taskEnvironmentId);
-      if (interruptible && !interpreting) {
-        continue;
-      }
-      yield put(actions.doAction(taskEnvironmentId, action.payload.action));
-      yield call(delay, pauseLength/3);
-
-      interpreting = yield select(isInterpreting, taskEnvironmentId);
-      if (interruptible && !interpreting) {
-        continue;
-      }
-      yield put(actions.move(taskEnvironmentId));
-      yield call(delay, pauseLength/3);
-
-      interpreting = yield select(isInterpreting, taskEnvironmentId);
-      if (interruptible && !interpreting) {
-        continue;
-      }
-      yield put(actions.evolveWorld(taskEnvironmentId));
+      const actionName = action.payload.action;
+      const interruptible = action.payload.interruptible;
+      yield* doActionMove(taskEnvironmentId, actionName, interruptible, pauseLength);
     }
 
     if (action.type === actionType.RUN_PROGRAM_START) {
@@ -154,32 +166,28 @@ function* taskFlow(dispatch, getState, taskEnvironmentId, task) {
 
       const roboAst = yield select(getRoboAst, taskEnvironmentId);
       yield put(actions.interpretationStarted(taskEnvironmentId));
-      const context = {
-        doActionMove: (action) => dispatch(actions.doActionMove(taskEnvironmentId, action)),
-        color: () => getColor(getState(), taskEnvironmentId),
-        position: () => getPosition(getState(), taskEnvironmentId),
-        isSolved: () => isSolved(getState(), taskEnvironmentId),
-        isDead: () => isDead(getState(), taskEnvironmentId),
-        highlightBlock: (blockId) => dispatch(actions.highlightBlock(taskEnvironmentId, blockId)),
-        interrupted: () => {
-          const stage = getGameStage(getState(), taskEnvironmentId);
-          return stage === 'initial';
-        }
+      const effects = {
+        doActionMove: (action) => call(doActionMove,
+          taskEnvironmentId, action, true, pauseLength),
+        color: () => select(getColor, taskEnvironmentId),
+        position: () => select(getPosition, taskEnvironmentId),
+        isSolved: () => select(isSolved, taskEnvironmentId),
+        isDead: () => select(isDead, taskEnvironmentId),
+        highlightBlock: (blockId) => put(actions.highlightBlock(taskEnvironmentId, blockId)),
+        interrupted: () => select(isInInitialStage, taskEnvironmentId),
+        //wait: (ms) => call(delay, ms),
       };
-      const settings = { pauseLength };
-      interpretRoboAst(roboAst, context, settings)
-        .catch(handleInterpreterError)
-        .then(() => dispatch(actions.interpretationFinished(taskEnvironmentId)));
+      try {
+        yield* interpretRoboAst(roboAst, effects);
+      } catch (error) {
+        if (error instanceof InterpreterError) {
+          alert(error.message);
+        } else {
+          throw error;
+        }
+      }
+      yield put(actions.interpretationFinished(taskEnvironmentId));
     }
-  }
-}
-
-
-function handleInterpreterError(error) {
-  if (error instanceof InterpreterError) {
-    alert(error.message);
-  } else {
-    throw error;
   }
 }
 

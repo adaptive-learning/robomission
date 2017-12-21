@@ -58,6 +58,11 @@ export function isDead(state, taskEnvironmentId) {
 }
 
 
+export function isInInitialStage(state, taskEnvironmentId) {
+  return getGameStage(state, taskEnvironmentId) === 'inital';
+}
+
+
 export function getGameStage(state, taskEnvironmentId) {
   const gameState = getGameState(state, taskEnvironmentId);
   return gameState.stage;
