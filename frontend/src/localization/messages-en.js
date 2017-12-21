@@ -4,6 +4,7 @@ export default {
   'I understand': 'I understand',
   'Intro': 'Intro',
   'Run': 'Run',
+  'Speed': 'Speed',
   'Task': 'Task',
   'Tasks': 'Tasks Overview',
   'Task Editor': 'Task Editor',

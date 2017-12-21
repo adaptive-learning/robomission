@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Slider from 'material-ui/Slider';
 import muiThemeable from 'material-ui/styles/muiThemeable';
+import Image from '../components/Image';
+import Text from '../localization/Text';
 
 
 const propTypes = {
@@ -25,13 +27,26 @@ class SpeedControl extends React.Component {
 
   render() {
     return (
-      <Slider
-        min={this.props.min}
-        max={this.props.max}
-        step={1}
-        value={this.props.speed}
-        onChange={this.handleChange}
-      />
+      <div style={{ marginTop: 15 }}>
+        <Image
+          imageId="speedometer"
+          style={{ height: 35, marginRight: 10, float: 'left' }} />
+        <div
+          style={{ height: 35, float: 'left' }}
+        >
+          <Text id="Speed" />
+          {`: ${this.props.speed}`}
+          <Slider
+            min={this.props.min}
+            max={this.props.max}
+            step={1}
+            value={this.props.speed}
+            onChange={this.handleChange}
+            style={{ width: 120 }}
+            sliderStyle={{ marginTop: 2, marginBottom: 0 }}
+          />
+        </div>
+      </div>
     );
   }
 }

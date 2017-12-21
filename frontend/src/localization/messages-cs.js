@@ -4,6 +4,7 @@ export default {
   'I understand': 'Rozumím',
   'Intro': 'Intro',
   'Run': 'Spusť program',
+  'Speed': 'Rychlost',
   'Task': 'Úkol',
   'Tasks': 'Přehled úloh',
   'Task Editor': 'Editor úloh',
