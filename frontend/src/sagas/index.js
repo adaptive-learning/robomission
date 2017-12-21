@@ -119,7 +119,7 @@ function* taskFlow(dispatch, getState, taskEnvironmentId, task) {
     if (action.payload.taskEnvironmentId !== taskEnvironmentId) {
       continue;
     }
-
+    const pauseLength = yield select(getPauseLength, taskEnvironmentId);
     if (action.type === actionType.DO_ACTION_MOVE) {
       const { interruptible } = action.payload;
       // TODO: dry repeated interruption check
@@ -128,14 +128,14 @@ function* taskFlow(dispatch, getState, taskEnvironmentId, task) {
         continue;
       }
       yield put(actions.doAction(taskEnvironmentId, action.payload.action));
-      yield call(delay, 200);
+      yield call(delay, pauseLength/3);
 
       interpreting = yield select(isInterpreting, taskEnvironmentId);
       if (interruptible && !interpreting) {
         continue;
       }
       yield put(actions.move(taskEnvironmentId));
-      yield call(delay, 200);
+      yield call(delay, pauseLength/3);
 
       interpreting = yield select(isInterpreting, taskEnvironmentId);
       if (interruptible && !interpreting) {
@@ -166,9 +166,7 @@ function* taskFlow(dispatch, getState, taskEnvironmentId, task) {
           return stage === 'initial';
         }
       };
-      const settings = {
-        pauseLength: yield select(getPauseLength, taskEnvironmentId),
-      };
+      const settings = { pauseLength };
       interpretRoboAst(roboAst, context, settings)
         .catch(handleInterpreterError)
         .then(() => dispatch(actions.interpretationFinished(taskEnvironmentId)));
