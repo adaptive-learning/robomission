@@ -112,29 +112,40 @@ function* watchTasks() {
 
 
 function* doActionMove(taskEnvironmentId, actionName, interruptible) {
-  const length = yield select(getPauseLength, taskEnvironmentId);
+  // Third of the time is used for block highlighting (see highlightBlock
+  // function), third after action (e.g. laser), third after movement.
+  const pause = 0.33 * (yield select(getPauseLength, taskEnvironmentId));
   // TODO: dry repeated interruption check
   let interpreting = yield select(isInterpreting, taskEnvironmentId);
   if (interruptible && !interpreting) {
     return;
   }
-  yield call(delay, length/3);
   yield put(actions.doAction(taskEnvironmentId, actionName));
-
+  yield call(delay, pause);
   interpreting = yield select(isInterpreting, taskEnvironmentId);
   if (interruptible && !interpreting) {
     return;
   }
-  yield call(delay, length/3);
   yield put(actions.move(taskEnvironmentId));
-
+  yield call(delay, pause);
   interpreting = yield select(isInterpreting, taskEnvironmentId);
   if (interruptible && !interpreting) {
     return;
   }
-  yield call(delay, length/3);
   yield put(actions.evolveWorld(taskEnvironmentId));
 }
+
+
+function* highlightBlock(taskEnvironmentId, blockId) {
+  // Third of the usual step time is used for highligthing, two thirds for
+  // intermediate visualizations.
+  const highlightPause = 0.33 * (yield select(getPauseLength, taskEnvironmentId));
+  if (highlightPause > 0) {
+    yield put(actions.highlightBlock(taskEnvironmentId, blockId))
+    yield call(delay, highlightPause);
+  }
+}
+
 
 function* taskFlow(taskEnvironmentId, task) {
   while (true) {
@@ -163,7 +174,8 @@ function* taskFlow(taskEnvironmentId, task) {
         sense: (sensor) => select(sense, taskEnvironmentId, sensor),
         doAction: (actionName) => call(doActionMove,
           taskEnvironmentId, actionName, true),
-        highlightBlock: (blockId) => put(actions.highlightBlock(taskEnvironmentId, blockId)),
+        highlightBlock: (blockId) => call(highlightBlock,
+          taskEnvironmentId, blockId),
       };
       try {
         yield* interpretRoboAst(roboAst, effects);
