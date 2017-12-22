@@ -25,7 +25,11 @@ export function* interpretRoboAst(roboAst, effects) {
     throw new InterpreterError(report);
   }
   const jsCode = generateRoboJavaScript(roboAst);
-  yield* stepJsCode(jsCode, effects);
+  try {
+    yield* stepJsCode(jsCode, effects);
+  } catch (error) {
+    handleInterpreterError(error);
+  }
 }
 
 
@@ -81,11 +85,7 @@ function* stepJsCode(jsCode, effects) {
   let next = true;
   let step = 0;
   while (next) {
-    try {
-      next = jsInterpreter.step();
-    } catch (error) {
-      handleInterpreterError(error);
-    }
+    next = jsInterpreter.step();
     step += 1;
     if (effectToYield) {
       const stopped = yield effects.isStopped();
