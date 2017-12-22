@@ -12,6 +12,11 @@ export function InterpreterError(message) {
 
 /**
  * Interpret given robo-ast step by step.
+ *
+ * @param {Object} roboAst - RoboCode AST as defined by core/roboCodeGrammar.
+ * @param {Object} effects - IO effects yielded during interpretation.
+ *                           (See interpretJsCode for their description.)
+ * @yields IO effects such as actions and sensing.
  */
 export function* interpretRoboAst(roboAst, effects) {
   const syntaxInfo = getSyntaxCheckInfo(roboAst);
@@ -24,18 +29,44 @@ export function* interpretRoboAst(roboAst, effects) {
 }
 
 
+/**
+ * Interpret given JavaScript step by step.
+ *
+ * @param {String} jsCode - JavaScript code to interpret.
+ * @param {Object} effects - IO effects yielded during interpretation.
+ *    effects.isStopped() -> Is execution interrupted/finished?
+ *    effects.sense(sensor) -> What is the value of given sensor (e.g. color)?
+ *    effects.doAction(action) -> Perform given action (e.g. fly, shoot).
+ *    effects.highlightBlock(blockId) -> Highlight given block.
+ *
+ * @yields IO effects such as actions and sensing.
+ */
 function* stepJsCode(jsCode, effects) {
-  let effect = null;
+  // In order to enable yielding IO effects, we set up "coroutines-like"
+  // communication between the top-level generator and the low-level interpreter.
+  // (IO effects cannot be yielded directly from non-generator functions, i.e.
+  // it's not possible to use yield in functions passed to the js-interpeter.)
+  // When an interpreter encounters an IO function, it sets the following
+  // variable to mark what effect it wants to perform:
+  let effectToYield = null;
+  // And sets a callback function to call after the effect is resolved:
   let interpreterCallback = null;
+  // Js-Interpreter requires API as a function that takes an instance of an
+  // interpreter and scope and sets the API calls via interpreter.setProperty.
+  // (Details: https://neil.fraser.name/software/JS-Interpreter/docs.html)
   const createInterpreterApi = (interpreter, scope) => {
+    // Helper function to define a new API function under given `name`.
+    // It sets the `effectToYield` and blocks the execution until
+    // `interpreterCallback` is called after the effect is resolved.
     const setFn = (name, getEffect) => {
       const fn = (...args) => {
         const callback = args.pop();
-        effect = getEffect(...args);
+        effectToYield = getEffect(...args);
         interpreterCallback = callback;
       };
       interpreter.setProperty(scope, name, interpreter.createAsyncFunction(fn));
     }
+    // Define API calls for acting, sensing, and block highlighting.
     const actionNames = ['fly', 'left', 'right', 'shoot'];
     for (const actionName of actionNames) {
       setFn(actionName, () => effects.doAction(actionName));
@@ -56,16 +87,16 @@ function* stepJsCode(jsCode, effects) {
       handleInterpreterError(error);
     }
     step += 1;
-    if (effect) {
+    if (effectToYield) {
       const stopped = yield effects.isStopped();
       if (stopped) {
         break;
       }
-      const effectResult = yield effect;
-      effect = null;
+      const effectResult = yield effectToYield;
+      effectToYield = null;
       interpreterCallback(jsInterpreter.createPrimitive(effectResult));
     }
-    // simple hack to avoid infinite loops:
+    // Simple hack to avoid infinite loops:
     if (step > 10000) {
       throw new InterpreterError('Maximum step reached. Probably an infinite loop.');
     }
