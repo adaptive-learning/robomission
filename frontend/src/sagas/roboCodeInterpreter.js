@@ -27,59 +27,31 @@ export function* interpretRoboAst(roboAst, effects) {
 function* stepJsCode(jsCode, effects) {
   let effect = null;
   let interpreterCallback = null;
-
-  function initApi(interpreter, scope) {
-    // TODO: dry initApi function
-    const actions = ['fly', 'left', 'right', 'shoot'];
-    actions.forEach((action) => {
-      interpreter.setProperty(scope, action,
-        interpreter.createAsyncFunction((callback) => {
-          effect = effects.doActionMove(action);
-          interpreterCallback = callback;
-        })
-      );
-    });
-
-    interpreter.setProperty(scope, 'color',
-      interpreter.createAsyncFunction((callback) => {
-        effect = effects.color();
+  const createInterpreterApi = (interpreter, scope) => {
+    const setFn = (name, getEffect) => {
+      const fn = (...args) => {
+        const callback = args.pop();
+        effect = getEffect(...args);
         interpreterCallback = callback;
-      })
-    );
-
-    interpreter.setProperty(scope, 'position',
-      interpreter.createAsyncFunction((callback) => {
-        effect = effects.position();
-        interpreterCallback = callback;
-      })
-    );
-
-    interpreter.setProperty(scope, 'highlightBlock',
-      interpreter.createAsyncFunction((blockIdValue, callback) => {
-        const blockId = blockIdValue.toString();
-        effect = effects.highlightBlock(blockId);
-        interpreterCallback = callback;
-      })
-    );
+      };
+      interpreter.setProperty(scope, name, interpreter.createAsyncFunction(fn));
+    }
+    const actionNames = ['fly', 'left', 'right', 'shoot'];
+    for (const actionName of actionNames) {
+      setFn(actionName, () => effects.doActionMove(actionName));
+    }
+    setFn('color', () => effects.color());
+    setFn('position', () => effects.position());
+    setFn('highlightBlock', (blockId) => effects.highlightBlock(blockId.toString()));
   }
-
-  const jsInterpreter = new Interpreter(jsCode, initApi);
+  const jsInterpreter = new Interpreter(jsCode, createInterpreterApi);
   let next = true;
   let step = 0;
   while (next) {
     try {
       next = jsInterpreter.step();
     } catch (error) {
-      if (error instanceof ReferenceError) {
-        let suggestion = '';
-        if (error.message.startsWith('move is not defined')) {
-          suggestion = ' (Did you mean "fly"?)';
-        }
-        const report = `InterpreterError: ${error.message}${suggestion}`;
-        throw new InterpreterError(report);
-      } else {
-        throw error;
-      }
+      handleInterpreterError(error);
     }
     step += 1;
     if (effect) {
@@ -103,5 +75,19 @@ function* stepJsCode(jsCode, effects) {
     if (step > 10000) {
       throw new InterpreterError('Maximum step reached. Probably an infinite loop.');
     }
+  }
+}
+
+
+function handleInterpreterError(error) {
+  if (error instanceof ReferenceError) {
+    let suggestion = '';
+    if (error.message.startsWith('move is not defined')) {
+      suggestion = ' (Did you mean "fly"?)';
+    }
+    const report = `InterpreterError: ${error.message}${suggestion}`;
+    throw new InterpreterError(report);
+  } else {
+    throw error;
   }
 }
