@@ -40,8 +40,8 @@ function* stepJsCode(jsCode, effects) {
     for (const actionName of actionNames) {
       setFn(actionName, () => effects.doActionMove(actionName));
     }
-    setFn('color', () => effects.color());
-    setFn('position', () => effects.position());
+    setFn('color', () => effects.getColor());
+    setFn('position', () => effects.getPosition());
     setFn('highlightBlock', (blockId) => effects.highlightBlock(blockId.toString()));
   }
   const jsInterpreter = new Interpreter(jsCode, createInterpreterApi);

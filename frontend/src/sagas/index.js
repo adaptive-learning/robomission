@@ -169,8 +169,8 @@ function* taskFlow(dispatch, getState, taskEnvironmentId, task) {
       const effects = {
         doActionMove: (action) => call(doActionMove,
           taskEnvironmentId, action, true, pauseLength),
-        color: () => select(getColor, taskEnvironmentId),
-        position: () => select(getPosition, taskEnvironmentId),
+        getColor: () => select(getColor, taskEnvironmentId),
+        getPosition: () => select(getPosition, taskEnvironmentId),
         isSolved: () => select(isSolved, taskEnvironmentId),
         isDead: () => select(isDead, taskEnvironmentId),
         highlightBlock: (blockId) => put(actions.highlightBlock(taskEnvironmentId, blockId)),
