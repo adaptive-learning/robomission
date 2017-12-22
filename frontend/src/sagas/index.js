@@ -111,7 +111,8 @@ function* watchTasks() {
 }
 
 
-function* doActionMove(taskEnvironmentId, actionName, interruptible, length) {
+function* doActionMove(taskEnvironmentId, actionName, interruptible) {
+  const length = yield select(getPauseLength, taskEnvironmentId);
   // TODO: dry repeated interruption check
   let interpreting = yield select(isInterpreting, taskEnvironmentId);
   if (interruptible && !interpreting) {
@@ -141,11 +142,10 @@ function* taskFlow(taskEnvironmentId, task) {
     if (action.payload.taskEnvironmentId !== taskEnvironmentId) {
       continue;
     }
-    const pauseLength = yield select(getPauseLength, taskEnvironmentId);
     if (action.type === actionType.DO_ACTION_MOVE) {
       const actionName = action.payload.action;
       const interruptible = action.payload.interruptible;
-      yield* doActionMove(taskEnvironmentId, actionName, interruptible, pauseLength);
+      yield* doActionMove(taskEnvironmentId, actionName, interruptible);
     }
 
     if (action.type === actionType.RUN_PROGRAM_START) {
@@ -162,7 +162,7 @@ function* taskFlow(taskEnvironmentId, task) {
         isStopped: () => select(isNotRunning, taskEnvironmentId),
         sense: (sensor) => select(sense, taskEnvironmentId, sensor),
         doAction: (actionName) => call(doActionMove,
-          taskEnvironmentId, actionName, true, pauseLength),
+          taskEnvironmentId, actionName, true),
         highlightBlock: (blockId) => put(actions.highlightBlock(taskEnvironmentId, blockId)),
       };
       try {
