@@ -123,22 +123,22 @@ function* doActionMove(taskEnvironmentId, actionName, interruptible, length) {
   if (interruptible && !interpreting) {
     return;
   }
+  yield call(delay, length/3);
   yield put(actions.doAction(taskEnvironmentId, actionName));
-  yield call(delay, length/3);
 
   interpreting = yield select(isInterpreting, taskEnvironmentId);
   if (interruptible && !interpreting) {
     return;
   }
+  yield call(delay, length/3);
   yield put(actions.move(taskEnvironmentId));
-  yield call(delay, length/3);
 
   interpreting = yield select(isInterpreting, taskEnvironmentId);
   if (interruptible && !interpreting) {
     return;
   }
-  yield put(actions.evolveWorld(taskEnvironmentId));
   yield call(delay, length/3);
+  yield put(actions.evolveWorld(taskEnvironmentId));
 }
 
 function* taskFlow(taskEnvironmentId, task) {
