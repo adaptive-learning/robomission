@@ -83,12 +83,12 @@ function* stepJsCode(jsCode, effects) {
     }
     step += 1;
     if (effect) {
-      const effectResult = yield effect;
-      effect = null;
       const interrupted = yield effects.interrupted();
       if (interrupted) {
         break;
       }
+      const effectResult = yield effect;
+      effect = null;
       const isSolved = yield effects.isSolved();
       if (isSolved) {
         break;
