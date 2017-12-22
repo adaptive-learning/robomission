@@ -38,10 +38,12 @@ function* stepJsCode(jsCode, effects) {
     }
     const actionNames = ['fly', 'left', 'right', 'shoot'];
     for (const actionName of actionNames) {
-      setFn(actionName, () => effects.doActionMove(actionName));
+      setFn(actionName, () => effects.doAction(actionName));
     }
-    setFn('color', () => effects.getColor());
-    setFn('position', () => effects.getPosition());
+    const sensorNames = ['color', 'position'];
+    for (const sensorName of sensorNames) {
+      setFn(sensorName, () => effects.sense(sensorName));
+    }
     setFn('highlightBlock', (blockId) => effects.highlightBlock(blockId.toString()));
   }
   const jsInterpreter = new Interpreter(jsCode, createInterpreterApi);
@@ -55,20 +57,12 @@ function* stepJsCode(jsCode, effects) {
     }
     step += 1;
     if (effect) {
-      const interrupted = yield effects.interrupted();
-      if (interrupted) {
+      const stopped = yield effects.isStopped();
+      if (stopped) {
         break;
       }
       const effectResult = yield effect;
       effect = null;
-      const isSolved = yield effects.isSolved();
-      if (isSolved) {
-        break;
-      }
-      const isDead = yield effects.isDead();
-      if (isDead) {
-        break;
-      }
       interpreterCallback(jsInterpreter.createPrimitive(effectResult));
     }
     // simple hack to avoid infinite loops:

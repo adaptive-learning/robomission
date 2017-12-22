@@ -19,13 +19,7 @@ import { getTaskId,
          getTaskSourceText,
          getPauseLength,
          isInterpreting } from '../selectors/taskEnvironment';
-import {
-  getColor,
-  getPosition,
-  isSolved,
-  isDead,
-  isInInitialStage
-  } from '../selectors/gameState';
+import { sense, isSolved, isNotRunning } from '../selectors/gameState';
 import { getNextLevelStatus } from '../selectors/practice';
 import { getUser } from '../selectors/user';
 import { interpretRoboAst, InterpreterError } from '../sagas/roboCodeInterpreter';
@@ -165,15 +159,11 @@ function* taskFlow(taskEnvironmentId, task) {
       const roboAst = yield select(getRoboAst, taskEnvironmentId);
       yield put(actions.interpretationStarted(taskEnvironmentId));
       const effects = {
-        doActionMove: (action) => call(doActionMove,
-          taskEnvironmentId, action, true, pauseLength),
-        getColor: () => select(getColor, taskEnvironmentId),
-        getPosition: () => select(getPosition, taskEnvironmentId),
-        isSolved: () => select(isSolved, taskEnvironmentId),
-        isDead: () => select(isDead, taskEnvironmentId),
+        isStopped: () => select(isNotRunning, taskEnvironmentId),
+        sense: (sensor) => select(sense, taskEnvironmentId, sensor),
+        doAction: (actionName) => call(doActionMove,
+          taskEnvironmentId, actionName, true, pauseLength),
         highlightBlock: (blockId) => put(actions.highlightBlock(taskEnvironmentId, blockId)),
-        interrupted: () => select(isInInitialStage, taskEnvironmentId),
-        //wait: (ms) => call(delay, ms),
       };
       try {
         yield* interpretRoboAst(roboAst, effects);

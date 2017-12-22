@@ -20,6 +20,21 @@ export function getPosition(state, taskEnvironmentId) {
 }
 
 
+export function sense(state, taskEnvironmentId, sensor) {
+  switch (sensor) {
+    case 'color': {
+      return getColor(state, taskEnvironmentId);
+    }
+    case 'position': {
+      return getPosition(state, taskEnvironmentId);
+    }
+    default: {
+      throw new Error(`Unknown sensor '${sensor}'`);
+    }
+  }
+}
+
+
 export function isSolved(state, taskEnvironmentId) {
   return getGameStage(state, taskEnvironmentId) === 'solved';
 }
@@ -61,6 +76,17 @@ export function isDead(state, taskEnvironmentId) {
 export function isInInitialStage(state, taskEnvironmentId) {
   const gameStage = getGameStage(state, taskEnvironmentId);
   return gameStage === 'initial';
+}
+
+
+export function isRunning(state, taskEnvironmentId) {
+  const gameStage = getGameStage(state, taskEnvironmentId);
+  return gameStage === 'running';
+}
+
+
+export function isNotRunning(state, taskEnvironmentId) {
+  return !isRunning(state, taskEnvironmentId);
 }
 
 
