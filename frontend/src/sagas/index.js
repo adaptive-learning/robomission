@@ -184,6 +184,8 @@ function* taskFlow(taskEnvironmentId, task) {
           throw error;
         }
       }
+      // wait to allow the student to see the world after the last step
+      yield call(delay, 300);
       yield put(actions.interpretationFinished(taskEnvironmentId));
     }
   }
