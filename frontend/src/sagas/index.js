@@ -102,7 +102,7 @@ function* watchInstruction(action) {
 }
 
 
-function* watchTasks(dispatch, getState) {
+function* watchTasks() {
   const openTaskFlows = {};
   while (true) {
     const action = yield take(actionType.SET_TASK);
@@ -111,7 +111,7 @@ function* watchTasks(dispatch, getState) {
     if (oldFlow) {
       yield cancel(oldFlow);
     }
-    const newFlow = yield fork(taskFlow, dispatch, getState, taskEnvironmentId, task);
+    const newFlow = yield fork(taskFlow, taskEnvironmentId, task);
     openTaskFlows[taskEnvironmentId] = newFlow;
   }
 }
@@ -141,9 +141,7 @@ function* doActionMove(taskEnvironmentId, actionName, interruptible, length) {
   yield call(delay, length/3);
 }
 
-// TODO: Rewrite this saga without calling dispatch and getState;
-//       then remove these two parameters.
-function* taskFlow(dispatch, getState, taskEnvironmentId, task) {
+function* taskFlow(taskEnvironmentId, task) {
   while (true) {
     const action = yield take([actionType.RUN_PROGRAM_START, actionType.DO_ACTION_MOVE]);
     if (action.payload.taskEnvironmentId !== taskEnvironmentId) {
@@ -339,13 +337,11 @@ function* watchActions() {
 }
 
 
-// TODO: Rewrite all sagas without need for dispatch and getState;
-//       then remove these two parameters.
-function* rootSaga(dispatch, getState) {
+function* rootSaga() {
   yield all([
     initializeAppOnLocationChange(),
     watchActions(),
-    watchTasks(dispatch, getState),
+    watchTasks(),
     authSaga(),
     googleAnalyticsSaga(),
     feedbackSaga(),
