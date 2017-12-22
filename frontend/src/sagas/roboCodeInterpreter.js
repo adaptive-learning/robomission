@@ -88,8 +88,7 @@ function* stepJsCode(jsCode, effects) {
     next = jsInterpreter.step();
     step += 1;
     if (effectToYield) {
-      const stopped = yield effects.isStopped();
-      if (stopped) {
+      if (yield effects.isStopped()) {
         break;
       }
       const effectResult = yield effectToYield;
