@@ -30,6 +30,7 @@ urlpatterns = [
         name='robots.txt'),
 
     url(r'^learn/', include('learn.urls')),
+    url(r'^monitoring/', include('monitoring.urls')),
     url(r'^rest-framework-auth/', include('rest_framework.urls')),
     url(r'^rest-auth/', include('rest_auth.urls')),
     url(r'^rest-auth/registration/', include('rest_auth.registration.urls')),
