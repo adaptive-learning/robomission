@@ -11,5 +11,6 @@ class Command(BaseCommand):
             'Computing metrics from {first_date} to {last_date} ...'.format(
                 first_date=metrics_computer.first_date,
                 last_date=metrics_computer.last_date))
-        metrics_computer.compute_and_save()
-        self.stdout.write('Metrics computed and stored to DB.')
+        for metric in metrics_computer.generate_and_save():
+            self.stdout.write('-- {metric}'.format(metric=metric))
+        self.stdout.write('Done. Computed metrics were stored to DB.')

@@ -30,11 +30,11 @@ class MetricsComputer:
         self.first_date = get_first_unmeasured_date()
         self.last_date = get_yesterday()
 
-    def compute_and_save(self):
+    def generate_and_save(self):
         metrics = self.compute()
         for metric in metrics:
-            print(metric)
-            #metric.save()
+            metric.save()
+            yield metric
 
     def compute(self):
         # Daily Active Users = students who have solved at least 1 task
