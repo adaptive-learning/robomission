@@ -2,10 +2,13 @@ import React from 'react';
 import { connect } from 'react-redux';
 import MonitoringPageComponent from '../components/MonitoringPage';
 import { fetchMetrics } from '../actions/monitoring';
+import { getMetrics } from '../selectors/monitoring';
 
 
 function getProps(state) {
-  return {};
+  return {
+    metrics: getMetrics(state),
+  };
 }
 
 const actionCreators = {
@@ -19,7 +22,9 @@ class MonitoringPage extends React.Component {
 
   render() {
     return (
-      <MonitoringPageComponent />
+      <MonitoringPageComponent
+        metrics={this.props.metrics}
+      />
     );
   }
 }
