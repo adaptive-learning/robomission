@@ -1,5 +1,5 @@
 import {take, call, put, fork} from 'redux-saga/effects';
-import * as authApi from '../authApi';
+import * as authApi from '../api/auth';
 import * as actions from '../actions';
 import * as actionType from '../action-types';
 

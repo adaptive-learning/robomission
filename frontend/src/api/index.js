@@ -2,7 +2,7 @@
  * Defines the interface between the backend and the frontend.
  */
 import axios from 'axios';
-import { API_PATH } from './config';
+import { API_PATH } from '../config';
 
 
 export function fetchApiRoot() {
