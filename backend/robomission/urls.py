@@ -39,7 +39,7 @@ urlpatterns = [
     url(r'^accounts/', include('allauth.urls')),
     url(r'^admin/', admin.site.urls),
     url(r'^learn/admin/', learn.admin.admin_site.urls),
-    url(r'^($|about|task)', learn.views.frontend_app, name='frontend_app'),
+    url(r'^($|about|task|monitoring)', learn.views.frontend_app, name='frontend_app'),
 ]
 
 # Set up media serving for development.

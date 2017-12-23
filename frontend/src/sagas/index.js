@@ -28,6 +28,7 @@ import { downloadTextFile, loadTextFile } from '../utils/files';
 import authSaga from './auth';
 import googleAnalyticsSaga from './googleAnalytics';
 import feedbackSaga from './feedback';
+import monitoringSaga from './monitoring';
 
 
 function* fetchApiRoot() {
@@ -349,6 +350,7 @@ function* rootSaga() {
     authSaga(),
     googleAnalyticsSaga(),
     feedbackSaga(),
+    monitoringSaga(),
   ]);
 }
 
