@@ -1,3 +1,12 @@
+"""Settings for the admin page.
+"""
 from django.contrib import admin
+from monitoring.models import Metric
 
-# Register your models here.
+
+@admin.register(Metric)
+class MetricAdmin(admin.ModelAdmin):
+    list_display = ('name', 'group', 'time', 'value')
+    list_filter = ('name', 'group')
+    search_fields = ('name', 'group')
+    date_hierarchy = 'time'
