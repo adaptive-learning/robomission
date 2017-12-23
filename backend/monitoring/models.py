@@ -23,10 +23,12 @@ class Metric(models.Model):
 
     @property
     def full_name(self):
-        return '{name}.{group}'.format(name=self.name, group=self.group)
+        if self.group:
+            return '{name}.{group}'.format(name=self.name, group=self.group)
+        return self.name
 
     def __str__(self):
-        return '{name}@{date}={value}'.format(
+        return '{name}@{time}={value}'.format(
             name=self.full_name,
-            date=self.date,
+            time=self.time,
             value=self.value)

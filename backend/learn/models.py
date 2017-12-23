@@ -137,6 +137,10 @@ class TaskSession(models.Model):
         seconds = int(delta.total_seconds())
         return seconds
 
+    @property
+    def date(self):
+        return self.end.date()
+
     def __str__(self):
         return '[{pk}] s{student}-{task}'.format(
             pk=self.pk,

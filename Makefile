@@ -139,6 +139,11 @@ export:
 	python backend/manage.py export_data
 
 
+.PHONY: metrics
+metrics:
+	python backend/manage.py compute_metrics
+
+
 .PHONY: frontend
 frontend:
 	cd frontend && npm run build
