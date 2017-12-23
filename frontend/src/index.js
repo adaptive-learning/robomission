@@ -10,6 +10,7 @@ import HomePage from './pages/HomePage';
 import PracticePage from './pages/PracticePage';
 import TaskEditorPage from './pages/TaskEditorPage';
 import TasksTableContainer from './containers/TasksTableContainer';
+import MonitoringPage from './containers/MonitoringPage';
 
 //TODO: setup service worker to work in production
 // (see create-react-app for details)
@@ -28,6 +29,7 @@ const app = (
             <Route exact path="/tasks" component={TasksTableContainer} />
             <Route exact path="/task-editor" component={TaskEditorPage} />
             <Route path="/task/:taskId" component={PracticePage} />
+            <Route exact path="/monitoring" component={MonitoringPage} />
           </Switch>
         </AppContainer>
       </BrowserRouter>
