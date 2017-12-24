@@ -26,8 +26,8 @@ def get_yesterday():
 
 
 class MetricsComputer:
-    def __init__(self):
-        self.first_date = get_first_unmeasured_date()
+    def __init__(self, first_date=None):
+        self.first_date = first_date or get_first_unmeasured_date()
         self.last_date = get_yesterday()
 
     def generate_and_save(self):
@@ -37,6 +37,10 @@ class MetricsComputer:
             yield metric
 
     def compute(self):
+        # If the first_date was set by user, it's necessary to delete
+        # previously computed metrics before they are replaced by the new
+        # values.
+        Metric.objects.filter(time__gte=self.first_date).delete()
         # Daily Active Users = students who have solved at least 1 task
         dates_with_DAU = (
             TaskSession.objects
