@@ -42,8 +42,8 @@ class MetricsComputer:
         # previously computed metrics before they are replaced by the new
         # values.
         Metric.objects.filter(time__gte=self.first_date).delete()
-        # Daily Active Users = students who have solved at least 1 task
-        dates_with_DAU = (
+        # Daily Active Students = students who have solved at least 1 task
+        dates_with_values = (
             TaskSession.objects
             .annotate(date=Trunc('end', 'day'))
             .filter(date__range=(self.first_date, self.last_date), solved=True)
@@ -52,8 +52,8 @@ class MetricsComputer:
         # We use defaultdict to return 0 for dates missing in the aggregation.
         date_to_value = defaultdict(
             int,
-            ((group['date'].date(), group['count']) for group in dates_with_DAU))
+            ((group['date'].date(), group['count']) for group in dates_with_values))
         n_days = (self.last_date - self.first_date).days + 1
         dates = [self.first_date + timedelta(days=d) for d in range(n_days)]
         for date in dates:
-            yield Metric(name='1DAU', time=date, value=date_to_value[date])
+            yield Metric(name='active-students', time=date, value=date_to_value[date])

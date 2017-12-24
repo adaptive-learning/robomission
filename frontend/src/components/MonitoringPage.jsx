@@ -7,7 +7,7 @@ import { LineChart, XAxis, YAxis, Line } from 'recharts';
 
 class MonitoringPage extends React.Component {
   renderActiveStudents() {
-    const data = getDataForPlot(this.props.metrics, '1DAU');
+    const data = getDataForPlot(this.props.metrics, 'active-students');
     return (
       <Card style={{ margin: 10 }}>
         <CardTitle
