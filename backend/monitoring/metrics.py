@@ -1,7 +1,7 @@
 """Definition of metrics we care about.
 """
 from collections import defaultdict
-from datetime import timedelta
+from datetime import timedelta, time, datetime
 from django.db.models import Count
 from django.db.models.functions import Trunc
 from django.utils import timezone
@@ -26,6 +26,12 @@ def get_yesterday():
     return timezone.now().date() - timedelta(days=1)
 
 
+def to_timezone_aware(date, last_second=False):
+    time_part = time.max if last_second else time.min
+    aware_datetime = datetime.combine(date, time_part, tzinfo=timezone.utc)
+    return aware_datetime
+
+
 class MetricsComputer:
     def __init__(self, first_date=None):
         self.first_date = first_date or get_first_unmeasured_date()
@@ -43,10 +49,13 @@ class MetricsComputer:
         # values.
         Metric.objects.filter(time__gte=self.first_date).delete()
         # Daily Active Students = students who have solved at least 1 task
+        time_range = (
+            to_timezone_aware(self.first_date),
+            to_timezone_aware(self.last_date, last_second=True))
         dates_with_values = (
             TaskSession.objects
             .annotate(date=Trunc('end', 'day'))
-            .filter(date__range=(self.first_date, self.last_date), solved=True)
+            .filter(date__range=time_range, solved=True)
             .values('date')
             .annotate(count=Count('student_id', distinct=True)))
         # We use defaultdict to return 0 for dates missing in the aggregation.
