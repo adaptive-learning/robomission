@@ -1,5 +1,6 @@
 """Definition of metrics we care about.
 """
+from collections import defaultdict
 from datetime import timedelta
 from django.db.models import Count
 from django.db.models.functions import Trunc
@@ -48,7 +49,11 @@ class MetricsComputer:
             .filter(date__range=(self.first_date, self.last_date), solved=True)
             .values('date')
             .annotate(count=Count('student_id', distinct=True)))
-        for date_with_dau in dates_with_DAU:
-            date = date_with_dau['date'].date()
-            count = date_with_dau['count']
-            yield Metric(name='1DAU', time=date, value=count)
+        # We use defaultdict to return 0 for dates missing in the aggregation.
+        date_to_value = defaultdict(
+            int,
+            ((group['date'].date(), group['count']) for group in dates_with_DAU))
+        n_days = (self.last_date - self.first_date).days + 1
+        dates = [self.first_date + timedelta(days=d) for d in range(n_days)]
+        for date in dates:
+            yield Metric(name='1DAU', time=date, value=date_to_value[date])
