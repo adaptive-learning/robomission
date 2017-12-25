@@ -52,17 +52,28 @@ class MetricsComputer:
         time_range = (
             to_timezone_aware(self.first_date),
             to_timezone_aware(self.last_date, last_second=True))
-        dates_with_values = (
+        task_sessions = (
             TaskSession.objects
             .annotate(date=Trunc('end', 'day'))
-            .filter(date__range=time_range, solved=True)
+            .filter(date__range=time_range))
+        dates_with_values = (
+            task_sessions
+            .filter(solved=True)
             .values('date')
-            .annotate(count=Count('student_id', distinct=True)))
+            .annotate(
+                students=Count('student_id', distinct=True),
+                solved_tasks=Count('*')))
+        # TODO: Add solving-time metric. Note that SQLite cannot aggregate over
+        # times, so it's not enought to just annotate
+        # `solving_time=Sum(F('end') - F('start'))`.
         # We use defaultdict to return 0 for dates missing in the aggregation.
-        date_to_value = defaultdict(
-            int,
-            ((group['date'].date(), group['count']) for group in dates_with_values))
+        values = defaultdict(int)
+        for group in dates_with_values:
+            date = group['date'].date()
+            values[(date, 'active-students')] = group['students']
+            values[(date, 'solved-tasks')] = group['solved_tasks']
         n_days = (self.last_date - self.first_date).days + 1
         dates = [self.first_date + timedelta(days=d) for d in range(n_days)]
         for date in dates:
-            yield Metric(name='active-students', time=date, value=date_to_value[date])
+            for name in ('active-students', 'solved-tasks'):
+                yield Metric(name=name, time=date, value=values[(date, name)])
