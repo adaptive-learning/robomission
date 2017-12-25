@@ -4,7 +4,7 @@ import monitoring.views
 
 
 api_router = DefaultRouter()
-api_router.register(r'metrics', monitoring.views.MetricViewSet)
+api_router.register(r'metrics', monitoring.views.MetricViewSet, base_name='metric')
 
 
 urlpatterns = [
