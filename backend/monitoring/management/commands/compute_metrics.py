@@ -1,6 +1,6 @@
 from datetime import datetime
 from django.core.management.base import BaseCommand
-from monitoring.metrics import MetricsComputer
+from monitoring.metrics import make_metrics_generator
 
 
 class Command(BaseCommand):
@@ -16,11 +16,14 @@ class Command(BaseCommand):
         first_date = None
         if options['from']:
             first_date = datetime.strptime(options['from'], '%Y-%m-%d').date()
-        metrics_computer = MetricsComputer(first_date=first_date)
+        generate_metrics, dates = make_metrics_generator(first_date=first_date)
+        if not dates:
+            self.stderr.write('Empty date range. No metrics generated.')
+            return
         self.stdout.write(
             'Computing metrics from {first_date} to {last_date} ...'.format(
-                first_date=metrics_computer.first_date,
-                last_date=metrics_computer.last_date))
-        for metric in metrics_computer.generate_and_save():
+                first_date=dates[0],
+                last_date=dates[-1]))
+        for metric in generate_metrics():
             self.stdout.write('-- {metric}'.format(metric=metric))
         self.stdout.write('Done. Computed metrics were stored to DB.')

@@ -2,8 +2,6 @@
 """
 from collections import defaultdict
 from datetime import timedelta, time, datetime
-from django.db.models import Count
-from django.db.models.functions import Trunc
 from django.utils import timezone
 from monitoring.models import Metric
 from learn.models import Action, TaskSession
@@ -78,28 +76,27 @@ def generate_solving_hours_metric(task_sessions, dates):
         yield Metric(name='solving-hours', time=date, value=total_solving_hours)
 
 
-class MetricsComputer:
-    def __init__(self, first_date=None):
-        self.first_date = first_date or get_first_unmeasured_date()
-        self.last_date = get_yesterday()
-        self.dates = dates_range(self.first_date, self.last_date)
+def generate_metrics(dates):
+    time_range = (to_timezone_aware(dates[0]), to_timezone_aware(dates[-1], last_second=True))
+    task_sessions = list(TaskSession.objects.filter(end__date__range=time_range))
+    yield from generate_active_students_metric(task_sessions, dates)
+    yield from generate_solved_tasks_metric(task_sessions, dates)
+    yield from generate_solving_hours_metric(task_sessions, dates)
 
-    def generate_and_save(self):
-        metrics = self.compute()
-        for metric in metrics:
+
+def make_metrics_generator(first_date=None):
+    """Return metrics generator and dates for which will be metrics computed.
+    """
+    first_date = first_date or get_first_unmeasured_date()
+    last_date = get_yesterday()
+    dates = dates_range(first_date, last_date)
+
+    def generate_and_save_metrics():
+        # If the first_date was set manually, it's necessary to delete
+        # previously computed metrics before they are replaced by the new ones.
+        Metric.objects.filter(time__gte=first_date).delete()
+        for metric in generate_metrics(dates):
             metric.save()
             yield metric
 
-    def compute(self):
-        # If the first_date was set by user, it's necessary to delete
-        # previously computed metrics before they are replaced by the new
-        # values.
-        Metric.objects.filter(time__gte=self.first_date).delete()
-        # Filter relevant entities
-        time_range = (
-            to_timezone_aware(self.first_date),
-            to_timezone_aware(self.last_date, last_second=True))
-        task_sessions = list(TaskSession.objects.filter(end__date__range=time_range))
-        yield from generate_active_students_metric(task_sessions, self.dates)
-        yield from generate_solved_tasks_metric(task_sessions, self.dates)
-        yield from generate_solving_hours_metric(task_sessions, self.dates)
+    return generate_and_save_metrics, dates
