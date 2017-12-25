@@ -1,7 +1,7 @@
 """Definition of metrics we care about.
 """
 from collections import defaultdict
-from statistics import mean
+from statistics import mean, median
 from datetime import timedelta, time, datetime
 from django.utils import timezone
 from monitoring.models import Metric
@@ -127,6 +127,20 @@ def generate_solving_hours_metric(task_sessions, dates):
         yield Metric(name='solving-hours', time=date, value=total_solving_hours)
 
 
+def generate_median_time_for_task_metric(task_sessions, date, tasks):
+    """Yield median-time metric for each task and given date.
+    """
+    recent_solved_task_sessions = [
+        ts for ts in task_sessions
+        if ts.solved and ts.date > date - timedelta(days=30)]
+    groups = group_by_task(recent_solved_task_sessions)
+    for task in tasks:
+        times = [ts.time_spent for ts in groups[task.id]]
+        median_time = median(times) if times else 0
+        group_name = 'task.' + task.name
+        yield Metric(name='median-time', group=group_name, time=date, value=median_time)
+
+
 def generate_metrics(dates):
     # Select all task sessions which might be possibly needed.
     time_range = (
@@ -142,6 +156,7 @@ def generate_metrics(dates):
     tasks = list(Task.objects.all())
     yield from generate_solved_count_for_task_metric(task_sessions, dates[-1], tasks)
     yield from generate_success_ratio_for_task_metric(task_sessions, dates[-1], tasks)
+    yield from generate_median_time_for_task_metric(task_sessions, dates[-1], tasks)
 
 
 def make_metrics_generator(first_date=None):
