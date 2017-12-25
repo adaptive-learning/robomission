@@ -3,16 +3,15 @@ import PropTypes from 'prop-types';
 import muiThemeable from 'material-ui/styles/muiThemeable';
 import { Card, CardTitle, CardText } from 'material-ui/Card';
 import { LineChart, XAxis, YAxis, Line } from 'recharts';
+import { toTitle } from '../utils/text';
 
 
 class MonitoringPage extends React.Component {
-  renderActiveStudents() {
-    const data = getDataForPlot(this.props.metrics, 'active-students');
+  renderMetricPlot(name) {
+    const data = getDataForPlot(this.props.metrics, name);
     return (
-      <Card style={{ margin: 10 }}>
-        <CardTitle
-          title="Active Students"
-        />
+      <Card style={{ margin: 10 }} key={name}>
+        <CardTitle title={toTitle(name)} />
         <CardText>
           <LineChart width={500} height={300} data={data}>
             <XAxis dataKey="time"/>
@@ -22,6 +21,31 @@ class MonitoringPage extends React.Component {
         </CardText>
       </Card>
     );
+  }
+
+  renderActiveStudents() {
+    return this.renderMetricPlot('active-students');
+  }
+
+  renderSolvedCount() {
+    return this.renderMetricPlot('solved-count');
+  }
+
+  renderSuccessRatio() {
+    return this.renderMetricPlot('success-ratio');
+  }
+
+  renderSolvingHours() {
+    return this.renderMetricPlot('solving-hours');
+  }
+
+  renderMetrics() {
+    return [
+      this.renderActiveStudents(),
+      this.renderSolvedCount(),
+      this.renderSuccessRatio(),
+      this.renderSolvingHours(),
+    ];
   }
 
   render() {
@@ -34,7 +58,7 @@ class MonitoringPage extends React.Component {
     };
     return (
       <div style={longPageContentStyle}>
-        {metrics && this.renderActiveStudents()}
+        {metrics && this.renderMetrics()}
       </div>
     );
   }
