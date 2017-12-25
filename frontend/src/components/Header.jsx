@@ -17,6 +17,7 @@ class Header extends React.Component {
   renderTitle() {
     const logoImg = (
       <img
+        key='header-logo'
         alt='RoboMission logo'
         src={ logo }
         style={{
@@ -31,7 +32,10 @@ class Header extends React.Component {
       modeTitleText = 'Monitoring';
     }
     const modeTitle = (
-      <span style={{ position: 'absolute', top: 0, marginLeft: 15, color: 'white' }}>
+      <span
+        key='header-mode-title'
+        style={{ position: 'absolute', top: 0, marginLeft: 15, color: 'white' }}
+      >
         {modeTitleText}
       </span>
     );
