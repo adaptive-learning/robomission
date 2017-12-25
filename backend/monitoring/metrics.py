@@ -44,10 +44,10 @@ def group_by_date(task_sessions):
     return groups
 
 
-def group_by_date_and_task(task_sessions):
+def group_by_task(task_sessions):
     groups = defaultdict(list)
     for ts in task_sessions:
-        groups[(ts.date, ts.task_id)].append(ts)
+        groups[ts.task_id].append(ts)
     return groups
 
 
@@ -73,17 +73,19 @@ def generate_solved_count_metric(task_sessions, dates):
         yield Metric(name='solved-count', time=date, value=n_solved_tasks)
 
 
-def generate_solved_count_for_task_metric(task_sessions, dates, tasks):
-    """Yield solved-count metric for each date and task.
+def generate_solved_count_for_task_metric(task_sessions, date, tasks):
+    """Yield solved-count metric for each task and given date.
     """
-    solved_task_sessions = [ts for ts in task_sessions if ts.solved]
-    groups = group_by_date_and_task(solved_task_sessions)
-    for date in dates:
-        for task in tasks:
-            solved_count = len(groups[(date, task.id)])
-            yield Metric(
-                name='solved-count', group=task.name, time=date,
-                value=solved_count)
+    recent_solved_task_sessions = [
+        ts for ts in task_sessions
+        if ts.solved and ts.date > date - timedelta(days=30)]
+    groups = group_by_task(recent_solved_task_sessions)
+    for task in tasks:
+        solved_count = len(groups[task.id])
+        group_name = 'task.' + task.name
+        yield Metric(
+            name='solved-count', group=group_name, time=date,
+            value=solved_count)
 
 
 def generate_success_ratio_metric(task_sessions, dates):
@@ -108,16 +110,19 @@ def generate_solving_hours_metric(task_sessions, dates):
 
 
 def generate_metrics(dates):
-    time_range = (to_timezone_aware(dates[0]), to_timezone_aware(dates[-1], last_second=True))
+    # Select all task sessions which might be possibly needed.
+    time_range = (
+        to_timezone_aware(min(dates[0], dates[-1] - timedelta(days=30))),
+        to_timezone_aware(dates[-1], last_second=True))
     task_sessions = list(TaskSession.objects.filter(end__date__range=time_range))
-    tasks = list(Task.objects.all())
     # global metrics
     yield from generate_active_students_metric(task_sessions, dates)
     yield from generate_solved_count_metric(task_sessions, dates)
     yield from generate_success_ratio_metric(task_sessions, dates)
     yield from generate_solving_hours_metric(task_sessions, dates)
     # task-specific metrics
-    yield from generate_solved_count_for_task_metric(task_sessions, dates, tasks)
+    tasks = list(Task.objects.all())
+    yield from generate_solved_count_for_task_metric(task_sessions, dates[-1], tasks)
 
 
 def make_metrics_generator(first_date=None):
@@ -131,6 +136,11 @@ def make_metrics_generator(first_date=None):
         # If the first_date was set manually, it's necessary to delete
         # previously computed metrics before they are replaced by the new ones.
         Metric.objects.filter(time__gte=first_date).delete()
+        # Delete recent group-specific metrics - it's not necessary to store
+        # them for every day.
+        group_metrics = Metric.objects.filter(group__isnull=False)
+        recent_group_metrics = group_metrics.filter(time__gt=last_date-timedelta(days=10))
+        recent_group_metrics.delete()
         for metric in generate_metrics(dates):
             metric.save()
             yield metric
