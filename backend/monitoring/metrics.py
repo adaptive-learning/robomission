@@ -5,7 +5,7 @@ from statistics import mean
 from datetime import timedelta, time, datetime
 from django.utils import timezone
 from monitoring.models import Metric
-from learn.models import Action, TaskSession
+from learn.models import Action, Task, TaskSession
 
 
 def get_last_measured_date():
@@ -44,6 +44,13 @@ def group_by_date(task_sessions):
     return groups
 
 
+def group_by_date_and_task(task_sessions):
+    groups = defaultdict(list)
+    for ts in task_sessions:
+        groups[(ts.date, ts.task_id)].append(ts)
+    return groups
+
+
 def generate_active_students_metric(task_sessions, dates):
     """Yield active-students metric for each date in dates.
 
@@ -56,14 +63,27 @@ def generate_active_students_metric(task_sessions, dates):
         yield Metric(name='active-students', time=date, value=n_active_students)
 
 
-def generate_solved_tasks_metric(task_sessions, dates):
-    """Yield solved-tasks metric for each date in dates.
+def generate_solved_count_metric(task_sessions, dates):
+    """Yield solved-count metric for each date in dates.
     """
     solved_task_sessions = [ts for ts in task_sessions if ts.solved]
     groups = group_by_date(solved_task_sessions)
     for date in dates:
         n_solved_tasks = len(groups[date])
-        yield Metric(name='solved-tasks', time=date, value=n_solved_tasks)
+        yield Metric(name='solved-count', time=date, value=n_solved_tasks)
+
+
+def generate_solved_count_for_task_metric(task_sessions, dates, tasks):
+    """Yield solved-count metric for each date and task.
+    """
+    solved_task_sessions = [ts for ts in task_sessions if ts.solved]
+    groups = group_by_date_and_task(solved_task_sessions)
+    for date in dates:
+        for task in tasks:
+            solved_count = len(groups[(date, task.id)])
+            yield Metric(
+                name='solved-count', group=task.name, time=date,
+                value=solved_count)
 
 
 def generate_success_ratio_metric(task_sessions, dates):
@@ -90,10 +110,14 @@ def generate_solving_hours_metric(task_sessions, dates):
 def generate_metrics(dates):
     time_range = (to_timezone_aware(dates[0]), to_timezone_aware(dates[-1], last_second=True))
     task_sessions = list(TaskSession.objects.filter(end__date__range=time_range))
+    tasks = list(Task.objects.all())
+    # global metrics
     yield from generate_active_students_metric(task_sessions, dates)
-    yield from generate_solved_tasks_metric(task_sessions, dates)
+    yield from generate_solved_count_metric(task_sessions, dates)
     yield from generate_success_ratio_metric(task_sessions, dates)
     yield from generate_solving_hours_metric(task_sessions, dates)
+    # task-specific metrics
+    yield from generate_solved_count_for_task_metric(task_sessions, dates, tasks)
 
 
 def make_metrics_generator(first_date=None):
