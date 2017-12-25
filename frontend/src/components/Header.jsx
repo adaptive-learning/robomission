@@ -14,7 +14,7 @@ import { translate } from '../localization';
 
 
 class Header extends React.Component {
-  render() {
+  renderTitle() {
     const logoImg = (
       <img
         alt='RoboMission logo'
@@ -26,6 +26,18 @@ class Header extends React.Component {
         }}
       />
     );
+    let modeTitleText = '';
+    if (this.props.mode === 'monitoring') {
+      modeTitleText = 'Monitoring';
+    }
+    const modeTitle = (
+      <span style={{ position: 'absolute', top: 0, marginLeft: 15, color: 'white' }}>
+        {modeTitleText}
+      </span>
+    );
+    return [logoImg, modeTitle];
+  }
+  render() {
     let userIcon = (<UserIcon />);
     if (!this.props.user.isLazy) {
       userIcon = this.props.user.initial;
@@ -65,15 +77,19 @@ class Header extends React.Component {
     }
     const toolbar = (
       <Toolbar style={{ backgroundColor: 'transparent', color: 'white' }}>
-        <ToolbarGroup>
-          <LevelBar mini {...this.props.levelInfo} />
-        </ToolbarGroup>
-        <ToolbarSeparator
-          style={{
-            position: 'relative',
-            top: 9,
-          }}
-        />
+        {this.props.mode !== 'monitoring' && [(
+          <ToolbarGroup>
+            <LevelBar mini {...this.props.levelInfo} />
+          </ToolbarGroup>
+        ),
+        (
+          <ToolbarSeparator
+            style={{
+              position: 'relative',
+              top: 9,
+            }}
+          />
+        )]}
         <ToolbarGroup lastChild={true}>
           <IconButton
             tooltip={translate('Feedback')}
@@ -87,7 +103,7 @@ class Header extends React.Component {
     );
     return (
       <AppBar
-        title={logoImg}
+        title={this.renderTitle()}
         style={{
           backgroundColor: this.props.muiTheme.palette.primary1Color,
           margin: 0,

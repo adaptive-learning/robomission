@@ -8,12 +8,14 @@ import {
   logout } from '../actions';
 import { getLevelStatus } from '../selectors/student';
 import { getUser } from '../selectors/user';
+import { getMode } from '../selectors/app';
 import Header from '../components/Header';
 
 
 const getProps = state => ({
   levelStatus: getLevelStatus(state),
   user: getUser(state),
+  mode: getMode(state),
 });
 
 const actionCreators = {
@@ -44,6 +46,7 @@ class HeaderContainer extends React.Component {
         openSignUpModal={this.openSignUpModal}
         logout={this.logout}
         user={this.props.user}
+        mode={this.props.mode}
       />
   )}
 }
