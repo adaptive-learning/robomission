@@ -88,14 +88,32 @@ def generate_solved_count_for_task_metric(task_sessions, date, tasks):
             value=solved_count)
 
 
+def compute_success_ratio(task_sessions):
+    return mean(ts.solved for ts in task_sessions) if task_sessions else 0
+
+
 def generate_success_ratio_metric(task_sessions, dates):
     """Yield success-ratio metric for each date in dates.
     """
     groups = group_by_date(task_sessions)
     for date in dates:
-        group = groups[date]
-        success_ratio = mean(ts.solved for ts in group) if group else 0
+        success_ratio = compute_success_ratio(groups[date])
         yield Metric(name='success-ratio', time=date, value=success_ratio)
+
+
+def generate_success_ratio_for_task_metric(task_sessions, date, tasks):
+    """Yield success ratio metric for each task and given date.
+    """
+    recent_task_sessions = [
+        ts for ts in task_sessions
+        if ts.date > date - timedelta(days=30)]
+    groups = group_by_task(recent_task_sessions)
+    for task in tasks:
+        success_ratio = compute_success_ratio(groups[task.id])
+        group_name = 'task.' + task.name
+        yield Metric(
+            name='success-ratio', group=group_name, time=date,
+            value=success_ratio)
 
 
 def generate_solving_hours_metric(task_sessions, dates):
@@ -123,6 +141,7 @@ def generate_metrics(dates):
     # task-specific metrics
     tasks = list(Task.objects.all())
     yield from generate_solved_count_for_task_metric(task_sessions, dates[-1], tasks)
+    yield from generate_success_ratio_for_task_metric(task_sessions, dates[-1], tasks)
 
 
 def make_metrics_generator(first_date=None):
