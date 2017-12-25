@@ -1,6 +1,7 @@
 """Definition of metrics we care about.
 """
 from collections import defaultdict
+from statistics import mean
 from datetime import timedelta, time, datetime
 from django.utils import timezone
 from monitoring.models import Metric
@@ -65,6 +66,16 @@ def generate_solved_tasks_metric(task_sessions, dates):
         yield Metric(name='solved-tasks', time=date, value=n_solved_tasks)
 
 
+def generate_success_ratio_metric(task_sessions, dates):
+    """Yield success-ratio metric for each date in dates.
+    """
+    groups = group_by_date(task_sessions)
+    for date in dates:
+        group = groups[date]
+        success_ratio = mean(ts.solved for ts in group) if group else 0
+        yield Metric(name='success-ratio', time=date, value=success_ratio)
+
+
 def generate_solving_hours_metric(task_sessions, dates):
     """Yield solving-time metric for each date in dates.
     """
@@ -81,6 +92,7 @@ def generate_metrics(dates):
     task_sessions = list(TaskSession.objects.filter(end__date__range=time_range))
     yield from generate_active_students_metric(task_sessions, dates)
     yield from generate_solved_tasks_metric(task_sessions, dates)
+    yield from generate_success_ratio_metric(task_sessions, dates)
     yield from generate_solving_hours_metric(task_sessions, dates)
 
 
