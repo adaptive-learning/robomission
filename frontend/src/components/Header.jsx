@@ -82,19 +82,20 @@ class Header extends React.Component {
     const toolbar = (
       <Toolbar style={{ backgroundColor: 'transparent', color: 'white' }}>
         {this.props.mode !== 'monitoring' && [(
-          <ToolbarGroup>
+          <ToolbarGroup key="levelbar">
             <LevelBar mini {...this.props.levelInfo} />
           </ToolbarGroup>
         ),
         (
           <ToolbarSeparator
+            key="separator1"
             style={{
               position: 'relative',
               top: 9,
             }}
           />
         )]}
-        <ToolbarGroup lastChild={true}>
+        <ToolbarGroup key="user-toolbar" lastChild={true}>
           <IconButton
             tooltip={translate('Feedback')}
             onClick={this.props.openFeedbackModal}
