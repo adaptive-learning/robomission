@@ -4,11 +4,16 @@ import muiThemeable from 'material-ui/styles/muiThemeable';
 import { Card, CardTitle, CardText } from 'material-ui/Card';
 import { List, ListItem } from 'material-ui/List';
 import Divider from 'material-ui/Divider';
-import OutlinkIcon from 'material-ui/svg-icons/action/open-in-new';
 import DownloadIcon from 'material-ui/svg-icons/file/file-download';
+import ChartIcon from 'material-ui/svg-icons/action/assessment';
+import CodeIcon from 'material-ui/svg-icons/action/code';
+import DBIcon from 'material-ui/svg-icons/device/storage';
+import APIIcon from 'material-ui/svg-icons/social/public';
+import ErrorReportIcon from 'material-ui/svg-icons/action/report-problem';
 import {
   LineChart, XAxis, YAxis, Line, Bar, BarChart,
   CartesianGrid, Tooltip } from 'recharts';
+import GHIcon from '../components/GitHubIcon';
 import { toTitle } from '../utils/text';
 import { theme } from '../theme';
 
@@ -27,6 +32,7 @@ const wideCardStyle = {
   width: 'auto',
   display: 'block',
 }
+
 
 class RotatedAxisTick extends React.Component {
   render () {
@@ -94,7 +100,7 @@ class MonitoringPage extends React.Component {
               target="_blank"
               rel="noreferrer noopener"
               primaryText="DB Admin"
-              leftIcon={<OutlinkIcon />}
+              leftIcon={<DBIcon />}
               secondaryText="DB tables (tasks, levels, task sessions, etc.)"
             />
             <Divider />
@@ -102,8 +108,8 @@ class MonitoringPage extends React.Component {
               href="https://github.com/adaptive-learning/robomission/tree/master/tasks/"
               target="_blank"
               rel="noreferrer noopener"
-              primaryText="Tasks Source Files"
-              leftIcon={<OutlinkIcon />}
+              primaryText="Task Source Files"
+              leftIcon={<CodeIcon />}
               secondaryText="[repo]//tasks/*.md"
             />
             <Divider />
@@ -112,7 +118,7 @@ class MonitoringPage extends React.Component {
               target="_blank"
               rel="noreferrer noopener"
               primaryText="Localization Messages"
-              leftIcon={<OutlinkIcon />}
+              leftIcon={<CodeIcon />}
               secondaryText="[repo]//frontend/src/localization/messages-*.js"
             />
             <Divider />
@@ -134,7 +140,7 @@ class MonitoringPage extends React.Component {
               target="_blank"
               rel="noreferrer noopener"
               primaryText="Google Analytics - Overview"
-              leftIcon={<OutlinkIcon />}
+              leftIcon={<ChartIcon />}
               secondaryText="https://analytics.google.com > robomise.cz > Home"
             />
             <Divider />
@@ -143,7 +149,7 @@ class MonitoringPage extends React.Component {
               target="_blank"
               rel="noreferrer noopener"
               primaryText="Google Analytics - Events"
-              leftIcon={<OutlinkIcon />}
+              leftIcon={<ChartIcon />}
               secondaryText="Behavior > Events > Overview"
             />
             <Divider />
@@ -152,7 +158,7 @@ class MonitoringPage extends React.Component {
               target="_blank"
               rel="noreferrer noopener"
               primaryText="Events Sent to Google Analytics"
-              leftIcon={<OutlinkIcon />}
+              leftIcon={<CodeIcon />}
               secondaryText="[repo]//frontend/src/sagas/googleAnalytics.js"
             />
             <Divider />
@@ -161,7 +167,7 @@ class MonitoringPage extends React.Component {
               target="_blank"
               rel="noreferrer noopener"
               primaryText="Metrics (DB Table)"
-              leftIcon={<OutlinkIcon />}
+              leftIcon={<DBIcon />}
               secondaryText="Plots from recent metric records are below."
             />
             <Divider />
@@ -183,8 +189,17 @@ class MonitoringPage extends React.Component {
               target="_blank"
               rel="noreferrer noopener"
               primaryText="Code Repository"
-              leftIcon={<OutlinkIcon />}
+              leftIcon={<GHIcon />}
               secondaryText="https://github.com/adaptive-learning/robomission"
+            />
+            <Divider />
+            <ListItem
+              href="https://github.com/adaptive-learning/robomission/issues"
+              target="_blank"
+              rel="noreferrer noopener"
+              primaryText="GitHub Issues"
+              leftIcon={<GHIcon />}
+              secondaryText="https://github.com/adaptive-learning/robomission/issues"
             />
             <Divider />
             <ListItem
@@ -192,7 +207,7 @@ class MonitoringPage extends React.Component {
               target="_blank"
               rel="noreferrer noopener"
               primaryText="Documentation"
-              leftIcon={<OutlinkIcon />}
+              leftIcon={<CodeIcon />}
               secondaryText="[repo]//docs"
             />
             <Divider />
@@ -201,17 +216,8 @@ class MonitoringPage extends React.Component {
               target="_blank"
               rel="noreferrer noopener"
               primaryText="REST API"
-              leftIcon={<OutlinkIcon />}
+              leftIcon={<APIIcon />}
               secondaryText="http://robomise.cz/learn/api"
-            />
-            <Divider />
-            <ListItem
-              href="https://github.com/adaptive-learning/robomission/issues"
-              target="_blank"
-              rel="noreferrer noopener"
-              primaryText="GitHub Issues"
-              leftIcon={<OutlinkIcon />}
-              secondaryText="https://github.com/adaptive-learning/robomission/issues"
             />
             <Divider />
           </List>
@@ -241,7 +247,7 @@ class MonitoringPage extends React.Component {
               target="_blank"
               rel="noreferrer noopener"
               primaryText="Export API"
-              leftIcon={<OutlinkIcon />}
+              leftIcon={<APIIcon />}
               secondaryText="Generate and download CSV tables from the current data."
             />
             <Divider />
@@ -250,7 +256,7 @@ class MonitoringPage extends React.Component {
               target="_blank"
               rel="noreferrer noopener"
               primaryText="Data Description"
-              leftIcon={<OutlinkIcon />}
+              leftIcon={<CodeIcon />}
               secondaryText="[repo]//docs/data.ipynb"
             />
             <Divider />
@@ -272,7 +278,7 @@ class MonitoringPage extends React.Component {
               target="_blank"
               rel="noreferrer noopener"
               primaryText="Unhandled B-E Errors"
-              leftIcon={<OutlinkIcon />}
+              leftIcon={<ErrorReportIcon />}
               secondaryText="Google group 'adaptive-programming-errors'"
             />
             <Divider />
@@ -294,7 +300,7 @@ class MonitoringPage extends React.Component {
               target="_blank"
               rel="noreferrer noopener"
               primaryText="Feedback from Users"
-              leftIcon={<OutlinkIcon />}
+              leftIcon={<DBIcon />}
               secondaryText="Messages submitted via feedback form."
             />
             <Divider />
