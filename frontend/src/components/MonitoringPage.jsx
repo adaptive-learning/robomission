@@ -31,12 +31,13 @@ class MonitoringPage extends React.Component {
   renderMetricPlot(name, domain = [0, 'auto']) {
     const data = getDataForPlot(this.props.metrics, name);
     return (
-      <Card style={{ margin: 10 }} key={name}>
+      <Card style={{ margin: 10, width: 500, display: 'inline-block' }} key={name}>
         <CardTitle title={toTitle(name)} />
         <CardText>
           <LineChart width={500} height={300} data={data}>
             <XAxis dataKey="time"/>
             <YAxis domain={domain} />
+            <CartesianGrid strokeDasharray="3 3" />
             <Line type="monotone" dataKey="value" stroke={theme.palette.primary2Color} />
           </LineChart>
         </CardText>
