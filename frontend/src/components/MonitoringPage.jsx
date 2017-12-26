@@ -2,12 +2,31 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import muiThemeable from 'material-ui/styles/muiThemeable';
 import { Card, CardTitle, CardText } from 'material-ui/Card';
+import { List, ListItem } from 'material-ui/List';
+import Divider from 'material-ui/Divider';
+import OutlinkIcon from 'material-ui/svg-icons/action/open-in-new';
+import DownloadIcon from 'material-ui/svg-icons/file/file-download';
 import {
   LineChart, XAxis, YAxis, Line, Bar, BarChart,
   CartesianGrid, Tooltip } from 'recharts';
 import { toTitle } from '../utils/text';
 import { theme } from '../theme';
 
+
+const cardStyle = {
+  margin: 10,
+  width: '47%',
+  minWidth: 500,
+  display: 'inline-block',
+  backgroundColor: '#3b3b3b',
+}
+
+
+const wideCardStyle = {
+  ...cardStyle,
+  width: 'auto',
+  display: 'block',
+}
 
 class RotatedAxisTick extends React.Component {
   render () {
@@ -31,7 +50,7 @@ class MonitoringPage extends React.Component {
   renderMetricPlot(name, domain = [0, 'auto']) {
     const data = getDataForPlot(this.props.metrics, name);
     return (
-      <Card style={{ margin: 10, width: 500, display: 'inline-block' }} key={name}>
+      <Card style={cardStyle} key={name}>
         <CardTitle title={toTitle(name)} />
         <CardText>
           <LineChart width={500} height={300} data={data}>
@@ -48,7 +67,7 @@ class MonitoringPage extends React.Component {
   renderTaskMetricPlot(name, domain = [0, 'auto']) {
     const data = getDataForTasksPlot(this.props.metrics, name);
     return (
-      <Card style={{ margin: 10 }} key={`tasks-${name}`}>
+      <Card style={wideCardStyle} key={`tasks-${name}`}>
         <CardTitle title={`${toTitle(name)} for Tasks`} />
         <CardText>
           <BarChart width={1000} height={400} data={data}>
@@ -63,8 +82,236 @@ class MonitoringPage extends React.Component {
     );
   }
 
+  renderAdminCard() {
+    return (
+      <Card style={cardStyle} key="admin-card">
+        <CardTitle title="Admin" />
+        <CardText style={{ paddingTop: 0 }}>
+          <List>
+            <Divider />
+            <ListItem
+              href="/learn/admin/"
+              target="_blank"
+              rel="noreferrer noopener"
+              primaryText="DB Admin"
+              leftIcon={<OutlinkIcon />}
+              secondaryText="DB tables (tasks, levels, task sessions, etc.)"
+            />
+            <Divider />
+            <ListItem
+              href="https://github.com/adaptive-learning/robomission/tree/master/tasks/"
+              target="_blank"
+              rel="noreferrer noopener"
+              primaryText="Tasks Source Files"
+              leftIcon={<OutlinkIcon />}
+              secondaryText="[repo]//tasks/*.md"
+            />
+            <Divider />
+            <ListItem
+              href="https://github.com/adaptive-learning/robomission/tree/master/frontend/src/localization"
+              target="_blank"
+              rel="noreferrer noopener"
+              primaryText="Localization Messages"
+              leftIcon={<OutlinkIcon />}
+              secondaryText="[repo]//frontend/src/localization/messages-*.js"
+            />
+            <Divider />
+          </List>
+        </CardText>
+      </Card>
+    );
+  }
+
+  renderAnalyticsCard() {
+    return (
+      <Card style={cardStyle} key="analytics-card">
+        <CardTitle title="Analytics" />
+        <CardText style={{ paddingTop: 0 }}>
+          <List>
+            <Divider />
+            <ListItem
+              href="https://analytics.google.com/analytics/web/#embed/report-home/a81667720w121094822p126691725/"
+              target="_blank"
+              rel="noreferrer noopener"
+              primaryText="Google Analytics - Overview"
+              leftIcon={<OutlinkIcon />}
+              secondaryText="https://analytics.google.com > robomise.cz > Home"
+            />
+            <Divider />
+            <ListItem
+              href="https://analytics.google.com/analytics/web/#report/content-event-overview/a81667720w121094822p126691725/%3Foverview-dimensionSummary.selectedGroup%3Dvisitors%26overview-dimensionSummary.selectedDimension%3Danalytics.eventAction/"
+              target="_blank"
+              rel="noreferrer noopener"
+              primaryText="Google Analytics - Events"
+              leftIcon={<OutlinkIcon />}
+              secondaryText="Behavior > Events > Overview"
+            />
+            <Divider />
+            <ListItem
+              href="https://github.com/adaptive-learning/robomission/tree/master/frontend/src/sagas/googleAnalytics.js"
+              target="_blank"
+              rel="noreferrer noopener"
+              primaryText="Events Sent to Google Analytics"
+              leftIcon={<OutlinkIcon />}
+              secondaryText="[repo]//frontend/src/sagas/googleAnalytics.js"
+            />
+            <Divider />
+            <ListItem
+              href="/admin/monitoring/metric/"
+              target="_blank"
+              rel="noreferrer noopener"
+              primaryText="Metrics (DB Table)"
+              leftIcon={<OutlinkIcon />}
+              secondaryText="Plots from recent metric records are below."
+            />
+            <Divider />
+          </List>
+        </CardText>
+      </Card>
+    );
+  }
+
+  renderDevelopmentCard() {
+    return (
+      <Card style={cardStyle} key="development-card">
+        <CardTitle title="Development" />
+        <CardText style={{ paddingTop: 0 }}>
+          <List>
+            <Divider />
+            <ListItem
+              href="https://github.com/adaptive-learning/robomission"
+              target="_blank"
+              rel="noreferrer noopener"
+              primaryText="Code Repository"
+              leftIcon={<OutlinkIcon />}
+              secondaryText="https://github.com/adaptive-learning/robomission"
+            />
+            <Divider />
+            <ListItem
+              href="https://github.com/adaptive-learning/robomission/tree/master/docs"
+              target="_blank"
+              rel="noreferrer noopener"
+              primaryText="Documentation"
+              leftIcon={<OutlinkIcon />}
+              secondaryText="[repo]//docs"
+            />
+            <Divider />
+            <ListItem
+              href="/learn/api"
+              target="_blank"
+              rel="noreferrer noopener"
+              primaryText="REST API"
+              leftIcon={<OutlinkIcon />}
+              secondaryText="http://robomise.cz/learn/api"
+            />
+            <Divider />
+            <ListItem
+              href="https://github.com/adaptive-learning/robomission/issues"
+              target="_blank"
+              rel="noreferrer noopener"
+              primaryText="GitHub Issues"
+              leftIcon={<OutlinkIcon />}
+              secondaryText="https://github.com/adaptive-learning/robomission/issues"
+            />
+            <Divider />
+          </List>
+        </CardText>
+      </Card>
+    );
+  }
+
+  renderExportCard() {
+    return (
+      <Card style={cardStyle} key="export-card">
+        <CardTitle title="Export" />
+        <CardText style={{ paddingTop: 0 }}>
+          <List>
+            <Divider />
+            <ListItem
+              href="/learn/export/latest/bundle/"
+              target="_blank"
+              rel="noreferrer noopener"
+              primaryText="Download Latest Bundle"
+              leftIcon={<DownloadIcon />}
+              secondaryText="Zip bundle with both static and collected data."
+            />
+            <Divider />
+            <ListItem
+              href="/learn/export"
+              target="_blank"
+              rel="noreferrer noopener"
+              primaryText="Export API"
+              leftIcon={<OutlinkIcon />}
+              secondaryText="Generate and download CSV tables from the current data."
+            />
+            <Divider />
+            <ListItem
+              href="https://github.com/adaptive-learning/robomission/blob/master/docs/data.ipynb"
+              target="_blank"
+              rel="noreferrer noopener"
+              primaryText="Data Description"
+              leftIcon={<OutlinkIcon />}
+              secondaryText="[repo]//docs/data.ipynb"
+            />
+            <Divider />
+          </List>
+        </CardText>
+      </Card>
+    );
+  }
+
+  renderErrorsCard() {
+    return (
+      <Card style={cardStyle} key="errors-card">
+        <CardTitle title="Errors" />
+        <CardText style={{ paddingTop: 0 }}>
+          <List>
+            <Divider />
+            <ListItem
+              href="https://groups.google.com/forum/#!forum/adaptive-programming-errors"
+              target="_blank"
+              rel="noreferrer noopener"
+              primaryText="Unhandled B-E Errors"
+              leftIcon={<OutlinkIcon />}
+              secondaryText="Google group 'adaptive-programming-errors'"
+            />
+            <Divider />
+          </List>
+        </CardText>
+      </Card>
+    );
+  }
+
+  renderFeedbackCard() {
+    return (
+      <Card style={cardStyle} key="feedback-card">
+        <CardTitle title="Feedback" />
+        <CardText style={{ paddingTop: 0 }}>
+          <List>
+            <Divider />
+            <ListItem
+              href="http://localhost:8000/learn/admin/learn/feedback/"
+              target="_blank"
+              rel="noreferrer noopener"
+              primaryText="Feedback from Users"
+              leftIcon={<OutlinkIcon />}
+              secondaryText="Messages submitted via feedback form."
+            />
+            <Divider />
+          </List>
+        </CardText>
+      </Card>
+    );
+  }
+
   renderMetrics() {
     return [
+      this.renderAdminCard(),
+      this.renderExportCard(),
+      this.renderAnalyticsCard(),
+      this.renderDevelopmentCard(),
+      this.renderErrorsCard(),
+      this.renderFeedbackCard(),
       this.renderMetricPlot('active-students'),
       this.renderMetricPlot('solved-count'),
       this.renderMetricPlot('success-ratio', [0, 1]),
