@@ -28,7 +28,7 @@ class RotatedAxisTick extends React.Component {
 }
 
 class MonitoringPage extends React.Component {
-  renderMetricPlot(name) {
+  renderMetricPlot(name, domain = [0, 'auto']) {
     const data = getDataForPlot(this.props.metrics, name);
     return (
       <Card style={{ margin: 10 }} key={name}>
@@ -36,7 +36,7 @@ class MonitoringPage extends React.Component {
         <CardText>
           <LineChart width={500} height={300} data={data}>
             <XAxis dataKey="time"/>
-            <YAxis/>
+            <YAxis domain={domain} />
             <Line type="monotone" dataKey="value" stroke={theme.palette.primary2Color} />
           </LineChart>
         </CardText>
@@ -44,7 +44,7 @@ class MonitoringPage extends React.Component {
     );
   }
 
-  renderTaskMetricPlot(name) {
+  renderTaskMetricPlot(name, domain = [0, 'auto']) {
     const data = getDataForTasksPlot(this.props.metrics, name);
     return (
       <Card style={{ margin: 10 }} key={`tasks-${name}`}>
@@ -53,7 +53,7 @@ class MonitoringPage extends React.Component {
           <BarChart width={1000} height={400} data={data}>
             <CartesianGrid stroke="#ccc" strokeDasharray="3 3" vertical={false} />
             <XAxis dataKey="name" tick={<RotatedAxisTick />} interval={0} height={200} />
-            <YAxis allowDecimals={false} />
+            <YAxis allowDecimals={false}  domain={domain}/>
             <Tooltip labelStyle={{ color: '#555' }} />
             <Bar dataKey="value" fill={theme.palette.primary2Color} />
           </BarChart>
@@ -62,33 +62,15 @@ class MonitoringPage extends React.Component {
     );
   }
 
-  renderActiveStudents() {
-    return this.renderMetricPlot('active-students');
-  }
-
-  renderSolvedCount() {
-    return this.renderMetricPlot('solved-count');
-  }
-
-  renderSuccessRatio() {
-    return this.renderMetricPlot('success-ratio');
-  }
-
-  renderSolvingHours() {
-    return this.renderMetricPlot('solving-hours');
-  }
-
-  renderSolvedCountsForTasks() {
-    return this.renderTaskMetricPlot('solved-count');
-  }
-
   renderMetrics() {
     return [
-      this.renderActiveStudents(),
-      this.renderSolvedCount(),
-      this.renderSuccessRatio(),
-      this.renderSolvingHours(),
-      this.renderSolvedCountsForTasks(),
+      this.renderMetricPlot('active-students'),
+      this.renderMetricPlot('solved-count'),
+      this.renderMetricPlot('success-ratio', [0, 1]),
+      this.renderMetricPlot('solving-hours'),
+      this.renderTaskMetricPlot('solved-count'),
+      this.renderTaskMetricPlot('success-ratio', [0, 1]),
+      this.renderTaskMetricPlot('median-time'),
     ];
   }
 
