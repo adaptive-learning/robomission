@@ -300,12 +300,14 @@ ACCOUNT_EMAIL_VERIFICATION = 'none'
 SOCIALACCOUNT_ADAPTER = 'learn.social.SocialAccountAdapter'
 
 
-CRON_EVERYDAY_4AM = '* 4 * * *'
-CRONJOBS = [(
-    CRON_EVERYDAY_4AM,
-    'django.core.management.call_command',
-    ['compute_metrics'], {},
-    '>> {logfile} 2>&1'.format(logfile=MNG_LOGGING_FILE))]
+# Scheduled jobs
+EVERYDAY_4AM = '* 4 * * *'
+SATURDAY_3AM = '* 3 * * 6'
+REDIRECT_TO_MNG_LOG = '>> {logfile} 2>&1'.format(logfile=MNG_LOGGING_FILE)
+cronjob = lambda schedule, cmd: (schedule, [cmd], {}, REDIRECT_TO_MNG_LOG)
+CRONJOBS = [
+    cronjob(EVERYDAY_4AM, 'compute_metrics'),
+    cronjob(SATURDAY_3AM, 'export_data')]
 
 
 # Setup CORS headers for development.
