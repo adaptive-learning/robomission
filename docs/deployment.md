@@ -6,7 +6,7 @@ Deployment process has 3 steps:
 * production.
 
 
-## Adaptive Learning Server
+## Access to the Server
 
 To access the Adaptive Learning server and publish new versions:
 
@@ -29,13 +29,12 @@ To access the Adaptive Learning server and publish new versions:
 
 Purpose: test the new version in the setting which is as close as possible to the production environment.
 
-
 To publish a new version to the staging, run:
 ```
 git push staging
 ```
 
-Use the staging version running at https://staging.robomise.cz
+Use the staging version running at <https://staging.robomise.cz>
 to test that everything works as expected.
 
 
@@ -46,8 +45,19 @@ To publish the new version to the production, run:
 git push production
 ```
 
-The public URL is https://robomise.cz.
-<!-- (...) for Czech localization and https://en.robomise.cz/ for English localization. -->
+The public URL is <https://robomise.cz> for Czech version
+and <https://en.robomise.cz> for English version.
+
+
+## Setting Up New Server
+
+First, set up nginx, gunicorn, git and PostgreSQL,
+similarly [as on the AL server](<https://github.com/adaptive-learning/project-deployment>).
+After first `git push`, there are some additional manual steps:
+
+* `python backend/manage.py createsuperuser`
+* `make socialapps` (required for login via social apps)
+* `make schedule_jobs` (uses cron to schedule periodic jobs)
 
 
 ## Related Links
