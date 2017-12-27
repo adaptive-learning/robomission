@@ -10,6 +10,7 @@ dj-database-url==0.4.2
 Django==1.11.5
 django-allauth==0.34.0
 django-cors-headers==2.1.0
+django-crontab==0.7.1
 django-extensions==1.9.1
 django-filter==1.0.4
 django-lazysignup==1.1.2
@@ -50,11 +51,13 @@ nbformat==4.4.0
 notebook==5.1.0
 numpy==1.13.3
 oauthlib==2.0.6
+olefile==0.44
 pandas==0.20.3
 pandocfilters==1.4.2
 parso==0.1.0
 pexpect==4.2.1
 pickleshare==0.7.4
+Pillow==4.3.0
 prompt-toolkit==1.0.15
 ptyprocess==0.5.2
 py==1.4.34
