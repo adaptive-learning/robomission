@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_extensions',
+    'django_crontab',
     'rest_framework',
     'rest_framework.authtoken',
     'rest_auth',
@@ -180,6 +181,8 @@ if DEVELOPMENT:
 # --------------------------------------------------------------------------
 # Logging
 # --------------------------------------------------------------------------
+LOGGING_DIR = os.path.join(REPO_DIR, 'logs')
+MNG_LOGGING_FILE = os.path.join(LOGGING_DIR, 'management.log')
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -206,13 +209,19 @@ LOGGING = {
         'file': {
             'level': 'DEBUG' if DEBUG else 'INFO',
             'class': 'logging.FileHandler',
-            'filename': os.path.join(REPO_DIR, 'logs', 'robomission.log'),
+            'filename': os.path.join(LOGGING_DIR, 'robomission.log'),
             'formatter': 'simple',
         },
         'feedback.log': {
             'level': 'INFO',
             'class': 'logging.FileHandler',
-            'filename': os.path.join(REPO_DIR, 'logs', 'feedback.log'),
+            'filename': os.path.join(LOGGING_DIR, 'feedback.log'),
+            'formatter': 'simple',
+        },
+        'management.log': {
+            'level': 'DEBUG' if DEBUG else 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': MNG_LOGGING_FILE,
             'formatter': 'simple',
         },
         'mail_admins': {
@@ -250,6 +259,11 @@ LOGGING = {
             'level': 'DEBUG',
             'propagate': True,
         },
+        'monitoring.management': {
+            'handlers': ['management.log'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
     },
 }
 
@@ -284,6 +298,14 @@ AUTHENTICATION_BACKENDS = (
 
 ACCOUNT_EMAIL_VERIFICATION = 'none'
 SOCIALACCOUNT_ADAPTER = 'learn.social.SocialAccountAdapter'
+
+
+CRON_EVERYDAY_4AM = '* 4 * * *'
+CRONJOBS = [(
+    CRON_EVERYDAY_4AM,
+    'django.core.management.call_command',
+    ['compute_metrics'], {},
+    '>> {logfile} 2>&1'.format(logfile=MNG_LOGGING_FILE))]
 
 
 # Setup CORS headers for development.

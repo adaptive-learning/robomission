@@ -1,6 +1,10 @@
 from datetime import datetime
+import logging
 from django.core.management.base import BaseCommand
 from monitoring.metrics import make_metrics_generator
+
+
+logger = logging.getLogger(__name__)
 
 
 class Command(BaseCommand):
@@ -13,6 +17,7 @@ class Command(BaseCommand):
         )
 
     def handle(self, *args, **options):
+        logger.info('Management command called: compute_metrics')
         first_date = None
         if options['from']:
             first_date = datetime.strptime(options['from'], '%Y-%m-%d').date()

@@ -154,6 +154,11 @@ logs:
 	mkdir -p logs
 
 
+.PHONY: schedule_jobs
+schedule_jobs:
+	python backend/manage.py crontab add
+
+
 .PHONY: socialapps
 socialapps:
 	python backend/manage.py create_social_apps
