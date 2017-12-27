@@ -27,7 +27,8 @@ def get_yesterday():
 
 def to_timezone_aware(date, last_second=False):
     time_part = time.max if last_second else time.min
-    aware_datetime = datetime.combine(date, time_part, tzinfo=timezone.utc)
+    naive_datetime = datetime.combine(date, time_part)
+    aware_datetime = timezone.make_aware(naive_datetime, timezone=timezone.utc)
     return aware_datetime
 
 
