@@ -147,6 +147,11 @@ def generate_metrics(dates):
     time_range = (
         to_timezone_aware(min(dates[0], dates[-1] - timedelta(days=30))),
         to_timezone_aware(dates[-1], last_second=True))
+    # NOTE: If you add a new metric, make sure to prefetch requried data (such
+    # as task_session.snapshots or task_session.task) to avoid excess SQL
+    # queries). Currently, only a separate lists of TaskSessions and Tasks are
+    # enought for all computation.
+    # TODO: test that no SQL queries are generated in metrics generators
     task_sessions = list(TaskSession.objects.filter(end__date__range=time_range))
     # global metrics
     yield from generate_active_students_metric(task_sessions, dates)
@@ -176,8 +181,11 @@ def make_metrics_generator(first_date=None):
         group_metrics = Metric.objects.filter(group__isnull=False)
         recent_group_metrics = group_metrics.filter(time__gt=last_date-timedelta(days=10))
         recent_group_metrics.delete()
+        new_metrics = []
         for metric in generate_metrics(dates):
-            metric.save()
+            new_metrics.append(metric)
             yield metric
+        # All generated metris are stored to DB in a single SQL query.
+        Metric.objects.bulk_create(new_metrics)
 
     return generate_and_save_metrics, dates
