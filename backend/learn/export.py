@@ -132,7 +132,7 @@ class ProgramSnapshotPandasSerializer(PandasSerializer):
 
 
 class ProgramSnapshotsViewSet(PandasViewSet):
-    queryset = ProgramSnapshot.objects.all()
+    queryset = ProgramSnapshot.objects.select_related('task_session').all()
     serializer_class = ProgramSnapshotSerializer
     pandas_serializer_class = ProgramSnapshotPandasSerializer
 
