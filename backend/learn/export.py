@@ -132,7 +132,14 @@ class ProgramSnapshotPandasSerializer(PandasSerializer):
 
 
 class ProgramSnapshotsViewSet(PandasViewSet):
-    queryset = ProgramSnapshot.objects.select_related('task_session').all()
+    # Not only task session, but also its snapshots must be prefetched to avoid
+    # generating individual SQL queries for each serialed row. (The reason is
+    # in ProgramSnapshot.order which is a computed property and needs to know
+    # all snapshots of its task session.)
+    # TODO: Once the order is computed on save(), it is enought to
+    # select_related('task_session') (that is still needed for time_from
+    # start), although that could be computed on save() as well.
+    queryset = ProgramSnapshot.objects.prefetch_related('task_session__snapshots').all()
     serializer_class = ProgramSnapshotSerializer
     pandas_serializer_class = ProgramSnapshotPandasSerializer
 

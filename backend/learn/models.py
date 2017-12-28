@@ -179,11 +179,15 @@ class ProgramSnapshot(models.Model):
     def order(self):
         """Order of the snapshot for the granularity level and current task session.
         """
-        previous_snapshots = ProgramSnapshot.objects.filter(
-            task_session=self.task_session,
-            granularity=self.granularity,
-            time__lt=self.time)
-        order = previous_snapshots.count() + 1
+        # The filtering is done in plain Python to avoid excess SQL queries if
+        # the snapshots are already prefetched.
+        # TODO: Compute the order on save(). It's not going to change later, so
+        # there no consistency issues.
+        snapshots = self.task_session.snapshots.all()
+        n_previous_snapshots = sum(
+            1 for s in snapshots
+            if s.granularity == self.granularity and s.time < self.time)
+        order = n_previous_snapshots + 1
         return order
 
     @cached_property
