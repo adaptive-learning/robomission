@@ -4,6 +4,7 @@
 import os
 import dj_database_url
 
+from .cronjobs import get_cronjobs
 # Secret settings.
 try:
     from .settings_secret import (
@@ -301,15 +302,7 @@ SOCIALACCOUNT_ADAPTER = 'learn.social.SocialAccountAdapter'
 
 
 # Scheduled jobs
-EVERYDAY_4AM = '* 4 * * *'
-SATURDAY_3AM = '* 3 * * 6'
-REDIRECT_TO_MNG_LOG = '>> {logfile} 2>&1'.format(logfile=MNG_LOGGING_FILE)
-cronjob = lambda schedule, cmd: (
-    schedule, 'django.core.management.call_command',
-    [cmd], {}, REDIRECT_TO_MNG_LOG)
-CRONJOBS = [
-    cronjob(EVERYDAY_4AM, 'compute_metrics'),
-    cronjob(SATURDAY_3AM, 'export_data')]
+CRONJOBS = get_cronjobs(logfile=MNG_LOGGING_FILE)
 
 
 # Setup CORS headers for development.
