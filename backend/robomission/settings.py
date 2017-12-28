@@ -304,7 +304,9 @@ SOCIALACCOUNT_ADAPTER = 'learn.social.SocialAccountAdapter'
 EVERYDAY_4AM = '* 4 * * *'
 SATURDAY_3AM = '* 3 * * 6'
 REDIRECT_TO_MNG_LOG = '>> {logfile} 2>&1'.format(logfile=MNG_LOGGING_FILE)
-cronjob = lambda schedule, cmd: (schedule, [cmd], {}, REDIRECT_TO_MNG_LOG)
+cronjob = lambda schedule, cmd: (
+    schedule, 'django.core.management.call_command',
+    [cmd], {}, REDIRECT_TO_MNG_LOG)
 CRONJOBS = [
     cronjob(EVERYDAY_4AM, 'compute_metrics'),
     cronjob(SATURDAY_3AM, 'export_data')]
