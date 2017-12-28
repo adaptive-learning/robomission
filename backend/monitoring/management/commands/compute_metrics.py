@@ -1,13 +1,13 @@
 from datetime import datetime
 import logging
-from django.core.management.base import BaseCommand
+from mmc.mixins import BaseCommand as MonitoredCommand
 from monitoring.metrics import make_metrics_generator
 
 
 logger = logging.getLogger(__name__)
 
 
-class Command(BaseCommand):
+class Command(MonitoredCommand):
     help = "Compute all metrics since last date they were computed."
 
     def add_arguments(self, parser):

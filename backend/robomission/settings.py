@@ -65,6 +65,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.google',
     'lazysignup',
     'webpack_loader',
+    'mmc',
 ]
 
 # Site Id is `django.contrib.sites` setting required for `rest_auth.registration`

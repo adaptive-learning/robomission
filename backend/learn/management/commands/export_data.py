@@ -3,14 +3,14 @@ import logging
 from shutil import make_archive, copyfile
 import os
 from django.conf import settings
-from django.core.management.base import BaseCommand
+from mmc.mixins import BaseCommand as MonitoredCommand
 from rest_framework.test import APIClient
 
 
 logger = logging.getLogger(__name__)
 
 
-class Command(BaseCommand):
+class Command(MonitoredCommand):
     help = "Export all data for analysis into CSV files."
 
     entities_to_export = [
