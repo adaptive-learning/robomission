@@ -105,6 +105,15 @@ class MonitoringPage extends React.Component {
             />
             <Divider />
             <ListItem
+              href="/admin/mmc/mmclog/"
+              target="_blank"
+              rel="noreferrer noopener"
+              primaryText="Executed Management Commands"
+              leftIcon={<DBIcon />}
+              secondaryText="DB table containing logs about commands executed by cron."
+            />
+            <Divider />
+            <ListItem
               href="https://github.com/adaptive-learning/robomission/tree/master/tasks/"
               target="_blank"
               rel="noreferrer noopener"
@@ -258,6 +267,15 @@ class MonitoringPage extends React.Component {
               primaryText="Data Description"
               leftIcon={<CodeIcon />}
               secondaryText="[repo]//docs/data.ipynb"
+            />
+            <Divider />
+            <ListItem
+              href="https://github.com/adaptive-learning/robomission/blob/master/backend/monitoring/notebooks/analysis_template.ipynb"
+              target="_blank"
+              rel="noreferrer noopener"
+              primaryText="Data Investigation [template]"
+              leftIcon={<CodeIcon />}
+              secondaryText="[repo]//backend/monitoring/notebooks/analysis_template.ipynb"
             />
             <Divider />
           </List>
