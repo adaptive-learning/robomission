@@ -314,7 +314,7 @@ class MonitoringPage extends React.Component {
           <List>
             <Divider />
             <ListItem
-              href="http://localhost:8000/learn/admin/learn/feedback/"
+              href="/learn/admin/learn/feedback/"
               target="_blank"
               rel="noreferrer noopener"
               primaryText="Feedback from Users"
