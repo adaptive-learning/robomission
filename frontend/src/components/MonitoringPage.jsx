@@ -24,14 +24,22 @@ const cardStyle = {
   minWidth: 500,
   display: 'inline-block',
   backgroundColor: '#3b3b3b',
-}
+};
 
 
 const wideCardStyle = {
   ...cardStyle,
   width: 'auto',
   display: 'block',
-}
+};
+
+
+const chartMargin = {
+  top: 0,
+  bottom: 0,
+  left: -25,
+  right: 5,
+};
 
 
 class RotatedAxisTick extends React.Component {
@@ -59,7 +67,7 @@ class MonitoringPage extends React.Component {
       <Card style={cardStyle} key={name}>
         <CardTitle title={toTitle(name)} />
         <CardText>
-          <LineChart width={500} height={300} data={data}>
+          <LineChart width={480} height={300} margin={chartMargin} data={data}>
             <XAxis dataKey="time"/>
             <YAxis domain={domain} />
             <CartesianGrid strokeDasharray="3 3" />
@@ -77,7 +85,7 @@ class MonitoringPage extends React.Component {
       <Card style={wideCardStyle} key={`tasks-${name}`}>
         <CardTitle title={`${toTitle(name)} for Tasks`} />
         <CardText>
-          <BarChart width={1000} height={400} data={data}>
+          <BarChart width={1000} height={400} margin={chartMargin} data={data}>
             <CartesianGrid stroke="#ccc" strokeDasharray="3 3" vertical={false} />
             <XAxis dataKey="name" tick={<RotatedAxisTick />} interval={0} height={200} />
             <YAxis allowDecimals={false}  domain={domain}/>
