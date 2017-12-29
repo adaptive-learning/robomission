@@ -63,6 +63,7 @@ class MonitoringPage extends React.Component {
             <XAxis dataKey="time"/>
             <YAxis domain={domain} />
             <CartesianGrid strokeDasharray="3 3" />
+            <Tooltip labelStyle={{ color: '#555' }} />
             <Line type="monotone" dataKey="value" stroke={theme.palette.primary2Color} />
           </LineChart>
         </CardText>
