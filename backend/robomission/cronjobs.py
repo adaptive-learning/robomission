@@ -28,3 +28,16 @@ def get_cronjobs(logfile):
         cronjob(EVERYDAY_4AM, 'compute_metrics', logfile),
         cronjob(SATURDAY_3AM, 'export_data', logfile)]
     return cronjobs_list
+
+
+def get_crontab_command_prefix(on_staging=False, on_production=False):
+    """Return command that sets environment variables for cron.
+
+    Use this function in settings.py to set CRONTAB_COMMAND_PREFIX option.
+    """
+    assert not on_staging or not on_production
+    if on_staging:
+        return 'source /usr/local/share/.virtualenvs/flocs-staging/bin/postactivate &&'
+    if on_production:
+        return 'source /usr/local/share/.virtualenvs/flocs/bin/postactivate &&'
+    return ''

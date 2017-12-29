@@ -4,7 +4,7 @@
 import os
 import dj_database_url
 
-from .cronjobs import get_cronjobs
+from .cronjobs import get_cronjobs, get_crontab_command_prefix
 # Secret settings.
 try:
     from .settings_secret import (
@@ -303,6 +303,8 @@ SOCIALACCOUNT_ADAPTER = 'learn.social.SocialAccountAdapter'
 
 
 # Scheduled jobs
+CRONTAB_COMMAND_PREFIX = get_crontab_command_prefix(
+    on_staging=ON_STAGING, on_production=ON_PRODUCTION)
 CRONJOBS = get_cronjobs(logfile=MNG_LOGGING_FILE)
 
 
