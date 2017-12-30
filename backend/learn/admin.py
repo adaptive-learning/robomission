@@ -13,6 +13,11 @@ class AdminSite(admin.AdminSite):
 admin_site = AdminSite(name='robomission-admin')
 
 
+@admin.register(Block, site=admin_site)
+class BlockAdmin(admin.ModelAdmin):
+    search_fields = ['name']
+
+
 @admin.register(Level, site=admin_site)
 class LevelAdmin(admin.ModelAdmin):
     list_display = ('level', 'name', 'toolbox', 'credits')
@@ -58,12 +63,13 @@ class ActionAdmin(admin.ModelAdmin):
     list_filter = ('name',)
 
 
+@admin.register(Student, site=admin_site)
+class StudentAdmin(admin.ModelAdmin):
+    pass
+
+
 @admin.register(Feedback, site=admin_site)
 class FeedbackAdmin(admin.ModelAdmin):
     date_hierarchy = 'inserted'
     list_filter = ('inserted', 'url')
     search_fields = ['comment']
-
-
-admin_site.register(Block)
-admin_site.register(Student)
