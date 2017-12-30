@@ -1,8 +1,8 @@
 """Settings for periodics jobs which should be scheduled using cron.
 """
 
-EVERYDAY_4AM = '* 4 * * *'
-SATURDAY_3AM = '* 3 * * 6'
+EVERYDAY_4AM = '0 4 * * *'
+SATURDAY_3AM = '0 3 * * 6'
 
 
 def cronjob(schedule, cmd, logfile):
