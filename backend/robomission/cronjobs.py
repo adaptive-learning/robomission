@@ -37,7 +37,9 @@ def get_crontab_command_prefix(on_staging=False, on_production=False):
     """
     assert not on_staging or not on_production
     if on_staging:
-        return 'source /usr/local/share/.virtualenvs/flocs-staging/bin/postactivate &&'
+        return ('export ON_STAGING=True && '
+                'source /usr/local/share/.virtualenvs/flocs-staging/bin/postactivate &&')
     if on_production:
-        return 'source /usr/local/share/.virtualenvs/flocs/bin/postactivate &&'
+        return ('export ON_AL=True && '
+                'source /usr/local/share/.virtualenvs/flocs/bin/postactivate &&')
     return ''
