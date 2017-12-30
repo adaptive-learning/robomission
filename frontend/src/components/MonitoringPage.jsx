@@ -105,7 +105,7 @@ class MonitoringPage extends React.Component {
           <List>
             <Divider />
             <ListItem
-              href="/learn/admin/"
+              href="/admin/learn/"
               target="_blank"
               rel="noreferrer noopener"
               primaryText="DB Admin"
@@ -323,7 +323,7 @@ class MonitoringPage extends React.Component {
           <List>
             <Divider />
             <ListItem
-              href="/learn/admin/learn/feedback/"
+              href="/admin/learn/feedback/"
               target="_blank"
               rel="noreferrer noopener"
               primaryText="Feedback from Users"
