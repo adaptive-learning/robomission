@@ -49,7 +49,7 @@ class LazyRegisterSerializer(RegisterSerializer):
 class BlockSerializer(serializers.ModelSerializer):
     class Meta:
         model = Block
-        fields = ('url', 'id', 'name', 'order')
+        fields = ('id', 'name', 'order')
 
 
 class ToolboxSerializer(serializers.ModelSerializer):
@@ -57,7 +57,7 @@ class ToolboxSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Toolbox
-        fields = ('url', 'id', 'name', 'blocks')
+        fields = ('id', 'name', 'blocks')
 
 
 class LevelSerializer(serializers.ModelSerializer):
@@ -72,13 +72,13 @@ class LevelSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Level
-        fields = ('url', 'id', 'level', 'name', 'credits', 'toolbox', 'tasks')
+        fields = ('id', 'level', 'name', 'credits', 'toolbox', 'tasks')
 
 
 class InstructionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Instruction
-        fields = ('url', 'id', 'name')
+        fields = ('id', 'name')
 
 
 class TaskSerializer(serializers.ModelSerializer):
@@ -89,7 +89,7 @@ class TaskSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Task
-        fields = ('url', 'id', 'name', 'level', 'setting', 'solution')
+        fields = ('id', 'name', 'level', 'setting', 'solution')
 
 
 class WorldSerializer(serializers.Serializer):
@@ -157,25 +157,15 @@ class StudentSerializer(serializers.HyperlinkedModelSerializer):
         return get_level_value(world, student)
 
 
-class TaskSessionSerializer(serializers.HyperlinkedModelSerializer):
+class TaskSessionSerializer(serializers.ModelSerializer):
     class Meta:
         model = TaskSession
-        fields = ('url', 'id', 'student', 'task', 'solved', 'start', 'end')
+        fields = ('id', 'student', 'task', 'solved', 'start', 'end')
         read_only_fields = ('student', 'solved', 'start', 'end')
         # Student field is made read-only as it should be determined by the
         # current user and passed by TaskSessionsViewSet.perform_create().
-
-
-class ProgramSnapshotSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = ProgramSnapshot
-        fields = ('url', 'id', 'task_session', 'time', 'program', 'granularity', 'correct')
-
-
-class ActionSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = Action
-        fields = ('url', 'id', 'name', 'student', 'task', 'time', 'randomness', 'data')
+        # Note that the serializer is currently not used (but will if we will
+        # enable student to see history of their past attempts).
 
 
 class StudentInstructionSerializer(serializers.Serializer):

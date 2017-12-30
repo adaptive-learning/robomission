@@ -13,21 +13,11 @@ from rest_framework.decorators import list_route
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
 from learn.credits import get_active_credits, get_level_value
-from learn.models import Block, Toolbox, Level, Task, Instruction
-from learn.models import Action, Student, TaskSession, ProgramSnapshot
-from learn.models import Feedback, Classroom, Teacher
+from learn.models import TaskSession, Student, Feedback, Teacher
 from learn.permissions import IsOwnerOrAdmin, IsOwnerOrAdminOrReadOnly
 from learn.practice_overview import get_practice_overview, get_recommendation
-from learn.serializers import ActionSerializer
-from learn.serializers import BlockSerializer
-from learn.serializers import ToolboxSerializer
-from learn.serializers import LevelSerializer
-from learn.serializers import InstructionSerializer
 from learn.serializers import PracticeOverviewSerializer
-from learn.serializers import ProgramSnapshotSerializer
 from learn.serializers import StudentSerializer
-from learn.serializers import TaskSerializer
-from learn.serializers import TaskSessionSerializer
 from learn.serializers import UserSerializer
 from learn.serializers import WorldSerializer
 from learn.serializers import RunProgramResponseSerializer
@@ -98,31 +88,6 @@ class CurrentUserViewSet(viewsets.ViewSet):
 
     def list(self, request, format=None):
         return redirect(reverse('user-current', request=request))
-
-
-class BlockViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Block.objects.all()
-    serializer_class = BlockSerializer
-
-
-class ToolboxViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Toolbox.objects.all().prefetch_related('blocks')
-    serializer_class = ToolboxSerializer
-
-
-class LevelViewSet(viewsets.ReadOnlyModelViewSet):
-    serializer_class = LevelSerializer
-    queryset = Level.objects.select_related('toolbox').prefetch_related('tasks').all()
-
-
-class InstructionViewSet(viewsets.ReadOnlyModelViewSet):
-    serializer_class = InstructionSerializer
-    queryset = Instruction.objects.all()
-
-
-class TaskViewSet(viewsets.ReadOnlyModelViewSet):
-    serializer_class = TaskSerializer
-    queryset = Task.objects.all().select_related('level')
 
 
 class WorldViewSet(viewsets.ViewSet):
@@ -228,31 +193,6 @@ class StudentViewSet(viewsets.ReadOnlyModelViewSet):
 
     #def perform_create(self, serializer):
     #    serializer.save(user=self.request.user)
-
-
-class TaskSessionsViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = TaskSession.objects.all()
-    serializer_class = TaskSessionSerializer
-    permission_classes = (IsOwnerOrAdmin,)
-
-    def get_queryset(self):
-        user = self.request.user
-        if user and user.is_staff:
-            return TaskSession.objects.all()
-        return TaskSession.objects.filter(student=user.student)
-
-    def perform_create(self, serializer):
-        serializer.save(student=self.request.user.student)
-
-
-class ActionsViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Action.objects.all()
-    serializer_class = ActionSerializer
-
-
-class ProgramSnapshotsViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = ProgramSnapshot.objects.all()
-    serializer_class = ProgramSnapshotSerializer
 
 
 class FeedbackViewSet(viewsets.ModelViewSet):
