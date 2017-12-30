@@ -45,6 +45,7 @@ DEBUG = (not ON_PRODUCTION) or (os.getenv('DJANGO_DEBUG', "False") == "True")
 INSTALLED_APPS = [
     'learn.apps.LearnConfig',
     'monitoring.apps.MonitoringConfig',
+    'robomission.apps.RobomissionConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
