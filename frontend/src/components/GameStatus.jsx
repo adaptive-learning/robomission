@@ -25,7 +25,7 @@ export default function GameStatus({ taskId, level, solved, dead, diamonds, ener
         {solved && <span style={{ float: 'right' }}>&#10003;</span>}
         {dead && <span style={{ float: 'right' }}>&#10005;</span>}
       </span>
-      <span style={{ display: 'block' }}>
+      <span className="text" style={{ display: 'block' }}>
         { diamonds.total > 0 &&
           <span
             className="instructionable-diamonds-status"
