@@ -2,6 +2,7 @@
 """
 from django.conf import settings
 from django.shortcuts import redirect
+from rest_framework import permissions
 from rest_framework import serializers
 from rest_framework import viewsets
 from rest_pandas import PandasSerializer, PandasViewSet
@@ -18,6 +19,7 @@ class BlockSerializer(serializers.ModelSerializer):
 class BlockViewSet(PandasViewSet):
     queryset = Block.objects.all()
     serializer_class = BlockSerializer
+    permission_classes = (permissions.IsAdminUser,)
 
 
 class ToolboxSerializer(serializers.ModelSerializer):
@@ -31,6 +33,7 @@ class ToolboxSerializer(serializers.ModelSerializer):
 class ToolboxViewSet(PandasViewSet):
     queryset = Toolbox.objects.all().prefetch_related('blocks')
     serializer_class = ToolboxSerializer
+    permission_classes = (permissions.IsAdminUser,)
 
 
 class LevelSerializer(serializers.ModelSerializer):
@@ -51,6 +54,7 @@ class LevelSerializer(serializers.ModelSerializer):
 class LevelViewSet(PandasViewSet):
     queryset = Level.objects.all().select_related('toolbox').prefetch_related('tasks')
     serializer_class = LevelSerializer
+    permission_classes = (permissions.IsAdminUser,)
 
 
 class InstructionSerializer(serializers.ModelSerializer):
@@ -62,6 +66,7 @@ class InstructionSerializer(serializers.ModelSerializer):
 class InstructionViewSet(PandasViewSet):
     serializer_class = InstructionSerializer
     queryset = Instruction.objects.all()
+    permission_classes = (permissions.IsAdminUser,)
 
 
 class TaskSerializer(serializers.ModelSerializer):
@@ -78,6 +83,7 @@ class TaskSerializer(serializers.ModelSerializer):
 class TaskViewSet(PandasViewSet):
     queryset = Task.objects.all().select_related('level')
     serializer_class = TaskSerializer
+    permission_classes = (permissions.IsAdminUser,)
 
 
 class StudentSerializer(serializers.ModelSerializer):
@@ -95,6 +101,7 @@ class StudentSerializer(serializers.ModelSerializer):
 class StudentViewSet(PandasViewSet):
     queryset = Student.objects.prefetch_related('seen_instructions').all()
     serializer_class = StudentSerializer
+    permission_classes = (permissions.IsAdminUser,)
 
 
 class TaskSessionSerializer(serializers.ModelSerializer):
@@ -106,6 +113,7 @@ class TaskSessionSerializer(serializers.ModelSerializer):
 class TaskSessionsViewSet(PandasViewSet):
     queryset = TaskSession.objects.all()
     serializer_class = TaskSessionSerializer
+    permission_classes = (permissions.IsAdminUser,)
 
 
 class ProgramSnapshotSerializer(serializers.ModelSerializer):
@@ -142,6 +150,7 @@ class ProgramSnapshotsViewSet(PandasViewSet):
     queryset = ProgramSnapshot.objects.prefetch_related('task_session__snapshots').all()
     serializer_class = ProgramSnapshotSerializer
     pandas_serializer_class = ProgramSnapshotPandasSerializer
+    permission_classes = (permissions.IsAdminUser,)
 
 
 class ActionSerializer(serializers.ModelSerializer):
@@ -153,14 +162,17 @@ class ActionSerializer(serializers.ModelSerializer):
 class ActionsViewSet(PandasViewSet):
     queryset = Action.objects.all()
     serializer_class = ActionSerializer
+    permission_classes = (permissions.IsAdminUser,)
 
 
 class LatestBundleViewSet(viewsets.ViewSet):
     """Phony ViewSet to specify a custom entry in the rest API.
     """
-    # DRF can't derive DjangoModelPermissions for ViewSets without a queryset,
-    # so we need to explicitly define them.
-    permission_classes = ()
+    # Whole export API is only available to staff users, but the already
+    # exported files are avaible to everybody by direct URL to the media dir.
+    # Specifically the latest bundle can be downloaded by anybody at:
+    # `http://robomise.cz/media/exports/robomission-latest.zip`.
+    permission_classes = (permissions.IsAdminUser,)
 
     def list(self, request, format=None):
         bundle_url = '{media}exports/{bundle_name}'.format(

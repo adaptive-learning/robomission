@@ -1,5 +1,6 @@
 from datetime import timedelta
 from django.utils import timezone
+from rest_framework import permissions
 from rest_framework import viewsets
 from monitoring.models import Metric
 from monitoring.serializers import MetricSerializer
@@ -7,6 +8,7 @@ from monitoring.serializers import MetricSerializer
 
 class MetricViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = MetricSerializer
+    permission_classes = (permissions.IsAdminUser,)
 
     def get_queryset(self):
         n_days = int(self.request.query_params.get('days', 30))
