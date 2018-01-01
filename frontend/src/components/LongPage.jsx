@@ -12,6 +12,7 @@ class LongPage extends React.Component {
     const longPageStyle = {
       maxWidth: 1200,
       margin: '20px auto',
+      minHeight: '90vh',
       backgroundColor: muiTheme.palette.canvasColor,
     };
     return (
