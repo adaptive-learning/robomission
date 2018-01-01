@@ -4,12 +4,14 @@ import { setOpenMenu, toggleFeedbackModal } from '../actions';
 import Menu from '../components/Menu';
 import { getRecommendedTask } from '../selectors/practice';
 import { getMode } from '../selectors/app';
+import { getUser } from '../selectors/user';
 
 
 const getProps = state => ({
   mode: getMode(state),
   open: state.menu.open,
-  recommendedTask: getRecommendedTask(state)
+  recommendedTask: getRecommendedTask(state),
+  user: getUser(state),
 });
 
 const actionCreators = {
@@ -32,6 +34,7 @@ class MenuContainer extends React.Component {
         setOpen={this.setOpen}
         openFeedbackModal={this.openFeedbackModal}
         recommendedTask={this.props.recommendedTask}
+        user={this.props.user}
       />
   )}
 }

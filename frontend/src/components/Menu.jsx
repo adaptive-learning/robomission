@@ -10,9 +10,11 @@ import TaskIcon from 'material-ui/svg-icons/av/play-arrow';
 import TasksOverviewIcon from 'material-ui/svg-icons/image/view-comfy';
 import TaskEditorIcon from 'material-ui/svg-icons/action/note-add';
 import FeedbackIcon from 'material-ui/svg-icons/action/feedback';
+import EyeIcon from 'material-ui/svg-icons/image/remove-red-eye';
+import DBIcon from 'material-ui/svg-icons/device/storage';
 import { Link } from 'react-router-dom';
+import GHIcon from '../components/GitHubIcon';
 import Text from '../localization/Text';
-
 
 
 class Menu extends React.Component {
@@ -20,6 +22,48 @@ class Menu extends React.Component {
     super(props);
     this.setOpen = this.props.setOpen.bind(this);
     this.openFeedbackModal = this.props.openFeedbackModal.bind(this);
+  }
+
+  renderAdminMenu() {
+    if (!this.props.user.isStaff) {
+      return null;
+    }
+    return [
+      (<Divider key="divivider-admin" />),
+      (<Subheader key="subheader-admin" >Admin</Subheader>),
+      (
+        <MenuItem
+          value="admin"
+          key="admin"
+          leftIcon={<DBIcon />}
+          href="/admin/"
+          target="_blank"
+          rel="noreferrer noopener"
+        >
+          DB Admin
+        </MenuItem>
+      ), (
+        <MenuItem
+          value="monitoring"
+          key="monitoring"
+          leftIcon={<EyeIcon />}
+          containerElement={<Link to="/monitoring" />}
+        >
+          Monitoring
+        </MenuItem>
+      ), (
+        <MenuItem
+          value="github"
+          key="github"
+          leftIcon={<GHIcon />}
+          href="https://github.com/adaptive-learning/robomission"
+          target="_blank"
+          rel="noreferrer noopener"
+        >
+          Repo
+        </MenuItem>
+      ),
+    ];
   }
 
   render() {
@@ -87,6 +131,7 @@ class Menu extends React.Component {
           >
             <Text id="Feedback" />
           </MenuItem>
+          {this.renderAdminMenu()}
         </MaterialMenu>
       </Drawer>
     );
