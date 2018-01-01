@@ -18,7 +18,10 @@ function parseApiRoot(data) {
     // TODO: fix it to allow for data['current_user']
     currentUserUrl: `${API_PATH}/users/current/`, // relativizeUrl(data['current_user']),
     worldUrl: relativizeUrl(data['world']),
-    feedbackUrl: relativizeUrl(data['feedback']),
+
+    // Hack to make feedback work after it was moved under monitoring API.
+    // TODO(refactor): merge learn and monitoring API
+    feedbackUrl: '/monitoring/api/feedback/',
   }
 }
 

@@ -216,7 +216,7 @@ LOGGING = {
             'formatter': 'simple',
         },
         'feedback.log': {
-            'level': 'INFO',
+            'level': 'DEBUG' if DEBUG else 'INFO',
             'class': 'logging.FileHandler',
             'filename': os.path.join(LOGGING_DIR, 'feedback.log'),
             'formatter': 'simple',
@@ -257,7 +257,7 @@ LOGGING = {
             'level': 'DEBUG',
             'propagate': True,
         },
-        'learn.feedback': {
+        'monitoring.feedback': {
             'handlers': ['feedback.log'],
             'level': 'DEBUG',
             'propagate': True,

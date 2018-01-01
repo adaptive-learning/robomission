@@ -6,7 +6,7 @@ from rest_auth.registration.serializers import RegisterSerializer
 from learn.credits import get_active_credits, get_level_value
 from learn.models import Block, Toolbox, Level, Task, Instruction
 from learn.models import Action, ProgramSnapshot, Student, TaskSession
-from learn.models import Feedback, Teacher, Classroom
+from learn.models import Teacher, Classroom
 from learn.users import convert_lazy_user, is_initial_user
 from learn.world import get_world
 
@@ -204,10 +204,3 @@ class RunProgramResponseSerializer(serializers.Serializer):
     correct = serializers.BooleanField()
     progress = ProgressSerializer(required=False)
     recommendation = RecommendationSerializer(required=False)
-
-
-class FeedbackSerializer(serializers.ModelSerializer):
-    user = serializers.ReadOnlyField(source='user.pk')
-    class Meta:
-        model = Feedback
-        fields = ('id', 'user', 'email', 'comment', 'url')

@@ -2,7 +2,7 @@
 """
 from django.contrib import admin
 from learn.models import Block, Toolbox, Level, Task, Instruction, Student
-from learn.models import TaskSession, ProgramSnapshot, Action, Feedback
+from learn.models import TaskSession, ProgramSnapshot, Action
 
 
 @admin.register(Block)
@@ -58,10 +58,3 @@ class ActionAdmin(admin.ModelAdmin):
 @admin.register(Student)
 class StudentAdmin(admin.ModelAdmin):
     pass
-
-
-@admin.register(Feedback)
-class FeedbackAdmin(admin.ModelAdmin):
-    date_hierarchy = 'inserted'
-    list_filter = ('inserted', 'url')
-    search_fields = ['comment']

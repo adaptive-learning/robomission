@@ -100,7 +100,7 @@ allows you to send a link to the investigation
 [Errors]: https://groups.google.com/forum/#!forum/adaptive-programming-errors
 [settings.py]: ../backend/robomission/settings.py
 [Feedback]: https://groups.google.com/forum/#!forum/adaptive-programming
-[feedback.py]: ../backend/learn/feedback.py
+[feedback.py]: ../backend/monitoring/feedback.py
 [Google Analytics]: https://analytics.google.com/analytics/web/#embed/report-home/a81667720w121094822p126691725/
 [googleAnalytics.js]: ../frontend/src/sagas/googleAnalytics.js
 [models.py]: ../backend/monitoring/models.py

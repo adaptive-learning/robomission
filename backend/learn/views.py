@@ -6,14 +6,13 @@ from django.shortcuts import redirect
 from django.shortcuts import render
 from django.template.exceptions import TemplateDoesNotExist
 from django.views.decorators.csrf import ensure_csrf_cookie
-from rest_framework import permissions
 from rest_framework import viewsets
 from rest_framework.decorators import detail_route
 from rest_framework.decorators import list_route
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
 from learn.credits import get_active_credits, get_level_value
-from learn.models import TaskSession, Student, Feedback, Teacher
+from learn.models import TaskSession, Student, Teacher
 from learn.permissions import IsOwnerOrAdmin, IsOwnerOrAdminOrReadOnly
 from learn.practice_overview import get_practice_overview, get_recommendation
 from learn.serializers import PracticeOverviewSerializer
@@ -21,12 +20,10 @@ from learn.serializers import StudentSerializer
 from learn.serializers import UserSerializer
 from learn.serializers import WorldSerializer
 from learn.serializers import RunProgramResponseSerializer
-from learn.serializers import FeedbackSerializer
 from learn.serializers import TeacherSerializer
 from learn.users import get_or_fake_user, create_user_student
 from learn.world import get_world
 from learn import actions
-from learn import feedback
 
 
 @ensure_csrf_cookie
@@ -193,14 +190,3 @@ class StudentViewSet(viewsets.ReadOnlyModelViewSet):
 
     #def perform_create(self, serializer):
     #    serializer.save(user=self.request.user)
-
-
-class FeedbackViewSet(viewsets.ModelViewSet):
-    queryset = Feedback.objects.all()
-    serializer_class = FeedbackSerializer
-    permission_classes = (IsOwnerOrAdmin,)
-
-    def perform_create(self, serializer):
-        user = self.request.user if self.request.user.is_authenticated() else None
-        new_feedback = serializer.save(user=user)
-        feedback.log_and_send(new_feedback)

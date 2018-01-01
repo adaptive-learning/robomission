@@ -2,8 +2,21 @@ from datetime import timedelta
 from django.utils import timezone
 from rest_framework import permissions
 from rest_framework import viewsets
-from monitoring.models import Metric
-from monitoring.serializers import MetricSerializer
+from learn.permissions import IsOwnerOrAdmin
+from monitoring.models import Feedback, Metric
+from monitoring.serializers import FeedbackSerializer, MetricSerializer
+from monitoring import feedback
+
+
+class FeedbackViewSet(viewsets.ModelViewSet):
+    queryset = Feedback.objects.all()
+    serializer_class = FeedbackSerializer
+    permission_classes = (IsOwnerOrAdmin,)
+
+    def perform_create(self, serializer):
+        user = self.request.user if self.request.user.is_authenticated() else None
+        new_feedback = serializer.save(user=user)
+        feedback.log_and_send(new_feedback)
 
 
 class MetricViewSet(viewsets.ReadOnlyModelViewSet):
