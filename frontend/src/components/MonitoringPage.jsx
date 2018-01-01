@@ -339,12 +339,6 @@ class MonitoringPage extends React.Component {
 
   renderMetrics() {
     return [
-      this.renderAdminCard(),
-      this.renderExportCard(),
-      this.renderAnalyticsCard(),
-      this.renderDevelopmentCard(),
-      this.renderErrorsCard(),
-      this.renderFeedbackCard(),
       this.renderMetricPlot('active-students'),
       this.renderMetricPlot('solved-count'),
       this.renderMetricPlot('success-ratio', [0, 1]),
@@ -365,6 +359,12 @@ class MonitoringPage extends React.Component {
     };
     return (
       <div style={longPageContentStyle}>
+        {this.renderAdminCard()}
+        {this.renderExportCard()}
+        {this.renderAnalyticsCard()}
+        {this.renderDevelopmentCard()}
+        {this.renderErrorsCard()}
+        {this.renderFeedbackCard()}
         {metrics && this.renderMetrics()}
       </div>
     );
