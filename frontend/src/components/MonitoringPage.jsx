@@ -16,6 +16,7 @@ import {
 import GHIcon from '../components/GitHubIcon';
 import { toTitle } from '../utils/text';
 import { theme } from '../theme';
+import LongPage from '../components/LongPage';
 
 
 const cardStyle = {
@@ -350,15 +351,9 @@ class MonitoringPage extends React.Component {
   }
 
   render() {
-    const { metrics, muiTheme } = this.props;
-    // TODO: factor out longPageStyle (used in other pages as well)
-    const longPageContentStyle = {
-      maxWidth: 1200,
-      margin: '20px auto',
-      backgroundColor: muiTheme.palette.canvasColor,
-    };
+    const { metrics } = this.props;
     return (
-      <div style={longPageContentStyle}>
+      <LongPage>
         {this.renderAdminCard()}
         {this.renderExportCard()}
         {this.renderAnalyticsCard()}
@@ -366,7 +361,7 @@ class MonitoringPage extends React.Component {
         {this.renderErrorsCard()}
         {this.renderFeedbackCard()}
         {metrics && this.renderMetrics()}
-      </div>
+      </LongPage>
     );
   }
 }
