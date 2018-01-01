@@ -9,6 +9,7 @@
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-env": "^1.6.1",
     "js-interpreter": "github:effa/JS-Interpreter#f7afaf9d4862f85394bf4860f8ba8e57f67fbdf2",
+    "jupyter-react-js": "^0.5.1",
     "material-ui": "^0.19.4",
     "node-blockly": "^1.0.29",
     "normalize.css": "^7.0.0",
@@ -39,6 +40,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
+    "jupyter-build": "webpack -p --config jupyter.webpack.config.js",
     "storybook": "start-storybook -p 9009 -s public",
     "build-storybook": "build-storybook -s public"
   },
