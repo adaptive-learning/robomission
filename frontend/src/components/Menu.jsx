@@ -15,6 +15,8 @@ import DBIcon from 'material-ui/svg-icons/device/storage';
 import { Link } from 'react-router-dom';
 import GHIcon from '../components/GitHubIcon';
 import Text from '../localization/Text';
+//import logoMenuPath from '../images/logo-menu.png';
+import Image from'../components/Image';
 
 
 class Menu extends React.Component {
@@ -77,11 +79,7 @@ class Menu extends React.Component {
         open={this.props.open}
         onRequestChange={this.setOpen}
       >
-        {/*
-        <MenuItem>Log in</MenuItem>
-        <MenuItem>Sign up</MenuItem>
-        <Divider />
-        */}
+        <Image imageId="menu-banner" style={{ width: "100%", marginBottom: -12 }} />
         <MaterialMenu
           value={this.props.mode}
           autoWidth={false}
@@ -91,6 +89,7 @@ class Menu extends React.Component {
         { /* Note that disabling auto focus on menu is important to avoid
         material-ui bug of menu steeling focus to text fields when typing, see
         https://github.com/callemall/material-ui/issues/4387 */ }
+          <Divider style={{ marginTop: 0 }} />
           <MenuItem
             value="intro"
             leftIcon={<HomeIcon />}
@@ -113,9 +112,6 @@ class Menu extends React.Component {
             <Text id="Tasks" />
           </MenuItem>
           <Divider />
-          <Subheader>
-            <Text id="For hackers" />
-          </Subheader>
           <MenuItem
             value="task-editor"
             leftIcon={<TaskEditorIcon />}
@@ -123,7 +119,6 @@ class Menu extends React.Component {
           >
             <Text id="Task Editor" />
           </MenuItem>
-          <Divider />
           <MenuItem
             value="feedback"
             leftIcon={<FeedbackIcon />}
