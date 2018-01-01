@@ -257,6 +257,16 @@ LOGGING = {
             'level': 'DEBUG',
             'propagate': True,
         },
+        'learn.management': {
+            'handlers': ['management.log'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'monitoring': {
+            'handlers': ['console', 'file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
         'monitoring.feedback': {
             'handlers': ['feedback.log'],
             'level': 'DEBUG',
