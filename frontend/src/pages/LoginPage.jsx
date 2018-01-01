@@ -3,6 +3,7 @@ import { Redirect, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { toggleLoginModal } from '../actions';
 import { getUser } from '../selectors/user';
+import LongPage from '../components/LongPage';
 
 
 const getProps = state => ({
@@ -11,13 +12,6 @@ const getProps = state => ({
 
 const actionCreators = {
   toggleLoginModal,
-};
-
-
-// TODO: factor out longPageStyle (used in other pages as well)
-const longPageContentStyle = {
-  maxWidth: 1200,
-  margin: '20px auto',
 };
 
 
@@ -35,7 +29,7 @@ class LoginPage extends React.Component {
     const { from } = this.props.location.state || { from: { pathname: '/' } };
     if (user.isLazy) {
       return (
-        <div style={longPageContentStyle} />
+        <LongPage />
       );
     }
     return (

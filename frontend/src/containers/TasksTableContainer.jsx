@@ -5,6 +5,7 @@ import TasksTable from '../components/TasksTable';
 import { fetchPracticeOverview } from '../actions';
 import { isPracticeOverviewInvalidated } from '../selectors/app';
 import { getPracticeOverviewUrl } from '../selectors/student';
+import LongPage from '../components/LongPage';
 
 
 function getProps(state) {
@@ -46,20 +47,14 @@ class TasksTableContainer extends React.Component {
       tasks: categories[categoryId].tasks.map(id => tasks[id]),
     }));
 
-    // TODO: move styling to a component
-    const longPageContentStyle = {
-      maxWidth: 1200,
-      margin: '20px auto',
-      backgroundColor: this.props.muiTheme.palette.canvasColor,
-    };
     return (
-      <div style={longPageContentStyle}>
+      <LongPage>
         <TasksTable
           tasksInCategories={tasksInCategories}
           urlBase="/task/"
           recommendation={this.props.recommendation}
         />
-      </div>
+      </LongPage>
     );
   }
 }
