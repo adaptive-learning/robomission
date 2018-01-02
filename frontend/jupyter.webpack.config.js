@@ -5,12 +5,21 @@ var version = require('./package.json').version;
 var path = require('path');
 
 
+// The path for all media, such as css and images. It can be arbitrary,
+// but it must match `data_files` setting in `setup.py`.
+var mediaPath = 'media/[name].[ext]';
+
+
 module.exports = [
   {
     entry: './src/jupyter.js',
     output: {
         filename: 'index.js',
-        path: path.join(__dirname, '..',  'jupyter', 'static'),
+        path: path.join(__dirname, '..',  'visualization', 'static'),
+        // PublicPath gets prepended to all asset requests.
+        // It is dictated by jupyter, which serves extensions files from
+        // /nbextensions/<extension-name>/
+        publicPath: '/nbextensions/visualization/',
         libraryTarget: 'umd'
     },
     module: {
@@ -28,7 +37,7 @@ module.exports = [
               loader: require.resolve('url-loader'),
               options: {
                 limit: 10000,
-                name: 'media/[name].[hash:8].[ext]',
+                name: mediaPath,
               },
             },
             // Process JS with Babel.
@@ -43,10 +52,8 @@ module.exports = [
                 plugins: ['transform-object-rest-spread'],
               },
             },
-            // "file" loader makes sure assets end up in the `build` folder.
-            // When you `import` an asset, you get its filename.
-            // This loader doesn't use a "test" so it will catch all modules
-            // that fall through the other loaders.
+            // The file loader loader doesn't use a "test" so it will catch all
+            // modules that fall through the other loaders.
             {
               loader: require.resolve('file-loader'),
               // Exclude `js` files to keep "css" loader working as it injects
@@ -55,7 +62,7 @@ module.exports = [
               // by webpacks internal loaders.
               exclude: [/\.js$/, /\.html$/, /\.json$/],
               options: {
-                name: 'media/[name].[hash:8].[ext]',
+                name: mediaPath,
               },
             },
             // ** STOP ** Are you adding a new loader?
