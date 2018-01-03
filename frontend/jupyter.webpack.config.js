@@ -14,13 +14,17 @@ module.exports = [
   {
     entry: './src/jupyter.js',
     output: {
-        filename: 'index.js',
-        path: path.join(__dirname, '..',  'visualization', 'static'),
-        // PublicPath gets prepended to all asset requests.
-        // It is dictated by jupyter, which serves extensions files from
-        // /nbextensions/<extension-name>/
-        publicPath: '/nbextensions/visualization/',
-        libraryTarget: 'umd'
+      filename: 'index.js',
+      path: path.join(__dirname, '..',  'visualization', 'static'),
+      // PublicPath gets prepended to all asset requests.
+      // It is dictated by jupyter, which serves extensions files from
+      // /nbextensions/<extension-name>/
+      publicPath: '/nbextensions/visualization/',
+      libraryTarget: 'umd'
+    },
+    resolve: {
+      // Allow to import .js/.jsx/.json files without specifying the extension
+      extensions: ['.js', '.jsx', '.json']
     },
     module: {
       strictExportPresence: true,

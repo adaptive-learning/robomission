@@ -162,3 +162,9 @@ schedule_jobs:
 .PHONY: socialapps
 socialapps:
 	python backend/manage.py create_social_apps
+
+
+.PHONY: jupyter_components
+jupyter_components:
+	cd frontend && npm run jupyter-build
+	python setup.py develop
