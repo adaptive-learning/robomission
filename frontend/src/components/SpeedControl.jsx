@@ -27,7 +27,7 @@ class SpeedControl extends React.Component {
 
   render() {
     return (
-      <div style={{ marginTop: 15 }}>
+      <div className="text" style={{ marginTop: 15 }}>
         <Image
           imageId="speedometer"
           style={{ height: 35, marginRight: 10, float: 'left' }} />
