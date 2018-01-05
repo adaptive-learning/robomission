@@ -15,12 +15,12 @@ class develop(_develop):
             overwrite=True,
             user=False,
             sys_prefix=True,  # to install it inside virtualenv
-            destination="visualization")
+            destination="robomission")
         cm = ConfigManager()
         cm.update('notebook', {"load_extensions": {"visualization/index": True } })
 
 setup(
-    name='visualization',
+    name='robomission',
     cmdclass={'develop': develop},
     version='0.0.1',
     description='Visualization components for RoboMission',
@@ -28,11 +28,12 @@ setup(
     author='Tomas Effenberger',
     author_email='xeffenberger@gmail.com',
     license='MIT',
-    packages=['visualization'],
+    package_dir={'robomission': ''},
+    packages=['robomission.visualization'],
     zip_safe=False,
     data_files=[
-        ('share/jupyter/nbextensions/visualization', ['visualization/static/index.js']),
-        ('share/jupyter/nbextensions/visualization/media', ['visualization/static/media/*'])
+        ('share/jupyter/nbextensions/robomission', ['visualization/static/index.js']),
+        ('share/jupyter/nbextensions/robomission/media', ['visualization/static/media/*'])
     ],
     install_requires=[
         "ipython",

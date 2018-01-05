@@ -19,7 +19,7 @@ module.exports = [
       // PublicPath gets prepended to all asset requests.
       // It is dictated by jupyter, which serves extensions files from
       // /nbextensions/<extension-name>/
-      publicPath: '/nbextensions/visualization/',
+      publicPath: '/nbextensions/robomission/',
       libraryTarget: 'umd'
     },
     resolve: {
