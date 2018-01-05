@@ -21,9 +21,12 @@ const defaultProps = {
 };
 
 class SpeedControl extends React.Component {
-  handleChange = (event, value) => {
-    this.props.onChange(value);
-  };
+  constructor(props) {
+    super(props);
+    this.handleChange = (event, value) => {
+      this.props.onChange(value);
+    };
+  }
 
   render() {
     return (
