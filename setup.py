@@ -1,10 +1,11 @@
+from glob import glob
+import os
 from setuptools import setup
 from setuptools.command.develop import develop as _develop
 from notebook.nbextensions import install_nbextension
 from notebook.services.config import ConfigManager
-import os
 
-extension_dir = os.path.join(os.path.dirname(__file__), "visualization", "static")
+extension_dir = os.path.join(os.path.dirname(__file__), "robomission", "static")
 
 class develop(_develop):
     def run(self):
@@ -17,23 +18,23 @@ class develop(_develop):
             sys_prefix=True,  # to install it inside virtualenv
             destination="robomission")
         cm = ConfigManager()
-        cm.update('notebook', {"load_extensions": {"visualization/index": True } })
+        cm.update('notebook', {"load_extensions": {"robomission/index": True } })
 
 setup(
     name='robomission',
     cmdclass={'develop': develop},
-    version='0.0.1',
+    version='0.0.4',
     description='Visualization components for RoboMission',
     url='https://github.com/adaptive-learning/robomission',
     author='Tomas Effenberger',
     author_email='xeffenberger@gmail.com',
     license='MIT',
-    package_dir={'robomission': ''},
-    packages=['robomission.visualization'],
+    packages=['robomission'],
     zip_safe=False,
+    include_package_data=True,  # specified in MANIFEST.in
     data_files=[
-        ('share/jupyter/nbextensions/robomission', ['visualization/static/index.js']),
-        ('share/jupyter/nbextensions/robomission/media', ['visualization/static/media/*'])
+        ('share/jupyter/nbextensions/robomission', ['robomission/static/index.js']),
+        ('share/jupyter/nbextensions/robomission/media', glob('robomission/static/media/*'))
     ],
     install_requires=[
         "ipython",

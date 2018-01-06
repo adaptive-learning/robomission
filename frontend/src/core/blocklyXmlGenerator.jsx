@@ -1,11 +1,12 @@
 export function generateBlocklyXml(roboAst) {
-  return `
+  const blocklyXml = `
     <xml xmlns="http://www.w3.org/1999/xhtml">
       <block type="start" deletable="false" x="210" y="10">
       ${generateNextBlocksIfPresent(roboAst.body)}
       </block>
     </xml>
   `;
+  return blocklyXml;
 }
 
 

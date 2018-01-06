@@ -168,3 +168,9 @@ socialapps:
 jupyter_components:
 	cd frontend && npm run jupyter-build
 	python setup.py develop
+
+
+.PHONY: upload_package
+upload_package:
+	python setup.py sdist
+	twine upload dist/*

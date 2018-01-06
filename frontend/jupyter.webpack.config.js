@@ -15,7 +15,7 @@ module.exports = [
     entry: './src/jupyter.js',
     output: {
       filename: 'index.js',
-      path: path.join(__dirname, '..',  'visualization', 'static'),
+      path: path.join(__dirname, '..',  'robomission', 'static'),
       // PublicPath gets prepended to all asset requests.
       // It is dictated by jupyter, which serves extensions files from
       // /nbextensions/<extension-name>/
