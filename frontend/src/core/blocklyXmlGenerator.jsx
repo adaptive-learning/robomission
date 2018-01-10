@@ -1,3 +1,9 @@
+/**
+ * Conversion from RoboAST into RoboBlocksXml.
+ *
+ * To see how the BlocklyXml is supposed to look use:
+ * https://blockly-demo.appspot.com/static/demos/code/index.html
+ */
 export function generateBlocklyXml(roboAst) {
   const blocklyXml = `
     <xml xmlns="http://www.w3.org/1999/xhtml">
@@ -75,7 +81,7 @@ function generateRepeatBlock({ count, body }, nextNodes) {
 function generateWhileBlock({ test, body }, nextNodes) {
   return `
     <block type="while">
-      ${generateTestValueIfPresent(test)};
+      ${generateTestValueIfPresent(test)}
       <statement name="body">${generateSequence(body)}</statement>
       ${generateNextBlocksIfPresent(nextNodes)}
     </block>
@@ -89,7 +95,7 @@ function generateIfBlock({ test, body, orelse }, nextNodes) {
   }
   return `
     <block type="if">
-      ${generateTestValueIfPresent(test)};
+      ${generateTestValueIfPresent(test)}
       <statement name="body">${generateSequence(body)}</statement>
       ${generateNextBlocksIfPresent(nextNodes)}
     </block>
@@ -103,7 +109,7 @@ function generateIfElseBlock({ test, body, orelse }, nextNodes) {
   }
   return `
     <block type="if-else">
-      ${generateTestValueIfPresent(test)};
+      ${generateTestValueIfPresent(test)}
       <statement name="body">${generateSequence(body)}</statement>
       <statement name="body-else">${generateSequence(orelse.statement.body)}</statement>
       ${generateNextBlocksIfPresent(nextNodes)}
@@ -133,14 +139,23 @@ function generateTestValueIfPresent(test) {
 
 
 function generateTest(node) {
+  let testBlock = null;
   switch (node.head) {
     case 'color':
-      return generateColorBlock(node);
+      testBlock =  generateColorBlock(node);
+      break;
     case 'position':
-      return generatePositionBlock(node);
+      testBlock = generatePositionBlock(node);
+      break;
     default:
       throw new Error(`Unknown node type: ${node.head}`);
   }
+  // Name tag must match with the while/if block definition in ./blocks.js
+  return `
+    <value name="test">
+      ${testBlock}
+    </value>
+  `;
 }
 
 
