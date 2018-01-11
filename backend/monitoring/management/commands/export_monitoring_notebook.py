@@ -1,6 +1,7 @@
 import logging
 import re
 import os
+from shutil import copyfile
 from django.conf import settings
 from mmc.mixins import BaseCommand as MonitoredCommand
 import nbformat
@@ -40,12 +41,15 @@ def run_notebook(notebook):
     ep.preprocess(notebook, {'metadata': {'path': path}})
 
 
-def export_notebook_to_html(notebook, datestamp):
+def export_notebook_to_html(notebook, datestamp, mark_as_latest=True):
     html_exporter = HTMLExporter()
     html, _resources = html_exporter.from_notebook_node(notebook)
     output_path = get_monitoring_notebook_output_path(datestamp, ext='html')
     with open(output_path, 'wt') as outfile:
         outfile.write(html)
+    if mark_as_latest:
+        latest_notebook_path = get_monitoring_notebook_output_path('latest', ext='html')
+        copyfile(output_path, latest_notebook_path)
 
 
 def save_notebook(notebook, datestamp):
@@ -67,5 +71,4 @@ class Command(MonitoredCommand):
         update_datestamp(notebook, datestamp)
         run_notebook(notebook)
         save_notebook(notebook, datestamp)
-        export_notebook_to_html(notebook, datestamp)
-
+        export_notebook_to_html(notebook, datestamp, mark_as_latest=True)
