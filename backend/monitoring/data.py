@@ -16,7 +16,7 @@ def get_latest_bundle_url():
 
 
 def get_cache_dir(datestamp=None):
-    path = os.path.join(settings.REPO_DIR, 'backend', 'monitoring', '.data')
+    path = settings.PROD_CACHE_DIR
     os.makedirs(path, exist_ok=True)
     if datestamp:
         path = os.path.join(path, 'robomission-' + datestamp)
@@ -34,6 +34,10 @@ def get_available_datestamps():
     bundle_names = os.listdir(cache_dir)  # they include "robomission-" prefix
     datestamps = [name.split('-', 1)[1] for name in bundle_names]
     return datestamps
+
+
+def get_last_available_datestamp():
+    return max(get_available_datestamps())
 
 
 def load_csv(dirpath, name):
@@ -109,7 +113,7 @@ def get_production_data(datestamp, fetch=True):
     available_datestamps = get_available_datestamps()
     if datestamp not in available_datestamps:
         fetch_latest_bundle_if_possible(datestamp, fetch)
-        new_datestamp = max(get_available_datestamps())
+        new_datestamp = get_last_available_datestamp()
         if new_datestamp != datestamp:
             raise ValueError('Change datestamp to: ' + new_datestamp)
     data = load_data_from_cache(datestamp)

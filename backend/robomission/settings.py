@@ -34,8 +34,9 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTOCOL', 'https')
 ALLOWED_HOSTS = ['.robomise.cz', '.localhost', '127.0.0.1', 'testserver']
 
 
+ON_SERVER = os.getenv('ON_AL', "False") == "True"
 ON_STAGING = os.getenv('ON_STAGING', "False") == "True"
-ON_PRODUCTION = os.getenv('ON_AL', "False") == "True" and not ON_STAGING
+ON_PRODUCTION = ON_SERVER and not ON_STAGING
 DEVELOPMENT = not ON_STAGING and not ON_PRODUCTION
 DEBUG = (not ON_PRODUCTION) or (os.getenv('DJANGO_DEBUG', "False") == "True")
 
@@ -161,6 +162,7 @@ SERVER_DIR = os.path.join(REPO_DIR, '.server') if DEVELOPMENT else os.path.join(
 MEDIA_ROOT = os.path.join(SERVER_DIR, 'media')
 MEDIA_URL = '/media/'
 EXPORTS_DIR = os.path.join(MEDIA_ROOT, 'exports')
+PROD_CACHE_DIR = EXPORTS_DIR if ON_SERVER else os.path.join(REPO_DIR, '.prodcache')
 EXPORT_BUNDLE_NAME = 'robomission-latest.zip'
 
 # --------------------------------------------------------------------------
