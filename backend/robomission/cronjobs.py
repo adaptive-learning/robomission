@@ -1,8 +1,9 @@
 """Settings for periodics jobs which should be scheduled using cron.
 """
 
-EVERYDAY_4AM = '0 4 * * *'
+EVERYDAY_2AM = '0 2 * * *'
 SATURDAY_3AM = '0 3 * * 6'
+SATURDAY_4AM = '0 4 * * 6'
 
 
 def cronjob(schedule, cmd, logfile):
@@ -25,8 +26,9 @@ def get_cronjobs(logfile):
     ```
     """
     cronjobs_list = [
-        cronjob(EVERYDAY_4AM, 'compute_metrics', logfile),
-        cronjob(SATURDAY_3AM, 'export_data', logfile)]
+        cronjob(EVERYDAY_2AM, 'compute_metrics', logfile),
+        cronjob(SATURDAY_3AM, 'export_data', logfile),
+        cronjob(SATURDAY_4AM, 'export_monitoring_notebook', logfile)]
     return cronjobs_list
 
 
