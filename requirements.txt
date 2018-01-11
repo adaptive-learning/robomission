@@ -60,7 +60,6 @@ parso==0.1.0
 pexpect==4.2.1
 pickleshare==0.7.4
 Pillow==4.3.0
-pkginfo==1.4.1
 prompt-toolkit==1.0.15
 ptyprocess==0.5.2
 py==1.4.34
@@ -78,7 +77,6 @@ pyzmq==16.0.2
 qtconsole==4.3.1
 requests==2.18.4
 requests-oauthlib==0.8.0
-requests-toolbelt==0.8.0
 rest-pandas==1.0.0
 scipy==1.0.0
 seaborn==0.8.1
@@ -87,9 +85,7 @@ six==1.11.0
 terminado==0.6
 testpath==0.3.1
 tornado==4.5.2
-tqdm==4.19.5
 traitlets==4.3.2
-twine==1.9.1
 urllib3==1.22
 wcwidth==0.1.7
 webencodings==0.5.1
