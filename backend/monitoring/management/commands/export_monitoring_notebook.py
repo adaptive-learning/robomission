@@ -4,6 +4,7 @@ import os
 from django.conf import settings
 from mmc.mixins import BaseCommand as MonitoredCommand
 import nbformat
+from nbconvert import HTMLExporter
 from nbconvert.preprocessors import ExecutePreprocessor
 import monitoring.data
 
@@ -18,10 +19,17 @@ def get_monitoring_notebook_template_path():
     return path
 
 
-def get_monitoring_notebook_output_path(datestamp):
-    notebook_name = 'monitoring_{datestamp}.ipynb'.format(datestamp=datestamp)
+def get_monitoring_notebook_output_path(datestamp, ext='ipynb'):
+    notebook_name = 'monitoring_{datestamp}.{ext}'.format(
+        datestamp=datestamp, ext=ext)
     path = os.path.join(settings.EXPORTS_DIR, notebook_name)
     return path
+
+
+def update_datestamp(notebook, new_datestamp):
+    for cell in notebook['cells']:
+        if cell['cell_type'] in {'code', 'markdown'}:
+            cell['source'] = re.sub(r'\d{4}-\d{2}-\d{2}', new_datestamp, cell['source'])
 
 
 def run_notebook(notebook):
@@ -32,11 +40,19 @@ def run_notebook(notebook):
     ep.preprocess(notebook, {'metadata': {'path': path}})
 
 
-def update_datestamp(notebook, new_datestamp):
-    for cell in notebook['cells']:
-        if cell['cell_type'] in {'code', 'markdown'}:
-            cell['source'] = re.sub(r'\d{4}-\d{2}-\d{2}', new_datestamp, cell['source'])
+def export_notebook_to_html(notebook, datestamp):
+    html_exporter = HTMLExporter()
+    html, _resources = html_exporter.from_notebook_node(notebook)
+    output_path = get_monitoring_notebook_output_path(datestamp, ext='html')
+    with open(output_path, 'wt') as outfile:
+        outfile.write(html)
 
+
+def save_notebook(notebook, datestamp):
+    output_path = get_monitoring_notebook_output_path(datestamp)
+    with open(output_path, 'wt') as outfile:
+        nbformat.write(notebook, outfile)
+    logger.info('New monitoring notebook stored at: ' + output_path)
 
 class Command(MonitoredCommand):
     help = "Create a new monitoring notebook and put it into /media/exports'"
@@ -50,7 +66,6 @@ class Command(MonitoredCommand):
         datestamp = monitoring.data.get_last_available_datestamp()
         update_datestamp(notebook, datestamp)
         run_notebook(notebook)
-        output_path = get_monitoring_notebook_output_path(datestamp)
-        with open(output_path, 'wt') as outfile:
-            nbformat.write(notebook, outfile)
-        logger.info('Done. New monitoring notebook stored at: ' + output_path)
+        save_notebook(notebook, datestamp)
+        export_notebook_to_html(notebook, datestamp)
+
