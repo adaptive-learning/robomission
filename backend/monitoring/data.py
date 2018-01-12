@@ -2,6 +2,7 @@
 """
 from datetime import datetime
 import io
+import re
 import os
 from zipfile import ZipFile
 
@@ -31,8 +32,13 @@ def get_csv_path(dirpath, name):
 
 def get_available_datestamps():
     cache_dir = get_cache_dir()
-    bundle_names = os.listdir(cache_dir)  # they include "robomission-" prefix
-    datestamps = [name.split('-', 1)[1] for name in bundle_names]
+    bundle_names = os.listdir(cache_dir)
+    datestamps = []
+    for name in bundle_names:
+        match = re.match(r'robomission-(\d{4}-\d{2}-\d{2})', name)
+        if match:
+            datestamp = match.group(1)
+            datestamps.append(datestamp)
     return datestamps
 
 
