@@ -5,6 +5,7 @@ import os
 from django.conf import settings
 from mmc.mixins import BaseCommand as MonitoredCommand
 from rest_framework.test import APIClient
+import learn.export
 
 
 logger = logging.getLogger(__name__)
@@ -14,15 +15,15 @@ class Command(MonitoredCommand):
     help = "Export all data for analysis into CSV files."
 
     entities_to_export = [
-        'blocks',
-        'toolboxes',
-        'levels',
-        'instructions',
-        'tasks',
-        'students',
-        'task_sessions',
-        'program_snapshots',
-        'actions',
+        ('blocks', learn.export.BlockViewSet),
+        ('toolboxes', learn.export.ToolboxViewSet),
+        ('levels', learn.export.LevelViewSet),
+        ('instructions', learn.export.InstructionViewSet),
+        ('tasks', learn.export.TaskViewSet),
+        ('students', learn.export.StudentViewSet),
+        ('task_sessions', learn.export.TaskSessionsViewSet),
+        ('program_snapshots', learn.export.ProgramSnapshotsViewSet),
+        ('actions', learn.export.ActionsViewSet),
     ]
 
     def handle(self, *args, **options):
@@ -33,22 +34,19 @@ class Command(MonitoredCommand):
         full_dirpath = os.path.join(settings.EXPORTS_DIR, dirname, '')
         self.stdout.write('Exporting entities to {path}'.format(path=full_dirpath))
         os.makedirs(full_dirpath, exist_ok=True)
-        for entity_name in self.entities_to_export:
-            self.export_entity(entity_name, full_dirpath)
+        for entity_name, viewset_class in self.entities_to_export:
+            self.export_entity(entity_name, viewset_class, full_dirpath)
         bundle_path = self.zip_bundle(full_dirpath)
         self.mark_zip_bundle_as_latest(bundle_path)
 
-    def export_entity(self, entity_name, dirpath):
+    def export_entity(self, entity_name, viewset_class, dirpath):
         file_name = entity_name + '.csv'
         file_path = os.path.join(dirpath, file_name)
         self.stdout.write(
             '-> exporting {entity} as {file_name}'
             .format(entity=entity_name, file_name=file_name))
-        # TODO: Create dataframes directly without url client, then use df.to_csv(path)
-        client = APIClient()
-        data = client.get('/learn/export/current/' + file_name).content.decode('utf-8')
-        with open(file_path, 'w') as csvfile:
-            csvfile.write(data)
+        df = viewset_class().get_dataframe()
+        df.to_csv(file_path)
 
     def zip_bundle(self, dirpath):
         # shutil.make_archive needs bundle output path without ".zip" as the

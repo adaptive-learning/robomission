@@ -10,16 +10,35 @@ from learn.models import Block, Toolbox, Level, Task, Instruction
 from learn.models import Action, Student, TaskSession, ProgramSnapshot
 
 
+class ExportViewSet(PandasViewSet):
+    # Currently, the export API is only available to staff users, with the
+    # exception of the already exported bundles, which are stored in the media
+    # dir and are available to everybody with direct URL.
+    # In the future, we might want to use the PandasViewSets with their
+    # dataframes transformations to serve some portions of the data to users;
+    # in such case, the permissions would need to rethink.
+    permission_classes = (permissions.IsAdminUser,)
+
+    def get_dataframe(self):
+        queryset = self.filter_queryset(self.get_queryset())
+        # The `with_list_serializer` method combines standard serializer class
+        # with a Pandas serializer class. See:
+        # https://github.com/wq/django-rest-pandas/blob/master/rest_pandas/views.py
+        serializer_class = self.with_list_serializer(self.serializer_class)
+        serializer = serializer_class(queryset, many=True)
+        df = serializer.data
+        return df
+
+
 class BlockSerializer(serializers.ModelSerializer):
     class Meta:
         model = Block
         fields = ('id', 'name', 'order')
 
 
-class BlockViewSet(PandasViewSet):
+class BlockViewSet(ExportViewSet):
     queryset = Block.objects.all()
     serializer_class = BlockSerializer
-    permission_classes = (permissions.IsAdminUser,)
 
 
 class ToolboxSerializer(serializers.ModelSerializer):
@@ -30,10 +49,9 @@ class ToolboxSerializer(serializers.ModelSerializer):
         fields = ('id', 'name', 'blocks')
 
 
-class ToolboxViewSet(PandasViewSet):
+class ToolboxViewSet(ExportViewSet):
     queryset = Toolbox.objects.all().prefetch_related('blocks')
     serializer_class = ToolboxSerializer
-    permission_classes = (permissions.IsAdminUser,)
 
 
 class LevelSerializer(serializers.ModelSerializer):
@@ -51,10 +69,9 @@ class LevelSerializer(serializers.ModelSerializer):
         fields = ('id', 'level', 'name', 'credits', 'toolbox', 'tasks')
 
 
-class LevelViewSet(PandasViewSet):
+class LevelViewSet(ExportViewSet):
     queryset = Level.objects.all().select_related('toolbox').prefetch_related('tasks')
     serializer_class = LevelSerializer
-    permission_classes = (permissions.IsAdminUser,)
 
 
 class InstructionSerializer(serializers.ModelSerializer):
@@ -63,10 +80,9 @@ class InstructionSerializer(serializers.ModelSerializer):
         fields = ('id', 'name')
 
 
-class InstructionViewSet(PandasViewSet):
+class InstructionViewSet(ExportViewSet):
     serializer_class = InstructionSerializer
     queryset = Instruction.objects.all()
-    permission_classes = (permissions.IsAdminUser,)
 
 
 class TaskSerializer(serializers.ModelSerializer):
@@ -80,10 +96,9 @@ class TaskSerializer(serializers.ModelSerializer):
         fields = ('id', 'name', 'level', 'setting', 'solution')
 
 
-class TaskViewSet(PandasViewSet):
+class TaskViewSet(ExportViewSet):
     queryset = Task.objects.all().select_related('level')
     serializer_class = TaskSerializer
-    permission_classes = (permissions.IsAdminUser,)
 
 
 class StudentSerializer(serializers.ModelSerializer):
@@ -98,10 +113,9 @@ class StudentSerializer(serializers.ModelSerializer):
         fields = ('id', 'credits', 'seen_instructions')
 
 
-class StudentViewSet(PandasViewSet):
+class StudentViewSet(ExportViewSet):
     queryset = Student.objects.prefetch_related('seen_instructions').all()
     serializer_class = StudentSerializer
-    permission_classes = (permissions.IsAdminUser,)
 
 
 class TaskSessionSerializer(serializers.ModelSerializer):
@@ -110,10 +124,9 @@ class TaskSessionSerializer(serializers.ModelSerializer):
         fields = ('id', 'student', 'task', 'solved', 'start', 'end', 'time_spent')
 
 
-class TaskSessionsViewSet(PandasViewSet):
+class TaskSessionsViewSet(ExportViewSet):
     queryset = TaskSession.objects.all()
     serializer_class = TaskSessionSerializer
-    permission_classes = (permissions.IsAdminUser,)
 
 
 class ProgramSnapshotSerializer(serializers.ModelSerializer):
@@ -139,7 +152,7 @@ class ProgramSnapshotPandasSerializer(PandasSerializer):
         return dataframe
 
 
-class ProgramSnapshotsViewSet(PandasViewSet):
+class ProgramSnapshotsViewSet(ExportViewSet):
     # Not only task session, but also its snapshots must be prefetched to avoid
     # generating individual SQL queries for each serialed row. (The reason is
     # in ProgramSnapshot.order which is a computed property and needs to know
@@ -150,7 +163,6 @@ class ProgramSnapshotsViewSet(PandasViewSet):
     queryset = ProgramSnapshot.objects.prefetch_related('task_session__snapshots').all()
     serializer_class = ProgramSnapshotSerializer
     pandas_serializer_class = ProgramSnapshotPandasSerializer
-    permission_classes = (permissions.IsAdminUser,)
 
 
 class ActionSerializer(serializers.ModelSerializer):
@@ -159,20 +171,18 @@ class ActionSerializer(serializers.ModelSerializer):
         fields = ('id', 'name', 'student', 'task', 'time', 'randomness', 'data')
 
 
-class ActionsViewSet(PandasViewSet):
+class ActionsViewSet(ExportViewSet):
     queryset = Action.objects.all()
     serializer_class = ActionSerializer
-    permission_classes = (permissions.IsAdminUser,)
 
 
 class LatestBundleViewSet(viewsets.ViewSet):
     """Phony ViewSet to specify a custom entry in the rest API.
     """
-    # Whole export API is only available to staff users, but the already
-    # exported files are avaible to everybody by direct URL to the media dir.
-    # Specifically the latest bundle can be downloaded by anybody at:
+    # The already exported files are avaible to everybody with direct URL to
+    # the media dir; e.g. the latest bundle can be downloaded by anybody at:
     # `http://robomise.cz/media/exports/robomission-latest.zip`.
-    permission_classes = (permissions.IsAdminUser,)
+    permission_classes = ()
 
     def list(self, request, format=None):
         bundle_url = '{media}exports/{bundle_name}'.format(
