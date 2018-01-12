@@ -35,8 +35,15 @@ def update_datestamp(notebook, new_datestamp):
 
 def run_notebook(notebook):
     # See http://nbconvert.readthedocs.io/en/latest/execute_api.html
-    ep = ExecutePreprocessor(timeout=120, kernel_name='django_extensions')
-    # path = directory from where to execute the notebook
+    # TODO: Specify 'django_extensions' kernel and make it work on the server.
+    # The kernel can be set as follows:
+    #   ep = ExecutePreprocessor(timeout=120, kernel_name='django_extensions')
+    # This works locally, but on server, I wasn't able to create the kernel
+    # (list available kernels by `jupyter kernelspec list`).
+    # Default kernel currently works, given the `path` (directory from where to
+    # execute the notebook) is set to //backend. It may fail if some Django
+    # features are used in the notebook, but I haven't explored this.
+    ep = ExecutePreprocessor(timeout=120)
     path = os.path.join(settings.REPO_DIR, 'backend')
     ep.preprocess(notebook, {'metadata': {'path': path}})
 
