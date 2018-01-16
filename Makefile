@@ -43,14 +43,16 @@ shell:
 notebook:
 	python backend/manage.py shell_plus --notebook
 
-# Double $$ is needed for expression expansion in Makefile.
-MONITORING_NTB="backend/monitoring/notebooks/monitoring_$$(date +'%Y_%m_%d').ipynb"
 
-.PHONY: monitoring
-monitoring:
+# Double $$ is needed for expression expansion in Makefile.
+INVESTIGATION_NTB="backend/monitoring/notebooks/investigation_$$(date +'%Y_%m_%d').ipynb"
+
+.PHONY: investigation
+investigation:
 	git checkout monitoring 2>/dev/null || git checkout -b monitoring
-	cp --no-clobber backend/monitoring/notebooks/monitoring_template.ipynb ${MONITORING_NTB}
+	cp --no-clobber backend/monitoring/notebooks/investigation_template.ipynb ${INVESTIGATION_NTB}
 	python backend/manage.py shell_plus --notebook
+	xdg-open http://localhost:8888/notebooks/${INVESTIGATION_NTB}
 
 
 .PHONY: export_monitoring_notebook
