@@ -149,7 +149,7 @@ class MonitoringPage extends React.Component {
 
   renderAnalyticsCard() {
     return (
-      <Card style={cardStyle} key="analytics-card">
+      <Card style={{...cardStyle, backgroundColor: '#3b4c74'}} key="analytics-card">
         <CardTitle title="Analytics" />
         <CardText style={{ paddingTop: 0 }}>
           <List>
@@ -172,6 +172,7 @@ class MonitoringPage extends React.Component {
               secondaryText="Behavior > Events > Overview"
             />
             <Divider />
+            {/*
             <ListItem
               href="https://github.com/adaptive-learning/robomission/tree/master/frontend/src/sagas/googleAnalytics.js"
               target="_blank"
@@ -179,6 +180,16 @@ class MonitoringPage extends React.Component {
               primaryText="Events Sent to Google Analytics"
               leftIcon={<CodeIcon />}
               secondaryText="[repo]//frontend/src/sagas/googleAnalytics.js"
+            />
+            <Divider />
+            */}
+            <ListItem
+              href="/media/exports/monitoring_latest.html"
+              target="_blank"
+              rel="noreferrer noopener"
+              primaryText="Monitoring Jupyter Notebook"
+              leftIcon={<ChartIcon />}
+              secondaryText="[web]/media/exports/monitoring_latest.html"
             />
             <Divider />
             <ListItem
@@ -226,7 +237,7 @@ class MonitoringPage extends React.Component {
               target="_blank"
               rel="noreferrer noopener"
               primaryText="Documentation"
-              leftIcon={<CodeIcon />}
+              leftIcon={<GHIcon />}
               secondaryText="[repo]//docs"
             />
             <Divider />
@@ -280,12 +291,12 @@ class MonitoringPage extends React.Component {
             />
             <Divider />
             <ListItem
-              href="https://github.com/adaptive-learning/robomission/blob/master/backend/monitoring/notebooks/analysis_template.ipynb"
+              href="https://github.com/adaptive-learning/robomission/blob/master/docs/monitoring.md#data-investigation"
               target="_blank"
               rel="noreferrer noopener"
-              primaryText="Data Investigation [template]"
-              leftIcon={<CodeIcon />}
-              secondaryText="[repo]//backend/monitoring/notebooks/analysis_template.ipynb"
+              primaryText="Data Investigation"
+              leftIcon={<GHIcon />}
+              secondaryText="[repo]//docs/monitoring.md#data-investigation"
             />
             <Divider />
           </List>
@@ -355,9 +366,9 @@ class MonitoringPage extends React.Component {
     return (
       <LongPage>
         {this.renderAdminCard()}
-        {this.renderExportCard()}
-        {this.renderAnalyticsCard()}
         {this.renderDevelopmentCard()}
+        {this.renderAnalyticsCard()}
+        {this.renderExportCard()}
         {this.renderErrorsCard()}
         {this.renderFeedbackCard()}
         {metrics && this.renderMetrics()}

@@ -60,7 +60,7 @@ You can subscribe to
 to receive an email for each new feedback.
 
 
-## Collected Data Investigation
+## Data Investigation
 
 To explore collected data, follow instructions in [//docs/data.md](./data.md).
 All collected data are exported once a week.
