@@ -55,7 +55,7 @@ def group_by_task(task_sessions):
 def generate_active_students_metric(task_sessions, dates):
     """Yield active-students metric for each date in dates.
 
-    Active student = has solve at least 1 task (in given day).
+    Active student = has solved at least 1 task (in given day).
     """
     solved_task_sessions = [ts for ts in task_sessions if ts.solved]
     groups = group_by_date(solved_task_sessions)

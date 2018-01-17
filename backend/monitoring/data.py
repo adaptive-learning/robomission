@@ -107,8 +107,6 @@ def get_production_data(datestamp, fetch=True):
     Args:
         datestamp:
             When the data was created. String in 'Y-m-d' format.
-            Data will be loaded from local cache, using the first export from
-            date >= given datestemp.
         fetch:
             If there are no cached data after given datestamp,
             it will fetch the latest export from the server.
