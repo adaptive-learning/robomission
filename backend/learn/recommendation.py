@@ -7,6 +7,10 @@ from learn.credits import get_level_value
 from learn.student_task import has_solved
 
 
+def randomly_from_unsolved_chunk(world, student):
+    raise NotImplementedError
+
+
 def randomly_by_level(world, student):
     """Select task randomly from the current level, sometimes from lower levels.
 

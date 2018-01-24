@@ -30,13 +30,21 @@ StudentTask = namedtuple('StudentTask', [
 
 Recommendation = namedtuple('Recommendation', [
     'available',
+    'mission',
+    'step',
     'task',
 ])
 
 
 def get_recommendation(world, student):
-    task = recommendation.randomly_by_level(world, student)
-    return Recommendation(available=task is not None, task=task.name)
+    task = recommendation.randomly_from_unsolved_chunk(world, student)
+    if task is None:
+        return Recommendation(available=False, mission=None, step=None, task=None)
+    return Recommendation(
+        available=True,
+        mission=task.chunk.mission.name,
+        step=task.chunk.step.name,
+        task=task.name)
 
 
 def get_instructions_overview(world, student):
