@@ -121,6 +121,13 @@ class Student(models.Model):
     classroom = models.ForeignKey(Classroom, on_delete=models.SET_NULL,
         null=True, blank=True, related_name='students')
     # task_sessions = m:n relation with tasks through learn.TaskSession
+    # skills = m:n relation with chunks through learn.Skill
+
+    def get_skill(self, chunk):
+        for skill in self.skills.all():
+            if skill.chunk == chunk:
+                return skill.value
+        return 0
 
     def __str__(self):
         return 's{pk}'.format(pk=self.pk)
@@ -143,6 +150,26 @@ class TaskSession(models.Model):
     start = models.DateTimeField(default=timezone.now)
     end = models.DateTimeField(default=timezone.now)
 
+    UNSOLVED = 0
+    POOR = 1
+    GOOD = 2
+    EXCELLENT = 3
+    PERFORMANCE_CHOICES = (
+        (UNSOLVED, 'unsolved'),
+        (POOR, 'poor'),
+        (GOOD, 'good'),
+        (EXCELLENT, 'excellent'))
+
+    performance = models.SmallIntegerField(
+        choices=PERFORMANCE_CHOICES,
+        default=UNSOLVED)
+
+    # Student can attempt a single task multiple times, but only the first
+    # successful attempt is shown in stats and is used for skill compuation.
+    # If the student hasn't solved the task yet, then the main task session is
+    # the most recent one for given s-t pair.
+    main = models.BooleanField(default=False)
+
     @property
     def time_spent(self):
         delta = self.end - self.start
@@ -158,6 +185,17 @@ class TaskSession(models.Model):
             pk=self.pk,
             student=self.student.pk,
             task=self.task.name)
+
+
+class Skill(models.Model):
+    """Measure of mastery for each student-chunk pair
+    """
+    student = models.ForeignKey(Student, related_name='skills')
+    chunk = models.ForeignKey(Chunk)
+    value = models.FloatField()
+
+    class Meta:
+        unique_together = ('student', 'chunk')
 
 
 class ProgramSnapshot(models.Model):
