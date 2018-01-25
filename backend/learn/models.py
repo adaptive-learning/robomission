@@ -79,9 +79,13 @@ class Chunk(models.Model):
     """Knowledge component defined by a group of coherent tasks.
     """
     name = models.SlugField(unique=True)
+    order = models.SmallIntegerField(default=0)
     #setting = JSONField()
     #prerequisities = models.ManyToManyField(Chunk)
     tasks = models.ManyToManyField(Task)  # allow 1 task in multiple chunks
+
+    class Meta:
+        ordering = ['order']
 
     def __str__(self):
         return '{name}'.format(name=self.name)
