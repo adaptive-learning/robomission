@@ -52,7 +52,7 @@ def test_has_mastered__not_when_skill_is_low():
 def test_get_first_unmastered_chunk__single():
     chunk = Chunk.objects.create(name='c1')
     student = Student.objects.create()
-    assert get_first_unmastered_chunk(student) == chunk
+    assert get_first_unmastered_chunk(student, Chunk.objects.all()) == chunk
 
 
 @pytest.mark.django_db
@@ -60,16 +60,16 @@ def test_get_first_unmastered_chunk__all_unmastered():
     chunk1 = Chunk.objects.create(name='c1')
     Chunk.objects.create(name='c2')
     student = Student.objects.create()
-    assert get_first_unmastered_chunk(student) == chunk1
+    assert get_first_unmastered_chunk(student, Chunk.objects.all()) == chunk1
 
 
 @pytest.mark.django_db
 def test_get_first_unmastered_chunk__first_mastered():
-    chunk1 = Chunk.objects.create(name='c1')
-    chunk2 = Chunk.objects.create(name='c2')
+    chunk1 = Chunk.objects.create(name='c1', order=1)
+    chunk2 = Chunk.objects.create(name='c2', order=2)
     student = Student.objects.create()
     Skill.objects.create(student=student, chunk=chunk1, value=1)
-    assert get_first_unmastered_chunk(student) == chunk2
+    assert get_first_unmastered_chunk(student, Chunk.objects.all()) == chunk2
 
 
 #@pytest.mark.django_db

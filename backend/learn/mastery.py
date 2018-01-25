@@ -1,6 +1,6 @@
 """Mastery learning.
 """
-from learn.models import TaskSession
+from learn.models import Chunk
 
 SKILL_FOR_MASTERY = 0.95
 
@@ -32,5 +32,10 @@ def has_mastered(student, chunk):
     return skill >= SKILL_FOR_MASTERY
 
 
-def get_first_unmastered_chunk(student):
-    raise NotImplementedError
+def get_first_unmastered_chunk(student, chunks):
+    # Chunks are ordered in DB layer.
+    for chunk in chunks:
+        if not has_mastered(student, chunk):
+            return chunk
+    # The student could have mastered all chunks.
+    return None
