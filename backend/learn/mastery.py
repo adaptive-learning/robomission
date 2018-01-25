@@ -32,5 +32,5 @@ def has_mastered(student, chunk):
     return skill >= SKILL_FOR_MASTERY
 
 
-def get_first_unmastered_chunk(world, student):
+def get_first_unmastered_chunk(student):
     raise NotImplementedError
