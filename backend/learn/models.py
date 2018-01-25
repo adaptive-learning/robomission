@@ -309,6 +309,5 @@ class Action(models.Model):
                 self.instruction if self.name == self.WATCH_INSTRUCTION
                 else self.task.name))
 
-
     class Meta:
         ordering = ('time',)
