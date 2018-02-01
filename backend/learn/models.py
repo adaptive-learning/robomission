@@ -102,7 +102,7 @@ class Mission(models.Model):
     """Top-level problem set specified by a chunk of height 2
     """
     name = models.SlugField(unique=True)
-    order = models.SmallIntegerField(unique=True)
+    order = models.SmallIntegerField(default=0)
     chunk = models.OneToOneField(Chunk, on_delete=models.CASCADE)
 
     class Meta:
