@@ -75,3 +75,73 @@ class TaskSessionTestCase(TestCase):
         assert TaskSession.UNSOLVED < TaskSession.POOR
         assert TaskSession.POOR < TaskSession.GOOD
         assert TaskSession.GOOD < TaskSession.EXCELLENT
+
+
+class ProgramSnapshotTestCase(TestCase):
+    def test_str(self):
+        snapshot = ProgramSnapshot(id=5, program='ffr')
+        assert str(snapshot) == '[5] ffr'
+
+    def test_order_first(self):
+        ts = _create_task_session()
+        snapshot = ProgramSnapshot.objects.create(task_session=ts)
+        assert snapshot.order == 1
+
+    def test_order_first_for_given_granularity(self):
+        ts = _create_task_session()
+        edit_snapshot = ProgramSnapshot.objects.create(
+            task_session=ts, granularity=ProgramSnapshot.EDIT)
+        execution_snapshot = ProgramSnapshot.objects.create(
+            task_session=ts, granularity=ProgramSnapshot.EXECUTION)
+        assert edit_snapshot.order == 1
+        assert execution_snapshot.order == 1
+
+    def test_order_by_time(self):
+        ts = _create_task_session()
+        snapshot1 = ProgramSnapshot.objects.create(
+            task_session=ts,
+            time=timezone.datetime(2017, 1, 1, 8, 0, 0, tzinfo=timezone.utc))
+        snapshot2 = ProgramSnapshot.objects.create(
+            task_session=ts,
+            time=timezone.datetime(2017, 1, 1, 8, 0, 10, tzinfo=timezone.utc))
+        assert snapshot1.order == 1
+        assert snapshot2.order == 2
+
+    def test_order_by_time_within_granularity(self):
+        ts = _create_task_session()
+        edit_snapshot1 = ProgramSnapshot.objects.create(
+            task_session=ts,
+            time=timezone.datetime(2017, 1, 1, 8, 0, 0, tzinfo=timezone.utc),
+            granularity=ProgramSnapshot.EDIT)
+        execution_snapshot1 = ProgramSnapshot.objects.create(
+            task_session=ts,
+            time=timezone.datetime(2017, 1, 1, 8, 0, 10, tzinfo=timezone.utc),
+            granularity=ProgramSnapshot.EXECUTION)
+        edit_snapshot2 = ProgramSnapshot.objects.create(
+            task_session=ts,
+            time=timezone.datetime(2017, 1, 1, 8, 0, 20, tzinfo=timezone.utc),
+            granularity=ProgramSnapshot.EDIT)
+        assert edit_snapshot1.order == 1
+        assert execution_snapshot1.order == 1
+        assert edit_snapshot2.order == 2
+
+    def test_time_from_start(self):
+        ts = _create_task_session_at(timezone.datetime(2017, 1, 1, 8, 0, 0, tzinfo=timezone.utc))
+        snapshot = ProgramSnapshot.objects.create(
+            task_session=ts,
+            time=timezone.datetime(2017, 1, 1, 8, 0, 10, tzinfo=timezone.utc))
+        assert snapshot.time_from_start == 10
+
+
+def _create_task_session():
+    task = Task.objects.create(name='carrot', setting='{}', solution='')
+    student = Student.objects.create()
+    ts = TaskSession.objects.create(student=student, task=task)
+    return ts
+
+
+def _create_task_session_at(time):
+    task = Task.objects.create(name='carrot', setting='{}', solution='')
+    student = Student.objects.create()
+    ts = TaskSession.objects.create(student=student, task=task, start=time)
+    return ts
