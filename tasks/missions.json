@@ -1,0 +1,62 @@
+[
+  {
+    "name": "spaceship-control",
+    "concept": "commands",
+    "toolbox": "fly",
+    "phases": [
+      {
+        "name": "fly-forward",
+        "tasks": [
+          "three-steps-forward"
+        ]
+      },
+      {
+        "name": "turn",
+        "tasks": [
+          "turning-right",
+          "turning-left",
+          "turning-right-and-left",
+          "turning-left-and-right"
+        ]
+      },
+      {
+        "name": "diamonds",
+        "tasks": [
+          "diamond-on-right",
+          "beware-of-asteorid",
+          "plus",
+          "diamond-path",
+          "surrounded-diamond"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "shooting-and-wormholes",
+    "concept": "commands",
+    "toolbox": "shoot",
+    "phases": [
+      {
+        "name": "shooting",
+        "tasks": [
+          "shot",
+          "shooting"
+        ]
+      },
+      {
+        "name": "wormhole",
+        "tasks": [
+          "wormhole-demo"
+        ]
+      },
+      {
+        "name": "shooting-2",
+        "tasks": [
+          "tunnel",
+          "dont-forget-to-shot",
+          "2diamonds-2meteoroids"
+        ]
+      }
+    ]
+  }
+]
