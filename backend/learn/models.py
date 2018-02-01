@@ -94,6 +94,14 @@ class Chunk(models.Model):
     class Meta:
         ordering = ['order']
 
+    @property
+    def parent_mission(self):
+        # Assumes exectly one parent, which is a mission.
+        # TODO: Generalize or throw a meaningful exception if the assumption is
+        # violated.
+        parent = self.parents.first()
+        return parent.mission
+
     def __str__(self):
         return '{name}'.format(name=self.name)
 
