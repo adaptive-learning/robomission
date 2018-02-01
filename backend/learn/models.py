@@ -116,8 +116,19 @@ class Mission(models.Model):
     class Meta:
         ordering = ['order']
 
+    @property
+    def chunk_name(self):
+        """Return a mission subtitle (name of the practiced concept).
+        """
+        return self.chunk.name
+
+    @property
+    def phases(self):
+        return list(self.chunk.subchunks.all())
+
     def __str__(self):
-        return 'M{order} {name}'.format(order=self.order, name=self.name)
+        return 'M{order} {name} ({chunk_name})'.format(
+            order=self.order, name=self.name, chunk_name=self.chunk_name)
 
 
 class Teacher(models.Model):
