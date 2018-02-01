@@ -212,7 +212,7 @@ class ProgramSnapshot(models.Model):
         (EDIT, EDIT))
 
     task_session = models.ForeignKey(TaskSession, related_name='snapshots')
-    time = models.DateTimeField(auto_now_add=True)
+    time = models.DateTimeField(default=timezone.now)
     program = models.TextField()
     granularity = models.CharField(
         help_text='Level of snapshoptting frequency.',
