@@ -81,7 +81,7 @@ class Chunk(models.Model):
     name = models.SlugField(unique=True)
     order = models.SmallIntegerField(default=0)
     #setting = JSONField()
-    #prerequisities = models.ManyToManyField(Chunk)
+    #prerequisities/subchunks = models.ManyToManyField(Chunk)
     tasks = models.ManyToManyField(Task)  # allow 1 task in multiple chunks
 
     class Meta:
@@ -89,6 +89,21 @@ class Chunk(models.Model):
 
     def __str__(self):
         return '{name}'.format(name=self.name)
+
+
+class Mission(models.Model):
+    """Top-level problem set specified by a chunk of height 2
+    """
+    name = models.SlugField(unique=True)
+    order = models.SmallIntegerField(unique=True)
+    chunk = models.OneToOneField(Chunk, on_delete=models.CASCADE)
+    toolbox = models.ForeignKey(Toolbox)
+
+    class Meta:
+        ordering = ['order']
+
+    def __str__(self):
+        return 'M{order} {name}'.format(order=self.order, name=self.name)
 
 
 class Teacher(models.Model):
