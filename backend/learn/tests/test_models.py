@@ -1,7 +1,7 @@
 from datetime import date
 from django.test import TestCase
 from django.utils import timezone
-from learn.models import Block, Task, Chunk, Student, Skill, TaskSession
+from learn.models import Block, Task, Chunk, Mission, Student, Skill, TaskSession
 from learn.models import ProgramSnapshot
 
 
@@ -23,10 +23,57 @@ class BlockTestCase(TestCase):
 
 
 class ChunkTestCase(TestCase):
+    def test_default_setting(self):
+        chunk = Chunk.objects.create(name='c1')
+        assert chunk.setting == {}
+
     def test_chunks_are_ordered(self):
         chunk1 = Chunk.objects.create(name='c1', order=2)
         chunk2 = Chunk.objects.create(name='c2', order=1)
         assert list(Chunk.objects.all()) == [chunk2, chunk1]
+
+    def test_parents(self):
+        chunk1 = Chunk.objects.create(name='c1')
+        chunk2 = Chunk.objects.create(name='c2')
+        chunk1.subchunks.set([chunk2])
+        assert list(chunk2.parents.all()) == [chunk1]
+
+    def test_mission(self):
+        chunk = Chunk.objects.create(name='c1')
+        mission = Mission.objects.create(name='m1', chunk=chunk)
+        assert chunk.mission == mission
+
+    def test_parent_mission(self):
+        chunk1 = Chunk.objects.create(name='c1')
+        chunk2 = Chunk.objects.create(name='c2')
+        mission = Mission.objects.create(name='m1', chunk=chunk1)
+        chunk1.subchunks.set([chunk2])
+        assert chunk2.parent_mission == mission
+
+
+class MisssionTestCase(TestCase):
+    def test_str(self):
+        chunk = Chunk.objects.create(name='loops')
+        mission = Mission.objects.create(name='carrot', order=2, chunk=chunk)
+        assert str(mission) == 'M2 carrot (loops)'
+
+    def test_missions_are_ordered(self):
+        mission1 = Mission.objects.create(name='m1', order=2, chunk=_create_chunk('c1'))
+        mission2 = Mission.objects.create(name='m2', order=1, chunk=_create_chunk('c2'))
+        assert list(Mission.objects.all()) == [mission2, mission1]
+
+    def test_chunk_name(self):
+        chunk = Chunk.objects.create(name='c1')
+        mission = Mission.objects.create(name='m1', chunk=chunk)
+        assert mission.chunk_name == 'c1'
+
+    def test_phases(self):
+        chunk1 = Chunk.objects.create(name='c1')
+        chunk2 = Chunk.objects.create(name='c2')
+        chunk3 = Chunk.objects.create(name='c3')
+        chunk1.subchunks.set([chunk2, chunk3])
+        mission = Mission.objects.create(name='m1', chunk=chunk1)
+        assert mission.phases == [chunk2, chunk3]
 
 
 class StudentTestCase(TestCase):
@@ -145,6 +192,11 @@ def _create_task_session():
     student = Student.objects.create()
     ts = TaskSession.objects.create(student=student, task=task)
     return ts
+
+
+def _create_chunk(name):
+    chunk = Chunk.objects.create(name=name)
+    return chunk
 
 
 def _create_task_session_at(time):
