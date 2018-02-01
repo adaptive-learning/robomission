@@ -132,6 +132,13 @@ class ProgramSnapshotTestCase(TestCase):
             time=timezone.datetime(2017, 1, 1, 8, 0, 10, tzinfo=timezone.utc))
         assert snapshot.time_from_start == 10
 
+    def test_time_from_start_over_minute(self):
+        ts = _create_task_session_at(timezone.datetime(2017, 1, 1, 8, 0, 0, tzinfo=timezone.utc))
+        snapshot = ProgramSnapshot.objects.create(
+            task_session=ts,
+            time=timezone.datetime(2017, 1, 1, 8, 2, 5, tzinfo=timezone.utc))
+        assert snapshot.time_from_start == 125
+
 
 def _create_task_session():
     task = Task.objects.create(name='carrot', setting='{}', solution='')
