@@ -80,7 +80,10 @@ class Chunk(models.Model):
     """
     name = models.SlugField(unique=True)
     order = models.SmallIntegerField(default=0)
-    #setting = JSONField()
+
+    # Each chunk can specify default environment, toolbox, limits.
+    # Most specific settings will be used.
+    setting = JSONField(default=dict)
 
     # Chunks form a directed acyclic forest.
     subchunks = models.ManyToManyField('self', symmetrical=False, related_name='parents')
@@ -101,7 +104,6 @@ class Mission(models.Model):
     name = models.SlugField(unique=True)
     order = models.SmallIntegerField(unique=True)
     chunk = models.OneToOneField(Chunk, on_delete=models.CASCADE)
-    toolbox = models.ForeignKey(Toolbox)
 
     class Meta:
         ordering = ['order']
