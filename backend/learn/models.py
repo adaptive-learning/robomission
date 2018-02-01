@@ -81,8 +81,12 @@ class Chunk(models.Model):
     name = models.SlugField(unique=True)
     order = models.SmallIntegerField(default=0)
     #setting = JSONField()
-    #prerequisities/subchunks = models.ManyToManyField(Chunk)
-    tasks = models.ManyToManyField(Task)  # allow 1 task in multiple chunks
+
+    # Chunks form a directed acyclic forest.
+    subchunks = models.ManyToManyField('self', symmetrical=False, related_name='parents')
+
+    # Allow single task in multiple chunks.
+    tasks = models.ManyToManyField(Task)
 
     class Meta:
         ordering = ['order']
