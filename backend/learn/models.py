@@ -123,6 +123,10 @@ class Mission(models.Model):
         return self.chunk.name
 
     @property
+    def setting(self):
+        return self.chunk.setting
+
+    @property
     def phases(self):
         return list(self.chunk.subchunks.all())
 

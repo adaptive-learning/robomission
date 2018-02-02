@@ -93,18 +93,24 @@ class TaskSerializer(serializers.ModelSerializer):
         fields = ('id', 'name', 'level', 'setting', 'solution')
 
 
+class SettingSerializer(serializers.Serializer):
+    toolbox = serializers.CharField(required=False)
+
+
 class ChunkSerializer(serializers.ModelSerializer):
+    setting = SettingSerializer()
     class Meta:
         model = Chunk
-        fields = ('id', 'name', 'order')
+        fields = ('id', 'name', 'order', 'setting')
 
 
 class MissionSerializer(serializers.ModelSerializer):
     phases = ChunkSerializer(many=True)
+    setting = SettingSerializer()
 
     class Meta:
         model = Mission
-        fields = ('id', 'order', 'name', 'chunk_name', 'phases')
+        fields = ('id', 'order', 'name', 'chunk_name', 'setting', 'phases')
 
 
 class WorldSerializer(serializers.Serializer):
