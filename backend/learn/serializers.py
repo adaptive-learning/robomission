@@ -108,6 +108,14 @@ class ChunkSerializer(serializers.ModelSerializer):
         model = Chunk
         fields = ('id', 'name', 'order', 'setting', 'tasks')
 
+    def create(self, validated_data):
+        tasks = validated_data.pop('tasks')
+        chunk = Chunk.objects.create(**validated_data)
+        for task_name in tasks:
+            task = Task.objects.get(name=task_name)
+            chunk.tasks.add(task)
+        return chunk
+
 
 class MissionSerializer(serializers.ModelSerializer):
     phases = ChunkSerializer(many=True)

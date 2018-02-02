@@ -57,6 +57,33 @@ class ChunkSerializerTestCase(TestCase):
             {'id': chunk1.pk, 'name': 'c1', 'order': 1, 'setting': {}, 'tasks': []},
             {'id': chunk2.pk, 'name': 'c2', 'order': 2, 'setting': {}, 'tasks': []}]
 
+    def test_deserialize_new_chunk(self):
+        data = {
+            'name': 'wormholes',
+            'order': 5,
+            'setting': {'toolbox': 'fly'},
+            'tasks': []}
+        serializer = ChunkSerializer(data=data)
+        assert serializer.is_valid()
+        chunk = serializer.save()
+        assert chunk.id is not None
+        assert chunk.name == 'wormholes'
+        assert chunk.order == 5
+        assert chunk.setting == {'toolbox': 'fly'}
+        assert chunk.tasks.count() == 0
+
+    def test_deserialize_new_chunk_with_tasks(self):
+        task1 = Task.objects.create(id=1, name='t1', setting='{}', solution='')
+        data = {
+            'name': 'wormholes',
+            'order': 5,
+            'setting': {'toolbox': 'fly'},
+            'tasks': ['t1']}
+        serializer = ChunkSerializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        chunk = serializer.save()
+        assert list(chunk.tasks.all()) == [task1]
+
 
 class MissionSerializerTestCase(TestCase):
     def test_serialize_mission_with_phases(self):
