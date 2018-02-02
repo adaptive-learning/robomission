@@ -7,6 +7,7 @@ from learn.credits import get_active_credits, get_level_value
 from learn.models import Block, Toolbox, Level, Task, Instruction
 from learn.models import Action, ProgramSnapshot, Student, TaskSession
 from learn.models import Teacher, Classroom
+from learn.models import Chunk, Mission
 from learn.users import convert_lazy_user, is_initial_user
 from learn.world import get_world
 
@@ -90,6 +91,20 @@ class TaskSerializer(serializers.ModelSerializer):
     class Meta:
         model = Task
         fields = ('id', 'name', 'level', 'setting', 'solution')
+
+
+class ChunkSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Chunk
+        fields = ('id', 'name', 'order')
+
+
+class MissionSerializer(serializers.ModelSerializer):
+    phases = ChunkSerializer(many=True)
+
+    class Meta:
+        model = Mission
+        fields = ('id', 'order', 'name', 'chunk_name', 'phases')
 
 
 class WorldSerializer(serializers.Serializer):

@@ -1,8 +1,10 @@
 [
   {
     "name": "spaceship-control",
-    "concept": "commands",
-    "toolbox": "fly",
+    "chunk_name": "commands",
+    "setting": {
+      "toolbox": "fly"
+    },
     "phases": [
       {
         "name": "fly-forward",
@@ -33,8 +35,10 @@
   },
   {
     "name": "shooting-and-wormholes",
-    "concept": "commands-2",
-    "toolbox": "shoot",
+    "chunk_name": "commands-2",
+    "setting": {
+      "toolbox": "shoot"
+    },
     "phases": [
       {
         "name": "shooting",

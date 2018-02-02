@@ -6,4 +6,6 @@ class Command(BaseCommand):
     help = "Loads static data into the database."
 
     def handle(self, *args, **options):
-        self.stdout.write(self.style.NOTICE('Data are loaded in migrations, use "make migrate".'))
+        #self.stdout.write(self.style.NOTICE('Data are loaded in migrations, use "make migrate".'))
+        # TODO: build and load all static data (blocks, toolboxes, missions, tasks)
+        pass
