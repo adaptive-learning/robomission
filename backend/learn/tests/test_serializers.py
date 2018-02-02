@@ -1,5 +1,5 @@
 from django.test import TestCase
-from learn.models import Chunk, Mission
+from learn.models import Chunk, Mission, Task
 from learn.serializers import SettingSerializer, ChunkSerializer, MissionSerializer
 
 
@@ -22,25 +22,40 @@ class ChunkSerializerTestCase(TestCase):
             'id': chunk.pk,
             'name': 'wormholes',
             'order': 5,
-            'setting': {'toolbox': 'fly'}}
+            'setting': {'toolbox': 'fly'},
+            'tasks': []}
 
-    def test_chunk_with_default_setting(self):
+    def test_serialize_chunk_with_default_setting(self):
         chunk = Chunk.objects.create(name='wormholes', order=5)
         serializer = ChunkSerializer(chunk)
         assert serializer.data == {
             'id': chunk.pk,
             'name': 'wormholes',
             'order': 5,
-            'setting': {}}
+            'setting': {},
+            'tasks': []}
 
-    def test_multiple_chunks_serialization(self):
+    def test_serialize_chunk_with_tasks(self):
+        task1 = Task.objects.create(id=1, name='t1', setting='{}', solution='')
+        task2 = Task.objects.create(id=2, name='t2', setting='{}', solution='')
+        chunk = Chunk.objects.create(name='wormholes', order=5)
+        chunk.tasks.set([task1, task2])
+        serializer = ChunkSerializer(chunk)
+        assert serializer.data == {
+            'id': chunk.pk,
+            'name': 'wormholes',
+            'order': 5,
+            'setting': {},
+            'tasks': ['t1', 't2']}
+
+    def test_serialize_multiple_chunks(self):
         chunk1 = Chunk.objects.create(name='c1', order=1)
         chunk2 = Chunk.objects.create(name='c2', order=2)
         chunks = Chunk.objects.filter(name__in=['c1', 'c2'])
         serializer = ChunkSerializer(chunks, many=True)
         assert serializer.data == [
-            {'id': chunk1.pk, 'name': 'c1', 'order': 1, 'setting': {}},
-            {'id': chunk2.pk, 'name': 'c2', 'order': 2, 'setting': {}}]
+            {'id': chunk1.pk, 'name': 'c1', 'order': 1, 'setting': {}, 'tasks': []},
+            {'id': chunk2.pk, 'name': 'c2', 'order': 2, 'setting': {}, 'tasks': []}]
 
 
 class MissionSerializerTestCase(TestCase):
@@ -58,8 +73,8 @@ class MissionSerializerTestCase(TestCase):
             'chunk_name': 'c1',
             'setting': {},
             'phases': [
-                {'id': chunk2.pk, 'name': 'c2', 'order': 2, 'setting': {}},
-                {'id': chunk3.pk, 'name': 'c3', 'order': 3, 'setting': {}}]}
+                {'id': chunk2.pk, 'name': 'c2', 'order': 2, 'setting': {}, 'tasks': []},
+                {'id': chunk3.pk, 'name': 'c3', 'order': 3, 'setting': {}, 'tasks': []}]}
 
     def test_serialize_mission_with_settings(self):
         chunk = Chunk.objects.create(name='c1', order=1, setting={'toolbox': 'fly'})

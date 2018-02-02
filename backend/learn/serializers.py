@@ -99,9 +99,14 @@ class SettingSerializer(serializers.Serializer):
 
 class ChunkSerializer(serializers.ModelSerializer):
     setting = SettingSerializer()
+    tasks = serializers.SlugRelatedField(
+        slug_field='name',
+        many=True,
+        queryset=Task.objects.all())
+
     class Meta:
         model = Chunk
-        fields = ('id', 'name', 'order', 'setting')
+        fields = ('id', 'name', 'order', 'setting', 'tasks')
 
 
 class MissionSerializer(serializers.ModelSerializer):
