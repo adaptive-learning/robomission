@@ -187,6 +187,14 @@ class ProgramSnapshotTestCase(TestCase):
         assert snapshot.time_from_start == 125
 
 
+class SkillTestCase(TestCase):
+    def test_str(self):
+        student = Student.objects.create(pk=10)
+        chunk = Chunk.objects.create(name='carrot')
+        skill = Skill(student=student, chunk=chunk, value=0.8)
+        assert str(skill) == 's10:carrot=0.8'
+
+
 def _create_task_session():
     task = Task.objects.create(name='carrot', setting='{}', solution='')
     student = Student.objects.create()

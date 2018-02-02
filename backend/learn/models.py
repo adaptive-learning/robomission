@@ -241,6 +241,12 @@ class Skill(models.Model):
     class Meta:
         unique_together = ('student', 'chunk')
 
+    def __str__(self):
+        return '{student}:{chunk}={value}'.format(
+            student=self.student,
+            chunk=self.chunk,
+            value=self.value)
+
 
 class ProgramSnapshot(models.Model):
     """Snapshot of a program at a point of time.
