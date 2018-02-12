@@ -98,7 +98,7 @@ class SettingSerializer(serializers.Serializer):
 
 
 class ChunkSerializer(serializers.ModelSerializer):
-    setting = SettingSerializer()
+    setting = SettingSerializer(required=False)
     tasks = serializers.SlugRelatedField(
         slug_field='name',
         many=True,

@@ -78,6 +78,16 @@ class ChunkSerializerTestCase(TestCase):
         assert chunk.setting == {'toolbox': 'fly'}
         assert chunk.tasks.count() == 0
 
+    def test_deserialize_chunk_without_setting(self):
+        data = {
+            'name': 'wormholes',
+            'order': 5,
+            'tasks': []}
+        serializer = ChunkSerializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        chunk = serializer.save()
+        assert chunk.setting == {}
+
     def test_deserialize_new_chunk_with_tasks(self):
         task1 = Task.objects.create(id=1, name='t1', setting='{}', solution='')
         data = {
