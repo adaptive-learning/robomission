@@ -116,6 +116,16 @@ class ChunkSerializer(serializers.ModelSerializer):
             chunk.tasks.add(task)
         return chunk
 
+    def update(self, instance, validated_data):
+        instance.order = validated_data.get('order', instance.order)
+        instance.setting = validated_data.get('setting', instance.setting)
+        if 'tasks' in validated_data:
+            task_names = validated_data.pop('tasks')
+            tasks = [Task.objects.get(name=name) for name in task_names]
+            instance.tasks.set(tasks)
+        instance.save()
+        return instance
+
 
 class MissionSerializer(serializers.ModelSerializer):
     phases = ChunkSerializer(many=True)
