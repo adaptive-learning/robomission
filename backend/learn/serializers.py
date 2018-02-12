@@ -129,11 +129,25 @@ class ChunkSerializer(serializers.ModelSerializer):
 
 class MissionSerializer(serializers.ModelSerializer):
     phases = ChunkSerializer(many=True)
-    setting = SettingSerializer()
+    chunk_name = serializers.SlugField()
+    setting = SettingSerializer(required=False)
 
     class Meta:
         model = Mission
         fields = ('id', 'order', 'name', 'chunk_name', 'setting', 'phases')
+
+    def create(self, validated_data):
+        print('validated', validated_data)
+        name = validated_data.pop('name')
+        order = validated_data.pop('order')
+        phases = validated_data.pop('phases')
+        chunk_name = validated_data.pop('chunk_name')
+        chunk_order = validated_data.pop('chunk_order')
+        setting = validated_data.pop('setting', {})
+        chunk = Chunk.objects.create(name=chunk_name, order=chunk_order, setting=setting)
+        mission = Mission.objects.create(name=name, order=order, chunk=chunk)
+        # TODO: create phases
+        return mission
 
 
 class WorldSerializer(serializers.Serializer):

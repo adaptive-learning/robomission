@@ -163,3 +163,20 @@ class MissionSerializerTestCase(TestCase):
             'chunk_name': 'c1',
             'setting': {'toolbox': 'fly'},
             'phases': []}
+
+    def test_deserialize_new_mission(self):
+        data = {
+            "name": "m1",
+            "chunk_name": "c1",
+            "setting": {"toolbox": "fly"},
+            "phases": []}
+        serializer = MissionSerializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        mission = serializer.save(order=2, chunk_order=20)
+        assert mission.id is not None
+        assert mission.name == 'm1'
+        assert mission.order == 2
+        assert mission.chunk.name == 'c1'
+        assert mission.chunk.order == 20
+        assert mission.chunk.setting == {'toolbox': 'fly'}
+        assert mission.phases == []
