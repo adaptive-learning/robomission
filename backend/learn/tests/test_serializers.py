@@ -1,6 +1,47 @@
 from django.test import TestCase
-from learn.models import Chunk, Mission, Task
-from learn.serializers import SettingSerializer, ChunkSerializer, MissionSerializer
+from learn.models import Block, Toolbox, Task, Chunk, Mission
+from learn.serializers import ToolboxSerializer, SettingSerializer
+from learn.serializers import ChunkSerializer, MissionSerializer
+
+
+class ToolboxSerializerTestCase(TestCase):
+    def test_serialization(self):
+        block1 = Block.objects.create(name='b1', order=1)
+        block2 = Block.objects.create(name='b2', order=2)
+        toolbox = Toolbox.objects.create(name='tb1')
+        toolbox.blocks.set([block1, block2])
+        serializer = ToolboxSerializer(toolbox)
+        assert serializer.data == {
+            'id': toolbox.id,
+            'name': 'tb1',
+            'blocks': ['b1', 'b2']}
+
+    def test_deserialization(self):
+        block1 = Block.objects.create(name='b1', order=1)
+        block2 = Block.objects.create(name='b2', order=2)
+        data = {
+            'id': 21,
+            'name': 'tb1',
+            'blocks': ['b1', 'b2']}
+        serializer = ToolboxSerializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        toolbox = Toolbox.objects.get(id=21)
+        assert toolbox.name == 'tb1'
+        assert list(toolbox.blocks.all()) == [block1, block2]
+
+    def test_deserialize_list(self):
+        Block.objects.create(name='b1', order=1)
+        Block.objects.create(name='b2', order=2)
+        data = [
+            {'id': 21, 'name': 'tb1', 'blocks': ['b1']},
+            {'id': 22, 'name': 'tb2', 'blocks': ['b2']}]
+        serializer = ToolboxSerializer(data=data, many=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        self.assertQuerysetEqual(
+            Toolbox.objects.all(),
+            ['<Toolbox: tb1>', '<Toolbox: tb2>'], ordered=False)
 
 
 class SettingSerializerTestCase(TestCase):

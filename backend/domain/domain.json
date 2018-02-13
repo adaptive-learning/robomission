@@ -76,7 +76,11 @@
     }
   ],
   "toolboxes": [
-    "fly": ["fly"],
-    "shoot": ["fly", "shoot"]
+    {"id": 1, "name": "fly", "blocks": ["fly"]},
+    {"id": 2, "name": "shoot", "blocks": ["fly", "shoot"]}
+  ],
+  "blocks": [
+    {"id": 1, "name": "fly"},
+    {"id": 2, "name": "shoot"}
   ]
 }

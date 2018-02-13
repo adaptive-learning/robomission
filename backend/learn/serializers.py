@@ -53,12 +53,38 @@ class BlockSerializer(serializers.ModelSerializer):
         fields = ('id', 'name', 'order')
 
 
+class ToolboxListSerializer(serializers.ListSerializer):
+    def create(self, validated_data):
+        return self.update(Toolbox.objects.all(), validated_data)
+
+    def update(self, instance, validated_data):
+        toolbox_map = {toolbox.id: toolbox for toolbox in instance}
+        current_toolboxes = []
+        for data in validated_data:
+            toolbox = toolbox_map.get(data['id'], None)
+            if toolbox is None:
+                current_toolboxes.append(self.child.create(data))
+            else:
+                current_toolboxes.append(self.child.update(toolbox, data))
+        # Remove old toolboxes not specified in the provided data.
+        current_toolbox_ids = {data['id'] for data in validated_data}
+        for toolbox_id, toolbox in toolbox_map.items():
+            if toolbox_id not in current_toolbox_ids:
+                toolbox.delete()
+        return current_toolboxes
+
+
 class ToolboxSerializer(serializers.ModelSerializer):
-    blocks = serializers.SlugRelatedField(slug_field='name', many=True, read_only=True)
+    id = serializers.IntegerField()  # defined explicitly to make it writable
+    blocks = serializers.SlugRelatedField(
+        slug_field='name',
+        many=True,
+        queryset=Block.objects.all())
 
     class Meta:
         model = Toolbox
         fields = ('id', 'name', 'blocks')
+        list_serializer_class = ToolboxListSerializer
 
 
 class LevelSerializer(serializers.ModelSerializer):
