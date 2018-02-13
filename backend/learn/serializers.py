@@ -137,16 +137,22 @@ class MissionSerializer(serializers.ModelSerializer):
         fields = ('id', 'order', 'name', 'chunk_name', 'setting', 'phases')
 
     def create(self, validated_data):
-        print('validated', validated_data)
         name = validated_data.pop('name')
         order = validated_data.pop('order')
-        phases = validated_data.pop('phases')
+        phases_data = validated_data.pop('phases')
         chunk_name = validated_data.pop('chunk_name')
         chunk_order = validated_data.pop('chunk_order')
         setting = validated_data.pop('setting', {})
         chunk = Chunk.objects.create(name=chunk_name, order=chunk_order, setting=setting)
         mission = Mission.objects.create(name=name, order=order, chunk=chunk)
-        # TODO: create phases
+        phases = []
+        for i, phase_data in enumerate(phases_data, start=1):
+            # As a new mission is created, we assume the chunks don't exist yet.
+            chunk_serializer = ChunkSerializer(data=phase_data)
+            chunk_serializer.is_valid()
+            chunk = chunk_serializer.save(order=chunk_order+i)
+            phases.append(chunk)
+        mission.chunk.subchunks.set(phases)
         return mission
 
 

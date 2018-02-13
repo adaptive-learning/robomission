@@ -180,3 +180,25 @@ class MissionSerializerTestCase(TestCase):
         assert mission.chunk.order == 20
         assert mission.chunk.setting == {'toolbox': 'fly'}
         assert mission.phases == []
+
+    def test_deserialize_new_mission_with_phases(self):
+        task1 = Task.objects.create(id=1, name='t1', setting='{}', solution='')
+        task2 = Task.objects.create(id=2, name='t2', setting='{}', solution='')
+        task3 = Task.objects.create(id=3, name='t3', setting='{}', solution='')
+        data = {
+            "name": "m1",
+            "chunk_name": "c1",
+            "setting": {"toolbox": "fly"},
+            "phases": [
+                {"name": "c2", "tasks": ["t1"]},
+                {"name": "c3", "tasks": ["t2", "t3"]}]}
+        serializer = MissionSerializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        mission = serializer.save(order=2, chunk_order=20)
+        assert len(mission.phases) == 2
+        assert mission.phases[0].name == 'c2'
+        assert mission.phases[0].order == 21
+        assert set(mission.phases[0].tasks.all()) == {task1}
+        assert mission.phases[1].name == 'c3'
+        assert mission.phases[1].order == 22
+        assert set(mission.phases[1].tasks.all()) == {task2, task3}
