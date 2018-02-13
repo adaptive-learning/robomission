@@ -165,33 +165,41 @@ class ChunkSerializer(serializers.ModelSerializer):
         return instance
 
 
+class MissionListSerializer(serializers.ListSerializer):
+    def create(self, validated_data):
+        # All existing missions will be updated or removed if not present.
+        all_missions = Mission.objects.all()
+        return self.update(all_missions, validated_data)
+
+    def update(self, instance, validated_data):
+        mission_map = {mission.id: mission for mission in instance}
+        current_missions = []
+        for order, data in enumerate(validated_data, start=1):
+            mission = mission_map.get(data['id'], None)
+            data['order'] = order
+            if mission is None:
+                current_missions.append(self.child.create(data))
+            else:
+                current_missions.append(self.child.update(mission, data))
+        # Remove old missions not specified in the provided data.
+        current_mission_ids = {data['id'] for data in validated_data}
+        for mission_id, mission in mission_map.items():
+            if mission_id not in current_mission_ids:
+                mission.delete()
+        return current_missions
+
+
 class MissionSerializer(serializers.ModelSerializer):
-    phases = ChunkSerializer(many=True)
-    chunk_name = serializers.SlugField()
-    setting = SettingSerializer(required=False)
+    id = serializers.IntegerField()  # defined explicitly to make it writable
+    chunk = serializers.SlugRelatedField(
+        slug_field='name',
+        many=False,
+        queryset=Chunk.objects.all())
 
     class Meta:
         model = Mission
-        fields = ('id', 'order', 'name', 'chunk_name', 'setting', 'phases')
-
-    def create(self, validated_data):
-        name = validated_data.pop('name')
-        order = validated_data.pop('order')
-        phases_data = validated_data.pop('phases')
-        chunk_name = validated_data.pop('chunk_name')
-        chunk_order = validated_data.pop('chunk_order')
-        setting = validated_data.pop('setting', {})
-        chunk = Chunk.objects.create(name=chunk_name, order=chunk_order, setting=setting)
-        mission = Mission.objects.create(name=name, order=order, chunk=chunk)
-        phases = []
-        for i, phase_data in enumerate(phases_data, start=1):
-            # As a new mission is created, we assume the chunks don't exist yet.
-            chunk_serializer = ChunkSerializer(data=phase_data)
-            chunk_serializer.is_valid()
-            chunk = chunk_serializer.save(order=chunk_order+i)
-            phases.append(chunk)
-        mission.chunk.subchunks.set(phases)
-        return mission
+        fields = ('id', 'order', 'name', 'chunk')
+        list_serializer_class = MissionListSerializer
 
 
 class WorldSerializer(serializers.Serializer):

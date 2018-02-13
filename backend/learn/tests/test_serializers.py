@@ -203,110 +203,92 @@ class ChunkSerializerTestCase(TestCase):
         assert {chunk.pk for chunk in  Chunk.objects.all()} == {1}
 
 
-#class MissionSerializerTestCase(TestCase):
-#    def test_serialize_mission_with_phases(self):
-#        chunk1 = Chunk.objects.create(name='c1', order=1)
-#        chunk2 = Chunk.objects.create(name='c2', order=2)
-#        chunk3 = Chunk.objects.create(name='c3', order=3)
-#        chunk1.subchunks.set([chunk2, chunk3])
-#        mission = Mission.objects.create(name='loops', chunk=chunk1, order=1)
-#        serializer = MissionSerializer(mission)
-#        assert serializer.data == {
-#            'id': mission.pk,
-#            'order': 1,
-#            'name': 'loops',
-#            'chunk_name': 'c1',
-#            'setting': {},
-#            'phases': [
-#                {'id': chunk2.pk, 'name': 'c2', 'order': 2, 'setting': {}, 'tasks': []},
-#                {'id': chunk3.pk, 'name': 'c3', 'order': 3, 'setting': {}, 'tasks': []}]}
-#
-#    def test_serialize_mission_with_settings(self):
-#        chunk = Chunk.objects.create(name='c1', order=1, setting={'toolbox': 'fly'})
-#        mission = Mission.objects.create(name='m1', chunk=chunk, order=1)
-#        serializer = MissionSerializer(mission)
-#        assert serializer.data == {
-#            'id': mission.pk,
-#            'order': 1,
-#            'name': 'm1',
-#            'chunk_name': 'c1',
-#            'setting': {'toolbox': 'fly'},
-#            'phases': []}
-#
-#    def test_deserialize_new_mission(self):
-#        data = {
-#            "name": "m1",
-#            "chunk_name": "c1",
-#            "setting": {"toolbox": "fly"},
-#            "phases": []}
-#        serializer = MissionSerializer(data=data)
-#        serializer.is_valid(raise_exception=True)
-#        mission = serializer.save(order=2, chunk_order=20)
-#        assert mission.id is not None
-#        assert mission.name == 'm1'
-#        assert mission.order == 2
-#        assert mission.chunk.name == 'c1'
-#        assert mission.chunk.order == 20
-#        assert mission.chunk.setting == {'toolbox': 'fly'}
-#        assert mission.phases == []
-#
-#    def test_deserialize_new_mission_with_phases(self):
-#        task1 = Task.objects.create(id=1, name='t1', setting='{}', solution='')
-#        task2 = Task.objects.create(id=2, name='t2', setting='{}', solution='')
-#        task3 = Task.objects.create(id=3, name='t3', setting='{}', solution='')
-#        data = {
-#            "name": "m1",
-#            "chunk_name": "c1",
-#            "setting": {"toolbox": "fly"},
-#            "phases": [
-#                {"name": "c2", "tasks": ["t1"]},
-#                {"name": "c3", "tasks": ["t2", "t3"]}]}
-#        serializer = MissionSerializer(data=data)
-#        serializer.is_valid(raise_exception=True)
-#        mission = serializer.save(order=2, chunk_order=20)
-#        assert len(mission.phases) == 2
-#        assert mission.phases[0].name == 'c2'
-#        assert mission.phases[0].order == 21
-#        assert set(mission.phases[0].tasks.all()) == {task1}
-#        assert mission.phases[1].name == 'c3'
-#        assert mission.phases[1].order == 22
-#        assert set(mission.phases[1].tasks.all()) == {task2, task3}
+class MissionSerializerTestCase(TestCase):
+    def test_serialize_mission_with_phases(self):
+        chunk1 = Chunk.objects.create(name='c1', order=1)
+        mission = Mission.objects.create(name='loops', chunk=chunk1, order=5)
+        serializer = MissionSerializer(mission)
+        assert serializer.data == {
+            'id': mission.pk,
+            'order': 5,
+            'name': 'loops',
+            'chunk': 'c1'}
 
-    #def test_update_existing_mission(self):
-    #    data = {
-    #        "name": "m1",
-    #        "chunk_name": "c1",
-    #        "setting": {"toolbox": "fly"},
-    #        "phases": []}
-    #    serializer = MissionSerializer(data=data)
-    #    serializer.is_valid(raise_exception=True)
-    #    mission = serializer.save(order=2, chunk_order=20)
-    #    assert mission.id is not None
-    #    assert mission.name == 'm1'
-    #    assert mission.order == 2
-    #    assert mission.chunk.name == 'c1'
-    #    assert mission.chunk.order == 20
-    #    assert mission.chunk.setting == {'toolbox': 'fly'}
-    #    assert mission.phases == []
+    def test_deserialize_new_mission(self):
+        chunk1 = Chunk.objects.create(name='c1', order=1)
+        data = {
+            "id": 1,
+            "name": "m1",
+            "chunk": "c1"}
+        serializer = MissionSerializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        mission = serializer.save(order=2)
+        assert mission.id == 1
+        assert mission.name == 'm1'
+        assert mission.order == 2
+        assert mission.chunk == chunk1
 
+    def test_update_existing_mission(self):
+        chunk1 = Chunk.objects.create(name='c1', order=1)
+        chunk2 = Chunk.objects.create(name='c2', order=2)
+        mission = Mission.objects.create(id=1, name='m1', chunk=chunk1)
+        data = {
+            "id": 1,
+            "name": "m1n",
+            "chunk": "c2"}
+        serializer = MissionSerializer(mission, data=data)
+        serializer.is_valid(raise_exception=True)
+        mission = serializer.save(order=5)
+        mission_db = Mission.objects.get(pk=1)
+        assert mission == mission_db
+        assert mission.name == 'm1n'
+        assert mission.order == 5
+        assert mission.chunk == chunk2
 
-    #    task1 = Task.objects.create(id=1, name='t1', setting='{}', solution='')
-    #    task2 = Task.objects.create(id=2, name='t2', setting='{}', solution='')
-    #    task3 = Task.objects.create(id=3, name='t3', setting='{}', solution='')
-    #    chunk1 = Chunk.objects.create(name='c1', order=1)
-    #    chunk2 = Chunk.objects.create(name='c2', order=2)
-    #    mission = Mission.objects.create(name='m1', chunk=chunk1, order=1)
-    #    data = {
-    #        'name': 'm1',
-    #        'chunk_name': 'm1',
-    #        'order': 3,
-    #        'setting': {'toolbox': 'fly'},
-    #        'tasks': ['t1']}
-    #    serializer = ChunkSerializer(chunk, data=data)
-    #    serializer.is_valid(raise_exception=True)
-    #    chunk = serializer.save()
-    #    chunk_db = Chunk.objects.get(name='c1')
-    #    assert chunk == chunk_db
-    #    assert chunk_db.order == 5
-    #    assert chunk_db.setting == {'toolbox': 'fly'}
-    #    assert list(chunk_db.tasks.all()) == [task1]
+    def test_deserialize_list_of_new_missions(self):
+        chunk1 = Chunk.objects.create(name='c1', order=1)
+        chunk2 = Chunk.objects.create(name='c2', order=2)
+        data = [
+            {'id': 1, 'name': 'm1', 'chunk': 'c1'},
+            {'id': 2, 'name': 'm2', 'chunk': 'c2'}]
+        serializer = MissionSerializer(data=data, many=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        missions = list(Mission.objects.all())
+        assert len(missions) == 2
+        assert missions[0].name == 'm1'
+        assert missions[0].order == 1
+        assert missions[0].chunk == chunk1
+        assert missions[1].name == 'm2'
+        assert missions[1].order == 2
+        assert missions[1].chunk == chunk2
+
+    def test_deserialize_list_of_new_missions__update_existing(self):
+        chunk1 = Chunk.objects.create(name='c1', order=1)
+        chunk2 = Chunk.objects.create(name='c2', order=2)
+        Mission.objects.create(id=1, name='m1', chunk=chunk1)
+        data = [{'id': 1, 'name': 'm1n', 'chunk': 'c2'}]
+        serializer = MissionSerializer(data=data, many=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        missions = list(Mission.objects.all())
+        assert len(missions) == 1
+        assert missions[0].id == 1
+        assert missions[0].name == 'm1n'
+        assert missions[0].order == 1
+        assert missions[0].chunk == chunk2
+
+    def test_deserialize_list_of_new_missions__delete_existing(self):
+        chunk1 = Chunk.objects.create(name='c1', order=1)
+        chunk2 = Chunk.objects.create(name='c2', order=2)
+        Mission.objects.create(id=1, name='m1', chunk=chunk1)
+        data = [{'id': 2, 'name': 'm2', 'chunk': 'c2'}]
+        serializer = MissionSerializer(data=data, many=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        missions = list(Mission.objects.all())
+        assert len(missions) == 1
+        assert missions[0].id == 2
+        assert missions[0].name == 'm2'
+        assert missions[0].order == 1
+        assert missions[0].chunk == chunk2
