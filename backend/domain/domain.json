@@ -1,72 +1,82 @@
 {
-  "toolboxes": [
-    "fly": ["fly"],
-    "shoot": ["fly", "shoot"]
-  ],
   "missions" : [
+    {"id": 1, "name": "spaceship-control", "chunk": "commands"},
+    {"id": 2, "name": "shooting-and-wormholes", "chunk": "commands-2"}
+  ],
+  "chunks": [
     {
-      "name": "spaceship-control",
-      "chunk_name": "commands",
-      "setting": {
-        "toolbox": "fly"
-      },
-      "phases": [
-        {
-          "name": "fly-forward",
-          "tasks": [
-            "three-steps-forward"
-          ]
-        },
-        {
-          "name": "turn",
-          "tasks": [
-            "turning-right",
-            "turning-left",
-            "turning-right-and-left",
-            "turning-left-and-right"
-          ]
-        },
-        {
-          "name": "diamonds",
-          "tasks": [
-            "diamond-on-right",
-            "beware-of-asteorid",
-            "plus",
-            "diamond-path",
-            "surrounded-diamond"
-          ]
-        }
+      "id": 1,
+      "name": "fly-forward",
+      "tasks": [
+        "three-steps-forward"
       ]
     },
     {
-      "name": "shooting-and-wormholes",
-      "chunk_name": "commands-2",
+      "id": 2,
+      "name": "turn",
+      "tasks": [
+        "turning-right",
+        "turning-left",
+        "turning-right-and-left",
+        "turning-left-and-right"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "diamonds",
+      "tasks": [
+        "diamond-on-right",
+        "beware-of-asteorid",
+        "plus",
+        "diamond-path",
+        "surrounded-diamond"
+      ]
+    },
+    {
+      "id": 4,
+      "name": "commands",
+      "setting": {
+        "toolbox": "fly"
+      },
+      "subchunks": ["fly-forward", "turn", "diamonds"],
+      "tasks": []
+    },
+    {
+      "id": 5,
+      "name": "shooting",
+      "tasks": [
+        "shot",
+        "shooting"
+      ]
+    },
+    {
+      "id": 6,
+      "name": "wormhole",
+      "tasks": [
+        "wormhole-demo"
+      ]
+    },
+    {
+      "id": 7,
+      "name": "shooting-2",
+      "tasks": [
+        "tunnel",
+        "dont-forget-to-shot",
+        "2diamonds-2meteoroids"
+      ]
+    },
+    {
+      "id": 8,
+      "name": "commands-2",
       "setting": {
         "toolbox": "shoot"
       },
-      "phases": [
-        {
-          "name": "shooting",
-          "tasks": [
-            "shot",
-            "shooting"
-          ]
-        },
-        {
-          "name": "wormhole",
-          "tasks": [
-            "wormhole-demo"
-          ]
-        },
-        {
-          "name": "shooting-2",
-          "tasks": [
-            "tunnel",
-            "dont-forget-to-shot",
-            "2diamonds-2meteoroids"
-          ]
-        }
-      ]
+      "subchunks": ["shooting", "wormhole", "shooting-2"],
+      "tasks": []
     }
+  ],
+  "toolboxes": [
+    "fly": ["fly"],
+    "shoot": ["fly", "shoot"]
   ]
 }

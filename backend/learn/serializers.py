@@ -97,16 +97,49 @@ class SettingSerializer(serializers.Serializer):
     toolbox = serializers.CharField(required=False)
 
 
+class ChunkListSerializer(serializers.ListSerializer):
+    def create(self, validated_data):
+        # All existing chunks will be updated or removed if not present.
+        all_chunks = Chunk.objects.all()
+        return self.update(all_chunks, validated_data)
+
+    def update(self, instance, validated_data):
+        chunk_map = {chunk.id: chunk for chunk in instance}
+        current_chunks = []
+        for order, data in enumerate(validated_data):
+            chunk = chunk_map.get(data['id'], None)
+            data['order'] = order
+            if chunk is None:
+                current_chunks.append(self.child.create(data))
+            else:
+                current_chunks.append(self.child.update(chunk, data))
+        # Remove old chunks not specified in the provided data.
+        current_chunk_ids = {data['id'] for data in validated_data}
+        for chunk_id, chunk in chunk_map.items():
+            if chunk_id not in current_chunk_ids:
+                chunk.delete()
+        return current_chunks
+
+
+
 class ChunkSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField()  # defined explicitly to make it writable
     setting = SettingSerializer(required=False)
     tasks = serializers.SlugRelatedField(
         slug_field='name',
         many=True,
-        queryset=Task.objects.all())
+        queryset=Task.objects.all(),
+        default=list)
+    subchunks = serializers.SlugRelatedField(
+        slug_field='name',
+        many=True,
+        queryset=Chunk.objects.all(),
+        default=list)
 
     class Meta:
         model = Chunk
-        fields = ('id', 'name', 'order', 'setting', 'tasks')
+        fields = ('id', 'name', 'order', 'setting', 'tasks', 'subchunks')
+        list_serializer_class = ChunkListSerializer
 
     def create(self, validated_data):
         tasks = validated_data.pop('tasks')
@@ -117,12 +150,17 @@ class ChunkSerializer(serializers.ModelSerializer):
         return chunk
 
     def update(self, instance, validated_data):
+        instance.name = validated_data.get('name', instance.name)
         instance.order = validated_data.get('order', instance.order)
         instance.setting = validated_data.get('setting', instance.setting)
         if 'tasks' in validated_data:
             task_names = validated_data.pop('tasks')
             tasks = [Task.objects.get(name=name) for name in task_names]
             instance.tasks.set(tasks)
+        if 'subchunks' in validated_data:
+            subchunk_names = validated_data.pop('subchunks')
+            subchunks = [Chunk.objects.get(name=name) for name in subchunk_names]
+            instance.subchunks.set(subchunks)
         instance.save()
         return instance
 
