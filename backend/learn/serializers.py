@@ -47,32 +47,44 @@ class LazyRegisterSerializer(RegisterSerializer):
             convert_lazy_user(lazy_user, user)
 
 
-class BlockListSerializer(serializers.ListSerializer):
-    def create(self, validated_data):
-        # All existing blocks will be updated or removed if not present.
-        return self.update(Block.objects.all(), validated_data)
+class OrderedListSerializer(serializers.ListSerializer):
+    """Infers order attribute from the position of each instance in the list.
+    """
+    order_start = 0
 
     def validate(self, data):
         for i in range(len(data)):
-            data[i]['order'] = i
+            data[i]['order'] = self.order_start + i
         return data
 
+
+class CompleteUpdateListSerializer(serializers.ListSerializer):
+    """All existing entities not specified in the list are removed.
+    """
+    model = None
+
+    def create(self, validated_data):
+        return self.update(self.model.objects.all(), validated_data)
+
     def update(self, instance, validated_data):
-        block_map = {block.id: block for block in instance}
-        current_blocks = []
+        entity_map = {entity.id: entity for entity in instance}
+        current_entities = []
         for data in validated_data:
-            block = block_map.get(data['id'], None)
-            #data['order'] = order
-            if block is None:
-                current_blocks.append(self.child.create(data))
+            entity = entity_map.get(data['id'], None)
+            if entity is None:
+                current_entities.append(self.child.create(data))
             else:
-                current_blocks.append(self.child.update(block, data))
-        # Remove old blocks not specified in the provided data.
-        current_block_ids = {data['id'] for data in validated_data}
-        for block_id, block in block_map.items():
-            if block_id not in current_block_ids:
-                block.delete()
-        return current_blocks
+                current_entities.append(self.child.update(entity, data))
+        # Remove old entitys not specified in the provided data.
+        current_entity_ids = {data['id'] for data in validated_data}
+        for entity_id, entity in entity_map.items():
+            if entity_id not in current_entity_ids:
+                entity.delete()
+        return current_entities
+
+
+class BlockListSerializer(CompleteUpdateListSerializer, OrderedListSerializer):
+    model = Block
 
 
 class BlockSerializer(serializers.ModelSerializer):
@@ -85,25 +97,8 @@ class BlockSerializer(serializers.ModelSerializer):
         list_serializer_class = BlockListSerializer
 
 
-class ToolboxListSerializer(serializers.ListSerializer):
-    def create(self, validated_data):
-        return self.update(Toolbox.objects.all(), validated_data)
-
-    def update(self, instance, validated_data):
-        toolbox_map = {toolbox.id: toolbox for toolbox in instance}
-        current_toolboxes = []
-        for data in validated_data:
-            toolbox = toolbox_map.get(data['id'], None)
-            if toolbox is None:
-                current_toolboxes.append(self.child.create(data))
-            else:
-                current_toolboxes.append(self.child.update(toolbox, data))
-        # Remove old toolboxes not specified in the provided data.
-        current_toolbox_ids = {data['id'] for data in validated_data}
-        for toolbox_id, toolbox in toolbox_map.items():
-            if toolbox_id not in current_toolbox_ids:
-                toolbox.delete()
-        return current_toolboxes
+class ToolboxListSerializer(CompleteUpdateListSerializer):
+    model = Toolbox
 
 
 class ToolboxSerializer(serializers.ModelSerializer):
@@ -155,29 +150,8 @@ class SettingSerializer(serializers.Serializer):
     toolbox = serializers.CharField(required=False)
 
 
-class ChunkListSerializer(serializers.ListSerializer):
-    def create(self, validated_data):
-        # All existing chunks will be updated or removed if not present.
-        all_chunks = Chunk.objects.all()
-        return self.update(all_chunks, validated_data)
-
-    def update(self, instance, validated_data):
-        chunk_map = {chunk.id: chunk for chunk in instance}
-        current_chunks = []
-        for order, data in enumerate(validated_data):
-            chunk = chunk_map.get(data['id'], None)
-            data['order'] = order
-            if chunk is None:
-                current_chunks.append(self.child.create(data))
-            else:
-                current_chunks.append(self.child.update(chunk, data))
-        # Remove old chunks not specified in the provided data.
-        current_chunk_ids = {data['id'] for data in validated_data}
-        for chunk_id, chunk in chunk_map.items():
-            if chunk_id not in current_chunk_ids:
-                chunk.delete()
-        return current_chunks
-
+class ChunkListSerializer(CompleteUpdateListSerializer, OrderedListSerializer):
+    model = Chunk
 
 
 class ChunkSerializer(serializers.ModelSerializer):
@@ -223,28 +197,9 @@ class ChunkSerializer(serializers.ModelSerializer):
         return instance
 
 
-class MissionListSerializer(serializers.ListSerializer):
-    def create(self, validated_data):
-        # All existing missions will be updated or removed if not present.
-        all_missions = Mission.objects.all()
-        return self.update(all_missions, validated_data)
-
-    def update(self, instance, validated_data):
-        mission_map = {mission.id: mission for mission in instance}
-        current_missions = []
-        for order, data in enumerate(validated_data, start=1):
-            mission = mission_map.get(data['id'], None)
-            data['order'] = order
-            if mission is None:
-                current_missions.append(self.child.create(data))
-            else:
-                current_missions.append(self.child.update(mission, data))
-        # Remove old missions not specified in the provided data.
-        current_mission_ids = {data['id'] for data in validated_data}
-        for mission_id, mission in mission_map.items():
-            if mission_id not in current_mission_ids:
-                mission.delete()
-        return current_missions
+class MissionListSerializer(CompleteUpdateListSerializer, OrderedListSerializer):
+    order_start = 1
+    model = Mission
 
 
 class MissionSerializer(serializers.ModelSerializer):
