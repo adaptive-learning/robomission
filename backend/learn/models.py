@@ -1,6 +1,7 @@
 """DB entities definitions.
 """
 from random import randrange
+from uuid import uuid4
 from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
@@ -304,6 +305,29 @@ class ProgramSnapshot(models.Model):
 
     def __str__(self):
         return '[{pk}] {program}'.format(pk=self.pk, program=self.program_shortened)
+
+
+def generate_uuid_string():
+    return uuid4().hex
+
+
+class Domain(models.Model):
+    """Describes the education content, concepts and relationships between them.
+
+    This model allows to have a single object with prefetched domain entities,
+    to easily deactivate some entities without deleting them (simply by
+    removing them from the "current" domain), and using differnt domain for
+    different users (AB experiments, testing version).
+    """
+    name = models.SlugField(unique=True, default=generate_uuid_string)
+    blocks = models.ManyToManyField(Block)
+    toolboxes = models.ManyToManyField(Toolbox)
+    tasks = models.ManyToManyField(Task)
+    chunks = models.ManyToManyField(Chunk)
+    missions = models.ManyToManyField(Mission)
+
+    def __str__(self):
+        return str(self.name)
 
 
 def generate_random_integer():
