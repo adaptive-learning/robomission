@@ -7,7 +7,7 @@ from learn.credits import get_active_credits, get_level_value
 from learn.models import Block, Toolbox, Level, Task, Instruction
 from learn.models import Action, ProgramSnapshot, Student, TaskSession
 from learn.models import Teacher, Classroom
-from learn.models import Chunk, Mission
+from learn.models import Chunk, Mission, Domain
 from learn.users import convert_lazy_user, is_initial_user
 from learn.world import get_world
 
@@ -215,13 +215,71 @@ class MissionSerializer(serializers.ModelSerializer):
         list_serializer_class = MissionListSerializer
 
 
-class DomainSerializer(serializers.Serializer):
+class DomainSerializer(serializers.ModelSerializer):
     name = serializers.SlugField()
     blocks = BlockSerializer(many=True)
+    #toolboxes = ToolboxSerializer(many=True, validators=[])
     toolboxes = ToolboxSerializer(many=True)
     tasks = TaskSerializer(many=True)
     chunks = ChunkSerializer(many=True)
     missions = MissionSerializer(many=True)
+
+    def validate_blocks(self, data):
+        serializer = BlockSerializer(data=data, many=True)
+        serializer.is_valid(raise_exception=True)
+        instances = serializer.save()
+        return instances
+
+    def validate_toolboxes(self, data):
+        serializer = ToolboxSerializer(data=data, many=True)
+        serializer.is_valid(raise_exception=True)
+        instances = serializer.save()
+        return instances
+
+    def validate_tasks(self, data):
+        serializer = TaskSerializer(data=data, many=True)
+        serializer.is_valid(raise_exception=True)
+        instances = serializer.save()
+        return instances
+
+    def validate_chunks(self, data):
+        serializer = ChunkSerializer(data=data, many=True)
+        serializer.is_valid(raise_exception=True)
+        instances = serializer.save()
+        return instances
+
+    def validate_missions(self, data):
+        serializer = MissionSerializer(data=data, many=True)
+        serializer.is_valid(raise_exception=True)
+        instances = serializer.save()
+        return instances
+
+    class Meta:
+        model = Domain
+        fields = ('name', 'blocks', 'toolboxes', 'tasks', 'chunks', 'missions')
+        #validators = []
+        #extra_kwargs = {
+        #    'toolboxes': {'validators': []}
+        #}
+
+    def create(self, validated_data):
+        domain = Domain.objects.create(name=validated_data['name'])
+        domain.blocks.set(validated_data['blocks'])
+        domain.toolboxes.set(validated_data['toolboxes'])
+        domain.tasks.set(validated_data['tasks'])
+        domain.chunks.set(validated_data['chunks'])
+        domain.missions.set(validated_data['missions'])
+        return domain
+
+    def update(self, instance, validated_data):
+        instance.name = validated_data.get('name', instance.name)
+        instance.save()
+        instance.blocks.set(validated_data['blocks'])
+        instance.toolboxes.set(validated_data['toolboxes'])
+        instance.tasks.set(validated_data['tasks'])
+        instance.chunks.set(validated_data['chunks'])
+        instance.missions.set(validated_data['missions'])
+        return instance
 
 
 # Deprecated.

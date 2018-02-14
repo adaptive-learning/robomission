@@ -19,6 +19,54 @@ class DomainSerializerTestCase(TestCase):
             'toolboxes': [{'id': toolbox.id, 'name': 'tb1', 'blocks': ['b1']}],
             'tasks': [], 'chunks': [], 'missions': []}
 
+    def test_nested_deserialization(self):
+        data = {
+            "name": "test1", "missions" : [], "chunks": [], "tasks": [],
+            "toolboxes": [{"id": 1, "name": "tb1", "blocks": ["b1", "b2"]}],
+            "blocks": [{"id": 1, "name": "b1"}, {"id": 2, "name": "b2"}]}
+        serializer = DomainSerializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        domain = Domain.objects.get(name='test1')
+        self.assertQuerysetEqual(
+            domain.toolboxes.first().blocks.all(),
+            ['<Block: b1>', '<Block: b2>'])
+
+    def test_mission_with_chunk_deserialization(self):
+        data = {
+            "name": "test1", "blocks" : [], "toolboxes": [], "tasks": [],
+            "chunks": [{"id": 1, "name": "c1"}],
+            "missions": [{"id": 1, "name": "m1", "chunk": "c1"}]}
+        serializer = DomainSerializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        domain = Domain.objects.get(name='test1')
+        mission = domain.missions.first()
+        assert mission.name == 'm1'
+        assert mission.chunk.name == 'c1'
+
+    def test_update_existing_domain(self):
+        block = Block.objects.create(name='b1', order=5)
+        toolbox = Toolbox.objects.create(name='tb1')
+        toolbox.blocks.set([block])
+        domain = Domain.objects.create(name='test1')
+        domain.blocks.set([block])
+        domain.toolboxes.set([toolbox])
+        data = {
+            "name": "test1", "missions" : [], "chunks": [], "tasks": [],
+            "toolboxes": [{"id": toolbox.pk, "name": "tb1", "blocks": ["b2", "b3"]}],
+            "blocks": [{"id": 2, "name": "b2"}, {"id": 3, "name": "b3"}]}
+        serializer = DomainSerializer(domain, data=data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        domain = Domain.objects.get(name='test1')
+        self.assertQuerysetEqual(
+            domain.toolboxes.all(),
+            ['<Toolbox: tb1>'])
+        self.assertQuerysetEqual(
+            domain.toolboxes.first().blocks.all(),
+            ['<Block: b2>', '<Block: b3>'])
+
 
 class BlockSerializerTestCase(TestCase):
     def test_serialization(self):
