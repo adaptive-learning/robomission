@@ -1,0 +1,55 @@
+{
+  "name": "test1",
+  "missions" : [
+    {"id": 1, "name": "m1", "chunk": "c1"},
+    {"id": 2, "name": "m2", "chunk": "c2"}
+  ],
+  "chunks": [
+    {
+      "id": 1,
+      "name": "c1a",
+      "tasks": [ "t1" ]
+    },
+    {
+      "id": 2,
+      "name": "c1b",
+      "tasks": [ "t3", "t4", "t5" ]
+    },
+    {
+      "id": 3,
+      "name": "c1c",
+      "tasks": [ "t6", "t7" ]
+    },
+    {
+      "id": 4,
+      "name": "c1",
+      "setting": { "toolbox": "tb1" },
+      "subchunks": ["c1a", "c1b", "c1c"],
+      "tasks": []
+    },
+    {
+      "id": 5,
+      "name": "c2a",
+      "tasks": [ "t8" ]
+    },
+    {
+      "id": 6,
+      "name": "c2b", "tasks": [ "t9", "t10" ]
+    },
+    {
+      "id": 7,
+      "name": "c2",
+      "setting": { "toolbox": "tb2" },
+      "subchunks": ["c2a", "c2b"],
+      "tasks": []
+    }
+  ],
+  "toolboxes": [
+    {"id": 1, "name": "tb1", "blocks": ["b1"]},
+    {"id": 2, "name": "tb2", "blocks": ["b1", "b2"]}
+  ],
+  "blocks": [
+    {"id": 1, "name": "b1"},
+    {"id": 2, "name": "b2"}
+  ]
+}
