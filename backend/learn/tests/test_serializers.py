@@ -1,7 +1,23 @@
 from django.test import TestCase
-from learn.models import Block, Toolbox, Task, Chunk, Mission
+from learn.models import Block, Toolbox, Task, Chunk, Mission, Domain
 from learn.serializers import BlockSerializer, ToolboxSerializer, SettingSerializer
-from learn.serializers import ChunkSerializer, MissionSerializer
+from learn.serializers import ChunkSerializer, MissionSerializer, DomainSerializer
+
+
+class DomainSerializerTestCase(TestCase):
+    def test_nested_serialization(self):
+        block = Block.objects.create(name='b1', order=5)
+        toolbox = Toolbox.objects.create(name='tb1')
+        toolbox.blocks.set([block])
+        domain = Domain.objects.create(name='d1')
+        domain.blocks.set([block])
+        domain.toolboxes.set([toolbox])
+        serializer = DomainSerializer(domain)
+        assert serializer.data == {
+            'name': 'd1',
+            'blocks': [{'id': block.id, 'name': 'b1', 'order': 5}],
+            'toolboxes': [{'id': toolbox.id, 'name': 'tb1', 'blocks': ['b1']}],
+            'tasks': [], 'chunks': [], 'missions': []}
 
 
 class BlockSerializerTestCase(TestCase):

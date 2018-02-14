@@ -215,6 +215,17 @@ class MissionSerializer(serializers.ModelSerializer):
         list_serializer_class = MissionListSerializer
 
 
+class DomainSerializer(serializers.Serializer):
+    name = serializers.SlugField()
+    blocks = BlockSerializer(many=True)
+    toolboxes = ToolboxSerializer(many=True)
+    tasks = TaskSerializer(many=True)
+    chunks = ChunkSerializer(many=True)
+    missions = MissionSerializer(many=True)
+
+
+# Deprecated.
+# TODO: Replace all its usage by DomainSerializer, then remove.
 class WorldSerializer(serializers.Serializer):
     blocks = BlockSerializer(many=True)
     toolboxes = ToolboxSerializer(many=True)
