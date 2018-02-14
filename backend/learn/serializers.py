@@ -47,10 +47,42 @@ class LazyRegisterSerializer(RegisterSerializer):
             convert_lazy_user(lazy_user, user)
 
 
+class BlockListSerializer(serializers.ListSerializer):
+    def create(self, validated_data):
+        # All existing blocks will be updated or removed if not present.
+        return self.update(Block.objects.all(), validated_data)
+
+    def validate(self, data):
+        for i in range(len(data)):
+            data[i]['order'] = i
+        return data
+
+    def update(self, instance, validated_data):
+        block_map = {block.id: block for block in instance}
+        current_blocks = []
+        for data in validated_data:
+            block = block_map.get(data['id'], None)
+            #data['order'] = order
+            if block is None:
+                current_blocks.append(self.child.create(data))
+            else:
+                current_blocks.append(self.child.update(block, data))
+        # Remove old blocks not specified in the provided data.
+        current_block_ids = {data['id'] for data in validated_data}
+        for block_id, block in block_map.items():
+            if block_id not in current_block_ids:
+                block.delete()
+        return current_blocks
+
+
 class BlockSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField()  # defined explicitly to make it writable
+    order = serializers.IntegerField(default=int)
+
     class Meta:
         model = Block
         fields = ('id', 'name', 'order')
+        list_serializer_class = BlockListSerializer
 
 
 class ToolboxListSerializer(serializers.ListSerializer):
