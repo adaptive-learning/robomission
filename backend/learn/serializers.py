@@ -89,6 +89,7 @@ class BlockListSerializer(CompleteUpdateListSerializer, OrderedListSerializer):
 
 class BlockSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField()  # defined explicitly to make it writable
+    name = serializers.SlugField(validators=[])
     order = serializers.IntegerField(default=int)
 
     class Meta:
@@ -103,6 +104,9 @@ class ToolboxListSerializer(CompleteUpdateListSerializer):
 
 class ToolboxSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField()  # defined explicitly to make it writable
+    # Don't check uniqueness of name is needed to allow multiple update of
+    # existing toolboxes.
+    name = serializers.SlugField(validators=[])
     blocks = serializers.SlugRelatedField(
         slug_field='name',
         many=True,
@@ -156,6 +160,7 @@ class ChunkListSerializer(CompleteUpdateListSerializer, OrderedListSerializer):
 
 class ChunkSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField()  # defined explicitly to make it writable
+    name = serializers.SlugField(validators=[])
     setting = SettingSerializer(required=False)
     tasks = serializers.SlugRelatedField(
         slug_field='name',
@@ -204,6 +209,7 @@ class MissionListSerializer(CompleteUpdateListSerializer, OrderedListSerializer)
 
 class MissionSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField()  # defined explicitly to make it writable
+    name = serializers.SlugField(validators=[])
     chunk = serializers.SlugRelatedField(
         slug_field='name',
         many=False,
