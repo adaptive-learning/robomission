@@ -24,9 +24,8 @@ class DomainSerializerTestCase(TestCase):
             "name": "test1", "missions" : [], "chunks": [], "tasks": [],
             "toolboxes": [{"id": 1, "name": "tb1", "blocks": ["b1", "b2"]}],
             "blocks": [{"id": 1, "name": "b1"}, {"id": 2, "name": "b2"}]}
-        serializer = DomainSerializer(data=data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
+        serializer = DomainSerializer()
+        serializer.create_or_update(data)
         domain = Domain.objects.get(name='test1')
         self.assertQuerysetEqual(
             domain.toolboxes.first().blocks.all(),
@@ -37,9 +36,8 @@ class DomainSerializerTestCase(TestCase):
             "name": "test1", "blocks" : [], "toolboxes": [], "tasks": [],
             "chunks": [{"id": 1, "name": "c1"}],
             "missions": [{"id": 1, "name": "m1", "chunk": "c1"}]}
-        serializer = DomainSerializer(data=data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
+        serializer = DomainSerializer()
+        serializer.create_or_update(data)
         domain = Domain.objects.get(name='test1')
         mission = domain.missions.first()
         assert mission.name == 'm1'
@@ -53,9 +51,8 @@ class DomainSerializerTestCase(TestCase):
             "name": "test1",
             "missions" : [], "chunks": [], "tasks": [], "toolboxes": [],
             "blocks": [{"id": block.id, "name": "b2"}, {"id": 3, "name": "b3"}]}
-        serializer = DomainSerializer(domain, data=data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
+        serializer = DomainSerializer()
+        serializer.create_or_update(data)
         domain = Domain.objects.get(name='test1')
         self.assertQuerysetEqual(
             domain.blocks.all(),
@@ -69,9 +66,8 @@ class DomainSerializerTestCase(TestCase):
             "name": "test1",
             "missions" : [], "chunks": [], "tasks": [], "blocks": [],
             "toolboxes": [{"id": toolbox.pk, "name": "tb1n", "blocks": []}]}
-        serializer = DomainSerializer(domain, data=data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
+        serializer = DomainSerializer()
+        serializer.create_or_update(data)
         domain = Domain.objects.get(name='test1')
         self.assertQuerysetEqual(domain.toolboxes.all(), ['<Toolbox: tb1n>'])
 
@@ -86,9 +82,8 @@ class DomainSerializerTestCase(TestCase):
             "name": "test1", "missions" : [], "chunks": [], "tasks": [],
             "toolboxes": [{"id": toolbox.pk, "name": "tb1", "blocks": ["b2", "b3"]}],
             "blocks": [{"id": 2, "name": "b2"}, {"id": 3, "name": "b3"}]}
-        serializer = DomainSerializer(domain, data=data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
+        serializer = DomainSerializer()
+        serializer.create_or_update(data)
         domain = Domain.objects.get(name='test1')
         self.assertQuerysetEqual(
             domain.toolboxes.all(),
@@ -114,9 +109,8 @@ class DomainSerializerTestCase(TestCase):
             "tasks": [],
             "toolboxes": [{"id": toolbox.pk, "name": "tb1", "blocks": []}],
             "blocks": [{"id": block.id, "name": "b1"}]}
-        serializer = DomainSerializer(domain, data=data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
+        serializer = DomainSerializer()
+        serializer.create_or_update(data)
         domain = Domain.objects.get(name='test1')
         self.assertQuerysetEqual(domain.blocks.all(), ['<Block: b1>'])
         self.assertQuerysetEqual(domain.toolboxes.all(), ['<Toolbox: tb1>'])
@@ -143,23 +137,23 @@ class BlockSerializerTestCase(TestCase):
         assert block.order == 5
 
     def test_deserialize_list(self):
+        domain = Domain.objects.create()
         data = [
             {'id': 2, 'name': 'b1'},
             {'id': 1, 'name': 'b2'}]
-        serializer = BlockSerializer(data=data, many=True)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
+        serializer = BlockSerializer(many=True)
+        serializer.set(domain.blocks, data)
         self.assertQuerysetEqual(
-            Block.objects.all(),
+            domain.blocks.all(),
             ['<Block: b1>', '<Block: b2>'])
 
     def test_deserialize_order(self):
+        domain = Domain.objects.create()
         data = [
             {'id': 2, 'name': 'b1'},
             {'id': 1, 'name': 'b2'}]
-        serializer = BlockSerializer(data=data, many=True)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
+        serializer = BlockSerializer(many=True)
+        serializer.set(domain.blocks, data)
         assert Block.objects.get(pk=2).order == 0
         assert Block.objects.get(pk=1).order == 1
 
@@ -191,33 +185,33 @@ class ToolboxSerializerTestCase(TestCase):
         assert list(toolbox.blocks.all()) == [block1, block2]
 
     def test_deserialize_list(self):
+        domain = Domain.objects.create()
         Block.objects.create(name='b1', order=1)
         Block.objects.create(name='b2', order=2)
         data = [
             {'id': 21, 'name': 'tb1', 'blocks': ['b1']},
             {'id': 22, 'name': 'tb2', 'blocks': ['b2']}]
-        serializer = ToolboxSerializer(data=data, many=True)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
+        serializer = ToolboxSerializer(many=True)
+        serializer.set(domain.toolboxes, data)
         self.assertQuerysetEqual(
-            Toolbox.objects.all(),
+            domain.toolboxes.all(),
             ['<Toolbox: tb1>', '<Toolbox: tb2>'], ordered=False)
 
     def test_update_existing_toolbox(self):
+        domain = Domain.objects.create()
         toolbox = Toolbox.objects.create(name='tb1')
         data = [{'id': toolbox.id, 'name': 'tb1n', 'blocks': []}]
-        serializer = ToolboxSerializer(data=data, many=True)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        self.assertQuerysetEqual(Toolbox.objects.all(), ['<Toolbox: tb1n>'])
+        serializer = ToolboxSerializer(many=True)
+        serializer.set(domain.toolboxes, data)
+        self.assertQuerysetEqual(domain.toolboxes.all(), ['<Toolbox: tb1n>'])
 
     def test_update_existing_toolbox_same_name(self):
+        domain = Domain.objects.create()
         toolbox = Toolbox.objects.create(name='tb1')
         data = [{'id': toolbox.id, 'name': 'tb1', 'blocks': []}]
-        serializer = ToolboxSerializer(data=data, many=True)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        self.assertQuerysetEqual(Toolbox.objects.all(), ['<Toolbox: tb1>'])
+        serializer = ToolboxSerializer(many=True)
+        serializer.set(domain.toolboxes, data)
+        self.assertQuerysetEqual(domain.toolboxes.all(), ['<Toolbox: tb1>'])
 
 
 class SettingSerializerTestCase(TestCase):
@@ -390,10 +384,10 @@ class ChunkSerializerTestCase(TestCase):
         assert set(chunk_db.subchunks.all()) == {chunk3, chunk4}
 
     def test_deserialize_list_of_new_chunks(self):
+        domain = Domain.objects.create()
         data = [{'id': 1, 'name': 'c1'}, {'id': 2, 'name': 'c2'}]
-        serializer = ChunkSerializer(data=data, many=True)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
+        serializer = ChunkSerializer(many=True)
+        serializer.set(domain.chunks, data)
         chunk1 = Chunk.objects.get(pk=1)
         chunk2 = Chunk.objects.get(pk=2)
         assert chunk1.name == 'c1'
@@ -401,23 +395,33 @@ class ChunkSerializerTestCase(TestCase):
         assert chunk2.name == 'c2'
         assert chunk2.order == 1
 
+    def test_deserialize_list_of_new_chunks_with_subchunks(self):
+        domain = Domain.objects.create()
+        data = [
+            {'id': 1, 'name': 'c1'},
+            {'id': 2, 'name': 'c2', 'subchunks': ['c1']}]
+        serializer = ChunkSerializer(many=True)
+        serializer.set(domain.chunks, data)
+        #chunk2 = Chunk.objects.get(pk=2)
+        #self.assertQuerysetEqual(chunk2.subchunks.all(), ['<Chunk c1>'])
+
     def test_deserialize_list_of_new_chunks__update_existing(self):
+        domain = Domain.objects.create()
         Chunk.objects.create(id=2, name='c2', order=5)
         data = [{'id': 1, 'name': 'c1'}, {'id': 2, 'name': 'c2n'}]
-        serializer = ChunkSerializer(data=data, many=True)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
+        serializer = ChunkSerializer(many=True)
+        serializer.set(domain.chunks, data)
         chunk = Chunk.objects.get(pk=2)
         assert chunk.name == 'c2n'
         assert chunk.order == 1
 
     def test_deserialize_list_of_new_chunks__remove_old(self):
+        domain = Domain.objects.create()
         Chunk.objects.create(id=2, name='c2')
         data = [{'id': 1, 'name': 'c1'}]
-        serializer = ChunkSerializer(data=data, many=True)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        assert {chunk.pk for chunk in  Chunk.objects.all()} == {1}
+        serializer = ChunkSerializer(many=True)
+        serializer.set(domain.chunks, data)
+        assert {chunk.pk for chunk in domain.chunks.all()} == {1}
 
 
 class MissionSerializerTestCase(TestCase):
@@ -463,15 +467,15 @@ class MissionSerializerTestCase(TestCase):
         assert mission.chunk == chunk2
 
     def test_deserialize_list_of_new_missions(self):
+        domain = Domain.objects.create()
         chunk1 = Chunk.objects.create(name='c1', order=1)
         chunk2 = Chunk.objects.create(name='c2', order=2)
         data = [
             {'id': 1, 'name': 'm1', 'chunk': 'c1'},
             {'id': 2, 'name': 'm2', 'chunk': 'c2'}]
-        serializer = MissionSerializer(data=data, many=True)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        missions = list(Mission.objects.all())
+        serializer = MissionSerializer(many=True)
+        serializer.set(domain.missions, data)
+        missions = list(domain.missions.all())
         assert len(missions) == 2
         assert missions[0].name == 'm1'
         assert missions[0].order == 1
@@ -481,14 +485,14 @@ class MissionSerializerTestCase(TestCase):
         assert missions[1].chunk == chunk2
 
     def test_deserialize_list_of_new_missions__update_existing(self):
+        domain = Domain.objects.create()
         chunk1 = Chunk.objects.create(name='c1', order=1)
         chunk2 = Chunk.objects.create(name='c2', order=2)
         Mission.objects.create(id=1, name='m1', chunk=chunk1)
         data = [{'id': 1, 'name': 'm1n', 'chunk': 'c2'}]
-        serializer = MissionSerializer(data=data, many=True)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        missions = list(Mission.objects.all())
+        serializer = MissionSerializer(many=True)
+        serializer.set(domain.missions, data)
+        missions = list(domain.missions.all())
         assert len(missions) == 1
         assert missions[0].id == 1
         assert missions[0].name == 'm1n'
@@ -496,14 +500,14 @@ class MissionSerializerTestCase(TestCase):
         assert missions[0].chunk == chunk2
 
     def test_deserialize_list_of_new_missions__delete_existing(self):
+        domain = Domain.objects.create()
         chunk1 = Chunk.objects.create(name='c1', order=1)
         chunk2 = Chunk.objects.create(name='c2', order=2)
         Mission.objects.create(id=1, name='m1', chunk=chunk1)
         data = [{'id': 2, 'name': 'm2', 'chunk': 'c2'}]
-        serializer = MissionSerializer(data=data, many=True)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        missions = list(Mission.objects.all())
+        serializer = MissionSerializer(many=True)
+        serializer.set(domain.missions, data)
+        missions = list(domain.missions.all())
         assert len(missions) == 1
         assert missions[0].id == 2
         assert missions[0].name == 'm2'

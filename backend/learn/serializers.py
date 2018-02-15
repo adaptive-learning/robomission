@@ -58,33 +58,30 @@ class OrderedListSerializer(serializers.ListSerializer):
         return data
 
 
-class CompleteUpdateListSerializer(serializers.ListSerializer):
-    """All existing entities not specified in the list are removed.
+class SettableListSerializer(serializers.ListSerializer):
+    """Allows to set new instances for a domain manager.
     """
-    model = None
-
-    def create(self, validated_data):
-        return self.update(self.model.objects.all(), validated_data)
-
-    def update(self, instance, validated_data):
-        entity_map = {entity.id: entity for entity in instance}
-        current_entities = []
-        for data in validated_data:
-            entity = entity_map.get(data['id'], None)
-            if entity is None:
-                current_entities.append(self.child.create(data))
-            else:
-                current_entities.append(self.child.update(entity, data))
-        # Remove old entitys not specified in the provided data.
-        current_entity_ids = {data['id'] for data in validated_data}
-        for entity_id, entity in entity_map.items():
-            if entity_id not in current_entity_ids:
-                entity.delete()
-        return current_entities
+    def set(self, manager, initial_data):
+        """Create or update isntances of given manager according to data.
+        Assumes not-validated initial_data.
+        """
+        data = self.validate(initial_data)
+        instance_map = {
+            instance.id: instance
+            for instance in manager.model.objects.all()}
+        current_instances = []
+        for instance_data in data:
+            instance = instance_map.get(instance_data['id'], None)
+            serializer = self.child.__class__(instance=instance, data=instance_data)
+            serializer.is_valid(raise_exception=True)
+            instance = serializer.save()
+            current_instances.append(instance)
+        manager.set(current_instances)
+        return current_instances
 
 
-class BlockListSerializer(CompleteUpdateListSerializer, OrderedListSerializer):
-    model = Block
+class SettableOrderedListSerializer(SettableListSerializer, OrderedListSerializer):
+    pass
 
 
 class BlockSerializer(serializers.ModelSerializer):
@@ -95,11 +92,7 @@ class BlockSerializer(serializers.ModelSerializer):
     class Meta:
         model = Block
         fields = ('id', 'name', 'order')
-        list_serializer_class = BlockListSerializer
-
-
-class ToolboxListSerializer(CompleteUpdateListSerializer):
-    model = Toolbox
+        list_serializer_class = SettableOrderedListSerializer
 
 
 class ToolboxSerializer(serializers.ModelSerializer):
@@ -115,7 +108,7 @@ class ToolboxSerializer(serializers.ModelSerializer):
     class Meta:
         model = Toolbox
         fields = ('id', 'name', 'blocks')
-        list_serializer_class = ToolboxListSerializer
+        list_serializer_class = SettableListSerializer
 
 
 class LevelSerializer(serializers.ModelSerializer):
@@ -140,22 +133,20 @@ class InstructionSerializer(serializers.ModelSerializer):
 
 
 class TaskSerializer(serializers.ModelSerializer):
-    level = serializers.SlugRelatedField(
-        slug_field='name',
-        many=False,
-        queryset=Level.objects.all())
+    #level = serializers.SlugRelatedField(
+    #    slug_field='name',
+    #    many=False,
+    #    queryset=Level.objects.all(),
+    #    required=False)
 
     class Meta:
         model = Task
-        fields = ('id', 'name', 'level', 'setting', 'solution')
+        fields = ('id', 'name', 'setting', 'solution')
+        list_serializer_class = SettableListSerializer
 
 
 class SettingSerializer(serializers.Serializer):
     toolbox = serializers.CharField(required=False)
-
-
-class ChunkListSerializer(CompleteUpdateListSerializer, OrderedListSerializer):
-    model = Chunk
 
 
 class ChunkSerializer(serializers.ModelSerializer):
@@ -176,35 +167,38 @@ class ChunkSerializer(serializers.ModelSerializer):
     class Meta:
         model = Chunk
         fields = ('id', 'name', 'order', 'setting', 'tasks', 'subchunks')
-        list_serializer_class = ChunkListSerializer
+        list_serializer_class = SettableOrderedListSerializer
 
     def create(self, validated_data):
-        tasks = validated_data.pop('tasks')
+        task_names = validated_data.pop('tasks', None)
+        subchunk_names = validated_data.pop('subchunks', None)
         chunk = Chunk.objects.create(**validated_data)
-        for task_name in tasks:
-            task = Task.objects.get(name=task_name)
-            chunk.tasks.add(task)
+        if task_names:
+            tasks = [Task.objects.get(name=name) for name in task_names]
+            chunk.tasks.set(tasks)
+        if subchunk_names:
+            subchunks = [Chunk.objects.get(name=name) for name in subchunk_names]
+            chunk.subchunks.set(subchunks)
         return chunk
 
     def update(self, instance, validated_data):
         instance.name = validated_data.get('name', instance.name)
         instance.order = validated_data.get('order', instance.order)
         instance.setting = validated_data.get('setting', instance.setting)
-        if 'tasks' in validated_data:
-            task_names = validated_data.pop('tasks')
+        task_names = validated_data.pop('tasks', None)
+        subchunk_names = validated_data.pop('subchunks', None)
+        if task_names:
             tasks = [Task.objects.get(name=name) for name in task_names]
             instance.tasks.set(tasks)
-        if 'subchunks' in validated_data:
-            subchunk_names = validated_data.pop('subchunks')
+        if subchunk_names:
             subchunks = [Chunk.objects.get(name=name) for name in subchunk_names]
             instance.subchunks.set(subchunks)
         instance.save()
         return instance
 
 
-class MissionListSerializer(CompleteUpdateListSerializer, OrderedListSerializer):
+class MissionListSerializer(SettableOrderedListSerializer):
     order_start = 1
-    model = Mission
 
 
 class MissionSerializer(serializers.ModelSerializer):
@@ -224,68 +218,24 @@ class MissionSerializer(serializers.ModelSerializer):
 class DomainSerializer(serializers.ModelSerializer):
     name = serializers.SlugField()
     blocks = BlockSerializer(many=True)
-    #toolboxes = ToolboxSerializer(many=True, validators=[])
     toolboxes = ToolboxSerializer(many=True)
     tasks = TaskSerializer(many=True)
     chunks = ChunkSerializer(many=True)
     missions = MissionSerializer(many=True)
 
-    def validate_blocks(self, data):
-        serializer = BlockSerializer(data=data, many=True)
-        serializer.is_valid(raise_exception=True)
-        instances = serializer.save()
-        return instances
-
-    def validate_toolboxes(self, data):
-        serializer = ToolboxSerializer(data=data, many=True)
-        serializer.is_valid(raise_exception=True)
-        instances = serializer.save()
-        return instances
-
-    def validate_tasks(self, data):
-        serializer = TaskSerializer(data=data, many=True)
-        serializer.is_valid(raise_exception=True)
-        instances = serializer.save()
-        return instances
-
-    def validate_chunks(self, data):
-        serializer = ChunkSerializer(data=data, many=True)
-        serializer.is_valid(raise_exception=True)
-        instances = serializer.save()
-        return instances
-
-    def validate_missions(self, data):
-        serializer = MissionSerializer(data=data, many=True)
-        serializer.is_valid(raise_exception=True)
-        instances = serializer.save()
-        return instances
-
     class Meta:
         model = Domain
         fields = ('name', 'blocks', 'toolboxes', 'tasks', 'chunks', 'missions')
-        #validators = []
-        #extra_kwargs = {
-        #    'toolboxes': {'validators': []}
-        #}
 
-    def create(self, validated_data):
-        domain = Domain.objects.create(name=validated_data['name'])
-        domain.blocks.set(validated_data['blocks'])
-        domain.toolboxes.set(validated_data['toolboxes'])
-        domain.tasks.set(validated_data['tasks'])
-        domain.chunks.set(validated_data['chunks'])
-        domain.missions.set(validated_data['missions'])
+    def create_or_update(self, data):
+        # Call directly without validation!
+        domain, _created = Domain.objects.get_or_create(name=data['name'])
+        BlockSerializer(many=True).set(domain.blocks, data['blocks'])
+        ToolboxSerializer(many=True).set(domain.toolboxes, data['toolboxes'])
+        TaskSerializer(many=True).set(domain.tasks, data['tasks'])
+        ChunkSerializer(many=True).set(domain.chunks, data['chunks'])
+        MissionSerializer(many=True).set(domain.missions, data['missions'])
         return domain
-
-    def update(self, instance, validated_data):
-        instance.name = validated_data.get('name', instance.name)
-        instance.save()
-        instance.blocks.set(validated_data['blocks'])
-        instance.toolboxes.set(validated_data['toolboxes'])
-        instance.tasks.set(validated_data['tasks'])
-        instance.chunks.set(validated_data['chunks'])
-        instance.missions.set(validated_data['missions'])
-        return instance
 
 
 # Deprecated.
