@@ -1,17 +1,16 @@
 from collections import namedtuple
-from learn.models import Block, Toolbox, Level, Task, Instruction
+from learn.models import Block, Toolbox, Task, Instruction
 
 
 World = namedtuple('World', [
     'blocks',
     'toolboxes',
-    'levels',
     'tasks',
     'instructions',
 ])
 
 
-def get_world(include=('blocks', 'toolboxes', 'levels', 'tasks', 'instructions')):
+def get_world(include=('blocks', 'toolboxes', 'tasks', 'instructions')):
     """Create a world of static entities.
 
     Each attribute is a queryset with specified related entities prefetching.
@@ -25,12 +24,8 @@ def get_world(include=('blocks', 'toolboxes', 'levels', 'tasks', 'instructions')
             Toolbox.objects.prefetch_related('blocks').all()
             if 'toolboxes' in include
             else None),
-        levels=(
-            Level.objects.prefetch_related('tasks').all()
-            if 'levels' in include
-            else None),
         tasks=(
-            Task.objects.select_related('level').all()
+            Task.objects.all()
             if 'tasks' in include
             else None),
         instructions=(

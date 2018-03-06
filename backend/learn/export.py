@@ -6,7 +6,7 @@ from rest_framework import permissions
 from rest_framework import serializers
 from rest_framework import viewsets
 from rest_pandas import PandasSerializer, PandasViewSet
-from learn.models import Block, Toolbox, Level, Task, Instruction
+from learn.models import Block, Toolbox, Task, Instruction
 from learn.models import Action, Student, TaskSession, ProgramSnapshot
 
 
@@ -54,26 +54,6 @@ class ToolboxViewSet(ExportViewSet):
     serializer_class = ToolboxSerializer
 
 
-class LevelSerializer(serializers.ModelSerializer):
-    tasks = serializers.SlugRelatedField(
-        slug_field='name',
-        many=True,
-        read_only=True)
-    toolbox = serializers.SlugRelatedField(
-        slug_field='name',
-        many=False,
-        queryset=Toolbox.objects.all())
-
-    class Meta:
-        model = Level
-        fields = ('id', 'level', 'name', 'credits', 'toolbox', 'tasks')
-
-
-class LevelViewSet(ExportViewSet):
-    queryset = Level.objects.all().select_related('toolbox').prefetch_related('tasks')
-    serializer_class = LevelSerializer
-
-
 class InstructionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Instruction
@@ -86,18 +66,13 @@ class InstructionViewSet(ExportViewSet):
 
 
 class TaskSerializer(serializers.ModelSerializer):
-    level = serializers.SlugRelatedField(
-        slug_field='name',
-        many=False,
-        queryset=Level.objects.all())
-
     class Meta:
         model = Task
-        fields = ('id', 'name', 'level', 'setting', 'solution')
+        fields = ('id', 'name', 'setting', 'solution')
 
 
 class TaskViewSet(ExportViewSet):
-    queryset = Task.objects.all().select_related('level')
+    queryset = Task.objects.all()
     serializer_class = TaskSerializer
 
 

@@ -4,7 +4,7 @@ from lazysignup.utils import is_lazy_user
 from rest_framework import serializers
 from rest_auth.registration.serializers import RegisterSerializer
 from learn.credits import get_active_credits, get_level_value
-from learn.models import Block, Toolbox, Level, Task, Instruction
+from learn.models import Block, Toolbox, Task, Instruction
 from learn.models import Action, ProgramSnapshot, Student, TaskSession
 from learn.models import Teacher, Classroom
 from learn.models import Chunk, Mission, Domain
@@ -109,21 +109,6 @@ class ToolboxSerializer(serializers.ModelSerializer):
         model = Toolbox
         fields = ('id', 'name', 'blocks')
         list_serializer_class = SettableListSerializer
-
-
-class LevelSerializer(serializers.ModelSerializer):
-    tasks = serializers.SlugRelatedField(
-        slug_field='name',
-        many=True,
-        read_only=True)
-    toolbox = serializers.SlugRelatedField(
-        slug_field='name',
-        many=False,
-        queryset=Toolbox.objects.all())
-
-    class Meta:
-        model = Level
-        fields = ('id', 'level', 'name', 'credits', 'toolbox', 'tasks')
 
 
 class InstructionSerializer(serializers.ModelSerializer):
@@ -244,7 +229,6 @@ class WorldSerializer(serializers.Serializer):
     blocks = BlockSerializer(many=True)
     toolboxes = ToolboxSerializer(many=True)
     instructions = InstructionSerializer(many=True)
-    levels = LevelSerializer(many=True)
     tasks = TaskSerializer(many=True)
 
 

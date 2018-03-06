@@ -34,23 +34,6 @@ class Toolbox(models.Model):
         return self.name
 
 
-class Level(models.Model):
-    """Small group of coherent tasks of similar difficulty sharing same toolbox.
-    """
-    level = models.SmallIntegerField()
-    name = models.SlugField(unique=True)
-    toolbox = models.ForeignKey(Toolbox)
-    credits = models.IntegerField(
-        help_text="Number of credits needed to complete this level.")
-    # tasks = 1:n relation, see learn.models.Task
-
-    class Meta:
-        ordering = ['level']
-
-    def __str__(self):
-        return 'L{level} {name}'.format(level=self.level, name=self.name)
-
-
 class Instruction(models.Model):
     """Explanation of a single concept, such as while loop or wormholes.
     """
@@ -64,10 +47,10 @@ class Task(models.Model):
     """Programming problem to be solved by students.
     """
     name = models.SlugField(max_length=100, unique=True)
-    level = models.ForeignKey(Level, null=True, default=None, related_name='tasks')
     setting = JSONField()
     solution = models.TextField()
     # sessions = m:n relation with students through learn.TaskSession
+    # chunks = m:n relation with chunks containing this task
 
     def get_absolute_url(self):
         return '/task/{name}/'.format(name=self.name)
@@ -90,7 +73,7 @@ class Chunk(models.Model):
     subchunks = models.ManyToManyField('self', symmetrical=False, related_name='parents')
 
     # Allow single task in multiple chunks.
-    tasks = models.ManyToManyField(Task)
+    tasks = models.ManyToManyField(Task, related_name='chunks')
 
     class Meta:
         ordering = ['order']

@@ -19,7 +19,6 @@ export_router.register(
     base_name='latest/bundle')
 export_router.register(r'current/blocks', export.BlockViewSet)
 export_router.register(r'current/toolboxes', export.ToolboxViewSet)
-export_router.register(r'current/levels', export.LevelViewSet)
 export_router.register(r'current/instructions', export.InstructionViewSet)
 export_router.register(r'current/tasks', export.TaskViewSet)
 export_router.register(r'current/students', export.StudentViewSet)
