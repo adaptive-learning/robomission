@@ -62,7 +62,7 @@ class SettableListSerializer(serializers.ListSerializer):
     """Allows to set new instances for a domain manager.
     """
     def set(self, manager, initial_data):
-        """Create or update isntances of given manager according to data.
+        """Create or update instances of given manager according to data.
         Assumes not-validated initial_data.
         """
         data = self.validate(initial_data)

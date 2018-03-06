@@ -13,12 +13,12 @@
     {
       "id": 2,
       "name": "c1b",
-      "tasks": [ "t3", "t4", "t5" ]
+      "tasks": [ "t2", "t3" ]
     },
     {
       "id": 3,
       "name": "c1c",
-      "tasks": [ "t6", "t7" ]
+      "tasks": []
     },
     {
       "id": 4,
@@ -30,11 +30,11 @@
     {
       "id": 5,
       "name": "c2a",
-      "tasks": [ "t8" ]
+      "tasks": []
     },
     {
       "id": 6,
-      "name": "c2b", "tasks": [ "t9", "t10" ]
+      "name": "c2b", "tasks": []
     },
     {
       "id": 7,
@@ -55,13 +55,6 @@
   "tasks" : [
     {"id": 1, "name": "t1"},
     {"id": 2, "name": "t2"},
-    {"id": 3, "name": "t3"},
-    {"id": 4, "name": "t4"},
-    {"id": 5, "name": "t5"},
-    {"id": 6, "name": "t6"},
-    {"id": 7, "name": "t7"},
-    {"id": 8, "name": "t8"},
-    {"id": 9, "name": "t9"},
-    {"id": 10, "name": "t10"}
+    {"id": 3, "name": "t3"}
   ]
 }
