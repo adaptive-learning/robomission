@@ -104,7 +104,7 @@ storybook:
 
 
 .PHONY: db
-db: migrate tasks data
+db: migrate domain
 
 
 .PHONY: migrate
@@ -121,7 +121,7 @@ flush:
 reset_db:
 	python backend/manage.py reset_db
 	python backend/manage.py migrate
-	python backend/manage.py build_tasks
+	python backend/manage.py load_domain
 	python backend/manage.py create_admin
 	python backend/manage.py create_social_apps
 
@@ -131,14 +131,9 @@ admin:
 	python backend/manage.py create_admin
 
 
-.PHONY: tasks
-tasks:
-	python backend/manage.py build_tasks
-
-
-.PHONY: data
-data:
-	python backend/manage.py load_data
+.PHONY: domain
+domain:
+	python backend/manage.py load_domain
 
 
 .PHONY: export

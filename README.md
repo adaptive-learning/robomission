@@ -67,28 +67,28 @@ at [Masaryk University][4].
 
 6. Develop the feature. Enjoy it, experience the state of flow :-)
 
-  * To start a server, run:
+  * To start a server:
 
           $ make server
 
-  *  To open python console (with all models automatically imported), run:
+  *  To open python console (with all models automatically imported):
 
           $ make shell
 
-  *  To open jupyter notebooek, run:
+  *  To open jupyter notebooek:
 
           $ make notebook
 
-  * If you change data in fixtures and want to load them to the database:
+  * To load new tasks (or other domain changes) to DB:
 
-          $ make data
+          $ make domain
 
   * If you change the data model, create and apply a migration:
 
-          $ ./manage.py makemigrations
-          $ ./manage.py migrate
+          $ ./backend/manage.py makemigrations
+          $ ./backend/manage.py migrate
 
-  * Take a regular breaks (e.g. after 25 minutes), stretch yourself (including your eyes).
+  * Take a regular breaks and stretch yourself (including your eyes).
 
 8. Test the implemented feature and check the code by a linter:
 
