@@ -12,17 +12,18 @@ from rest_framework.decorators import list_route
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
 from learn.credits import get_active_credits, get_level_value
+from learn.domain import get_domain
 from learn.models import TaskSession, Student, Teacher
 from learn.permissions import IsOwnerOrAdmin, IsOwnerOrAdminOrReadOnly
 from learn.practice_overview import get_practice_overview, get_recommendation
+from learn.serializers import DomainSerializer
 from learn.serializers import PracticeOverviewSerializer
 from learn.serializers import StudentSerializer
 from learn.serializers import UserSerializer
-from learn.serializers import WorldSerializer
 from learn.serializers import RunProgramResponseSerializer
 from learn.serializers import TeacherSerializer
 from learn.users import get_or_fake_user, create_user_student
-from learn.world import get_world
+from learn.world import get_world  # TODO: replace by get_domain
 from learn import actions
 
 
@@ -87,15 +88,16 @@ class CurrentUserViewSet(viewsets.ViewSet):
         return redirect(reverse('user-current', request=request))
 
 
-class WorldViewSet(viewsets.ViewSet):
-    serializer_class = WorldSerializer
+class DomainViewSet(viewsets.ViewSet):
+    serializer_class = DomainSerializer
     # DRF can't derive DjangoModelPermissions for ViewSets without a queryset,
     # so we need to explicitly define them.
     permission_classes = ()
 
     def list(self, request, format=None):
-        world = get_world()
-        serializer = WorldSerializer(world, context={'request': request})
+        domain = get_domain()
+        # TODO: Don't pass request context if not needed.
+        serializer = DomainSerializer(domain, context={'request': request})
         return Response(serializer.data)
 
 

@@ -223,15 +223,6 @@ class DomainSerializer(serializers.ModelSerializer):
         return domain
 
 
-# Deprecated.
-# TODO: Replace all its usage by DomainSerializer, then remove.
-class WorldSerializer(serializers.Serializer):
-    blocks = BlockSerializer(many=True)
-    toolboxes = ToolboxSerializer(many=True)
-    instructions = InstructionSerializer(many=True)
-    tasks = TaskSerializer(many=True)
-
-
 class TeacherSerializer(serializers.HyperlinkedModelSerializer):
     user = serializers.HyperlinkedRelatedField(
         view_name='user-detail',

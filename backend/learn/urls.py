@@ -5,7 +5,7 @@ from learn import views
 
 
 api_router = DefaultRouter()
-api_router.register(r'world', views.WorldViewSet, base_name='world')
+api_router.register(r'domain', views.DomainViewSet, base_name='domain')
 api_router.register(r'users', views.UserViewSet, base_name='user')
 api_router.register(r'students', views.StudentViewSet, base_name='student')
 #api_router.register(r'teachers', views.TeacherViewSet, base_name='teacher')

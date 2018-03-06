@@ -4,9 +4,14 @@ import json
 import os
 from django.conf import settings
 from learn.serializers import DomainSerializer
-from learn.models import Task
+from learn.models import Domain
 from learn.utils import js
-from learn.serializers import TaskSerializer
+
+
+def get_domain(name='current'):
+    domain = Domain.objects.get(name=name)
+    # TODO: prefetching
+    return domain
 
 
 def load_domain_from_file(name='domain/domain.json'):
