@@ -17,7 +17,6 @@ class Command(MonitoredCommand):
     entities_to_export = [
         ('blocks', learn.export.BlockViewSet),
         ('toolboxes', learn.export.ToolboxViewSet),
-        ('levels', learn.export.LevelViewSet),
         ('instructions', learn.export.InstructionViewSet),
         ('tasks', learn.export.TaskViewSet),
         ('students', learn.export.StudentViewSet),
