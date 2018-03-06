@@ -27,7 +27,7 @@
       "name": "diamonds",
       "tasks": [
         "diamond-on-right",
-        "beware-of-asteorid",
+        "beware-of-asteroid",
         "plus",
         "diamond-path",
         "surrounded-diamond"
@@ -62,8 +62,8 @@
       "name": "shooting-2",
       "tasks": [
         "tunnel",
-        "dont-forget-to-shot",
-        "2diamonds-2meteoroids"
+        "dont-forget-shot",
+        "2diamonds-2meteorids"
       ]
     },
     {
@@ -91,7 +91,7 @@
     {"id": 26, "name": "turning-right-and-left"},
     {"id":  2, "name": "turning-left-and-right"},
     {"id": 31, "name": "diamond-on-right"},
-    {"id": 14, "name": "beware-of-asteorid"},
+    {"id": 14, "name": "beware-of-asteroid"},
     {"id": 67, "name": "plus"},
     {"id": 86, "name": "diamond-path"},
     {"id": 66, "name": "surrounded-diamond"},
@@ -99,7 +99,7 @@
     {"id":  8, "name": "shooting"},
     {"id": 12, "name": "wormhole-demo"},
     {"id":  6, "name": "tunnel"},
-    {"id": 23, "name": "dont-forget-to-shot"},
-    {"id": 19, "name": "2diamonds-2meteoroids"}
+    {"id": 23, "name": "dont-forget-shot"},
+    {"id": 19, "name": "2diamonds-2meteorids"}
   ]
 }
