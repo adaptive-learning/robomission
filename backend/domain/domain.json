@@ -83,5 +83,23 @@
   "blocks": [
     {"id": 1, "name": "fly"},
     {"id": 2, "name": "shoot"}
+  ],
+  "tasks": [
+    {"id": 51, "name": "three-steps-forward"},
+    {"id": 49, "name": "turning-right"},
+    {"id": 44, "name": "turning-left"},
+    {"id": 26, "name": "turning-right-and-left"},
+    {"id":  2, "name": "turning-left-and-right"},
+    {"id": 31, "name": "diamond-on-right"},
+    {"id": 14, "name": "beware-of-asteorid"},
+    {"id": 67, "name": "plus"},
+    {"id": 86, "name": "diamond-path"},
+    {"id": 66, "name": "surrounded-diamond"},
+    {"id": 10, "name": "shot"},
+    {"id":  8, "name": "shooting"},
+    {"id": 12, "name": "wormhole-demo"},
+    {"id":  6, "name": "tunnel"},
+    {"id": 23, "name": "dont-forget-to-shot"},
+    {"id": 19, "name": "2diamonds-2meteoroids"}
   ]
 }
