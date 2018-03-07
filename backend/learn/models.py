@@ -86,6 +86,10 @@ class Chunk(models.Model):
         parent = self.parents.first()
         return parent.mission
 
+    @property
+    def n_tasks(self):
+        return self.tasks.count()
+
     def __str__(self):
         return '{name}'.format(name=self.name)
 

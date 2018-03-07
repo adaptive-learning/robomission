@@ -30,8 +30,8 @@ def update_skills(student, task, performance):
 
 def update_base_skill(student, chunk, performance):
     skill, _created = Skill.objects.get_or_create(student=student, chunk=chunk)
-    n_tasks = chunk.tasks.count()
-    skill.value = min(1, skill.value + performance_to_value(performance, n_tasks))
+    delta = performance_to_value(performance, chunk.n_tasks)
+    skill.value = min(1, skill.value + delta)
     skill.save()
 
 
