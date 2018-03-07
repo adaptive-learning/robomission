@@ -1,8 +1,10 @@
 import pytest
 
-from learn.models import Student, Task, Chunk, TaskSession, Skill
-from learn.mastery import get_first_unmastered_chunk
-from learn.mastery import has_mastered, get_first_unmastered_chunk
+from learn.models import Task, Chunk, Mission, Domain
+from learn.models import Student, TaskSession, Skill
+from learn.mastery import has_mastered
+from learn.mastery import get_first_unsolved_mission
+from learn.mastery import get_first_unsolved_phase
 
 
 @pytest.fixture
@@ -41,6 +43,19 @@ def test_has_mastered__when_skill_is_1():
 
 
 @pytest.mark.django_db
+def test_has_mastered__mastered_subchunks():
+    chunk1 = Chunk.objects.create(name='c1')
+    chunk2 = Chunk.objects.create(name='c2')
+    chunk3 = Chunk.objects.create(name='c3')
+    chunk1.subchunks.set([chunk2, chunk3])
+    student = Student.objects.create()
+    Skill.objects.create(student=student, chunk=chunk1, value=1)
+    Skill.objects.create(student=student, chunk=chunk2, value=1)
+    Skill.objects.create(student=student, chunk=chunk3, value=1)
+    assert has_mastered(student, chunk1)
+
+
+@pytest.mark.django_db
 def test_has_mastered__not_when_skill_is_low():
     chunk = Chunk.objects.create(name='c1')
     student = Student.objects.create()
@@ -49,28 +64,78 @@ def test_has_mastered__not_when_skill_is_low():
 
 
 @pytest.mark.django_db
-def test_get_first_unmastered_chunk__single():
-    chunk = Chunk.objects.create(name='c1')
-    student = Student.objects.create()
-    assert get_first_unmastered_chunk(student, Chunk.objects.all()) == chunk
-
-
-@pytest.mark.django_db
-def test_get_first_unmastered_chunk__all_unmastered():
+def test_has_mastered__not_unmastered_subchunk():
     chunk1 = Chunk.objects.create(name='c1')
-    Chunk.objects.create(name='c2')
-    student = Student.objects.create()
-    assert get_first_unmastered_chunk(student, Chunk.objects.all()) == chunk1
-
-
-@pytest.mark.django_db
-def test_get_first_unmastered_chunk__first_mastered():
-    chunk1 = Chunk.objects.create(name='c1', order=1)
-    chunk2 = Chunk.objects.create(name='c2', order=2)
+    chunk2 = Chunk.objects.create(name='c2')
+    chunk3 = Chunk.objects.create(name='c3')
+    chunk1.subchunks.set([chunk2, chunk3])
     student = Student.objects.create()
     Skill.objects.create(student=student, chunk=chunk1, value=1)
-    assert get_first_unmastered_chunk(student, Chunk.objects.all()) == chunk2
+    Skill.objects.create(student=student, chunk=chunk2, value=1)
+    # The 3rd skill is implicitly 0.
+    assert not has_mastered(student, chunk1)
 
+
+@pytest.mark.django_db
+def test_get_first_unsolved_mission__single():
+    # TODO: Shorter domain description.
+    chunk = Chunk.objects.create(name='c1')
+    mission = Mission.objects.create(name='m1', chunk=chunk)
+    domain = Domain.objects.create()
+    domain.missions.set([mission])
+    domain.chunks.set([chunk])
+    student = Student.objects.create()
+    assert get_first_unsolved_mission(domain, student) == mission
+
+
+@pytest.mark.django_db
+def test_get_first_unsolved_mission__all_unsolved():
+    chunk1 = Chunk.objects.create(name='c1')
+    chunk2 = Chunk.objects.create(name='c2')
+    mission1 = Mission.objects.create(name='m1', chunk=chunk1)
+    mission2 = Mission.objects.create(name='m2', chunk=chunk2)
+    domain = Domain.objects.create()
+    domain.missions.set([mission1, mission2])
+    domain.chunks.set([chunk1, chunk2])
+    student = Student.objects.create()
+    assert get_first_unsolved_mission(domain, student) == mission1
+
+
+@pytest.mark.django_db
+def test_get_first_unsolved_mission__first_solved():
+    chunk1 = Chunk.objects.create(name='c1')
+    chunk2 = Chunk.objects.create(name='c2')
+    mission1 = Mission.objects.create(name='m1', chunk=chunk1)
+    mission2 = Mission.objects.create(name='m2', chunk=chunk2)
+    domain = Domain.objects.create()
+    domain.missions.set([mission1, mission2])
+    domain.chunks.set([chunk1, chunk2])
+    student = Student.objects.create()
+    Skill.objects.create(student=student, chunk=chunk1, value=1)
+    assert get_first_unsolved_mission(domain, student) == mission2
+
+
+@pytest.mark.django_db
+def test_get_first_unsolved_phase__all_unsolved():
+    chunk1 = Chunk.objects.create(name='c1')
+    chunk2 = Chunk.objects.create(name='c2', order=1)
+    chunk3 = Chunk.objects.create(name='c3', order=2)
+    chunk1.subchunks.set([chunk2, chunk3])
+    mission = Mission.objects.create(name='m1', chunk=chunk1)
+    student = Student.objects.create()
+    assert get_first_unsolved_phase(mission, student) == chunk2
+
+
+@pytest.mark.django_db
+def test_get_first_unsolved_phase__first_solved():
+    chunk1 = Chunk.objects.create(name='c1')
+    chunk2 = Chunk.objects.create(name='c2', order=1)
+    chunk3 = Chunk.objects.create(name='c3', order=2)
+    chunk1.subchunks.set([chunk2, chunk3])
+    mission = Mission.objects.create(name='m1', chunk=chunk1)
+    student = Student.objects.create()
+    Skill.objects.create(student=student, chunk=chunk2, value=1)
+    assert get_first_unsolved_phase(mission, student) == chunk3
 
 #@pytest.mark.django_db
 #def test_has_mastered__excellent_performance():

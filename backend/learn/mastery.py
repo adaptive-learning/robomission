@@ -28,14 +28,25 @@ SKILL_FOR_MASTERY = 0.95
 
 
 def has_mastered(student, chunk):
+    subchunks_mastered = (has_mastered(student, c) for c in chunk.subchunks.all())
+    all_subchunks_mastered = all(subchunks_mastered)
     skill = student.get_skill(chunk)
-    return skill >= SKILL_FOR_MASTERY
+    return all_subchunks_mastered and skill >= SKILL_FOR_MASTERY
 
 
-def get_first_unmastered_chunk(student, chunks):
-    # Chunks are ordered in DB layer.
-    for chunk in chunks:
-        if not has_mastered(student, chunk):
-            return chunk
-    # The student could have mastered all chunks.
+def get_first_unsolved_mission(domain, student):
+    # TODO: has mastered mission - if all phases are solved ??
+    # Missions are ordered in DB layer.
+    for mission in domain.missions.all():
+        if not has_mastered(student, mission.chunk):
+            return mission
+    # The student could have mastered all missions.
+    return None
+
+
+def get_first_unsolved_phase(mission, student):
+    for phase in mission.phases:
+        if not has_mastered(student, phase):
+            return phase
+    # The student could have mastered all phases of the given mission.
     return None
