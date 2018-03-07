@@ -11,7 +11,7 @@ from rest_framework.decorators import detail_route
 from rest_framework.decorators import list_route
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
-from learn.credits import get_level
+from learn.mastery import get_level
 from learn.domain import get_domain
 from learn.models import TaskSession, Student, Teacher
 from learn.permissions import IsOwnerOrAdmin, IsOwnerOrAdminOrReadOnly

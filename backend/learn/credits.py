@@ -3,11 +3,6 @@
 from learn.models import Student, Task
 
 
-def get_level(domain, student):
-    # TODO: Unfake using mastery info (number of mastered missions).
-    return 1
-
-
 def get_earned_credits(student: Student, task: Task) -> int:
     """Number of credits earned for solving given task by given student.
 

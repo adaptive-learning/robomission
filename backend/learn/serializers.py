@@ -3,13 +3,13 @@ from django.contrib.auth.models import User
 from lazysignup.utils import is_lazy_user
 from rest_framework import serializers
 from rest_auth.registration.serializers import RegisterSerializer
-from learn.credits import get_level
+from learn.domain import get_domain
+from learn.mastery import get_level
 from learn.models import Block, Toolbox, Task, Instruction
 from learn.models import Action, ProgramSnapshot, Student, TaskSession
 from learn.models import Teacher, Classroom
 from learn.models import Chunk, Mission, Domain
 from learn.users import convert_lazy_user, is_initial_user
-from learn.domain import get_domain
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):

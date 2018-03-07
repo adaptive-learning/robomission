@@ -64,3 +64,10 @@ def get_first_unsolved_phase(mission, student):
             return phase
     # The student could have mastered all phases of the given mission.
     return None
+
+
+def get_level(domain, student):
+    n_solved_missions = sum(
+        int(has_mastered(student, mission.chunk))
+        for mission in domain.missions.all())
+    return n_solved_missions

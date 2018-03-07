@@ -1,5 +1,5 @@
 from collections import namedtuple
-from learn.credits import get_level
+from learn.mastery import get_level
 from learn.student_task import has_attempted, has_solved, get_time
 from learn.recommendation import get_recommendation
 

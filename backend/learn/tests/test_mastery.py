@@ -2,7 +2,7 @@ import pytest
 
 from learn.models import Task, Chunk, Mission, Domain
 from learn.models import Student, TaskSession, Skill
-from learn.mastery import has_mastered
+from learn.mastery import has_mastered, get_level
 from learn.mastery import get_first_unsolved_mission
 from learn.mastery import get_first_unsolved_phase
 
@@ -137,14 +137,30 @@ def test_get_first_unsolved_phase__first_solved():
     Skill.objects.create(student=student, chunk=chunk2, value=1)
     assert get_first_unsolved_phase(mission, student) == chunk3
 
-#@pytest.mark.django_db
-#def test_has_mastered__excellent_performance():
-#    task1 = Task.objects.create(id=1, name='t1', setting='{}', solution='')
-#    task2 = Task.objects.create(id=2, name='t2', setting='{}', solution='')
-#    chunk = Chunk.objects.create(id=1, name='c1')
-#    chunk.tasks.set([task1, task2])
-#    # Id=1 already taken by the student "initial" created in a DB migration.
-#    student = Student.objects.create(id=2)
-#    ts = TaskSession.objects.create(
-#        student=student, task=task1, performance=TaskSession.EXCELLENT)
-#    assert has_mastered(student, chunk)
+
+@pytest.mark.django_db
+def test_get_level_for_new_student():
+    chunk = Chunk.objects.create(name='c1')
+    mission = Mission.objects.create(name='m1', chunk=chunk)
+    domain = Domain.objects.create()
+    domain.missions.set([mission])
+    domain.chunks.set([chunk])
+    student = Student.objects.create()
+    assert get_level(domain, student) == 0
+
+
+@pytest.mark.django_db
+def test_level_equals_number_of_solved_missions():
+    c1 = Chunk.objects.create(name='c1')
+    c2 = Chunk.objects.create(name='c2')
+    c3 = Chunk.objects.create(name='c3')
+    m1 = Mission.objects.create(name='m1', chunk=c1)
+    m2 = Mission.objects.create(name='m2', chunk=c2)
+    m3 = Mission.objects.create(name='m3', chunk=c3)
+    domain = Domain.objects.create()
+    domain.missions.set([m1, m2, m3])
+    domain.chunks.set([c1, c2, c3])
+    student = Student.objects.create()
+    Skill.objects.create(student=student, chunk=c1, value=1)
+    Skill.objects.create(student=student, chunk=c3, value=1)
+    assert get_level(domain, student) == 2
