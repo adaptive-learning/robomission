@@ -4,6 +4,7 @@ from django.utils import timezone
 from learn.credits import get_earned_credits
 from learn.models import Action, TaskSession, ProgramSnapshot
 from learn.student_task import get_current_task_session
+from learn.performance import compute_performance
 
 
 def start_task(domain, student, task_name):
@@ -61,18 +62,12 @@ def edit_program(task_session, program):
     return action
 
 
-def run_program(task_session, program, correct):
+def run_program(domain, task_session, program, correct):
     if task_session.solved:
         return
-
     student = task_session.student
     task = task_session.task
-
     task_session.end = timezone.now()
-    if correct:
-        task_session.solved = True
-        student.credits += get_earned_credits(student, task)
-
     snapshot = ProgramSnapshot(
         task_session_id=task_session.pk,
         granularity=ProgramSnapshot.EXECUTION,
@@ -86,12 +81,23 @@ def run_program(task_session, program, correct):
             'task_session_id': task_session.pk,
             'program': program,
             'correct': correct})
-
     # TODO: factor db updates out
     if correct:
-        student.save()
+        solve_task(domain, task_session)
     task_session.save()
     snapshot.save()
     action.save()
-
     return action
+
+
+def solve_task(domain, task_session):
+    if task_session.solved:
+        return
+    student = task_session.student
+    task = task_session.task
+    task_session.end = timezone.now()
+    task_session.solved = True
+    task_session.performance = compute_performance(domain, task_session)
+    student.credits += get_earned_credits(student, task)
+    student.save()
+    task_session.save()

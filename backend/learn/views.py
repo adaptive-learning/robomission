@@ -159,8 +159,8 @@ class StudentViewSet(viewsets.ReadOnlyModelViewSet):
             .get(pk=task_session_id))
         student = task_session.student
         assert student.pk == int(pk)
-        action = actions.run_program(task_session, program, correct)
         domain = get_domain()
+        action = actions.run_program(domain, task_session, program, correct)
         response = {'correct': correct}
         if correct:
             prefetch_related_objects(
