@@ -3,14 +3,25 @@
 import json
 import os
 from django.conf import settings
+from django.db.models import Prefetch
 from learn.serializers import DomainSerializer
-from learn.models import Domain
+from learn.models import Mission, Chunk, Domain
 from learn.utils import js
 
 
 def get_domain(name='current'):
-    domain = Domain.objects.get(name=name)
-    # TODO: prefetching
+    """Return a prefeteched domain instance.
+    """
+    # TODO: Cache domain - it's used in almost all views.
+    prefetches = [
+        'blocks', 'toolboxes__blocks', 'tasks',
+        Prefetch(
+            'missions',
+            queryset=Mission.objects.select_related('chunk')),
+        Prefetch(
+            'chunks',
+            queryset=Chunk.objects.prefetch_related('tasks', 'subchunks'))]
+    domain = Domain.objects.prefetch_related(*prefetches).get(name=name)
     return domain
 
 
