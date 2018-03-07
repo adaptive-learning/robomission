@@ -3,13 +3,13 @@ from django.contrib.auth.models import User
 from lazysignup.utils import is_lazy_user
 from rest_framework import serializers
 from rest_auth.registration.serializers import RegisterSerializer
-from learn.credits import get_active_credits, get_level_value
+from learn.credits import get_level
 from learn.models import Block, Toolbox, Task, Instruction
 from learn.models import Action, ProgramSnapshot, Student, TaskSession
 from learn.models import Teacher, Classroom
 from learn.models import Chunk, Mission, Domain
 from learn.users import convert_lazy_user, is_initial_user
-from learn.world import get_world
+from learn.domain import get_domain
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
@@ -267,17 +267,14 @@ class StudentSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Student
         fields = (
-            'url', 'user', 'credits', 'level', 'active_credits',
+            'url', 'user', 'credits', 'level',
             'seen_instructions', 'classroom', 'practice_overview',
             'start_task', 'watch_instruction', 'edit_program', 'run_program')
 
-    def get_active_credits(self, student):
-        world = get_world()
-        return get_active_credits(world, student)
-
     def get_level(self, student):
-        world = get_world()
-        return get_level_value(world, student)
+        domain = get_domain()
+        level = get_level(domain, student)
+        return level
 
 
 class TaskSessionSerializer(serializers.ModelSerializer):

@@ -1,7 +1,7 @@
 import pytest
 
 from learn.models import Task, Student, Toolbox, TaskSession
-from learn.credits import get_credits, get_earned_credits
+from learn.credits import get_earned_credits
 
 
 @pytest.fixture
@@ -27,11 +27,6 @@ def solved_task_for_student():
     student = Student.objects.create(user=None)
     TaskSession.objects.create(student=student, task=task, solved=True)
     return student, task
-
-
-def test_get_credits_for_task(task):
-    credits = get_credits(task)
-    assert credits > 0
 
 
 def test_get_earner_credits_first_time(student, task):

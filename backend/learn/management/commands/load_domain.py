@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand
 from django.conf import settings
-from learn.domain import load_domain_from_file
+from learn.domain_parser import load_domain_from_file
 
 
 class Command(BaseCommand):

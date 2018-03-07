@@ -1,4 +1,4 @@
-""" Actions represent events and interactions in the world we want to model.
+""" Actions represent events and interactions in the domain we want to model.
 """
 from django.utils import timezone
 from learn.credits import get_earned_credits
@@ -6,8 +6,8 @@ from learn.models import Action, TaskSession, ProgramSnapshot
 from learn.student_task import get_current_task_session
 
 
-def start_task(world, student, task_name):
-    task = world.tasks.get(name=task_name)
+def start_task(domain, student, task_name):
+    task = domain.tasks.get(name=task_name)
     task_session = get_current_task_session(student, task)
 
     if task_session is not None:
@@ -29,17 +29,6 @@ def start_task(world, student, task_name):
         student=student,
         task=task,
         data={'task_session_id': task_session.pk})
-    action.save()
-    return action
-
-
-def watch_instruction(world, student, instruction_name):
-    instruction = world.instructions.get(name=instruction_name)
-    student.seen_instructions.add(instruction)
-    action = Action(
-        name=Action.WATCH_INSTRUCTION,
-        student=student,
-        data={'instruction': instruction_name})
     action.save()
     return action
 

@@ -1,9 +1,9 @@
 from django.test import TestCase
-from learn.domain import load_domain_from_file
+from learn.domain_parser import load_domain_from_file
 from learn.models import Domain, Task, Chunk
 
 
-class DomainTestCase(TestCase):
+class DomainParserTestCase(TestCase):
     def test_load_domain_from_file__entities(self):
         load_domain_from_file('domain/tests/test1.domain.json')
         domain = Domain.objects.get(name='test1')

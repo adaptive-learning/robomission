@@ -11,7 +11,7 @@ from rest_framework.decorators import detail_route
 from rest_framework.decorators import list_route
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
-from learn.credits import get_active_credits, get_level_value
+from learn.credits import get_level
 from learn.domain import get_domain
 from learn.models import TaskSession, Student, Teacher
 from learn.permissions import IsOwnerOrAdmin, IsOwnerOrAdminOrReadOnly
@@ -23,7 +23,6 @@ from learn.serializers import UserSerializer
 from learn.serializers import RunProgramResponseSerializer
 from learn.serializers import TeacherSerializer
 from learn.users import get_or_fake_user, create_user_student
-from learn.world import get_world  # TODO: replace by get_domain
 from learn import actions
 
 
@@ -117,11 +116,12 @@ class StudentViewSet(viewsets.ReadOnlyModelViewSet):
         student = self.get_object()
         prefetch_related_objects(
             [student],
-            'seen_instructions',
-            Prefetch('task_sessions', queryset=TaskSession.objects.select_related('task')))
+            Prefetch(
+                'task_sessions',
+                queryset=TaskSession.objects.select_related('task')))
         # -> Same as student = Student.objects.prefetch_related(...).get(pk=pk)
-        world = get_world(include=('instructions', 'levels', 'tasks'))
-        overview = get_practice_overview(world, student)
+        domain = get_domain()
+        overview = get_practice_overview(domain, student)
         serializer = PracticeOverviewSerializer(overview)
         return Response(serializer.data)
 
@@ -130,20 +130,10 @@ class StudentViewSet(viewsets.ReadOnlyModelViewSet):
         student = self.get_object()
         assert student.pk == int(pk)
         task_name = request.data['task']
-        world = get_world()
-        action = actions.start_task(world, student, task_name)
+        domain = get_domain()
+        action = actions.start_task(domain, student, task_name)
         response_data = {'task_session_id': action.task_session_id}
         return Response(response_data)
-
-    @detail_route(methods=['post'])
-    def watch_instruction(self, request, pk=None):
-        student = self.get_object()
-        assert student.pk == int(pk)
-        instruction_name = request.data['instruction']
-        world = get_world()
-        action = actions.watch_instruction(world, student, instruction_name)
-        #serializer = ActionSerializer(action, context={'request': request})
-        return Response()
 
     @detail_route(methods=['post'])
     def edit_program(self, request, pk=None):
@@ -170,7 +160,7 @@ class StudentViewSet(viewsets.ReadOnlyModelViewSet):
         student = task_session.student
         assert student.pk == int(pk)
         action = actions.run_program(task_session, program, correct)
-        world = get_world()
+        domain = get_domain()
         response = {'correct': correct}
         if correct:
             prefetch_related_objects(
@@ -178,11 +168,10 @@ class StudentViewSet(viewsets.ReadOnlyModelViewSet):
                 Prefetch(
                     'task_sessions',
                     queryset=TaskSession.objects.select_related('task')))
-            response['recommendation'] = get_recommendation(world, student)
+            response['recommendation'] = get_recommendation(domain, student)
             response['progress'] = {
-                'level': get_level_value(world, student),
-                'credits': student.credits,
-                'active_credits': get_active_credits(world, student)}
+                'level': get_level(domain, student),
+                'credits': student.credits}
         serializer = RunProgramResponseSerializer(response)
         return Response(serializer.data)
 
