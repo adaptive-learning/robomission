@@ -224,7 +224,7 @@ class Skill(models.Model):
     """
     student = models.ForeignKey(Student, related_name='skills')
     chunk = models.ForeignKey(Chunk)
-    value = models.FloatField()
+    value = models.FloatField(default=0)
 
     class Meta:
         unique_together = ('student', 'chunk')

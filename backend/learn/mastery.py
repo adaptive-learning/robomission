@@ -1,30 +1,44 @@
 """Mastery learning.
 """
-from learn.models import Chunk
+from statistics import mean
+from learn.models import TaskSession, Skill
 
 SKILL_FOR_MASTERY = 0.95
 
-#PERFORMANCE_VALUES_MAP = {
-#    TaskSession.UNSOLVED: 0,
-#    TaskSession.POOR: 0.1,
-#    TaskSession.GOOD: 0.5,
-#    TaskSession.EXCELLENT: 1,
-#}
-#
-#
-#def performance_to_value(performance, n_tasks):
-#    base_value = PERFORMANCE_VALUES_MAP[performance]
-#    min_value = 1 / n_tasks
-#    value = max(base_value, min_value)
-#    return value
-#
-#
-#def get_skill(student, chunk):
-#    performances = student.task_sessions.filter(task__chunk=chunk).all()
-#    n_tasks = chunk.tasks.count()
-#    performance_values = [performance_to_value(p, n_tasks) for p in performances]
-#    skill = min(1, sum(performance_values))
-#    return skill
+PERFORMANCE_VALUES_MAP = {
+    TaskSession.UNSOLVED: 0,
+    TaskSession.POOR: 0.1,
+    TaskSession.GOOD: 0.5,
+    TaskSession.EXCELLENT: 1,
+}
+
+
+def performance_to_value(performance, n_tasks):
+    base_value = PERFORMANCE_VALUES_MAP[performance]
+    min_value = 1 / n_tasks
+    value = max(base_value, min_value)
+    return value
+
+
+def update_skills(student, task, performance):
+    for phase in task.chunks.all():
+        update_base_skill(student, phase, performance)
+        # TODO: If the chunk graph structure become any DAG, then update all
+        # parent chunks recursively.
+        update_parent_skill(student, phase.parents.first())
+
+
+def update_base_skill(student, chunk, performance):
+    skill, _created = Skill.objects.get_or_create(student=student, chunk=chunk)
+    n_tasks = chunk.tasks.count()
+    skill.value = min(1, skill.value + performance_to_value(performance, n_tasks))
+    skill.save()
+
+
+def update_parent_skill(student, chunk):
+    skill, _created = Skill.objects.get_or_create(student=student, chunk=chunk)
+    skill.value = mean(student.get_skill(c) for c in chunk.subchunks.all())
+    skill.save()
 
 
 def has_mastered(student, chunk):

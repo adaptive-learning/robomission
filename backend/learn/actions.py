@@ -4,6 +4,7 @@ from django.utils import timezone
 from learn.credits import get_earned_credits
 from learn.models import Action, TaskSession, ProgramSnapshot
 from learn.student_task import get_current_task_session
+from learn.mastery import update_skills
 from learn.performance import compute_performance
 
 
@@ -98,6 +99,7 @@ def solve_task(domain, task_session):
     task_session.end = timezone.now()
     task_session.solved = True
     task_session.performance = compute_performance(domain, task_session)
+    update_skills(student, task, task_session.performance)
     student.credits += get_earned_credits(student, task)
     student.save()
     task_session.save()

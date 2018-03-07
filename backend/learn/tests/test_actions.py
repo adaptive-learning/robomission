@@ -55,3 +55,22 @@ class SolveTaskTestCase(TestCase):
             with self.assertNumQueries(0):
                 solve_task(domain, same_ts)
         assert ts.end == same_ts.end
+
+    def test_phase_skill_updated(self):
+        domain = create_domain()
+        student = Student.objects.create()
+        task = domain.tasks.get(name='t1')
+        ts = TaskSession.objects.create(student=student, task=task)
+        assert student.get_skill(task.chunks.first()) == 0
+        solve_task(domain, ts)
+        assert student.get_skill(task.chunks.first()) > 0
+
+    def test_mission_skill_updated(self):
+        domain = create_domain()
+        student = Student.objects.create()
+        task = domain.tasks.get(name='t1')
+        mission = domain.missions.get(name='m1')
+        ts = TaskSession.objects.create(student=student, task=task)
+        assert student.get_skill(mission.chunk) == 0
+        solve_task(domain, ts)
+        assert student.get_skill(mission.chunk) > 0
