@@ -1,7 +1,6 @@
 import {
   CHANGE_LOCATION,
   FETCH_WORLD_SUCCESS,
-  FETCH_STUDENT_SUCCESS,
   SET_TASK,
   SEE_INSTRUCTION_REQUEST,
   SHOW_INSTRUCTIONS,
@@ -21,18 +20,15 @@ const initial = {
 export default function reduceInstructions(state = initial, action) {
   switch (action.type) {
     case FETCH_WORLD_SUCCESS: {
-      const instructionList = action.payload.instructions.map(parseInstruction);
-      return {
-        ...state,
-        byId: createEntityMap(instructionList),
-        all: instructionList.map(instruction => instruction.id),
-      };
-    }
-    case FETCH_STUDENT_SUCCESS: {
-      return {
-        ...state,
-        seen: action.payload.seenInstructions,
-      };
+      // Instruction temporarily removed.
+      // TODO: Reintroduce instruction after added to the domain again.
+      // const instructionList = action.payload.instructions.map(parseInstruction);
+      // return {
+      //   ...state,
+      //   byId: createEntityMap(instructionList),
+      //   all: instructionList.map(instruction => instruction.id),
+      // };
+      return state;
     }
     case SET_TASK: {
       if (action.payload.taskEnvironmentId !== practicePageTaskEnvironmentId) {

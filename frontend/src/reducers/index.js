@@ -3,9 +3,9 @@ import { intlReducer } from 'react-intl-redux';
 import reduceApi from './api';
 import reduceApp from './app';
 import reduceBlocks from './blocks';
-import reduceCategories from './categories';
+import reduceChunks from './chunks';
+import reduceMissions from './missions';
 import reduceInstructions from './instructions';
-import reduceLevels from './levels';
 import reduceTasks from './tasks';
 import reduceToolboxes from './toolboxes';
 import reduceUser from './user';
@@ -23,9 +23,9 @@ export const reducers = combineReducers({
   api: reduceApi,
   app: reduceApp,
   blocks: reduceBlocks,
-  categories: reduceCategories,
+  chunks: reduceChunks,
+  missions: reduceMissions,
   instructions: reduceInstructions,
-  levels: reduceLevels,
   tasks: reduceTasks,
   toolboxes: reduceToolboxes,
   user: reduceUser,
