@@ -245,20 +245,13 @@ class StudentSerializer(serializers.HyperlinkedModelSerializer):
         required=False)
     credits = serializers.IntegerField(read_only=True)
     level = serializers.SerializerMethodField()
-    seen_instructions = serializers.SlugRelatedField(
-        slug_field='name',
-        many=True,
-        queryset=Instruction.objects.all())
     classroom = serializers.SlugRelatedField(
         slug_field='name',
         queryset=Classroom.objects.all())
-    active_credits = serializers.SerializerMethodField()
     practice_overview = serializers.HyperlinkedIdentityField(
         view_name='student-practice-overview')
     start_task = serializers.HyperlinkedIdentityField(
         view_name='student-start-task')
-    watch_instruction = serializers.HyperlinkedIdentityField(
-        view_name='student-watch-instruction')
     edit_program = serializers.HyperlinkedIdentityField(
         view_name='student-edit-program')
     run_program = serializers.HyperlinkedIdentityField(
@@ -268,8 +261,8 @@ class StudentSerializer(serializers.HyperlinkedModelSerializer):
         model = Student
         fields = (
             'url', 'user', 'credits', 'level',
-            'seen_instructions', 'classroom', 'practice_overview',
-            'start_task', 'watch_instruction', 'edit_program', 'run_program')
+            'classroom', 'practice_overview',
+            'start_task', 'edit_program', 'run_program')
 
     def get_level(self, student):
         domain = get_domain()
@@ -288,11 +281,6 @@ class TaskSessionSerializer(serializers.ModelSerializer):
         # enable student to see history of their past attempts).
 
 
-class StudentInstructionSerializer(serializers.Serializer):
-    name = serializers.CharField()
-    seen = serializers.BooleanField()
-
-
 class StudentTaskSerializer(serializers.Serializer):
     name = serializers.CharField()
     attempted = serializers.BooleanField()
@@ -308,8 +296,6 @@ class RecommendationSerializer(serializers.Serializer):
 class PracticeOverviewSerializer(serializers.Serializer):
     level = serializers.IntegerField()
     credits = serializers.IntegerField()
-    active_credits = serializers.IntegerField()
-    instructions = StudentInstructionSerializer(many=True)
     tasks = StudentTaskSerializer(many=True)
     recommendation = RecommendationSerializer()
 
@@ -317,7 +303,6 @@ class PracticeOverviewSerializer(serializers.Serializer):
 class ProgressSerializer(serializers.Serializer):
     level = serializers.IntegerField()
     credits = serializers.IntegerField()
-    active_credits = serializers.IntegerField()
 
 
 class RunProgramResponseSerializer(serializers.Serializer):
