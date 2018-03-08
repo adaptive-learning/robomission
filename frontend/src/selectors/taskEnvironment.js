@@ -3,7 +3,7 @@ import { generateSpaceWorldText } from '../core/spaceWorldDescription';
 import { generateMiniRoboCode } from '../core/miniRoboCodeGenerator';
 import { stripIndentation } from '../utils/text';
 import { initialTaskEnvironment } from '../reducers/taskEnvironments';
-import { getToolboxId } from '../selectors/category';
+import { getToolboxId } from '../selectors/chunk';
 
 export const practicePageTaskEnvironmentId = 'practice-page';
 
@@ -56,8 +56,8 @@ export function getToolbox(state, taskEnvironmentId) {
   if (task === undefined || task.category === undefined) {
     return [];
   }
-  const categoryId = task.category;
-  const toolboxId = getToolboxId(state, categoryId);
+  const chunkId = task.chunk;
+  const toolboxId = getToolboxId(state, chunkId);
   const toolbox = state.toolboxes[toolboxId];
   return toolbox.blocks;
 }

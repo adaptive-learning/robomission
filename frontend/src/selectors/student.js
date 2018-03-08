@@ -1,8 +1,8 @@
 export function getLevelStatus(state) {
   const level = state.student.level;
-  const activeCredits = state.student.activeCredits;
-  // current level specify number of credits the student needs to level up
-  const maxCredits = state.levels[level].credits;
+  // Temporarily used fake values of active/maxCredits.
+  // TODO: Remove notion of activeCredits; replace progressbar by stepper.
+  const activeCredits = 0; const maxCredits = 100;  // fake values
   return { level, activeCredits, maxCredits };
 }
 

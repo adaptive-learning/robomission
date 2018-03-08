@@ -1,8 +1,11 @@
-import { getCategoryLevel, getToolboxId } from '../selectors/category';
+import { getChunkLevel, getToolboxId } from '../selectors/chunk';
 
 
-export function getCategoryId(state, taskId) {
-  return state.tasks[taskId].category;
+export function getChunkId(state, taskId) {
+  // Faked becouse chunks are not set.
+  // TODO: Use the following line once the task.chunk are available.
+  //return state.tasks[taskId].chunk;
+  return 'commands';  // fake
 }
 
 
@@ -12,15 +15,17 @@ export function getTaskById(state, taskId) {
 
 
 export function getTaskLevel(state, taskId) {
-  const categoryId = getCategoryId(state, taskId);
-  const level = getCategoryLevel(state, categoryId);
+  const chunkId = getChunkId(state, taskId);
+  const level = getChunkLevel(state, chunkId);
   return level;
 }
 
 
 export function getToolbox(state, taskId) {
-  const categoryId = getCategoryId(state, taskId);
-  const toolboxId = getToolboxId(state, categoryId);
+  // TODO: Generalize to work with the toolbox not specified in the immediate
+  // parent.
+  const chunkId = getChunkId(state, taskId);
+  const toolboxId = getToolboxId(state, chunkId);
   const toolbox = state.toolboxes[toolboxId];
   return toolbox;
 }
