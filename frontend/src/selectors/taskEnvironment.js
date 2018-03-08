@@ -3,7 +3,7 @@ import { generateSpaceWorldText } from '../core/spaceWorldDescription';
 import { generateMiniRoboCode } from '../core/miniRoboCodeGenerator';
 import { stripIndentation } from '../utils/text';
 import { initialTaskEnvironment } from '../reducers/taskEnvironments';
-import { getToolboxId } from '../selectors/chunk';
+import { getToolboxForTask } from '../selectors/task';
 
 export const practicePageTaskEnvironmentId = 'practice-page';
 
@@ -50,16 +50,13 @@ export function getTaskLevel(state, taskEnvironmentId) {
 
 
 export function getToolbox(state, taskEnvironmentId) {
-  // using task version stored in the environment to make it work in task
-  // editor as well
+  // Using task version stored in the environment to make it work in task
+  // editor as well.
   const task = getTask(state, taskEnvironmentId);
-  if (task === undefined || task.category === undefined) {
+  if (task === undefined) {
     return [];
   }
-  const chunkId = task.chunk;
-  const toolboxId = getToolboxId(state, chunkId);
-  const toolbox = state.toolboxes[toolboxId];
-  return toolbox.blocks;
+  return getToolboxForTask(state, task);
 }
 
 export function getEditorSessionId(state, taskEnvironmentId) {

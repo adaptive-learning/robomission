@@ -10,6 +10,12 @@ export default function reduceTasks(state = {}, action) {
       for (const task of taskList) {
         tasks[task.id] = task;
       }
+      // Inject task chunks.
+      for (const chunk of action.payload.chunks) {
+        for (const taskId of chunk.tasks) {
+          tasks[taskId].chunk = chunk.name;
+        }
+      }
       return tasks;
     }
     case FETCH_PRACTICE_OVERVIEW_SUCCESS: {

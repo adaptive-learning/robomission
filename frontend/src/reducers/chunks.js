@@ -7,6 +7,10 @@ export default function reduceChunks(state = {}, action) {
       const chunks = {};
       for (const chunk of chunkList) {
         chunks[chunk.id] = chunk;
+        // Add links from childre to this chuns.
+        for (const subchunkId of chunk.subchunks) {
+          chunks[subchunkId].parentChunk = chunk.id
+        }
       }
       return chunks;
     }
@@ -23,6 +27,7 @@ function parseChunk(data) {
     setting: data['setting'],
     tasks: data['tasks'],
     subchunks: data['subchunks'],
+    parentChunk: null,
   };
   return chunk;
 }
