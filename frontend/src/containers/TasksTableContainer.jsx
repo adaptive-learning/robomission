@@ -5,13 +5,13 @@ import TasksTable from '../components/TasksTable';
 import { fetchPracticeOverview } from '../actions';
 import { isPracticeOverviewInvalidated } from '../selectors/app';
 import { getPracticeOverviewUrl } from '../selectors/student';
+import { getMissionList } from '../selectors/missions';
 import LongPage from '../components/LongPage';
 
 
 function getProps(state) {
   return {
-    tasks: state.tasks,
-    categories: state.categories,
+    missions: getMissionList(state),
     recommendation: state.recommendation,
     isPracticeOverviewInvalidated: isPracticeOverviewInvalidated(state),
     practiceOverviewUrl: getPracticeOverviewUrl(state),
@@ -38,19 +38,10 @@ class TasksTableContainer extends React.Component {
   }
 
   render() {
-    const { tasks, categories } = this.props;
-    const allCategoryIds = Object.keys(categories);
-    const compareCategoryIds = (a, b) => categories[a].level - categories[b].level;
-    const orderedCategoryIds = allCategoryIds.sort(compareCategoryIds);
-    const tasksInCategories = orderedCategoryIds.map(categoryId => ({
-      category: categories[categoryId],
-      tasks: categories[categoryId].tasks.map(id => tasks[id]),
-    }));
-
     return (
       <LongPage>
         <TasksTable
-          tasksInCategories={tasksInCategories}
+          missions={this.props.missions}
           urlBase="/task/"
           recommendation={this.props.recommendation}
         />

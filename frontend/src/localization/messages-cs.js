@@ -139,6 +139,12 @@ export default {
   'blockly.yellow': 'žlutá',
   'blockly.black': 'černá',
 
+  'mission.spaceship-control': 'Ovládání vesmírné lodě',
+  'mission.shooting-and-wormholes': 'Střelba a červí díry',
+
+  'chunk.commands': 'Příkazy',
+  'chunk.commands-2': 'Příkazy 2',
+
   'category.moves': 'Základní kroky',
   'category.world': 'Tajemný vesmír',
   'category.repeat': 'Opakuj N-krát',

@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
+import Avatar from 'material-ui/Avatar';
 import { Card, CardTitle, CardText } from 'material-ui/Card';
 import { GridList, GridTile } from 'material-ui/GridList';
 import TaskName from './TaskName';
@@ -9,15 +10,14 @@ import { theme } from '../theme';
 import { translate } from '../localization';
 
 
-export default function TaskTable({ urlBase, tasksInCategories, recommendation }) {
+export default function TaskTable({ urlBase, missions, recommendation }) {
   return (
     <div>
-      { tasksInCategories.map(({ category, tasks }) =>
-        <CategoryTasks
-          key={category.id}
+      { missions.map(mission =>
+        <MissionOverview
+          key={mission.id}
           urlBase={urlBase}
-          category={category}
-          tasks={tasks}
+          mission={mission}
           recommendation={recommendation}
         />)
       }
@@ -27,7 +27,7 @@ export default function TaskTable({ urlBase, tasksInCategories, recommendation }
 
 TaskTable.propTypes = {
   urlBase: PropTypes.string,
-  tasksInCategories: PropTypes.array.isRequired,
+  missions: PropTypes.array.isRequired,
   recommendation: PropTypes.object.isRequired,
 };
 
@@ -36,11 +36,35 @@ TaskTable.defaultProps = {
 };
 
 
-function CategoryTasks({ category, tasks, urlBase, recommendation }) {
-  if (tasks.length === 0) {
-    return null;
-  }
+function MissionOverview({ mission, urlBase, recommendation }) {
+  return (
+    <Card style={{ margin: 10 }}>
+      <CardTitle
+        title={`${mission.order}. ${translate(`mission.${mission.id}`)}`}
+        subtitle={<FormattedMessage id={`chunk.${mission.chunk}`} />}
+      />
+      <CardText>
+      {mission.phases.map(phase => (
+        <Phase
+          key={phase.id}
+          urlBase={urlBase}
+          phase={phase}
+          recommendation={recommendation}
+        />))}
+      </CardText>
+    </Card>
+  );
+}
 
+
+MissionOverview.propTypes = {
+  mission: PropTypes.object.isRequired,
+  urlBase: PropTypes.string,
+  recommendation: PropTypes.object.isRequired,
+};
+
+
+function Phase({ phase, urlBase, recommendation }) {
   const chooseBackgroundColor = task => {
     if (task.id === recommendation.task) {
       return theme.palette.accent2Color;
@@ -58,50 +82,55 @@ function CategoryTasks({ category, tasks, urlBase, recommendation }) {
     return formatSolvingTime(task.time);
   };
 
+  const { tasks } = phase;
   return (
-    <Card style={{ margin: 10 }}>
-      <CardTitle
-        title={<FormattedMessage id={`category.${category.id}`} />}
-        subtitle={`Level ${category.level}`}
-      />
-      <CardText>
-        <GridList
-          cellHeight={120}
-          cols={Math.min(5, Math.floor(window.innerWidth / 300))}
-          style={{
-            display: 'flex',
-            flexWrap: 'wrap',
-          }}
-        >
-          {tasks.map((task) => (
-            <Link key={task.id} to={`${urlBase}${task.id}`}>
-              <GridTile
-                title={<TaskName taskId={task.id} />}
-                subtitle={getSubtitle(task)}
-              >
-                <div
-                  style={{
-                    backgroundColor: chooseBackgroundColor(task),
-                    width: '100%',
-                    height: '100%',
-                  }}
-                />
-              </GridTile>
-            </Link>
-          ))}
-        </GridList>
-      </CardText>
-    </Card>
+    <div style={{
+      margin: 7,
+      display: 'flex',
+      flexWrap: 'wrap',
+      justifyContent: 'space-around',
+    }}>
+      <span style={{
+        marginRight: 10,
+        marginTop: 40,
+        display: 'inline-block'
+      }}>
+        <Avatar>
+          {phase.index}
+        </Avatar>
+      </span>
+      <GridList
+        cellHeight={120}
+        rows={1}
+        cols={window.innerWidth / 250}
+        style={{
+          width: '100%',
+          display: 'flex',
+          flexWrap: 'nowrap',
+          overflowX: 'auto',
+          flex: 1,
+        }}
+      >
+        {tasks.map((task) => (
+          <Link key={task.id} to={`${urlBase}${task.id}`}>
+            <GridTile
+              title={<TaskName taskId={task.id} />}
+              subtitle={getSubtitle(task)}
+            >
+              <div
+                style={{
+                  backgroundColor: chooseBackgroundColor(task),
+                  width: 250,
+                  height: '100%',
+                }}
+              />
+            </GridTile>
+          </Link>
+        ))}
+      </GridList>
+    </div>
   );
 }
-
-
-CategoryTasks.propTypes = {
-  category: PropTypes.object.isRequired,
-  tasks: PropTypes.array.isRequired,
-  urlBase: PropTypes.string,
-  recommendation: PropTypes.object.isRequired,
-};
 
 
 function formatSolvingTime(time) {

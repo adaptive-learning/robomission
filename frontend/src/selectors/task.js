@@ -1,4 +1,4 @@
-import { getChunkLevel, getToolboxId } from '../selectors/chunk';
+import { getChunkLevel } from '../selectors/chunk';
 
 
 export function getToolbox(state, taskId) {
