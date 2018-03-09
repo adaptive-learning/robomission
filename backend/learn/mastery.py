@@ -20,6 +20,13 @@ def performance_to_value(performance, n_tasks):
     return value
 
 
+def get_skills(domain, student):
+    skills = {chunk.name: 0 for chunk in domain.chunks.all()}
+    for skill in student.skills.all():
+        skills[skill.chunk.name] = skill.value
+    return skills
+
+
 def update_skills(student, task, performance):
     for phase in task.chunks.all():
         update_base_skill(student, phase, performance)

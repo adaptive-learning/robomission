@@ -288,15 +288,23 @@ class StudentTaskSerializer(serializers.Serializer):
     time = serializers.IntegerField()  # number of seconds
 
 
+class StudentSkillSerializer(serializers.Serializer):
+    name = serializers.CharField()
+    value = serializers.FloatField()
+
+
 class RecommendationSerializer(serializers.Serializer):
     available = serializers.BooleanField()
     task = serializers.CharField()
+    phase = serializers.CharField()
+    mission = serializers.CharField()
 
 
 class PracticeOverviewSerializer(serializers.Serializer):
     level = serializers.IntegerField()
     credits = serializers.IntegerField()
     tasks = StudentTaskSerializer(many=True)
+    skills = StudentSkillSerializer(many=True)
     recommendation = RecommendationSerializer()
 
 

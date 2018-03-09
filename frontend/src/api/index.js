@@ -66,12 +66,14 @@ export function fetchStudent(url) {
 export function fetchPracticeOverview(url) {
   return axios.get(url).then(response => {
     const { data } = response;
-    return {
+    const overview = {
       level: data['level'],
       credits: data['credits'],
       tasks: data['tasks'],
+      skills: data['skills'],
       recommendation: data['recommendation'],
     };
+    return overview;
   });
 }
 
