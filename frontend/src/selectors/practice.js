@@ -35,10 +35,16 @@ export function getRecommendedTask(state) {
 
 
 export function getLevelStatus(state) {
-  const { level, activeCredits } = state.practice.shownLevelStatus;
-  const maxCredits = state.levels[level].credits;
-  const levelup = (activeCredits === maxCredits);
-  const hasNext = getNextLevelStatus(state) !== null;
+  // Temporarily disabled.
+  //const { level, activeCredits } = state.practice.shownLevelStatus;
+  //const maxCredits = state.levels[level].credits;
+  //const levelup = (activeCredits === maxCredits);
+  //const hasNext = getNextLevelStatus(state) !== null;
+  const level = 0;
+  const activeCredits = 0;
+  const maxCredits = 10;
+  const levelup = false;
+  const hasNext = false;
   return { level, activeCredits, maxCredits, levelup, hasNext };
 }
 

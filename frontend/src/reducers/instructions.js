@@ -225,7 +225,9 @@ function getRelevantUnseenInstructions(task, seen) {
 
 
 function getRelevantInstructions(task) {
-  return ordering.filter(instruction => containsInstruction(task, task.toolbox, instruction));
+  // Instructions temporarily disabled.
+  //return ordering.filter(instruction => containsInstruction(task, task.toolbox, instruction));
+  return [];
 }
 
 

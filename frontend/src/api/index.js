@@ -69,7 +69,6 @@ export function fetchPracticeOverview(url) {
     return {
       level: data['level'],
       credits: data['credits'],
-      activeCredits: data['active_credits'],
       tasks: data['tasks'],
       recommendation: data['recommendation'],
     };
