@@ -3,7 +3,7 @@ import { generateSpaceWorldText } from '../core/spaceWorldDescription';
 import { generateMiniRoboCode } from '../core/miniRoboCodeGenerator';
 import { stripIndentation } from '../utils/text';
 import { initialTaskEnvironment } from '../reducers/taskEnvironments';
-import { getToolboxForTask } from '../selectors/task';
+import { getToolboxForTask, getOption } from '../selectors/task';
 
 export const practicePageTaskEnvironmentId = 'practice-page';
 
@@ -17,7 +17,15 @@ export function getTaskEnvironment(state, taskEnvironmentId) {
 
 
 export function getTask(state, taskEnvironmentId) {
-  return getTaskEnvironment(state, taskEnvironmentId).task;
+  const taskEnvironment = getTaskEnvironment(state, taskEnvironmentId);
+  // TODO: Merge all parent chunks setting into the task setting.
+  return {
+    ...taskEnvironment.task,
+    setting: {
+      ...taskEnvironment.task.setting,
+      toolbox: getOption(taskEnvironment.task, state.chunks, 'toolbox'),
+    },
+  };
 }
 
 
@@ -78,20 +86,20 @@ export function getTaskSourceText(state, taskEnvironmentId) {
   if (!isSpaceWorldTextValid(state, taskEnvironmentId)) {
     throw Error('Invalid task setting');
   }
-  const { id, category, setting } = getTask(state, taskEnvironmentId);
-  const { energy, length } = setting;
+  const { id, setting } = getTask(state, taskEnvironmentId);
+  const { toolbox, energy, length } = setting;
   const spaceWorldText = getSpaceWorldText(state, taskEnvironmentId);
   const solution = getCode(state, taskEnvironmentId);
 
   const sourceText = stripIndentation`\
     # ${id}
-    ${category !== null ? `- category: ${category}` : ''}
 
     ## Setting
 
     \`\`\`
     ${spaceWorldText}
     \`\`\`
+    ${toolbox !== null ? `- toolbox: ${toolbox}` : ''}
     ${energy !== null ? `- energy: ${energy}` : ''}
     ${length !== null ? `- length: ${length}` : ''}
 

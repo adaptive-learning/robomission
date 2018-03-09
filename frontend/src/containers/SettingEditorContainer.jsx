@@ -28,12 +28,12 @@ class SettingEditorWrapper extends React.Component {
       this.props.changeSetting(this.props.taskEnvironmentId, { id });
     };
 
-    this.handleCategoryChange = (event, index, value) => {
-      let category = value;
-      if (category.length === 0) {
-        category = null;
+    this.handleToolboxChange = (event, index, value) => {
+      let toolbox = value;
+      if (toolbox.length === 0) {
+        toolbox = null;
       }
-      this.props.changeSetting(this.props.taskEnvironmentId, { category });
+      this.props.changeSetting(this.props.taskEnvironmentId, { toolbox });
     };
 
     this.handleEnergyChange = event => {
@@ -68,8 +68,8 @@ class SettingEditorWrapper extends React.Component {
         onChange={this.handleChangeSetting}
         taskId={this.props.taskId}
         onTaskIdChange={this.handleTaskIdChange}
-        category={this.props.category || ''}
-        onCategoryChange={this.handleCategoryChange}
+        toolbox={this.props.toolbox || ''}
+        onToolboxChange={this.handleToolboxChange}
         energy={this.props.energy}
         onEnergyChange={this.handleEnergyChange}
         lengthLimit={this.props.lengthLimit}
@@ -91,7 +91,7 @@ SettingEditorWrapper.propTypes = {
   isValid: PropTypes.bool.isRequired,
   changeSetting: PropTypes.func.isRequired,
   taskId: PropTypes.string.isRequired,
-  category: PropTypes.string,
+  toolbox: PropTypes.string,
   energy: PropTypes.number,
   lengthLimit: PropTypes.number,
   vimMode: PropTypes.bool.isRequired,
@@ -104,8 +104,8 @@ SettingEditorWrapper.propTypes = {
 
 function mapStateToProps(state, props) {
   const { taskEnvironmentId } = props;
-  const { id, category, setting } = getTask(state, taskEnvironmentId);
-  const { energy, length } = setting;
+  const { id, setting } = getTask(state, taskEnvironmentId);
+  const { energy, length, toolbox } = setting;
   const spaceWorldText = getSpaceWorldText(state, taskEnvironmentId);
   const isValid = isSpaceWorldTextValid(state, taskEnvironmentId);
   const editorType = getEditorType(state, taskEnvironmentId);
@@ -113,7 +113,7 @@ function mapStateToProps(state, props) {
   return {
     taskEnvironmentId,
     taskId: id,
-    category,
+    toolbox,
     energy,
     lengthLimit: length,
     spaceWorldText,

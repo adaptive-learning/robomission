@@ -11,7 +11,6 @@ export function parseTaskSourceText(sourceText) {
   const chunkedTaskSource = pegTaskSourceParser.parse(sourceText);
   const task = {
     id: chunkedTaskSource.taskId,
-    category: chunkedTaskSource.category,
     setting: {
       ...chunkedTaskSource.setting,
       fields: parseSpaceWorld(chunkedTaskSource.setting.fields),

@@ -28,8 +28,8 @@ TaskEditorWrapper.propTypes = {
 
 const defaultInitialTask = {
   id: 'nameless-task',
-  category: 'final-challenge',
   setting: {
+    toolbox: 'shoot',
     fields: parseSpaceWorld(`\
       |b |b |b |b |b |
       |k |k |k |k |k |

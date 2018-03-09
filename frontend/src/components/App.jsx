@@ -4,7 +4,7 @@ import Snackbar from 'material-ui/Snackbar';
 import backgroundPath from '../images/background-space.png';
 import HeaderContainer from '../containers/HeaderContainer';
 import MenuContainer from '../containers/MenuContainer';
-import InstructionsContainer from '../containers/InstructionsContainer';
+//import InstructionsContainer from '../containers/InstructionsContainer';
 import FeedbackModalContainer  from '../containers/FeedbackModalContainer';
 import LoginModal from '../components/LoginModal';
 import SignUpModal from '../components/SignUpModal';
@@ -29,7 +29,8 @@ export default class App extends React.Component {
           overflowX: 'hidden',
         }}
       >
-        <InstructionsContainer />
+        {/* Instructions temporarily disabled.
+        <InstructionsContainer />*/}
         <HeaderContainer />
         <MenuContainer />
         { this.props.children }

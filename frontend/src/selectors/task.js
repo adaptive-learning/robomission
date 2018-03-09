@@ -20,7 +20,7 @@ export function getToolboxForTask(state, task) {
 }
 
 
-function getOption(task, chunks, optionName) {
+export function getOption(task, chunks, optionName) {
   if (optionName in task.setting) {
     return task.setting[optionName];
   }

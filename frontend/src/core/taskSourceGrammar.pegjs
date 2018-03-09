@@ -4,7 +4,6 @@
  * Example:
  * ----------------------------
  * # four-steps-forward
- * - category: repeat
  *
  * ## Setting
  *

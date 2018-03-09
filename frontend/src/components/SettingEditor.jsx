@@ -24,8 +24,8 @@ function SettingEditor({
   onChange,
   taskId,
   onTaskIdChange,
-  category,
-  onCategoryChange,
+  toolbox,
+  onToolboxChange,
   energy,
   onEnergyChange,
   lengthLimit,
@@ -59,19 +59,12 @@ function SettingEditor({
         </div>
         <div>
           <SelectField
-            floatingLabelText="Category"
-            value={category}
-            onChange={onCategoryChange}
+            floatingLabelText="Toolbox"
+            value={toolbox}
+            onChange={onToolboxChange}
           >
-            <MenuItem value={'moves'} primaryText="L1 Moves" />
-            <MenuItem value={'world'} primaryText="L2 World" />
-            <MenuItem value={'repeat'} primaryText="L3 Repeat" />
-            <MenuItem value={'while'} primaryText="L4 While" />
-            <MenuItem value={'loops'} primaryText="L5 Loops" />
-            <MenuItem value={'if'} primaryText="L6 If" />
-            <MenuItem value={'comparing'} primaryText="L7 Comparing" />
-            <MenuItem value={'if-else'} primaryText="L8 If-else" />
-            <MenuItem value={'final-challenge'} primaryText="L9 Final challenge" />
+            <MenuItem value={'fly'} primaryText="fly" />
+            <MenuItem value={'shoot'} primaryText="shoot" />
           </SelectField>
         </div>
         <div>
@@ -145,8 +138,8 @@ SettingEditor.propTypes = {
   onChange: PropTypes.func.isRequired,
   taskId: PropTypes.string.isRequired,
   onTaskIdChange: PropTypes.func.isRequired,
-  category: PropTypes.string.isRequired,
-  onCategoryChange: PropTypes.func.isRequired,
+  toolbox: PropTypes.string.isRequired,
+  onToolboxChange: PropTypes.func.isRequired,
   energy: PropTypes.number,
   onEnergyChange: PropTypes.func.isRequired,
   lengthLimit: PropTypes.number,
