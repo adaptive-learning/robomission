@@ -302,6 +302,8 @@ class RecommendationSerializer(serializers.Serializer):
 
 class PracticeOverviewSerializer(serializers.Serializer):
     level = serializers.IntegerField()
+    mission = serializers.CharField()
+    phase = serializers.CharField()
     credits = serializers.IntegerField()
     tasks = StudentTaskSerializer(many=True)
     skills = StudentSkillSerializer(many=True)

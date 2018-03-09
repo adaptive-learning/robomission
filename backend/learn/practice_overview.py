@@ -1,11 +1,14 @@
 from collections import namedtuple
 from learn.mastery import get_level, get_skills
+from learn.mastery import get_current_mission_phase
 from learn.student_task import has_attempted, has_solved, get_time
 from learn.recommendation import get_recommendation
 
 
 PracticeOverview = namedtuple('PracticeOverview', [
     'level',
+    'mission',
+    'phase',
     'credits',
     'tasks',
     'skills',
@@ -47,8 +50,11 @@ def get_skill_list(domain, student):
 
 
 def get_practice_overview(domain, student):
+    mission, phase = get_current_mission_phase(domain, student)
     overview = PracticeOverview(
         level=get_level(domain, student),
+        mission=mission.name,
+        phase=phase.name,
         credits=student.credits,
         tasks=get_tasks(domain, student),
         skills=get_skill_list(domain, student),

@@ -68,6 +68,8 @@ export function fetchPracticeOverview(url) {
     const { data } = response;
     const overview = {
       level: data['level'],
+      mission: data['mission'],
+      phase: data['phase'],
       credits: data['credits'],
       tasks: data['tasks'],
       skills: data['skills'],

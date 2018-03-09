@@ -1,4 +1,5 @@
-import { FETCH_WORLD_SUCCESS } from '../action-types';
+import { FETCH_WORLD_SUCCESS,
+         FETCH_PRACTICE_OVERVIEW_SUCCESS } from '../action-types';
 
 export default function reduceChunks(state = {}, action) {
   switch (action.type) {
@@ -11,6 +12,16 @@ export default function reduceChunks(state = {}, action) {
         for (const subchunkId of chunk.subchunks) {
           chunks[subchunkId].parentChunk = chunk.id
         }
+      }
+      return chunks;
+    }
+    case FETCH_PRACTICE_OVERVIEW_SUCCESS: {
+      const chunks = {};
+      for (const skill of action.payload.skills) {
+        chunks[skill.name] = {
+          ...state[skill.name],
+          skill: skill.value,
+        };
       }
       return chunks;
     }

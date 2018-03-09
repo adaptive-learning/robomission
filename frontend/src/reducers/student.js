@@ -1,4 +1,5 @@
 import { FETCH_STUDENT_SUCCESS,
+         FETCH_PRACTICE_OVERVIEW_SUCCESS,
          RUN_PROGRAM_SOLVED_REPORT } from '../action-types';
 
 
@@ -15,6 +16,12 @@ export default function reduceStudent(state = {}, action) {
         watchInstructionUrl: action.payload.watchInstructionUrl,
         reportProgramEditUrl: action.payload.reportProgramEditUrl,
         reportProgramExecutionUrl: action.payload.reportProgramExecutionUrl,
+      };
+    case FETCH_PRACTICE_OVERVIEW_SUCCESS:
+      return {
+        ...state,
+        mission: action.payload.mission,
+        phase: action.payload.phase,
       };
     case RUN_PROGRAM_SOLVED_REPORT:
       return {

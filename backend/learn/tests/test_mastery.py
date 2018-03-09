@@ -146,7 +146,7 @@ def test_get_level_for_new_student():
     domain.missions.set([mission])
     domain.chunks.set([chunk])
     student = Student.objects.create()
-    assert get_level(domain, student) == 0
+    assert get_level(domain, student) == 1
 
 
 @pytest.mark.django_db
@@ -163,4 +163,4 @@ def test_level_equals_number_of_solved_missions():
     student = Student.objects.create()
     Skill.objects.create(student=student, chunk=c1, value=1)
     Skill.objects.create(student=student, chunk=c3, value=1)
-    assert get_level(domain, student) == 2
+    assert get_level(domain, student) == 3

@@ -55,6 +55,12 @@ def has_mastered(student, chunk):
     return all_subchunks_mastered and skill >= SKILL_FOR_MASTERY
 
 
+def get_current_mission_phase(domain, student):
+    mission = get_first_unsolved_mission(domain, student)
+    phase = get_first_unsolved_phase(mission, student)
+    return mission, phase
+
+
 def get_first_unsolved_mission(domain, student):
     # TODO: has mastered mission - if all phases are solved ??
     # Missions are ordered in DB layer.
@@ -74,7 +80,9 @@ def get_first_unsolved_phase(mission, student):
 
 
 def get_level(domain, student):
+    """Level is number of solved missions + 1 (in order to start on level 1).
+    """
     n_solved_missions = sum(
         int(has_mastered(student, mission.chunk))
         for mission in domain.missions.all())
-    return n_solved_missions
+    return n_solved_missions + 1

@@ -1,8 +1,12 @@
 export function getLevelStatus(state) {
   const level = state.student.level;
-  // Temporarily used fake values of active/maxCredits.
   // TODO: Remove notion of activeCredits; replace progressbar by stepper.
-  const activeCredits = 0; const maxCredits = 100;  // fake values
+  // Temporarily activeCredits are set to correspond to the mastered skill
+  // (percentage).
+  const currentChunkId = state.missions[state.student.mission].chunk;
+  const skill = state.chunks[currentChunkId].skill;
+  const activeCredits = Math.floor(100 * skill);
+  const maxCredits = 100;
   return { level, activeCredits, maxCredits };
 }
 
