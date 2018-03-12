@@ -2,10 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
-import Avatar from 'material-ui/Avatar';
-import { Card, CardTitle, CardText } from 'material-ui/Card';
+import { Scrollbars } from 'react-custom-scrollbars';
+import { Card, CardTitle, CardHeader, CardText } from 'material-ui/Card';
 import { GridList, GridTile } from 'material-ui/GridList';
 import TaskName from './TaskName';
+import Skillometer from './Skillometer';
 import { theme } from '../theme';
 import { translate } from '../localization';
 
@@ -38,12 +39,22 @@ TaskTable.defaultProps = {
 
 function MissionOverview({ mission, urlBase, recommendation }) {
   return (
-    <Card style={{ margin: 10 }}>
-      <CardTitle
-        title={`${mission.order}. ${translate(`mission.${mission.id}`)}`}
+    <Card
+      style={{ margin: 10 }}
+      initiallyExpanded={recommendation.mission === mission.id}
+    >
+      <CardHeader
+        avatar={<Skillometer skill={mission.skill} text={`${mission.order}`}/>}
+        title={`${translate(`mission.${mission.id}`)}`}
+        titleStyle={{ fontSize: 20 }}
         subtitle={<FormattedMessage id={`chunk.${mission.chunk}`} />}
+        subtitleStyle={{ fontSize: 16 }}
+        actAsExpander={true}
+        showExpandableButton={true}
       />
-      <CardText>
+      <CardText
+        expandable={true}
+      >
       {mission.phases.map(phase => (
         <Phase
           key={phase.id}
@@ -83,52 +94,55 @@ function Phase({ phase, urlBase, recommendation }) {
   };
 
   const { tasks } = phase;
+  // TODO: Nicer scrollbars.
   return (
-    <div style={{
-      margin: 7,
-      display: 'flex',
-      flexWrap: 'wrap',
-      justifyContent: 'space-around',
-    }}>
-      <span style={{
-        marginRight: 10,
-        marginTop: 40,
-        display: 'inline-block'
+      <div style={{
+        margin: 7,
+        display: 'flex',
+        flexWrap: 'wrap',
+        justifyContent: 'space-around',
+        borderStyle: 'solid',
+        borderWidth: 1,
+        borderColor: '#535353',
       }}>
-        <Avatar>
-          {phase.index}
-        </Avatar>
-      </span>
-      <GridList
-        cellHeight={120}
-        rows={1}
-        cols={window.innerWidth / 250}
-        style={{
-          width: '100%',
-          display: 'flex',
-          flexWrap: 'nowrap',
-          overflowX: 'auto',
-          flex: 1,
-        }}
-      >
-        {tasks.map((task) => (
-          <Link key={task.id} to={`${urlBase}${task.id}`}>
-            <GridTile
-              title={<TaskName taskId={task.id} />}
-              subtitle={getSubtitle(task)}
-            >
-              <div
-                style={{
-                  backgroundColor: chooseBackgroundColor(task),
-                  width: 250,
-                  height: '100%',
-                }}
-              />
-            </GridTile>
-          </Link>
-        ))}
-      </GridList>
-    </div>
+        <span style={{
+          marginLeft: 10,
+          marginRight: 10,
+          marginTop: 40,
+          display: 'inline-block'
+        }}>
+          <Skillometer skill={phase.skill} text={`${phase.index}`} />
+        </span>
+        <GridList
+          cellHeight={120}
+          rows={1}
+          cols={window.innerWidth / 250}
+          style={{
+            width: '100%',
+            display: 'flex',
+            flexWrap: 'nowrap',
+            overflowX: 'auto',
+            flex: 1,
+          }}
+        >
+          {tasks.map((task) => (
+            <Link key={task.id} to={`${urlBase}${task.id}`}>
+              <GridTile
+                title={<TaskName taskId={task.id} />}
+                subtitle={getSubtitle(task)}
+              >
+                <div
+                  style={{
+                    backgroundColor: chooseBackgroundColor(task),
+                    width: 250,
+                    height: '100%',
+                  }}
+                />
+              </GridTile>
+            </Link>
+          ))}
+        </GridList>
+      </div>
   );
 }
 

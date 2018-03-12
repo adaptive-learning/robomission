@@ -21,5 +21,7 @@ function parseRecommendation(data) {
   return {
     available: data['available'],
     task: data['task'],
+    phase: data['phase'],
+    mission: data['mission'],
   };
 }

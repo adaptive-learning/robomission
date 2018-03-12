@@ -7,6 +7,7 @@ export function getMissionList(state) {
   const missionList = orderedMissionIds.map(missionId => ({
     ...missions[missionId],
     phases: getPhaseList(state, missionId),
+    skill: state.chunks[state.missions[missionId].chunk].skill,
   }));
   // TODO: Inject phases and missions.
   return missionList;
