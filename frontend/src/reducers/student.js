@@ -1,6 +1,5 @@
 import { FETCH_STUDENT_SUCCESS,
-         FETCH_PRACTICE_OVERVIEW_SUCCESS,
-         RUN_PROGRAM_SOLVED_REPORT } from '../action-types';
+         FETCH_PRACTICE_OVERVIEW_SUCCESS } from '../action-types';
 
 
 export default function reduceStudent(state = {}, action) {
@@ -22,13 +21,6 @@ export default function reduceStudent(state = {}, action) {
         ...state,
         mission: action.payload.mission,
         phase: action.payload.phase,
-      };
-    case RUN_PROGRAM_SOLVED_REPORT:
-      return {
-        ...state,
-        level: action.payload.progress.level,
-        credits: action.payload.progress.credits,
-        activeCredits: action.payload.progress.activeCredits,
       };
     default:
       return state;

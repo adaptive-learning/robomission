@@ -83,12 +83,14 @@ def run_program(domain, task_session, program, correct):
             'program': program,
             'correct': correct})
     # TODO: factor db updates out
+    progress = []
     if correct:
-        solve_task(domain, task_session)
+        progress = solve_task(domain, task_session)
     task_session.save()
     snapshot.save()
     action.save()
-    return action
+    return progress
+    #return action
 
 
 def solve_task(domain, task_session):
@@ -99,7 +101,8 @@ def solve_task(domain, task_session):
     task_session.end = timezone.now()
     task_session.solved = True
     task_session.performance = compute_performance(domain, task_session)
-    update_skills(student, task, task_session.performance)
+    progress = update_skills(student, task, task_session.performance)
     student.credits += get_earned_credits(student, task)
     student.save()
     task_session.save()
+    return progress

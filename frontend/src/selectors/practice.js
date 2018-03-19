@@ -1,5 +1,6 @@
 import { getPracticePageTaskId } from '../selectors/taskEnvironment';
 import { getMode } from '../selectors/app';
+import { getLevelStatus as getStudentLevelStatus } from '../selectors/student';
 //import { getStudentLevel } from '../selectors/student';
 //import { getTaskLevel } from '../selectors/task';
 
@@ -35,64 +36,24 @@ export function getRecommendedTask(state) {
 
 
 export function getLevelStatus(state) {
-  // Temporarily disabled.
-  //const { level, activeCredits } = state.practice.shownLevelStatus;
-  //const maxCredits = state.levels[level].credits;
-  //const levelup = (activeCredits === maxCredits);
-  //const hasNext = getNextLevelStatus(state) !== null;
-  const level = 0;
-  const activeCredits = 0;
-  const maxCredits = 10;
-  const levelup = false;
-  const hasNext = false;
-  return { level, activeCredits, maxCredits, levelup, hasNext };
+  const levelStatus = {
+    ...getStudentLevelStatus(state),
+    levelup: false,
+    hasNext: getNextLevelStatus(state) !== null
+  };
+  return levelStatus;
 }
 
 
 export function getNextLevelStatus(state) {
-  const current = state.practice.shownLevelStatus;
-  const target = state.practice.targetLevelStatus;
-  if (target === null) {
+  if (!state.practice.progress) {
     return null;
   }
-  const currentMaxCredits = state.levels[current.level].credits;
-  if (current.level < target.level && current.activeCredits < currentMaxCredits) {
-    // complete rest of the current level
-    return {
-      level: current.level,
-      activeCredits: currentMaxCredits,
-      maxCredits: currentMaxCredits,
-      // levelup: true,
-    };
-  } else if (current.level + 1 < target.level) {
-    // complete full next level
-    return {
-      level: current.level + 1,
-      activeCredits: state.levels[current.level + 1].credits,
-      maxCredits: state.levels[current.level + 1].credits,
-      // levelup: true,
-    };
-  } else if (current.level < target.level ||
-    (current.level === target.level && current.activeCredits < target.activeCredits)
-  ) {
-    // advance to target
-    const targetMaxCredits = state.levels[target.level].credits;
-    return {
-      level: target.level,
-      activeCredits: target.activeCredits,
-      maxCredits: targetMaxCredits,
-      // levelup: false,
-    };
+  const levelStatus = {
+    ...getStudentLevelStatus(state),
+    progress: state.practice.progress,
   }
-  return null; // already at target
+  // TODO: extract state.practice.progress
+  levelStatus.activeCredits = 90;
+  return levelStatus;
 }
-
-
-// maybe: get??AnimationTime(state)
-//       animationTime: computeAnimationTime(
-//         (target.activeCredits - current.activeCredits) / targetMaxCredits),
-// animationTime: computeAnimationTime(1 - current.activeCredits / maxCredits),
-//
-// function computeAnimationTime(progressProportion) {
-//   return 800 + progressBarProportion * 1400;
-// }

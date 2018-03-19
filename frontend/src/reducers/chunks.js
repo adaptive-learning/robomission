@@ -1,5 +1,6 @@
 import { FETCH_WORLD_SUCCESS,
-         FETCH_PRACTICE_OVERVIEW_SUCCESS } from '../action-types';
+         FETCH_PRACTICE_OVERVIEW_SUCCESS,
+         SHOW_NEXT_LEVEL_STATUS} from '../action-types';
 
 export default function reduceChunks(state = {}, action) {
   switch (action.type) {
@@ -25,6 +26,15 @@ export default function reduceChunks(state = {}, action) {
       }
       return chunks;
     }
+    case SHOW_NEXT_LEVEL_STATUS:
+      const chunks = {...state};
+      for (const progress of action.payload.progress) {
+        chunks[progress.chunk] = {
+          ...state[progress.chunk],
+          skill: progress.skill,
+        };
+      }
+      return chunks;
     default: {
       return state;
     }

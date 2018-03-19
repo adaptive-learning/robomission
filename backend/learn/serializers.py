@@ -311,11 +311,11 @@ class PracticeOverviewSerializer(serializers.Serializer):
 
 
 class ProgressSerializer(serializers.Serializer):
-    level = serializers.IntegerField()
-    credits = serializers.IntegerField()
+    chunk = serializers.CharField()
+    skill = serializers.FloatField()
 
 
 class RunProgramResponseSerializer(serializers.Serializer):
     correct = serializers.BooleanField()
-    progress = ProgressSerializer(required=False)
+    progress = ProgressSerializer(required=False, many=True)
     recommendation = RecommendationSerializer(required=False)

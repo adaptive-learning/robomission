@@ -1,5 +1,6 @@
 """Mastery learning.
 """
+from collections import namedtuple
 from statistics import mean
 from learn.models import TaskSession, Skill
 
@@ -11,6 +12,12 @@ PERFORMANCE_VALUES_MAP = {
     TaskSession.GOOD: 0.5,
     TaskSession.EXCELLENT: 1,
 }
+
+
+Progress = namedtuple('Progress', [
+    'chunk',
+    'skill',
+])
 
 
 def performance_to_value(performance, n_tasks):
@@ -28,11 +35,16 @@ def get_skills(domain, student):
 
 
 def update_skills(student, task, performance):
+    progress = []
     for phase in task.chunks.all():
-        update_base_skill(student, phase, performance)
+        skill = update_base_skill(student, phase, performance)
+        progress.append(Progress(phase.name, skill.value))
         # TODO: If the chunk graph structure become any DAG, then update all
         # parent chunks recursively.
-        update_parent_skill(student, phase.parents.first())
+        parent_chunk = phase.parents.first()
+        skill = update_parent_skill(student, parent_chunk)
+        progress.append(Progress(parent_chunk.name, skill.value))
+    return progress
 
 
 def update_base_skill(student, chunk, performance):
@@ -40,12 +52,14 @@ def update_base_skill(student, chunk, performance):
     delta = performance_to_value(performance, chunk.n_tasks)
     skill.value = min(1, skill.value + delta)
     skill.save()
+    return skill
 
 
 def update_parent_skill(student, chunk):
     skill, _created = Skill.objects.get_or_create(student=student, chunk=chunk)
     skill.value = mean(student.get_skill(c) for c in chunk.subchunks.all())
     skill.save()
+    return skill
 
 
 def has_mastered(student, chunk):

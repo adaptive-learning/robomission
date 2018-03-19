@@ -130,12 +130,12 @@ function parseProgramExecution(data) {
 }
 
 
-function parseProgress(data) {
-  return {
-    level: data['level'],
-    credits: data['credits'],
-    activeCredits: data['active_credits'],
-  };
+function parseProgress(dataList) {
+  const progress = dataList.map(data => ({
+    chunk: data['chunk'],
+    skill: data['skill'],
+  }));
+  return progress;
 }
 
 

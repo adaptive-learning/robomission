@@ -160,7 +160,7 @@ class StudentViewSet(viewsets.ReadOnlyModelViewSet):
         student = task_session.student
         assert student.pk == int(pk)
         domain = get_domain()
-        action = actions.run_program(domain, task_session, program, correct)
+        progress = actions.run_program(domain, task_session, program, correct)
         response = {'correct': correct}
         if correct:
             prefetch_related_objects(
@@ -169,9 +169,8 @@ class StudentViewSet(viewsets.ReadOnlyModelViewSet):
                     'task_sessions',
                     queryset=TaskSession.objects.select_related('task')))
             response['recommendation'] = get_recommendation(domain, student)
-            response['progress'] = {
-                'level': get_level(domain, student),
-                'credits': student.credits}
+            response['progress'] = progress or []
+            print('progress', progress)
         serializer = RunProgramResponseSerializer(response)
         return Response(serializer.data)
 
