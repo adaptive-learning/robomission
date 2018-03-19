@@ -5,6 +5,7 @@ import { stripIndentation } from '../utils/text';
 import { initialTaskEnvironment } from '../reducers/taskEnvironments';
 import { getToolboxForTask, getOption } from '../selectors/task';
 
+
 export const practicePageTaskEnvironmentId = 'practice-page';
 
 export function getTaskEnvironment(state, taskEnvironmentId) {
@@ -47,13 +48,12 @@ export function getTaskId(state, taskEnvironmentId) {
 
 export function getTaskLevel(state, taskEnvironmentId) {
   const task = getTask(state, taskEnvironmentId);
-  const categoryId = task.category;
-  if (!categoryId) {
+  const missionId = task.mission;
+  if (!missionId) {
     return 0;
   }
-  const category = state.categories[categoryId];
-  const level = category.level;
-  return level;
+  const mission = state.missions[missionId];
+  return mission.order;
 }
 
 

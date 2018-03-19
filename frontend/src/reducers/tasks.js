@@ -16,6 +16,21 @@ export default function reduceTasks(state = {}, action) {
           tasks[taskId].chunk = chunk.name;
         }
       }
+      // Inject missions.
+      const chunkToMission = {};
+      for (const mission of action.payload.missions) {
+        chunkToMission[mission.chunk] = mission.name;
+      }
+      for (const chunk of action.payload.chunks) {
+        if (chunk.name in chunkToMission) {
+          for (const subchunkId of chunk.subchunks) {
+            chunkToMission[subchunkId] = chunkToMission[chunk.name];
+          }
+        }
+      }
+      for (const task of taskList) {
+        tasks[task.id].mission = chunkToMission[task.chunk];
+      }
       return tasks;
     }
     case FETCH_PRACTICE_OVERVIEW_SUCCESS: {
