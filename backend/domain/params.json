@@ -1,0 +1,349 @@
+{
+  "domain": "current",
+  "params": [
+    {
+      "task": "one-step-forward",
+      "good_time": 12
+    },
+    {
+      "task": "three-steps-forward",
+      "good_time": 22
+    },
+    {
+      "task": "shot",
+      "good_time": 25
+    },
+    {
+      "task": "turning-right",
+      "good_time": 30
+    },
+    {
+      "task": "turning-right-and-left",
+      "good_time": 31
+    },
+    {
+      "task": "plus",
+      "good_time": 33
+    },
+    {
+      "task": "turning-left",
+      "good_time": 34
+    },
+    {
+      "task": "wormhole-demo",
+      "good_time": 39
+    },
+    {
+      "task": "diamond-path",
+      "good_time": 41
+    },
+    {
+      "task": "beware-of-asteroid",
+      "good_time": 48
+    },
+    {
+      "task": "diamond-on-right",
+      "good_time": 48
+    },
+    {
+      "task": "shooting",
+      "good_time": 49
+    },
+    {
+      "task": "direct-flight-ahead",
+      "good_time": 57
+    },
+    {
+      "task": "turning-left-and-right",
+      "good_time": 58
+    },
+    {
+      "task": "big-right-turn",
+      "good_time": 72
+    },
+    {
+      "task": "diamond-cross",
+      "good_time": 78
+    },
+    {
+      "task": "big-left-turn",
+      "good_time": 81
+    },
+    {
+      "task": "ladder",
+      "good_time": 88
+    },
+    {
+      "task": "yellow-hint",
+      "good_time": 96
+    },
+    {
+      "task": "stop-on-red",
+      "good_time": 96
+    },
+    {
+      "task": "surrounded-diamond",
+      "good_time": 106
+    },
+    {
+      "task": "diamonds-in-meteoroid-cloud",
+      "good_time": 108
+    },
+    {
+      "task": "zig-zag",
+      "good_time": 108
+    },
+    {
+      "task": "letter-e",
+      "good_time": 112
+    },
+    {
+      "task": "stripes",
+      "good_time": 114
+    },
+    {
+      "task": "narrow-passage",
+      "good_time": 129
+    },
+    {
+      "task": "blocked-wormhole",
+      "good_time": 129
+    },
+    {
+      "task": "n",
+      "good_time": 132
+    },
+    {
+      "task": "big-slalom",
+      "good_time": 133
+    },
+    {
+      "task": "last-shot",
+      "good_time": 136
+    },
+    {
+      "task": "double-bend",
+      "good_time": 148
+    },
+    {
+      "task": "triangle",
+      "good_time": 150
+    },
+    {
+      "task": "yellow-is-not-red",
+      "good_time": 150
+    },
+    {
+      "task": "direction-change",
+      "good_time": 153
+    },
+    {
+      "task": "steal-the-nose",
+      "good_time": 157
+    },
+    {
+      "task": "dont-forget-shot",
+      "good_time": 162
+    },
+    {
+      "task": "on-yellow-to-left",
+      "good_time": 165
+    },
+    {
+      "task": "collect-diamonds",
+      "good_time": 165
+    },
+    {
+      "task": "color-slalom",
+      "good_time": 180
+    },
+    {
+      "task": "color-navigation",
+      "good_time": 183
+    },
+    {
+      "task": "find-the-path",
+      "good_time": 184
+    },
+    {
+      "task": "diamond-in-house",
+      "good_time": 185
+    },
+    {
+      "task": "diamonds-with-signals",
+      "good_time": 186
+    },
+    {
+      "task": "follow-colors",
+      "good_time": 191
+    },
+    {
+      "task": "stairs",
+      "good_time": 193
+    },
+    {
+      "task": "zig-zag-plus",
+      "good_time": 195
+    },
+    {
+      "task": "five-diamonds",
+      "good_time": 214
+    },
+    {
+      "task": "tunnel",
+      "good_time": 216
+    },
+    {
+      "task": "four-vs",
+      "good_time": 219
+    },
+    {
+      "task": "bouncing-from-edge",
+      "good_time": 229
+    },
+    {
+      "task": "rectangle",
+      "good_time": 233
+    },
+    {
+      "task": "diamonds-on-yellow",
+      "good_time": 240
+    },
+    {
+      "task": "chessboard",
+      "good_time": 258
+    },
+    {
+      "task": "free-column",
+      "good_time": 266
+    },
+    {
+      "task": "2diamonds-2meteorids",
+      "good_time": 270
+    },
+    {
+      "task": "mirror",
+      "good_time": 275
+    },
+    {
+      "task": "two-diamonds",
+      "good_time": 292
+    },
+    {
+      "task": "triple-steps",
+      "good_time": 295
+    },
+    {
+      "task": "plan-your-shooting",
+      "good_time": 297
+    },
+    {
+      "task": "diagonal-lines",
+      "good_time": 304
+    },
+    {
+      "task": "diamond-lines",
+      "good_time": 307
+    },
+    {
+      "task": "arrow",
+      "good_time": 310
+    },
+    {
+      "task": "letter-h",
+      "good_time": 328
+    },
+    {
+      "task": "clean-your-path",
+      "good_time": 339
+    },
+    {
+      "task": "edge-to-edge",
+      "good_time": 348
+    },
+    {
+      "task": "meteoroids-and-wormholes",
+      "good_time": 354
+    },
+    {
+      "task": "wormhole-cloud",
+      "good_time": 355
+    },
+    {
+      "task": "maneuvers-on-left",
+      "good_time": 357
+    },
+    {
+      "task": "red-shooting",
+      "good_time": 381
+    },
+    {
+      "task": "yellow-squares",
+      "good_time": 384
+    },
+    {
+      "task": "edge-wormholes",
+      "good_time": 403
+    },
+    {
+      "task": "two-color-tracks",
+      "good_time": 406
+    },
+    {
+      "task": "double-track",
+      "good_time": 408
+    },
+    {
+      "task": "diamond-ring",
+      "good_time": 421
+    },
+    {
+      "task": "cross-2",
+      "good_time": 444
+    },
+    {
+      "task": "diagonal-diamonds",
+      "good_time": 459
+    },
+    {
+      "task": "six-diamonds",
+      "good_time": 469
+    },
+    {
+      "task": "colorful-flowers",
+      "good_time": 475
+    },
+    {
+      "task": "triple-slalom",
+      "good_time": 546
+    },
+    {
+      "task": "turning-in-square",
+      "good_time": 574
+    },
+    {
+      "task": "belgian-flag",
+      "good_time": 600
+    },
+    {
+      "task": "wave",
+      "good_time": 616
+    },
+    {
+      "task": "letter-d",
+      "good_time": 646
+    },
+    {
+      "task": "meteoroids-on-left",
+      "good_time": 663
+    },
+    {
+      "task": "slalom-position-testing",
+      "good_time": 1145
+    },
+    {
+      "task": "two-bit-instructions",
+      "good_time": 2219
+    }
+  ]
+}

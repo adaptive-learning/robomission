@@ -1,6 +1,0 @@
-{
-  "tasks" : [
-    { "name": "three_steps-forward", "good-time": 15 },
-    { "name": "turning-right", "good-time": 25 }
-  ]
-}
