@@ -83,6 +83,10 @@ function Phase({ phase, urlBase, recommendation }) {
     if (task.solved) {
       return theme.palette.successColor;
     }
+    // TODO: Use explicit mastery info.
+    if (phase.skill >= 1) {
+      return theme.palette.successColorLight;
+    }
     if (phase.id === recommendation.phase) {
       return theme.palette.primary3Color;
     }
