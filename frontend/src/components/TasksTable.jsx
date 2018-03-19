@@ -96,7 +96,17 @@ function Phase({ phase, urlBase, recommendation }) {
     return formatSolvingTime(task.time);
   };
 
-  const { tasks } = phase;
+  const sorted = tasks => {
+    // 1: solved, 2: recommended, 3: other tasks
+    const compareTasks = (a, b) => {
+      const keyA = [!a.solved, a.id !== recommendation.task, a.id];
+      const keyB = [!b.solved, b.id !== recommendation.task, b.id];
+      return keyA > keyB ? 1 : -1;
+    };
+    return tasks.sort(compareTasks);
+  }
+
+  const tasks = sorted(phase.tasks);
   // TODO: Nicer scrollbars.
   return (
       <div style={{
