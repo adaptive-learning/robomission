@@ -83,7 +83,10 @@ function Phase({ phase, urlBase, recommendation }) {
     if (task.solved) {
       return theme.palette.successColor;
     }
-    return theme.palette.primary3Color;
+    if (phase.id === recommendation.phase) {
+      return theme.palette.primary3Color;
+    }
+    return '#888';
   };
 
   const getSubtitle = task => {
