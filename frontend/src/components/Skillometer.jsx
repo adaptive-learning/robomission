@@ -31,7 +31,7 @@ class Skillometer extends React.Component {
       <Avatar
         style={{
           display: 'inline-block',
-          marginRight: 10,
+          //marginRight: 10,
         }}
         backgroundColor={this.getCircleBackgroundColor()}
       >

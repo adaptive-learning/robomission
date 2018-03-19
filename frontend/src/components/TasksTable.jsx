@@ -13,7 +13,7 @@ import { translate } from '../localization';
 
 export default function TaskTable({ urlBase, missions, recommendation }) {
   return (
-    <div>
+    <div style={{paddingBottom: 10}}>
       { missions.map(mission =>
         <MissionOverview
           key={mission.id}
@@ -44,7 +44,10 @@ function MissionOverview({ mission, urlBase, recommendation }) {
       initiallyExpanded={recommendation.mission === mission.id}
     >
       <CardHeader
-        avatar={<Skillometer skill={mission.skill} text={`${mission.order}`}/>}
+        avatar={
+          <span style={{marginRight: 10}}>
+            <Skillometer skill={mission.skill} text={`${mission.order}`}/>
+          </span>}
         title={`${translate(`mission.${mission.id}`)}`}
         titleStyle={{ fontSize: 20 }}
         subtitle={<FormattedMessage id={`chunk.${mission.chunk}`} />}
@@ -137,8 +140,9 @@ function Phase({ phase, urlBase, recommendation }) {
           style={{
             width: '100%',
             display: 'flex',
-            flexWrap: 'nowrap',
-            overflowX: 'auto',
+            // Uncomment the following 2 lines to make it single-line:
+            //flexWrap: 'nowrap',
+            //overflowX: 'auto',
             flex: 1,
           }}
         >
