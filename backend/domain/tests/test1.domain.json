@@ -1,5 +1,9 @@
 {
   "name": "test1",
+  "include": {
+    "tasks": "./tasks",
+    "params": "./test1.params.json"
+  },
   "missions" : [
     {"id": 1, "name": "m1", "chunk": "c1"},
     {"id": 2, "name": "m2", "chunk": "c2"}

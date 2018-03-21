@@ -317,6 +317,25 @@ class Domain(models.Model):
         return str(self.name)
 
 
+class DomainParam(models.Model):
+    """Parameters linked to a domain (and optionally a task or a chunk).
+    """
+    domain = models.ForeignKey(Domain, related_name='params')
+    name = models.SlugField(unique=False)
+    task = models.ForeignKey(Task, blank=True, null=True)
+    chunk = models.ForeignKey(Chunk, blank=True, null=True)
+    value = models.FloatField(default=0)
+
+    def __str__(self):
+        identifiers = [
+            str(entity)
+            for entity in [self.domain, self.name, self.task, self.chunk]
+            if entity is not None]
+        return '{identifier}={value}'.format(
+            identifier=':'.join(identifiers),
+            value=self.value)
+
+
 def generate_random_integer():
     return randrange(2**30)
 

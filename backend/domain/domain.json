@@ -1,5 +1,9 @@
 {
   "name": "current",
+  "include": {
+    "tasks": "./tasks",
+    "params": "./params.json"
+  },
   "missions" : [
     {"id": 1, "name": "spaceship-control", "chunk": "commands"},
     {"id": 2, "name": "shooting-and-wormholes", "chunk": "commands-2"}

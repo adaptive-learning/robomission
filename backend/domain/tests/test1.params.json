@@ -1,0 +1,17 @@
+{
+  "domain": "test1",
+  "params": [
+    {
+      "task": "t1",
+      "good_time": 10
+    },
+    {
+      "task": "t2",
+      "good_time": 20
+    },
+    {
+      "task": "t3",
+      "good_time": 30
+    }
+  ]
+}

@@ -40,3 +40,13 @@ class DomainParserTestCase(TestCase):
             chunk.tasks.all(),
             ['<Task: t2>', '<Task: t3>'],
             ordered=False)
+
+    def test_load_domain_params(self):
+        load_domain_from_file('domain/tests/test1.domain.json')
+        domain = Domain.objects.get(name='test1')
+        self.assertQuerysetEqual(
+            domain.params.all(),
+            ['<DomainParam: test1:good_time:t1=10.0>',
+             '<DomainParam: test1:good_time:t2=20.0>',
+             '<DomainParam: test1:good_time:t3=30.0>'],
+            ordered=False)

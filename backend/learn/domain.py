@@ -9,7 +9,7 @@ def get_domain(name='current'):
     """
     # TODO: Cache domain - it's used in almost all views.
     prefetches = [
-        'blocks', 'toolboxes__blocks', 'tasks',
+        'params', 'blocks', 'toolboxes__blocks', 'tasks',
         Prefetch(
             'missions',
             queryset=Mission.objects.select_related('chunk')),

@@ -9,6 +9,7 @@ Current domain resides in //backend/domain/domain.json
 import json
 import os
 from django.conf import settings
+from learn.models import Task, Chunk, DomainParam
 from learn.serializers import DomainSerializer
 from learn.utils import js
 
@@ -17,11 +18,29 @@ def load_domain_from_file(name='domain/domain.json'):
     path = os.path.join(settings.REPO_DIR, 'backend', name)
     with open(path) as infile:
         data = json.load(infile)
-    task_dir = os.path.join(os.path.dirname(path), 'tasks')
+    task_dir = os.path.join(os.path.dirname(path), data['include']['tasks'])
     inject_tasks_data(data['tasks'], task_dir)
     serializer = DomainSerializer()
     domain = serializer.create_or_update(data)
+    params_path = os.path.join(os.path.dirname(path), data['include']['params'])
+    load_domain_params(domain, params_path)
     return domain
+
+
+def load_domain_params(domain, params_path):
+    with open(params_path) as infile:
+        data = json.load(infile)
+    assert domain.name == data['domain']
+    for param_data in data['params']:
+        task_name = param_data.pop('task', None)
+        task = Task.objects.get(name=task_name) if task_name else None
+        chunk_name = param_data.pop('chunk', None)
+        chunk = Chunk.objects.get(name=chunk_name) if chunk_name else None
+        for name, value in param_data.items():
+            DomainParam.objects.create(
+                domain=domain, task=task, chunk=chunk, name=name, value=value)
+
+
 
 
 def inject_tasks_data(data, task_dir):

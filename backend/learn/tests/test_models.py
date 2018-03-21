@@ -2,7 +2,7 @@ from datetime import date
 from django.test import TestCase
 from django.utils import timezone
 from learn.models import Block, Task, Chunk, Mission, Student, Skill, TaskSession
-from learn.models import ProgramSnapshot
+from learn.models import ProgramSnapshot, Domain, DomainParam
 
 
 class BlockTestCase(TestCase):
@@ -193,6 +193,14 @@ class SkillTestCase(TestCase):
         chunk = Chunk.objects.create(name='carrot')
         skill = Skill(student=student, chunk=chunk, value=0.8)
         assert str(skill) == 's10:carrot=0.8'
+
+
+class DomainParamTestCase(TestCase):
+    def test_str(self):
+        domain = Domain.objects.create(name='d')
+        chunk = Chunk.objects.create(name='c')
+        param = DomainParam(domain=domain, chunk=chunk, name='n', value=3)
+        assert str(param) == 'd:n:c=3'
 
 
 def _create_task_session():
