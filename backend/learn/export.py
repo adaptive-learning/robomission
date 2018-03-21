@@ -6,8 +6,8 @@ from rest_framework import permissions
 from rest_framework import serializers
 from rest_framework import viewsets
 from rest_pandas import PandasSerializer, PandasViewSet
-from learn.models import Block, Toolbox, Task, Instruction
-from learn.models import Action, Student, TaskSession, ProgramSnapshot
+from learn.models import Block, Toolbox, Task, Chunk, Mission
+from learn.models import TaskSession, ProgramSnapshot
 
 
 class ExportViewSet(PandasViewSet):
@@ -54,17 +54,6 @@ class ToolboxViewSet(ExportViewSet):
     serializer_class = ToolboxSerializer
 
 
-class InstructionSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Instruction
-        fields = ('id', 'name')
-
-
-class InstructionViewSet(ExportViewSet):
-    serializer_class = InstructionSerializer
-    queryset = Instruction.objects.all()
-
-
 class TaskSerializer(serializers.ModelSerializer):
     class Meta:
         model = Task
@@ -76,21 +65,32 @@ class TaskViewSet(ExportViewSet):
     serializer_class = TaskSerializer
 
 
-class StudentSerializer(serializers.ModelSerializer):
-    credits = serializers.IntegerField(read_only=True)
-    seen_instructions = serializers.SlugRelatedField(
-        slug_field='name',
-        many=True,
-        read_only=True)
-
+class ChunkSerializer(serializers.ModelSerializer):
+    subchunks = serializers.SlugRelatedField(
+        slug_field='name', many=True, read_only=True)
+    tasks = serializers.SlugRelatedField(
+        slug_field='name', many=True, read_only=True)
     class Meta:
-        model = Student
-        fields = ('id', 'credits', 'seen_instructions')
+        model = Chunk
+        fields = ('id', 'name', 'order', 'setting', 'subchunks', 'tasks')
 
 
-class StudentViewSet(ExportViewSet):
-    queryset = Student.objects.prefetch_related('seen_instructions').all()
-    serializer_class = StudentSerializer
+class ChunkViewSet(ExportViewSet):
+    queryset = Chunk.objects.all()
+    serializer_class = ChunkSerializer
+
+
+class MissionSerializer(serializers.ModelSerializer):
+    chunk = serializers.SlugRelatedField(
+        slug_field='name', many=False, read_only=True)
+    class Meta:
+        model = Mission
+        fields = ('id', 'name', 'order', 'chunk')
+
+
+class MissionViewSet(ExportViewSet):
+    queryset = Mission.objects.all()
+    serializer_class = MissionSerializer
 
 
 class TaskSessionSerializer(serializers.ModelSerializer):
@@ -138,17 +138,6 @@ class ProgramSnapshotsViewSet(ExportViewSet):
     queryset = ProgramSnapshot.objects.prefetch_related('task_session__snapshots').all()
     serializer_class = ProgramSnapshotSerializer
     pandas_serializer_class = ProgramSnapshotPandasSerializer
-
-
-class ActionSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Action
-        fields = ('id', 'name', 'student', 'task', 'time', 'randomness', 'data')
-
-
-class ActionsViewSet(ExportViewSet):
-    queryset = Action.objects.all()
-    serializer_class = ActionSerializer
 
 
 class LatestBundleViewSet(viewsets.ViewSet):

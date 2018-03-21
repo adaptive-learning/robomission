@@ -17,12 +17,11 @@ class Command(MonitoredCommand):
     entities_to_export = [
         ('blocks', learn.export.BlockViewSet),
         ('toolboxes', learn.export.ToolboxViewSet),
-        ('instructions', learn.export.InstructionViewSet),
         ('tasks', learn.export.TaskViewSet),
-        ('students', learn.export.StudentViewSet),
+        ('chunks', learn.export.ChunkViewSet),
+        ('missions', learn.export.MissionViewSet),
         ('task_sessions', learn.export.TaskSessionsViewSet),
         ('program_snapshots', learn.export.ProgramSnapshotsViewSet),
-        ('actions', learn.export.ActionsViewSet),
     ]
 
     def handle(self, *args, **options):
