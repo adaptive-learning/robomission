@@ -1,6 +1,9 @@
 """Compressing program sessions into a discrete performance measure.
 """
-from learn.models import TaskSession
+from learn.models import TaskSession, DomainParam
+
+
+DEFAULT_GOOD_TIME = 5 * 60  # 5 mins
 
 
 def compute_performance(domain, task_session):
@@ -20,5 +23,7 @@ def get_excellent_time(domain, task):
 
 
 def get_good_time(domain, task):
-    good_time = domain.params.get(name='good_time', task=task).value
-    return good_time
+    try:
+        return domain.params.get(name='good_time', task=task).value
+    except DomainParam.DoesNotExist:
+        return DEFAULT_GOOD_TIME
