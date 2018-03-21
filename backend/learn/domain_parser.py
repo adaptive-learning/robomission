@@ -33,9 +33,17 @@ def load_domain_params(domain, params_path):
     assert domain.name == data['domain']
     for param_data in data['params']:
         task_name = param_data.pop('task', None)
-        task = Task.objects.get(name=task_name) if task_name else None
+        task = Task.objects.filter(name=task_name).first()
+        if task_name and not task:
+            print('Warning: Specified non-existing task "{task}". Skipping'\
+                  .format(task=task_name))
+            continue
         chunk_name = param_data.pop('chunk', None)
-        chunk = Chunk.objects.get(name=chunk_name) if chunk_name else None
+        chunk = Chunk.objects.filter(name=chunk_name).first()
+        if chunk_name and not chunk:
+            print('Warning: Specified non-existing chunk "{chunk}". Skipping'\
+                  .format(chunk=chunk_name))
+            continue
         for name, value in param_data.items():
             DomainParam.objects.create(
                 domain=domain, task=task, chunk=chunk, name=name, value=value)
