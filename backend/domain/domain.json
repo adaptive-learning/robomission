@@ -4,10 +4,19 @@
     "tasks": "./tasks",
     "params": "./params.json"
   },
+
   "missions" : [
     {"id": 1, "name": "spaceship-control", "chunk": "commands"},
-    {"id": 2, "name": "shooting-and-wormholes", "chunk": "commands-2"}
+    {"id": 2, "name": "shooting-and-wormholes", "chunk": "commands-2"},
+    {"id": 3, "name": "repeat-n-times", "chunk": "repeat"},
+    {"id": 4, "name": "repeat-while", "chunk": "while"},
+    {"id": 5, "name": "loops-challenge", "chunk": "loops"},
+    {"id": 6, "name": "color-decisions", "chunk": "if"},
+    {"id": 7, "name": "position-decisions", "chunk": "comparing"},
+    {"id": 8, "name": "if-else", "chunk": "if-else"},
+    {"id": 9, "name": "final-challenge", "chunk": "loops-if"}
   ],
+
   "chunks": [
     {
       "id": 1,
@@ -46,6 +55,7 @@
       "subchunks": ["fly-forward", "turn", "diamonds"],
       "tasks": []
     },
+
     {
       "id": 5,
       "name": "shooting",
@@ -78,15 +88,322 @@
       },
       "subchunks": ["shooting", "wormhole", "shooting-2"],
       "tasks": []
+    },
+
+    {
+      "id": 9,
+      "name": "single-repeat",
+      "tasks": [
+        "ladder",
+        "diamonds-in-meteoroid-cloud"
+      ]
+    },
+    {
+      "id": 10,
+      "name": "multiple-repeats",
+      "tasks": [
+        "big-left-turn",
+        "big-right-turn",
+        "blocked-wormhole",
+        "triangle",
+        "n"
+      ]
+    },
+    {
+      "id": 11,
+      "name": "repeat-puzzle",
+      "tasks": [
+        "steal-the-nose",
+        "find-the-path",
+        "stairs",
+        "clean-your-path"
+      ]
+    },
+    {
+      "id": 12,
+      "name": "repeat",
+      "subchunks": ["single-repeat", "multiple-repeats", "repeat-puzzle"],
+      "setting": {
+        "toolbox": "repeat"
+      }
+    },
+
+    {
+      "id": 13,
+      "name": "single-while",
+      "tasks": [
+        "zig-zag",
+        "direct-flight-ahead"
+      ]
+    },
+    {
+      "id": 14,
+      "name": "multiple-whiles",
+      "tasks": [
+        "yellow-is-not-red",
+        "yellow-hint",
+        "stop-on-red",
+        "direction-change"
+      ]
+    },
+    {
+      "id": 15,
+      "name": "while-puzzle",
+      "tasks": [
+        "diamond-in-house"
+      ]
+    },
+    {
+      "id": 16,
+      "name": "while",
+      "subchunks": ["single-while", "multiple-whiles", "while-puzzle"],
+      "setting": {
+        "toolbox": "while"
+      }
+    },
+
+    {
+      "id": 17,
+      "name": "repeat-while-1",
+      "tasks": [
+        "diamond-cross",
+        "stripes",
+        "big-slalom",
+        "double-bend"
+      ]
+    },
+    {
+      "id": 18,
+      "name": "repeat-while-2",
+      "tasks": [
+        "collect-diamonds",
+        "color-slalom",
+        "zig-zag-plus",
+        "four-vs",
+        "rectangle"
+      ]
+    },
+    {
+      "id": 19,
+      "name": "loops-puzzle",
+      "tasks": [
+        "arrow",
+        "double-track"
+      ]
+    },
+    {
+      "id": 20,
+      "name": "loops",
+      "subchunks": ["repeat-while-1", "repeat-while-2", "loops-puzzle"],
+      "setting": {
+        "toolbox": "loops"
+      }
+    },
+
+    {
+      "id": 21,
+      "name": "if-intro",
+      "tasks": [
+        "on-yellow-to-left",
+        "diamonds-with-signals",
+        "follow-colors"
+      ]
+    },
+    {
+      "id": 22,
+      "name": "if-practice",
+      "tasks": [
+        "two-diamonds",
+        "red-shooting",
+        "yellow-squares"
+      ]
+    },
+    {
+      "id": 23,
+      "name": "if-puzzle",
+      "tasks": [
+        "belgian-flag"
+      ]
+    },
+    {
+      "id": 24,
+      "name": "if",
+      "subchunks": ["if-intro", "if-practice", "if-puzzle"],
+      "setting": {
+        "toolbox": "loops-if"
+      }
+    },
+
+    {
+      "id": 25,
+      "name": "comparing-intro",
+      "tasks": [
+        "chessboard",
+        "edge-to-edge",
+        "meteoroids-and-wormholes",
+        "maneuvers-on-left"
+      ]
+    },
+    {
+      "id": 26,
+      "name": "comparing-practice",
+      "tasks": [
+        "free-column",
+        "diamond-lines",
+        "letter-h"
+      ]
+    },
+    {
+      "id": 27,
+      "name": "comparing-puzzle",
+      "tasks": [
+        "wave",
+        "slalom-position-testing"
+      ]
+    },
+    {
+      "id": 28,
+      "name": "comparing",
+      "subchunks": ["comparing-intro", "comparing-practice", "comparing-puzzle"],
+      "setting": {
+        "toolbox": "loops-if-position"
+      }
+    },
+
+    {
+      "id": 29,
+      "name": "if-else-intro",
+      "tasks": [
+        "letter-e",
+        "narrow-passage",
+        "color-navigation"
+      ]
+    },
+    {
+      "id": 30,
+      "name": "if-else-practice",
+      "tasks": [
+        "bouncing-from-edge",
+        "diamonds-on-yellow",
+        "triple-steps"
+      ]
+    },
+    {
+      "id": 31,
+      "name": "if-else-puzzle",
+      "tasks": [
+        "colorful-flowers"
+      ]
+    },
+    {
+      "id": 32,
+      "name": "if-else",
+      "subchunks": ["if-else-intro", "if-else-practice", "if-else-puzzle"],
+      "setting": {
+        "toolbox": "loops-if-else"
+      }
+    },
+
+    {
+      "id": 33,
+      "name": "loops-if-practice-1",
+      "tasks": [
+        "five-diamonds",
+        "mirror",
+        "plan-your-shooting",
+        "diagonal-lines",
+        "wormhole-cloud",
+        "edge-wormholes"
+      ]
+    },
+    {
+      "id": 34,
+      "name": "loops-if-practice-2",
+      "tasks": [
+        "two-color-tracks",
+        "diamond-ring",
+        "cross-2",
+        "diagonal-diamonds",
+        "six-diamonds"
+      ]
+    },
+    {
+      "id": 35,
+      "name": "loops-if-practice-3",
+      "tasks": [
+        "triple-slalom",
+        "turning-in-square",
+        "letter-d",
+        "meteoroids-on-left",
+        "two-bit-instructions"
+      ]
+    },
+    {
+      "id": 36,
+      "name": "loops-if",
+      "subchunks": [
+        "loops-if-practice-1",
+        "loops-if-practice-2",
+        "loops-if-practice-3"
+      ],
+      "setting": {
+        "toolbox": "loops-if-else"
+      }
     }
+
   ],
   "toolboxes": [
-    {"id": 1, "name": "fly", "blocks": ["fly"]},
-    {"id": 2, "name": "shoot", "blocks": ["fly", "shoot"]}
+    {
+      "id": 1,
+      "name": "fly",
+      "blocks": ["fly"]
+    },
+    {
+      "id": 2,
+      "name": "shoot",
+      "blocks": ["fly", "shoot"]
+    },
+    {
+      "id": 3,
+      "name": "repeat",
+      "blocks": ["fly", "shoot", "repeat"]
+    },
+    {
+      "id": 4,
+      "name": "while",
+      "blocks": ["fly", "shoot", "while", "color"]
+    },
+    {
+      "id": 5,
+      "name": "loops",
+      "blocks": ["fly", "shoot", "repeat", "while", "color"]
+    },
+    {
+      "id": 6,
+      "name": "loops-if",
+      "blocks": ["fly", "shoot", "repeat", "while", "color", "if"]
+    },
+    {
+      "id": 7,
+      "name": "loops-if-position",
+      "blocks": ["fly", "shoot", "repeat", "while", "color", "position", "if"]
+    },
+    {
+      "id": 8,
+      "name": "loops-if-else",
+      "blocks": ["fly", "shoot", "repeat", "while", "color", "position", "if",
+                 "if-else"]
+    }
   ],
   "blocks": [
     {"id": 1, "name": "fly"},
-    {"id": 2, "name": "shoot"}
+    {"id": 2, "name": "shoot"},
+    {"id": 3, "name": "repeat"},
+    {"id": 4, "name": "while"},
+    {"id": 5, "name": "color"},
+    {"id": 6, "name": "position"},
+    {"id": 7, "name": "if"},
+    {"id": 8, "name": "if-else"}
   ],
   "tasks": [
     {"id": 51, "name": "three-steps-forward"},
@@ -104,6 +421,74 @@
     {"id": 12, "name": "wormhole-demo"},
     {"id":  6, "name": "tunnel"},
     {"id": 23, "name": "dont-forget-shot"},
-    {"id": 19, "name": "2diamonds-2meteorids"}
+    {"id": 19, "name": "2diamonds-2meteorids"},
+    {"id": 70, "name": "big-right-turn"},
+    {"id": 71, "name": "big-left-turn"},
+    {"id": 11, "name": "ladder"},
+    {"id":  1, "name": "diamonds-in-meteoroid-cloud"},
+    {"id": 76, "name": "blocked-wormhole"},
+    {"id": 13, "name": "n"},
+    {"id": 84, "name": "triangle"},
+    {"id": 21, "name": "steal-the-nose"},
+    {"id": 46, "name": "find-the-path"},
+    {"id": 57, "name": "stairs"},
+    {"id": 18, "name": "clean-your-path"},
+    {"id": 53, "name": "direct-flight-ahead"},
+    {"id": 41, "name": "yellow-hint"},
+    {"id": 73, "name": "stop-on-red"},
+    {"id":  3, "name": "zig-zag"},
+    {"id": 17, "name": "yellow-is-not-red"},
+    {"id": 38, "name": "direction-change"},
+    {"id": 69, "name": "diamond-in-house"},
+    {"id": 56, "name": "diamond-cross"},
+    {"id": 68, "name": "stripes"},
+    {"id": 37, "name": "big-slalom"},
+    {"id": 50, "name": "double-bend"},
+    {"id": 58, "name": "collect-diamonds"},
+    {"id": 55, "name": "color-slalom"},
+    {"id": 52, "name": "zig-zag-plus"},
+    {"id": 72, "name": "four-vs"},
+    {"id": 63, "name": "rectangle"},
+    {"id": 47, "name": "arrow"},
+    {"id": 32, "name": "double-track"},
+    {"id": 27, "name": "on-yellow-to-left"},
+    {"id":  5, "name": "diamonds-with-signals"},
+    {"id": 34, "name": "follow-colors"},
+    {"id": 59, "name": "two-diamonds"},
+    {"id": 60, "name": "red-shooting"},
+    {"id": 78, "name": "yellow-squares"},
+    {"id": 81, "name": "belgian-flag"},
+    {"id": 85, "name": "chessboard"},
+    {"id": 82, "name": "free-column"},
+    {"id":  9, "name": "diamond-lines"},
+    {"id": 65, "name": "letter-h"},
+    {"id": 48, "name": "edge-to-edge"},
+    {"id":  7, "name": "meteoroids-and-wormholes"},
+    {"id": 83, "name": "maneuvers-on-left"},
+    {"id": 64, "name": "wave"},
+    {"id": 28, "name": "slalom-position-testing"},
+    {"id": 80, "name": "letter-e"},
+    {"id": 24, "name": "narrow-passage"},
+    {"id": 29, "name": "color-navigation"},
+    {"id": 75, "name": "bouncing-from-edge"},
+    {"id": 16, "name": "diamonds-on-yellow"},
+    {"id": 22, "name": "triple-steps"},
+    {"id": 43, "name": "colorful-flowers"},
+    {"id": 20, "name": "five-diamonds"},
+    {"id": 61, "name": "mirror"},
+    {"id": 40, "name": "plan-your-shooting"},
+    {"id": 45, "name": "diagonal-lines"},
+    {"id": 15, "name": "wormhole-cloud"},
+    {"id": 30, "name": "edge-wormholes"},
+    {"id": 42, "name": "two-color-tracks"},
+    {"id": 33, "name": "diamond-ring"},
+    {"id": 36, "name": "cross-2"},
+    {"id": 54, "name": "diagonal-diamonds"},
+    {"id": 35, "name": "six-diamonds"},
+    {"id":  4, "name": "triple-slalom"},
+    {"id": 74, "name": "turning-in-square"},
+    {"id": 77, "name": "letter-d"},
+    {"id": 39, "name": "meteoroids-on-left"},
+    {"id": 62, "name": "two-bit-instructions"}
   ]
 }
