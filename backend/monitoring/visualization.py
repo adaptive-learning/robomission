@@ -26,8 +26,8 @@ def time_background(value):
     return viridis_background(value, vmin=0, vmax=300, reverse=True)
 
 
-def style_level(df, order_by='id'):
-    df = df[['name', 'n_attempts', 'success', 'time']]
+def style_level(df, order_by='order'):
+    df = df[['name', 'order', 'n_attempts', 'success', 'time']]
     df = df.reset_index()
     df = df.sort_values(by=order_by)
     styled_df = (
@@ -49,6 +49,6 @@ def style_level(df, order_by='id'):
     return styled_df
 
 
-def display_level_overview(overview_df, order_by='id'):
+def display_level_overview(overview_df, order_by='order'):
     styled = style_level(overview_df, order_by=order_by)
     display(styled)
