@@ -15,11 +15,8 @@ class Command(MonitoredCommand):
     help = "Export all data for analysis into CSV files."
 
     entities_to_export = [
-        ('blocks', learn.export.BlockViewSet),
-        ('toolboxes', learn.export.ToolboxViewSet),
         ('tasks', learn.export.TaskViewSet),
         ('chunks', learn.export.ChunkViewSet),
-        ('missions', learn.export.MissionViewSet),
         ('task_sessions', learn.export.TaskSessionsViewSet),
         ('program_snapshots', learn.export.ProgramSnapshotsViewSet),
     ]

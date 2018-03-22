@@ -52,6 +52,25 @@ class Task(models.Model):
     # sessions = m:n relation with students through learn.TaskSession
     # chunks = m:n relation with chunks containing this task
 
+    @property
+    def mission(self):
+        phase = self.phase
+        return phase.parent_mission if phase is not None else None
+
+    @property
+    def level(self):
+        mission = self.mission
+        return mission.order if mission is not None else 0
+
+    @property
+    def phase(self):
+        return self.chunks.first()
+
+    @property
+    def order(self):
+        phase = self.phase
+        return phase.order if phase is not None else 0
+
     def get_absolute_url(self):
         return '/task/{name}/'.format(name=self.name)
 

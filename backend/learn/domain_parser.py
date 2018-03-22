@@ -49,8 +49,6 @@ def load_domain_params(domain, params_path):
                 domain=domain, task=task, chunk=chunk, name=name, value=value)
 
 
-
-
 def inject_tasks_data(data, task_dir):
     for task_data in data:
         #task = Task.objects.filter(pk=task_data['id']).first()

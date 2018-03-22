@@ -30,39 +30,23 @@ class ExportViewSet(PandasViewSet):
         return df
 
 
-class BlockSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Block
-        fields = ('id', 'name', 'order')
-
-
-class BlockViewSet(ExportViewSet):
-    queryset = Block.objects.all()
-    serializer_class = BlockSerializer
-
-
-class ToolboxSerializer(serializers.ModelSerializer):
-    blocks = serializers.SlugRelatedField(slug_field='name', many=True, read_only=True)
-
-    class Meta:
-        model = Toolbox
-        fields = ('id', 'name', 'blocks')
-
-
-class ToolboxViewSet(ExportViewSet):
-    queryset = Toolbox.objects.all().prefetch_related('blocks')
-    serializer_class = ToolboxSerializer
-
-
 class TaskSerializer(serializers.ModelSerializer):
     class Meta:
         model = Task
-        fields = ('id', 'name', 'setting', 'solution')
+        fields = (
+            'id', 'name', 'setting', 'solution',
+            'level', 'order', 'mission', 'phase')
+
+
+class TaskPandasSerializer(PandasSerializer):
+    def transform_dataframe(self, dataframe):
+        return dataframe.sort_values('order')
 
 
 class TaskViewSet(ExportViewSet):
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
+    pandas_serializer_class = TaskPandasSerializer
 
 
 class ChunkSerializer(serializers.ModelSerializer):
@@ -80,17 +64,17 @@ class ChunkViewSet(ExportViewSet):
     serializer_class = ChunkSerializer
 
 
-class MissionSerializer(serializers.ModelSerializer):
-    chunk = serializers.SlugRelatedField(
-        slug_field='name', many=False, read_only=True)
-    class Meta:
-        model = Mission
-        fields = ('id', 'name', 'order', 'chunk')
-
-
-class MissionViewSet(ExportViewSet):
-    queryset = Mission.objects.all()
-    serializer_class = MissionSerializer
+#class MissionSerializer(serializers.ModelSerializer):
+#    chunk = serializers.SlugRelatedField(
+#        slug_field='name', many=False, read_only=True)
+#    class Meta:
+#        model = Mission
+#        fields = ('id', 'name', 'order', 'chunk')
+#
+#
+#class MissionViewSet(ExportViewSet):
+#    queryset = Mission.objects.all()
+#    serializer_class = MissionSerializer
 
 
 class TaskSessionSerializer(serializers.ModelSerializer):
