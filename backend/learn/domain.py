@@ -1,7 +1,7 @@
 """Utils for working with the domain.
 """
 from django.db.models import Prefetch
-from learn.models import Mission, Chunk, Domain
+from learn.models import ProblemSet, Domain
 
 
 def get_domain(name='current'):
@@ -9,12 +9,9 @@ def get_domain(name='current'):
     """
     # TODO: Cache domain - it's used in almost all views.
     prefetches = [
-        'params', 'blocks', 'toolboxes__blocks', 'tasks',
+        'params', 'blocks', 'toolboxes__blocks', 'tasks__problemset',
         Prefetch(
-            'missions',
-            queryset=Mission.objects.select_related('chunk')),
-        Prefetch(
-            'chunks',
-            queryset=Chunk.objects.prefetch_related('tasks', 'subchunks'))]
+            'problemsets',
+            queryset=ProblemSet.objects.prefetch_related('parent', 'tasks', 'parts'))]
     domain = Domain.objects.prefetch_related(*prefetches).get(name=name)
     return domain

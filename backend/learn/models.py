@@ -11,6 +11,38 @@ from django.utils.functional import cached_property
 from jsonfield import JSONField
 
 
+class Chunk(models.Model):
+    """Any entity in the programming domain.
+
+    Currently: there are two types of chunks: problemsets and tasks.
+    In the future, we might add: toolboxes, blocks, instructions, hints, concepts.
+    """
+    # The name of a chunk. Same name can be used for chunks of different type,
+    # but not for the chunks of the same type.
+    # be must be unique across all chunks.
+    name = models.SlugField(blank=True, unique=False, default='')
+    # All chunks have order to allow for ordered relationship.
+    order = models.SmallIntegerField(default=0)
+
+    # TODO: Consider to make type a field to allow enforcing unique_together
+    # (type, name) on DB level.
+    @property
+    def type(self):
+        """String specifying type of the entity (e.g. 'ps', 'task', 'tbx').
+        """
+        return ''  # To be overriden by subclasses.
+
+    @property
+    def qualified_name(self):
+        return '{prefix}:{name}'.format(prefix=self.type, name=self.name)
+
+    class Meta:
+        ordering = ['order']
+
+    def __str__(self):
+        return '{name}'.format(name=self.name)
+
+
 class Block(models.Model):
     """Programming block, such as "fly" or "repeat".
     """
@@ -43,103 +75,95 @@ class Instruction(models.Model):
         return self.name
 
 
-class Task(models.Model):
-    """Programming problem to be solved by students.
+class ProblemSet(Chunk):
+    """Set of tasks practicing common concepts.
     """
-    name = models.SlugField(max_length=100, unique=True)
+    section = models.CharField(max_length=20)  # e.g. '3.4' (<mission>.<phase>)
+    level = models.SmallIntegerField()  # currently the top-most section number
+    setting = JSONField()
+    parent = models.ForeignKey(
+        'self', on_delete=models.SET_NULL, null=True,
+        related_name='parts')
+    # tasks = 1:n relation with tasks
+
+    MISSION = 'mission'
+    PHASE = 'phase'
+    GRANULARITY_CHOICES = ((MISSION, MISSION), (PHASE, PHASE))
+    granularity = models.CharField(
+        help_text='Hierachy level; either base phase, or compound mission.',
+        max_length=10,
+        choices=GRANULARITY_CHOICES,
+        default=PHASE)
+
+    # Reversed relationship from Chunks would be called 'problemset' by
+    # default, which would clash with Task.problemset, so we rename it.
+    chunk = models.OneToOneField(
+        Chunk, on_delete=models.CASCADE, parent_link=True,
+        related_name='problemset_obj')
+
+    @property
+    def type(self):
+        return 'ps'
+
+    @property
+    def phases(self):
+        assert self.granularity == self.MISSION
+        return list(self.parts.all())
+
+    # TODO: Consider to remove (use self.parent instead).
+    @property
+    def parent_mission(self):
+        assert self.granularity == self.PHASE
+        return self.parent
+
+    # TODO: Caching.
+    @property
+    def n_tasks(self):
+        return self.tasks.count()
+
+    def __str__(self):
+        return '{section} {name}'.format(section=self.section, name=self.name)
+
+
+# TODO: Inhertit Task from Chunk
+# (requires careful migrations, because some tasks already exist).
+#class Task(Chunk):
+class Task(models.Model):
+    """Problem to be solved to practice programming.
+    """
+    problemset = models.ForeignKey(ProblemSet,
+        on_delete=models.SET_NULL, null=True,
+        related_name='tasks')
     setting = JSONField()
     solution = models.TextField()
     # sessions = m:n relation with students through learn.TaskSession
-    # chunks = m:n relation with chunks containing this task
+
+    # TODO: Remove name and order once the inheritance migration is completed.
+    name = models.SlugField(blank=True, unique=False, default='')
+    order = models.SmallIntegerField(default=0)
+    #chunk = models.OneToOneField(
+    #    Chunk, on_delete=models.CASCADE, parent_link=True,
+    #    related_name='task_obj')
+
+    @property
+    def type(self):
+        return 'task'
 
     @property
     def mission(self):
-        phase = self.phase
-        return phase.parent_mission if phase is not None else None
+        if self.problemset is None:
+            return None
+        return self.problemset.parent_mission
 
     @property
     def level(self):
-        mission = self.mission
-        return mission.order if mission is not None else 0
-
-    @property
-    def phase(self):
-        return self.chunks.first()
-
-    @property
-    def order(self):
-        phase = self.phase
-        return phase.order if phase is not None else 0
+        return self.problemset.level if self.problemset is not None else 0
 
     def get_absolute_url(self):
         return '/task/{name}/'.format(name=self.name)
 
     def __str__(self):
         return self.name
-
-
-class Chunk(models.Model):
-    """Knowledge component defined by a group of coherent tasks.
-    """
-    name = models.SlugField(unique=True)
-    order = models.SmallIntegerField(default=0)
-
-    # Each chunk can specify default environment, toolbox, limits.
-    # Most specific settings will be used.
-    setting = JSONField(default=dict)
-
-    # Chunks form a directed acyclic forest.
-    subchunks = models.ManyToManyField('self', symmetrical=False, related_name='parents')
-
-    # Allow single task in multiple chunks.
-    tasks = models.ManyToManyField(Task, related_name='chunks')
-
-    class Meta:
-        ordering = ['order']
-
-    @property
-    def parent_mission(self):
-        # Assumes exectly one parent, which is a mission.
-        # TODO: Generalize or throw a meaningful exception if the assumption is
-        # violated.
-        parent = self.parents.first()
-        return parent.mission
-
-    @property
-    def n_tasks(self):
-        return self.tasks.count()
-
-    def __str__(self):
-        return '{name}'.format(name=self.name)
-
-
-class Mission(models.Model):
-    """Top-level problem set specified by a chunk of height 2
-    """
-    name = models.SlugField(unique=True)
-    order = models.SmallIntegerField(default=0)
-    chunk = models.OneToOneField(Chunk, on_delete=models.CASCADE)
-
-    class Meta:
-        ordering = ['order']
-
-    @property
-    def chunk_name(self):
-        """Return a mission subtitle (name of the practiced concept).
-        """
-        return self.chunk.name
-
-    @property
-    def setting(self):
-        return self.chunk.setting
-
-    @property
-    def phases(self):
-        return list(self.chunk.subchunks.all())
-
-    def __str__(self):
-        return 'M{order} {name} ({chunk_name})'.format(
-            order=self.order, name=self.name, chunk_name=self.chunk_name)
 
 
 class Teacher(models.Model):
@@ -326,29 +350,29 @@ class Domain(models.Model):
     different users (AB experiments, testing version).
     """
     name = models.SlugField(unique=True, default=generate_uuid_string)
+    # TODO: only set chunks, and access all chunk-types via @property
+    #chunks = models.ManyToManyField(Chunk)
     blocks = models.ManyToManyField(Block)
     toolboxes = models.ManyToManyField(Toolbox)
     tasks = models.ManyToManyField(Task)
-    chunks = models.ManyToManyField(Chunk)
-    missions = models.ManyToManyField(Mission)
+    problemsets = models.ManyToManyField(ProblemSet)
 
     def __str__(self):
         return str(self.name)
 
 
 class DomainParam(models.Model):
-    """Parameters linked to a domain (and optionally a task or a chunk).
+    """Parameters linked to a domain, optionally to a specific chunk.
     """
     domain = models.ForeignKey(Domain, related_name='params')
     name = models.SlugField(unique=False)
-    task = models.ForeignKey(Task, blank=True, null=True)
     chunk = models.ForeignKey(Chunk, blank=True, null=True)
     value = models.FloatField(default=0)
 
     def __str__(self):
         identifiers = [
             str(entity)
-            for entity in [self.domain, self.name, self.task, self.chunk]
+            for entity in [self.domain, self.name, self.chunk]
             if entity is not None]
         return '{identifier}={value}'.format(
             identifier=':'.join(identifiers),

@@ -6,7 +6,7 @@ from rest_framework import permissions
 from rest_framework import serializers
 from rest_framework import viewsets
 from rest_pandas import PandasSerializer, PandasViewSet
-from learn.models import Block, Toolbox, Task, Chunk, Mission
+from learn.models import Block, Toolbox, Task, ProblemSet
 from learn.models import TaskSession, ProgramSnapshot
 
 
@@ -49,19 +49,19 @@ class TaskViewSet(ExportViewSet):
     pandas_serializer_class = TaskPandasSerializer
 
 
-class ChunkSerializer(serializers.ModelSerializer):
-    subchunks = serializers.SlugRelatedField(
+class ProblemSetSerializer(serializers.ModelSerializer):
+    parts = serializers.SlugRelatedField(
         slug_field='name', many=True, read_only=True)
     tasks = serializers.SlugRelatedField(
         slug_field='name', many=True, read_only=True)
     class Meta:
-        model = Chunk
-        fields = ('id', 'name', 'order', 'setting', 'subchunks', 'tasks')
+        model = ProblemSet
+        fields = ('id', 'name', 'order', 'setting', 'parts', 'tasks')
 
 
-class ChunkViewSet(ExportViewSet):
-    queryset = Chunk.objects.all()
-    serializer_class = ChunkSerializer
+class ProblemSetViewSet(ExportViewSet):
+    queryset = ProblemSet.objects.all()
+    serializer_class = ProblemSetSerializer
 
 
 #class MissionSerializer(serializers.ModelSerializer):

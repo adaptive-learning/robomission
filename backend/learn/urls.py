@@ -18,7 +18,7 @@ export_router.register(
     export.LatestBundleViewSet,
     base_name='latest/bundle')
 export_router.register(r'current/tasks', export.TaskViewSet)
-export_router.register(r'current/chunks', export.ChunkViewSet)
+export_router.register(r'current/problemsets', export.ProblemSetViewSet)
 export_router.register(r'current/task_sessions', export.TaskSessionsViewSet)
 export_router.register(r'current/program_snapshots', export.ProgramSnapshotsViewSet)
 
