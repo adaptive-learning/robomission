@@ -118,6 +118,7 @@ class InstructionSerializer(serializers.ModelSerializer):
 
 
 class TaskSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField()  # defined explicitly to make it writable
     #level = serializers.SlugRelatedField(
     #    slug_field='name',
     #    many=False,

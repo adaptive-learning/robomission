@@ -22,12 +22,14 @@ def load_domain_from_file(name='domain/domain.json'):
     inject_tasks_data(data['tasks'], task_dir)
     serializer = DomainSerializer()
     domain = serializer.create_or_update(data)
-    params_path = os.path.join(os.path.dirname(path), data['include']['params'])
+    params_path = os.path.normpath(
+        os.path.join(os.path.dirname(path), data['include']['params']))
     load_domain_params(domain, params_path)
     return domain
 
 
 def load_domain_params(domain, params_path):
+    print('Loading domain parameters from', params_path, '...')
     with open(params_path) as infile:
         data = json.load(infile)
     assert domain.name == data['domain']
@@ -35,13 +37,13 @@ def load_domain_params(domain, params_path):
         task_name = param_data.pop('task', None)
         task = Task.objects.filter(name=task_name).first()
         if task_name and not task:
-            print('Warning: Specified non-existing task "{task}". Skipping'\
+            print('Warning: Specified non-existing task "{task}". Skipping.'\
                   .format(task=task_name))
             continue
         chunk_name = param_data.pop('chunk', None)
         chunk = Chunk.objects.filter(name=chunk_name).first()
         if chunk_name and not chunk:
-            print('Warning: Specified non-existing chunk "{chunk}". Skipping'\
+            print('Warning: Specified non-existing chunk "{chunk}". Skipping.'\
                   .format(chunk=chunk_name))
             continue
         for name, value in param_data.items():
@@ -53,6 +55,7 @@ def inject_tasks_data(data, task_dir):
     for task_data in data:
         #task = Task.objects.filter(pk=task_data['id']).first()
         task_name = task_data['name']
+        print('Parsing task', task_name, '...')  # TODO:logging
         source = read_task_source(task_dir, task_name)
         source_data = parse_task_source(source)
         if task_name != source_data['name']:
