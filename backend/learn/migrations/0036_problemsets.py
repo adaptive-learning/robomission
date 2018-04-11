@@ -14,18 +14,6 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.CreateModel(
-            name='ProblemSet',
-            fields=[
-                ('section', models.CharField(max_length=20)),
-                ('level', models.SmallIntegerField()),
-                ('setting', jsonfield.fields.JSONField()),
-                ('granularity', models.CharField(choices=[('mission', 'mission'), ('phase', 'phase')], default='phase', help_text='Hierachy level; either base phase, or compound mission.', max_length=10)),
-                ('chunk', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, related_name='problemset_obj', serialize=False, to='learn.Chunk')),
-                ('parent', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='parts', to='learn.ProblemSet')),
-            ],
-            bases=('learn.chunk',),
-        ),
         migrations.RemoveField(
             model_name='mission',
             name='chunk',
@@ -71,15 +59,5 @@ class Migration(migrations.Migration):
         ),
         migrations.DeleteModel(
             name='Mission',
-        ),
-        migrations.AddField(
-            model_name='domain',
-            name='problemsets',
-            field=models.ManyToManyField(to='learn.ProblemSet'),
-        ),
-        migrations.AddField(
-            model_name='task',
-            name='problemset',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='tasks', to='learn.ProblemSet'),
         ),
     ]

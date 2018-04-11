@@ -78,9 +78,14 @@ class Instruction(models.Model):
 class ProblemSet(Chunk):
     """Set of tasks practicing common concepts.
     """
-    section = models.CharField(max_length=20)  # e.g. '3.4' (<mission>.<phase>)
-    level = models.SmallIntegerField()  # currently the top-most section number
-    setting = JSONField()
+    section = models.CharField(
+        max_length=20, blank=True, default='',
+        help_text="Dot-numbering '<mission>.<phase>', e.g. '3.4'.")
+    # TODO: Extract from section (as a property / on save).
+    level = models.SmallIntegerField(
+        default=0,
+        help_text='The top-most section number.')
+    setting = JSONField(default=dict)
     parent = models.ForeignKey(
         'self', on_delete=models.SET_NULL, null=True,
         related_name='parts')
@@ -134,8 +139,8 @@ class Task(models.Model):
     problemset = models.ForeignKey(ProblemSet,
         on_delete=models.SET_NULL, null=True,
         related_name='tasks')
-    setting = JSONField()
-    solution = models.TextField()
+    setting = JSONField(default=dict)
+    solution = models.TextField(blank=True, default='')
     # sessions = m:n relation with students through learn.TaskSession
 
     # TODO: Remove name and order once the inheritance migration is completed.

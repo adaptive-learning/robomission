@@ -2,7 +2,7 @@ from unittest import mock
 import pytest
 from django.test import TestCase
 from django.utils import timezone
-from learn.models import Task, Chunk, Mission, Domain
+from learn.models import Task, Chunk, ProblemSet, Domain
 from learn.models import Student, TaskSession, Skill
 from learn.actions import solve_task
 from learn.utils.time import ms
@@ -11,16 +11,12 @@ from learn.utils.time import ms
 def create_domain():
     # TODO: Allow to set domain briefly, sth. like:
     #       create_domain('m1(p1(t1, t2, t3), p2(t4, t5))').
-    t1 = Task.objects.create(name='t1', setting='{}', solution='')
-    c1 = Chunk.objects.create(name='c1')
-    p1 = Chunk.objects.create(name='p1', order=1)
-    p2 = Chunk.objects.create(name='p2', order=2)
-    m1 = Mission.objects.create(name='m1', chunk=c1)
-    c1.subchunks.set([p1, p2])
-    p1.tasks.set([t1])
+    m1 = ProblemSet.objects.create(name='m1')
+    p1 = ProblemSet.objects.create(name='p1', parent=m1, order=1)
+    p2 = ProblemSet.objects.create(name='p2', parent=m1, order=2)
+    t1 = Task.objects.create(name='t1', problemset=p1, setting='{}', solution='')
     domain = Domain.objects.create()
-    domain.missions.set([m1])
-    domain.chunks.set([c1, p1, p2])
+    domain.problemsets.set([m1, p1, p2])
     domain.tasks.set([t1])
     return domain
 
@@ -69,7 +65,7 @@ class SolveTaskTestCase(TestCase):
         domain = create_domain()
         student = Student.objects.create()
         task = domain.tasks.get(name='t1')
-        mission = domain.missions.get(name='m1')
+        mission = domain.problemsets.get(name='m1')
         ts = TaskSession.objects.create(student=student, task=task)
         assert student.get_skill(mission.chunk) == 0
         solve_task(domain, ts)
