@@ -77,7 +77,9 @@ class Chunk(models.Model):
 
     @property
     def qualified_name(self):
-        return '{prefix}:{name}'.format(prefix=self.type, name=self.name)
+        if self.type:
+            return '{prefix}:{name}'.format(prefix=self.type, name=self.name)
+        return self.name
 
     #@property
     #def description(self):
