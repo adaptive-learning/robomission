@@ -102,9 +102,9 @@ class ProblemSetTestCase(TestCase):
 
     def test_n_tasks(self):
         ps = ProblemSet.objects.create()
-        t1 = Task.objects.create(problemset=ps)
-        t2 = Task.objects.create(problemset=ps)
-        t3 = Task.objects.create(problemset=ps)
+        Task.objects.create(problemset=ps)
+        Task.objects.create(problemset=ps)
+        Task.objects.create(problemset=ps)
         assert ps.n_tasks == 3
 
 

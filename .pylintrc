@@ -18,9 +18,11 @@ ignore-long-lines=^\s*(# )?<?https?://\S+>?$
 max-module-lines=200
 
 [VARIABLES]
-# do not check for unused import in __init__ files
+# Do not check for unused import in __init__ files.
 init-import=no
 dummy-variables-rgx=(_+[a-zA-Z0-9_]*?$)|dummy
+# Allow short variable names.
+variable-rgx=[a-z0-9_]{1,30}$
 
 [MASTER]
 load-plugins=pylint_django
