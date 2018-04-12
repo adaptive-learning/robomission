@@ -22,10 +22,34 @@ class Chunk(models.Model):
     # be must be unique across all chunks.
     name = models.SlugField(blank=True, unique=False, default='')
     # All chunks have order to allow for ordered relationship.
-    order = models.SmallIntegerField(default=0)
+    section = models.CharField(
+        max_length=20, blank=True, default='',
+        help_text="Dotted section e.g. '3.4'.")
+    content = JSONField(
+        default=dict,
+        help_text='Description, setting, solution, etc.')
 
-    # TODO: Consider to make type a field to allow enforcing unique_together
-    # (type, name) on DB level.
+    class Meta:
+        ordering = ['section']
+
+    @property
+    def level(self):
+        """The frist part of the section number.
+        """
+        if self.section == '':
+            return 0
+        return int(self.section.split('.')[0])
+
+    @property
+    def order(self):
+        """The last part of the section number.
+        """
+        if self.section == '':
+            return 0
+        return int(self.section.split('.')[-1])
+
+    # TODO: Make it a field (for export, ordering by (type, section) and for
+    # enforcing unique_together(type, name) on DB level.
     @property
     def type(self):
         """String specifying type of the entity (e.g. 'ps', 'task', 'tbx').
@@ -36,8 +60,23 @@ class Chunk(models.Model):
     def qualified_name(self):
         return '{prefix}:{name}'.format(prefix=self.type, name=self.name)
 
-    class Meta:
-        ordering = ['order']
+    #@property
+    #def description(self):
+    #    """Only some chunks have description.
+    #    """
+    #    return self.content.get('description', '')
+
+    @property
+    def setting(self):
+        """Only some chunks have setting (problem sets and tasks).
+        """
+        return self.content.get('setting', {})
+
+    @property
+    def solution(self):
+        """Only some chunks have solution (tasks).
+        """
+        return self.content.get('solution', '')
 
     def __str__(self):
         return '{name}'.format(name=self.name)
@@ -78,14 +117,6 @@ class Instruction(models.Model):
 class ProblemSet(Chunk):
     """Set of tasks practicing common concepts.
     """
-    section = models.CharField(
-        max_length=20, blank=True, default='',
-        help_text="Dot-numbering '<mission>.<phase>', e.g. '3.4'.")
-    # TODO: Extract from section (as a property / on save).
-    level = models.SmallIntegerField(
-        default=0,
-        help_text='The top-most section number.')
-    setting = JSONField(default=dict)
     parent = models.ForeignKey(
         'self', on_delete=models.SET_NULL, null=True,
         related_name='parts')
@@ -107,10 +138,6 @@ class ProblemSet(Chunk):
         related_name='problemset_obj')
 
     @property
-    def type(self):
-        return 'ps'
-
-    @property
     def phases(self):
         assert self.granularity == self.MISSION
         return list(self.parts.all())
@@ -130,39 +157,23 @@ class ProblemSet(Chunk):
         return '{section} {name}'.format(section=self.section, name=self.name)
 
 
-# TODO: Inhertit Task from Chunk
-# (requires careful migrations, because some tasks already exist).
-#class Task(Chunk):
-class Task(models.Model):
+class Task(Chunk):
     """Problem to be solved to practice programming.
     """
     problemset = models.ForeignKey(ProblemSet,
         on_delete=models.SET_NULL, null=True,
         related_name='tasks')
-    setting = JSONField(default=dict)
-    solution = models.TextField(blank=True, default='')
     # sessions = m:n relation with students through learn.TaskSession
 
-    # TODO: Remove name and order once the inheritance migration is completed.
-    name = models.SlugField(blank=True, unique=False, default='')
-    order = models.SmallIntegerField(default=0)
-    #chunk = models.OneToOneField(
-    #    Chunk, on_delete=models.CASCADE, parent_link=True,
-    #    related_name='task_obj')
-
-    @property
-    def type(self):
-        return 'task'
+    chunk_ptr = models.OneToOneField(
+        Chunk, on_delete=models.CASCADE, parent_link=True,
+        related_name='task_obj')
 
     @property
     def mission(self):
         if self.problemset is None:
             return None
         return self.problemset.parent_mission
-
-    @property
-    def level(self):
-        return self.problemset.level if self.problemset is not None else 0
 
     def get_absolute_url(self):
         return '/task/{name}/'.format(name=self.name)
