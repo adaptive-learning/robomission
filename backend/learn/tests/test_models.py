@@ -23,9 +23,14 @@ class BlockTestCase(TestCase):
 
 
 class ChunkTestCase(TestCase):
-    def test_chunks_are_ordered(self):
+    def test_chunks_order_by_section(self):
         chunk1 = Chunk.objects.create(name='c1', section='1.2')
         chunk2 = Chunk.objects.create(name='c2', section='1.1')
+        assert list(Chunk.objects.all()) == [chunk2, chunk1]
+
+    def test_chunks_order_by_type_first(self):
+        chunk1 = Chunk.objects.create(type='b', name='c1', section='1.1')
+        chunk2 = Chunk.objects.create(type='a', name='c2', section='1.2')
         assert list(Chunk.objects.all()) == [chunk2, chunk1]
 
     def test_str(self):
@@ -68,6 +73,12 @@ class ProblemSetTestCase(TestCase):
             section='2.3', granularity='mission', name='loops')
         assert str(ps) == 'loops'
         assert repr(ps) == '<ProblemSet: loops>'
+
+    def test_is_mission(self):
+        mission = ProblemSet.objects.create(granularity='mission')
+        phase = ProblemSet.objects.create(granularity='phase')
+        assert mission.is_mission
+        assert not phase.is_mission
 
     def test_parts(self):
         mission = ProblemSet.objects.create(granularity='mission')

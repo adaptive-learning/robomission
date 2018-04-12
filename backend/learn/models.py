@@ -35,7 +35,7 @@ class Chunk(models.Model):
         help_text='Description, setting, solution, etc.')
 
     class Meta:
-        ordering = ['section']
+        ordering = ['type', 'section']
 
     def __init__(self, *args, **kwargs):
         # Inject type (unless already set).
@@ -151,8 +151,12 @@ class ProblemSet(Chunk):
         related_name='problemset_obj')
 
     @property
+    def is_mission(self):
+        return self.granularity == self.MISSION
+
+    @property
     def phases(self):
-        assert self.granularity == self.MISSION
+        assert self.is_mission
         return list(self.parts.all())
 
     # TODO: Consider to remove (use self.parent instead).
