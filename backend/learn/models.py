@@ -17,6 +17,11 @@ class Chunk(models.Model):
     Currently: there are two types of chunks: problemsets and tasks.
     In the future, we might add: toolboxes, blocks, instructions, hints, concepts.
     """
+    # Type of the chunk, e.g 'tbx', or 'task'.  Can be overriden by subclass.
+    # Can contain field placeholders, e.g. 'ps.{field:granularity}'.
+    TYPE = ''
+
+    type = models.CharField(max_length=256, blank=True, default='')
     # The name of a chunk. Same name can be used for chunks of different type,
     # but not for the chunks of the same type.
     # be must be unique across all chunks.
@@ -31,6 +36,19 @@ class Chunk(models.Model):
 
     class Meta:
         ordering = ['section']
+
+    def __init__(self, *args, **kwargs):
+        # Inject type (unless already set).
+        # TODO: factor infere_type(self, **kwargs)
+        if 'type' not in kwargs:
+            parts = self.TYPE.split('.')
+            for i, part in enumerate(parts):
+                if part.startswith('{field:'):
+                    field_name = part[7:-1]
+                    default = self._meta.get_field(field_name).get_default()
+                    parts[i] = kwargs.get(field_name, default)
+            kwargs['type'] = '.'.join(parts)
+        super(Chunk, self).__init__(*args, **kwargs)
 
     @property
     def level(self):
@@ -47,14 +65,6 @@ class Chunk(models.Model):
         if self.section == '':
             return 0
         return int(self.section.split('.')[-1])
-
-    # TODO: Make it a field (for export, ordering by (type, section) and for
-    # enforcing unique_together(type, name) on DB level.
-    @property
-    def type(self):
-        """String specifying type of the entity (e.g. 'ps', 'task', 'tbx').
-        """
-        return ''  # To be overriden by subclasses.
 
     @property
     def qualified_name(self):
@@ -79,7 +89,9 @@ class Chunk(models.Model):
         return self.content.get('solution', '')
 
     def __str__(self):
-        return '{name}'.format(name=self.name)
+        return self.qualified_name
+        #return '{section} {name}'.format(
+        #    section=self.section, name=self.qualified_name)
 
 
 class Block(models.Model):
@@ -117,6 +129,7 @@ class Instruction(models.Model):
 class ProblemSet(Chunk):
     """Set of tasks practicing common concepts.
     """
+    TYPE = 'ps.{field:granularity}'
     parent = models.ForeignKey(
         'self', on_delete=models.SET_NULL, null=True,
         related_name='parts')
@@ -154,12 +167,13 @@ class ProblemSet(Chunk):
         return self.tasks.count()
 
     def __str__(self):
-        return '{section} {name}'.format(section=self.section, name=self.name)
-
+        # Overrides the parent __str__ to omit prefix (type).
+        return self.name
 
 class Task(Chunk):
     """Problem to be solved to practice programming.
     """
+    TYPE = 'task'
     problemset = models.ForeignKey(ProblemSet,
         on_delete=models.SET_NULL, null=True,
         related_name='tasks')
@@ -179,6 +193,7 @@ class Task(Chunk):
         return '/task/{name}/'.format(name=self.name)
 
     def __str__(self):
+        # Overrides the parent __str__ to omit prefix (type).
         return self.name
 
 
