@@ -41,14 +41,23 @@ class Chunk(models.Model):
         # Inject type (unless already set).
         # TODO: factor infere_type(self, **kwargs)
         if 'type' not in kwargs:
-            parts = self.TYPE.split('.')
-            for i, part in enumerate(parts):
-                if part.startswith('{field:'):
-                    field_name = part[7:-1]
-                    default = self._meta.get_field(field_name).get_default()
-                    parts[i] = kwargs.get(field_name, default)
-            kwargs['type'] = '.'.join(parts)
+            kwargs['type'] = self._interpolate_type(kwargs)
         super(Chunk, self).__init__(*args, **kwargs)
+
+    def _interpolate_type(self, kwargs):
+        """Return type based on self.TYPE, and provided kwargs or defaults.
+        """
+        parts = self.TYPE.split('.')
+        for i, part in enumerate(parts):
+            if part.startswith('{field:'):
+                field_name = part[7:-1]  # cut 'name' from '{field:name}'
+                # Explicit test for inclusion in kwargs to avoid computing
+                # default value if it is not necessary.
+                if field_name in kwargs:
+                    parts[i] = kwargs[field_name]
+                else:
+                    parts[i] = self._meta.get_field(field_name).get_default()
+        return '.'.join(parts)
 
     @property
     def level(self):
