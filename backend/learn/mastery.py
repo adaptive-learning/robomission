@@ -36,14 +36,14 @@ def get_skills(domain, student):
 
 def update_skills(student, task, performance):
     progress = []
-    for phase in task.chunks.all():
+    phase = task.problemset
+    if phase:
         skill = update_base_skill(student, phase, performance)
         progress.append(Progress(phase.name, skill.value))
-        # TODO: If the chunk graph structure become any DAG, then update all
-        # parent chunks recursively.
-        parent_chunk = phase.parents.first()
-        skill = update_parent_skill(student, parent_chunk)
-        progress.append(Progress(parent_chunk.name, skill.value))
+    mission = task.mission
+    if mission:
+        skill = update_parent_skill(student, mission)
+        progress.append(Progress(mission.name, skill.value))
     return progress
 
 

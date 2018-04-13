@@ -108,6 +108,31 @@ class ProblemSetTestCase(TestCase):
         Task.objects.create(problemset=ps)
         assert ps.n_tasks == 3
 
+    def test_n_parts(self):
+        ps = ProblemSet.objects.create()
+        ProblemSet.objects.create(parent=ps)
+        ProblemSet.objects.create(parent=ps)
+        assert ps.n_parts == 2
+
+    def test_add_part(self):
+        ps = ProblemSet.objects.create(section='7.3')
+        ps.add_part(name='p1')
+        ps.add_part(name='p2')
+        part = ps.parts.last()
+        assert part.name == 'p2'
+        assert part.parent == ps
+        assert part.granularity == 'phase'
+        assert part.section == '7.3.2'
+
+    def test_add_task(self):
+        ps = ProblemSet.objects.create(section='7.3')
+        ps.add_task(name='t1')
+        ps.add_task(name='t2')
+        task = ps.tasks.last()
+        assert task.name == 't2'
+        assert task.problemset == ps
+        assert task.section == '7.3.2'
+
 
 class TaskTestCase(TestCase):
     def test_type(self):

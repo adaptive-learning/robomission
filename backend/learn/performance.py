@@ -24,6 +24,6 @@ def get_excellent_time(domain, task):
 
 def get_good_time(domain, task):
     try:
-        return domain.params.get(name='good_time', task=task).value
+        return domain.params.get(name='good_time', chunk=task).value
     except DomainParam.DoesNotExist:
         return DEFAULT_GOOD_TIME

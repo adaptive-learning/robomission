@@ -12,9 +12,9 @@ def create_domain():
     # TODO: Allow to set domain briefly, sth. like:
     #       create_domain('m1(p1(t1, t2, t3), p2(t4, t5))').
     m1 = ProblemSet.objects.create(name='m1')
-    p1 = ProblemSet.objects.create(name='p1', parent=m1, order=1)
-    p2 = ProblemSet.objects.create(name='p2', parent=m1, order=2)
-    t1 = Task.objects.create(name='t1', problemset=p1, setting='{}', solution='')
+    p1 = m1.add_part(name='p1')
+    p2 = m1.add_part(name='p2')
+    t1 = p1.add_task(name='t1')
     domain = Domain.objects.create()
     domain.problemsets.set([m1, p1, p2])
     domain.tasks.set([t1])

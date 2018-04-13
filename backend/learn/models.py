@@ -28,7 +28,7 @@ class Chunk(models.Model):
     name = models.SlugField(blank=True, unique=False, default='')
     # All chunks have order to allow for ordered relationship.
     section = models.CharField(
-        max_length=20, blank=True, default='',
+        max_length=20, blank=True, default='0',
         help_text="Dotted section e.g. '3.4'.")
     content = JSONField(
         default=dict,
@@ -63,16 +63,16 @@ class Chunk(models.Model):
     def level(self):
         """The frist part of the section number.
         """
-        if self.section == '':
-            return 0
+        #if self.section == '':
+        #    return 0
         return int(self.section.split('.')[0])
 
     @property
     def order(self):
         """The last part of the section number.
         """
-        if self.section == '':
-            return 0
+        #if self.section == '':
+        #    return 0
         return int(self.section.split('.')[-1])
 
     @property
@@ -180,6 +180,23 @@ class ProblemSet(Chunk):
     @property
     def n_tasks(self):
         return self.tasks.count()
+
+    @property
+    def n_parts(self):
+        return self.parts.count()
+
+    def add_part(self, *args, **kwargs):
+        kwargs['parent'] = self
+        kwargs['granularity'] = 'phase'
+        kwargs['section'] = '{0}.{1}'.format(self.section, self.n_parts+1)
+        ps = ProblemSet.objects.create(*args, **kwargs)
+        return ps
+
+    def add_task(self, *args, **kwargs):
+        kwargs['problemset'] = self
+        kwargs['section'] = '{0}.{1}'.format(self.section, self.n_tasks+1)
+        task = Task.objects.create(*args, **kwargs)
+        return task
 
     def __str__(self):
         # Overrides the parent __str__ to omit prefix (type).
