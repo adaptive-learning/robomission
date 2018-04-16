@@ -1,5 +1,6 @@
 """DB entities definitions.
 """
+import json
 from random import randrange
 from uuid import uuid4
 from django.db import models
@@ -93,11 +94,34 @@ class Chunk(models.Model):
         """
         return self.content.get('setting', {})
 
+    @setting.setter
+    def setting(self, value):
+        self.content['setting'] = value
+
     @property
     def solution(self):
         """Only some chunks have solution (tasks).
         """
         return self.content.get('solution', '')
+
+    @solution.setter
+    def solution(self, value):
+        self.content['solution'] = value
+
+    # Hack to overcome a bug in JsonField implementation that results in
+    # not parsing json values in inherited models, leaving them as strings
+    # See https://github.com/dmkoch/django-jsonfield/issues/101.
+    # TODO: Use another JsonField implementation, or subclass the current one
+    # and override the problematic part (see the referenced issue).
+    @classmethod
+    def from_db(cls, db, field_names, values):
+        for i, (name, value) in enumerate(zip(field_names, values)):
+            if name == 'content' and isinstance(value, str):
+                value_list = list(values)
+                value_list[i] = json.loads(value)
+                values = tuple(value_list)
+                break
+        return super(Chunk, cls).from_db(db, field_names, values)
 
     def __str__(self):
         return self.qualified_name

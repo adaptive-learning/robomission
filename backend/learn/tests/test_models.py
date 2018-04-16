@@ -47,6 +47,11 @@ class ChunkTestCase(TestCase):
         chunk = Chunk.objects.create(section='3.1.5')
         assert chunk.order == 5
 
+    def test_content_type_preserved(self):
+        chunk = Chunk.objects.create()
+        chunk = Chunk.objects.get(pk=chunk.pk)
+        assert isinstance(chunk.content, dict)  # and not a str!
+
     def test_content_setting(self):
         chunk = Chunk.objects.create(content={'setting': 4})
         assert chunk.setting == 4
@@ -54,6 +59,19 @@ class ChunkTestCase(TestCase):
     def test_default_setting(self):
         chunk = Chunk.objects.create()
         assert chunk.setting == {}
+
+    def test_setting_setter(self):
+        chunk = Chunk.objects.create()
+        chunk.setting = 4
+        assert chunk.setting == 4
+
+    def test_setting_init(self):
+        chunk = Chunk.objects.create(setting=4)
+        assert chunk.setting == 4
+
+    def test_setting_and_solution_init(self):
+        chunk = Chunk.objects.create(setting=4, solution=5)
+        assert chunk.content == {'setting': 4, 'solution': 5}
 
 
 class ProblemSetTestCase(TestCase):
@@ -133,6 +151,11 @@ class ProblemSetTestCase(TestCase):
         assert task.problemset == ps
         assert task.section == '7.3.2'
 
+    def test_content_type_preserved(self):
+        ps = ProblemSet.objects.create()
+        ps = ProblemSet.objects.get(pk=ps.pk)
+        print('type', type(ps.content))
+        assert isinstance(ps.content, dict)  # and not a str!
 
 class TaskTestCase(TestCase):
     def test_type(self):

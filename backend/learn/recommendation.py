@@ -36,7 +36,7 @@ def select_phase(mission, student):
     return get_first_unsolved_phase(mission, student)
 
 
-def select_task(chunk, student):
+def select_task(ps, student):
     solved_tasks = {ts.task for ts in student.task_sessions.all() if ts.solved}
-    unsolved_tasks = set(chunk.tasks.all()) - solved_tasks
+    unsolved_tasks = set(ps.tasks.all()) - solved_tasks
     return random.choice(list(unsolved_tasks))

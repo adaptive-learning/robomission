@@ -1,3 +1,4 @@
+import json
 from django.contrib.auth import login
 from django.contrib.auth.models import User
 from lazysignup.utils import is_lazy_user
@@ -134,72 +135,79 @@ class TaskSerializer(serializers.ModelSerializer):
 class SettingSerializer(serializers.Serializer):
     toolbox = serializers.CharField(required=False)
 
-## TODO: Merge into PSSerializer below.
-#class ChunkSerializer(serializers.ModelSerializer):
-#    id = serializers.IntegerField()  # defined explicitly to make it writable
-#    name = serializers.SlugField(validators=[])
+
+#class ContentSerializer(serializers.Serializer):
 #    setting = SettingSerializer(required=False)
-#    tasks = serializers.SlugRelatedField(
-#        slug_field='name',
-#        many=True,
-#        queryset=Task.objects.all(),
-#        default=list)
-#    subchunks = serializers.SlugRelatedField(
-#        slug_field='name',
-#        many=True,
-#        queryset=Chunk.objects.all(),
-#        default=list)
-#
-#    class Meta:
-#        model = Chunk
-#        fields = ('id', 'name', 'order', 'setting', 'tasks', 'subchunks')
-#        list_serializer_class = SettableOrderedListSerializer
-#
-#    def create(self, validated_data):
-#        task_names = validated_data.pop('tasks', None)
-#        subchunk_names = validated_data.pop('subchunks', None)
-#        chunk = Chunk.objects.create(**validated_data)
-#        if task_names:
-#            tasks = [Task.objects.get(name=name) for name in task_names]
-#            chunk.tasks.set(tasks)
-#        if subchunk_names:
-#            subchunks = [Chunk.objects.get(name=name) for name in subchunk_names]
-#            chunk.subchunks.set(subchunks)
-#        return chunk
-#
-#    def update(self, instance, validated_data):
-#        instance.name = validated_data.get('name', instance.name)
-#        instance.order = validated_data.get('order', instance.order)
-#        instance.setting = validated_data.get('setting', instance.setting)
-#        task_names = validated_data.pop('tasks', None)
-#        subchunk_names = validated_data.pop('subchunks', None)
-#        if task_names:
-#            tasks = [Task.objects.get(name=name) for name in task_names]
-#            instance.tasks.set(tasks)
-#        if subchunk_names:
-#            subchunks = [Chunk.objects.get(name=name) for name in subchunk_names]
-#            instance.subchunks.set(subchunks)
-#        instance.save()
-#        return instance
+#    solution = serializers.CharField(required=False)
 
 
-class ProblemSetListSerializer(SettableOrderedListSerializer):
-    order_start = 1
+#class ProblemSetListSerializer(SettableOrderedListSerializer):
+#    order_start = 1
 
 
 class ProblemSetSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField()  # defined explicitly to make it writable
     name = serializers.SlugField(validators=[])
-    # TODO: add other fields
-    #chunk = serializers.SlugRelatedField(
-    #    slug_field='name',
-    #    many=False,
-    #    queryset=Chunk.objects.all())
+    parent = serializers.SlugRelatedField(
+        slug_field='name',
+        many=False,
+        required=False,
+        queryset=ProblemSet.objects.all())
+    #content = ContentSerializer(read_only=True, required=False)
+    setting = SettingSerializer(required=False)
+    parts = serializers.SlugRelatedField(
+        slug_field='name',
+        many=True,
+        queryset=ProblemSet.objects.all(),
+        default=list)
+    tasks = serializers.SlugRelatedField(
+        slug_field='name',
+        many=True,
+        queryset=Task.objects.all(),
+        default=list)
 
     class Meta:
         model = ProblemSet
-        fields = ('id', 'order', 'name')
-        list_serializer_class = ProblemSetListSerializer
+        fields = (
+            'id', 'name', 'granularity', 'section', 'level', 'order',
+            'setting', 'parent', 'parts', 'tasks')
+        list_serializer_class = SettableListSerializer
+
+    def create(self, validated_data):
+        # After validation, tasks and parts are already DB entities, not names.
+        tasks = validated_data.pop('tasks', None)
+        parts = validated_data.pop('parts', None)
+        ps = ProblemSet.objects.create(**validated_data)
+        if tasks:
+            ps.tasks.set(tasks)
+        if parts:
+            ps.parts.set(parts)
+        return ps
+        #task_names = validated_data.pop('tasks', None)
+        #part_names = validated_data.pop('parts', None)
+        #ps = ProblemSet.objects.create(**validated_data)
+        #if task_names:
+        #    tasks = [Task.objects.get(name=name) for name in task_names]
+        #    ps.tasks.set(tasks)
+        #if part_names:
+        #    parts = [ProblemSet.objects.get(name=name) for name in part_names]
+        #    ps.parts.set(parts)
+        #return ps
+
+    def update(self, instance, validated_data):
+        instance.name = validated_data.get('name', instance.name)
+        instance.section = validated_data.get('section', instance.order)
+        instance.setting = validated_data.get('setting', instance.setting)
+        task_names = validated_data.pop('tasks', None)
+        part_names = validated_data.pop('parts', None)
+        if task_names:
+            tasks = [Task.objects.get(name=name) for name in task_names]
+            instance.tasks.set(tasks)
+        if part_names:
+            parts = [ProblemSet.objects.get(name=name) for name in part_names]
+            instance.parts.set(parts)
+        instance.save()
+        return instance
 
 
 class DomainSerializer(serializers.ModelSerializer):
