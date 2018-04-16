@@ -59,15 +59,15 @@ class ChunkTestCase(TestCase):
 class ProblemSetTestCase(TestCase):
     def test_default_granularity(self):
         ps = ProblemSet.objects.create()
-        assert ps.granularity == 'phase'
+        assert ps.granularity == 'mission'
 
     def test_type(self):
         ps = ProblemSet.objects.create()
-        assert ps.type == 'ps.phase'
+        assert ps.type == 'ps.mission'
 
     def test_mission(self):
-        ps = ProblemSet.objects.create(granularity='mission')
-        assert ps.type == 'ps.mission'
+        ps = ProblemSet.objects.create(granularity='phase')
+        assert ps.type == 'ps.phase'
 
     def test_str(self):
         ps = ProblemSet.objects.create(
@@ -145,8 +145,8 @@ class TaskTestCase(TestCase):
 
     def test_mission(self):
         mission = ProblemSet.objects.create(granularity='mission')
-        phase = ProblemSet.objects.create(parent=mission)
-        task = Task.objects.create(problemset=phase)
+        phase = mission.add_part()
+        task = phase.add_task()
         assert task.mission == mission
 
 

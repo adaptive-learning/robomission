@@ -153,7 +153,7 @@ class ProblemSet(Chunk):
         help_text='Hierachy level; either base phase, or compound mission.',
         max_length=10,
         choices=GRANULARITY_CHOICES,
-        default=PHASE)
+        default=MISSION)
 
     # Reversed relationship from Chunks would be called 'problemset' by
     # default, which would clash with Task.problemset, so we rename it.
