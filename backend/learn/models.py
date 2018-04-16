@@ -421,6 +421,10 @@ class Domain(models.Model):
     tasks = models.ManyToManyField(Task)
     problemsets = models.ManyToManyField(ProblemSet)
 
+    @property
+    def missions(self):
+        return self.problemsets.filter(granularity=ProblemSet.MISSION)
+
     def __str__(self):
         return str(self.name)
 

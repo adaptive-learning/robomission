@@ -8,10 +8,10 @@ from learn.utils.time import ms
 
 @pytest.mark.django_db
 def test_compute_performance__unsolved():
-    task = Task.objects.create(name='t1', setting='{}', solution='')
+    task = Task.objects.create()
     domain = Domain.objects.create()
     domain.tasks.set([task])
-    domain.params.create(name='good_time', task=task, value=2*60)
+    domain.params.create(name='good_time', chunk=task, value=2*60)
     student = Student.objects.create()
     ts = TaskSession.objects.create(
         student=student, task=task, solved=False, start=ms('0:00'), end=ms('1:00'))
@@ -20,10 +20,10 @@ def test_compute_performance__unsolved():
 
 @pytest.mark.django_db
 def test_compute_performance__poor():
-    task = Task.objects.create(name='t1', setting='{}', solution='')
+    task = Task.objects.create()
     domain = Domain.objects.create()
     domain.tasks.set([task])
-    domain.params.create(name='good_time', task=task, value=2*60)
+    domain.params.create(name='good_time', chunk=task, value=2*60)
     student = Student.objects.create()
     ts = TaskSession.objects.create(
         student=student, task=task, solved=True, start=ms('0:00'), end=ms('3:00'))
@@ -32,10 +32,10 @@ def test_compute_performance__poor():
 
 @pytest.mark.django_db
 def test_compute_performance__good():
-    task = Task.objects.create(name='t1', setting='{}', solution='')
+    task = Task.objects.create()
     domain = Domain.objects.create()
     domain.tasks.set([task])
-    domain.params.create(name='good_time', task=task, value=2*60)
+    domain.params.create(name='good_time', chunk=task, value=2*60)
     student = Student.objects.create()
     ts = TaskSession.objects.create(
         student=student, task=task, solved=True, start=ms('0:00'), end=ms('1:30'))
@@ -44,10 +44,10 @@ def test_compute_performance__good():
 
 @pytest.mark.django_db
 def test_compute_performance__excellent():
-    task = Task.objects.create(name='t1', setting='{}', solution='')
+    task = Task.objects.create()
     domain = Domain.objects.create()
     domain.tasks.set([task])
-    domain.params.create(name='good_time', task=task, value=2*60)
+    domain.params.create(name='good_time', chunk=task, value=2*60)
     student = Student.objects.create()
     ts = TaskSession.objects.create(
         student=student, task=task, solved=True, start=ms('0:00'), end=ms('0:30'))
