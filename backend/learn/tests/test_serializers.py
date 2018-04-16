@@ -41,7 +41,6 @@ class DomainSerializerTestCase(TestCase):
         domain = Domain.objects.get(name='test1')
         mission = domain.missions.first()
         assert mission.name == 'm1'
-        assert mission.chunk.name == 'c1'
 
     def test_update_existing_domain(self):
         block = Block.objects.create(name='b1', order=5)
@@ -447,7 +446,6 @@ class MissionSerializerTestCase(TestCase):
         assert mission.id == 1
         assert mission.name == 'm1'
         assert mission.order == 2
-        assert mission.chunk == chunk1
 
     def test_update_existing_mission(self):
         chunk1 = Chunk.objects.create(name='c1', order=1)
@@ -464,7 +462,6 @@ class MissionSerializerTestCase(TestCase):
         assert mission == mission_db
         assert mission.name == 'm1n'
         assert mission.order == 5
-        assert mission.chunk == chunk2
 
     def test_deserialize_list_of_new_missions(self):
         domain = Domain.objects.create()

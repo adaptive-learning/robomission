@@ -162,6 +162,12 @@ class StudentTestCase(TestCase):
         student = Student.objects.create()
         assert student.get_skill(chunk) == 0
 
+    def test_get_skill_for_ps(self):
+        ps = ProblemSet.objects.create(name='p1')
+        student = Student.objects.create()
+        Skill.objects.create(student=student, chunk=ps, value=0.25)
+        assert student.get_skill(ps) == 0.25
+
     def test_str(self):
         student = Student.objects.create(id=10)
         assert str(student) == 's10'

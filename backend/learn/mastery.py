@@ -47,26 +47,26 @@ def update_skills(student, task, performance):
     return progress
 
 
-def update_base_skill(student, chunk, performance):
-    skill, _created = Skill.objects.get_or_create(student=student, chunk=chunk)
-    delta = performance_to_value(performance, chunk.n_tasks)
+def update_base_skill(student, ps, performance):
+    skill, _created = Skill.objects.get_or_create(student=student, chunk=ps)
+    delta = performance_to_value(performance, ps.n_tasks)
     skill.value = min(1, skill.value + delta)
     skill.save()
     return skill
 
 
-def update_parent_skill(student, chunk):
-    skill, _created = Skill.objects.get_or_create(student=student, chunk=chunk)
-    skill.value = mean(student.get_skill(c) for c in chunk.subchunks.all())
+def update_parent_skill(student, ps):
+    skill, _created = Skill.objects.get_or_create(student=student, chunk=ps)
+    skill.value = mean(student.get_skill(part) for part in ps.parts.all())
     skill.save()
     return skill
 
 
-def has_mastered(student, chunk):
-    subchunks_mastered = (has_mastered(student, c) for c in chunk.subchunks.all())
-    all_subchunks_mastered = all(subchunks_mastered)
-    skill = student.get_skill(chunk)
-    return all_subchunks_mastered and skill >= SKILL_FOR_MASTERY
+def has_mastered(student, ps):
+    parts_mastered = (has_mastered(student, part) for part in ps.parts.all())
+    all_parts_mastered = all(parts_mastered)
+    skill = student.get_skill(ps)
+    return all_parts_mastered and skill >= SKILL_FOR_MASTERY
 
 
 def get_current_mission_phase(domain, student):
@@ -79,7 +79,7 @@ def get_first_unsolved_mission(domain, student):
     # TODO: has mastered mission - if all phases are solved ??
     # Missions are ordered in DB layer.
     for mission in domain.missions.all():
-        if not has_mastered(student, mission.chunk):
+        if not has_mastered(student, mission):
             return mission
     # The student could have mastered all missions.
     return None
@@ -97,6 +97,6 @@ def get_level(domain, student):
     """Level is number of solved missions + 1 (in order to start on level 1).
     """
     n_solved_missions = sum(
-        int(has_mastered(student, mission.chunk))
+        int(has_mastered(student, mission))
         for mission in domain.missions.all())
     return n_solved_missions + 1

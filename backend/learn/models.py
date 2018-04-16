@@ -157,6 +157,8 @@ class ProblemSet(Chunk):
 
     # Reversed relationship from Chunks would be called 'problemset' by
     # default, which would clash with Task.problemset, so we rename it.
+    # TODO: rename to chunk_obj (/chunk_ptr/chunk_ref) to avoid mission.chunk
+    # which had different meaning before.
     chunk = models.OneToOneField(
         Chunk, on_delete=models.CASCADE, parent_link=True,
         related_name='problemset_obj')
@@ -265,11 +267,10 @@ class Student(models.Model):
     # task_sessions = m:n relation with tasks through learn.TaskSession
     # skills = m:n relation with chunks through learn.Skill
 
+    # TODO: Caching.
     def get_skill(self, chunk):
-        for skill in self.skills.all():
-            if skill.chunk == chunk:
-                return skill.value
-        return 0
+        skill = self.skills.filter(chunk=chunk).first()
+        return skill.value if skill else 0
 
     def __str__(self):
         return 's{pk}'.format(pk=self.pk)

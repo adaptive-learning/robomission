@@ -57,9 +57,9 @@ class SolveTaskTestCase(TestCase):
         student = Student.objects.create()
         task = domain.tasks.get(name='t1')
         ts = TaskSession.objects.create(student=student, task=task)
-        assert student.get_skill(task.chunks.first()) == 0
+        assert student.get_skill(task.problemset) == 0
         solve_task(domain, ts)
-        assert student.get_skill(task.chunks.first()) > 0
+        assert student.get_skill(task.problemset) > 0
 
     def test_mission_skill_updated(self):
         domain = create_domain()
@@ -67,6 +67,6 @@ class SolveTaskTestCase(TestCase):
         task = domain.tasks.get(name='t1')
         mission = domain.problemsets.get(name='m1')
         ts = TaskSession.objects.create(student=student, task=task)
-        assert student.get_skill(mission.chunk) == 0
+        assert student.get_skill(mission) == 0
         solve_task(domain, ts)
-        assert student.get_skill(mission.chunk) > 0
+        assert student.get_skill(mission) > 0
