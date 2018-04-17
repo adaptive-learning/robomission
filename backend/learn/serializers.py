@@ -62,16 +62,30 @@ class OrderedListSerializer(serializers.ListSerializer):
 class SettableListSerializer(serializers.ListSerializer):
     """Allows to set new instances for a domain manager.
     """
+    relationship_fields = None
+    # TODO: add single_relationship_fields if needed
+
     def set(self, manager, initial_data):
         """Create or update instances of given manager according to data.
         Assumes not-validated initial_data.
         """
+        # First set istances without relationships, then with them.
+        if self.relationship_fields:
+            self._set(manager, initial_data, ignore_fields=self.relationship_fields)
+        return self._set(manager, initial_data)
+
+    def _set(self, manager, initial_data, ignore_fields=None):
         data = self.validate(initial_data)
         instance_map = {
             instance.id: instance
             for instance in manager.model.objects.all()}
         current_instances = []
         for instance_data in data:
+            if ignore_fields:
+                # Temporarily remove relationship fields to avoid attempts to
+                # create a relatihonship to an object that does not yet exist.
+                for field in ignore_fields:
+                    instance_data.pop(field, None)
             instance = instance_map.get(instance_data['id'], None)
             serializer = self.child.__class__(instance=instance, data=instance_data)
             serializer.is_valid(raise_exception=True)
@@ -118,22 +132,44 @@ class InstructionSerializer(serializers.ModelSerializer):
         fields = ('id', 'name')
 
 
+class SettingSerializer(serializers.Serializer):
+    toolbox = serializers.CharField(required=False)
+    fields = serializers.CharField(required=False)
+    energy = serializers.IntegerField(required=False)
+    length = serializers.IntegerField(required=False)
+
+
 class TaskSerializer(serializers.ModelSerializer):
-    id = serializers.IntegerField()  # defined explicitly to make it writable
-    #level = serializers.SlugRelatedField(
-    #    slug_field='name',
-    #    many=False,
-    #    queryset=Level.objects.all(),
-    #    required=False)
+    # Id, setting, and solution are defined explicitly to make them writable.
+    id = serializers.IntegerField()
+    setting = SettingSerializer(required=False)
+    solution = serializers.CharField(required=False)
+    problemset = serializers.SlugRelatedField(
+        slug_field='name',
+        many=False,
+        required=False,
+        queryset=ProblemSet.objects.all())
 
     class Meta:
         model = Task
-        fields = ('id', 'name', 'setting', 'solution')
+        fields = (
+            'id', 'name', 'section', 'level', 'order', 'problemset',
+            'setting', 'solution')
         list_serializer_class = SettableListSerializer
 
+    # We need explicit create method to allow for nested writes (setting field).
+    def create(self, validated_data):
+        return Task.objects.create(**validated_data)
 
-class SettingSerializer(serializers.Serializer):
-    toolbox = serializers.CharField(required=False)
+    def update(self, instance, validated_data):
+        instance.name = validated_data.get('name', instance.name)
+        instance.section = validated_data.get('section', instance.section)
+        instance.setting = validated_data.get('setting', instance.setting)
+        instance.solution = validated_data.get('solution', instance.solution)
+        ps = validated_data.pop('problemset', None)  # name or instance?
+        instance.problemset = ps
+        instance.save()
+        return instance
 
 
 #class ContentSerializer(serializers.Serializer):
@@ -142,7 +178,8 @@ class SettingSerializer(serializers.Serializer):
 
 
 #class ProblemSetListSerializer(SettableOrderedListSerializer):
-#    order_start = 1
+class ProblemSetListSerializer(SettableListSerializer):
+    relationship_fields = ['parts']
 
 
 class ProblemSetSerializer(serializers.ModelSerializer):
@@ -171,7 +208,7 @@ class ProblemSetSerializer(serializers.ModelSerializer):
         fields = (
             'id', 'name', 'granularity', 'section', 'level', 'order',
             'setting', 'parent', 'parts', 'tasks')
-        list_serializer_class = SettableListSerializer
+        list_serializer_class = ProblemSetListSerializer
 
     def create(self, validated_data):
         # After validation, tasks and parts are already DB entities, not names.
@@ -196,7 +233,7 @@ class ProblemSetSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         instance.name = validated_data.get('name', instance.name)
-        instance.section = validated_data.get('section', instance.order)
+        instance.section = validated_data.get('section', instance.section)
         instance.setting = validated_data.get('setting', instance.setting)
         task_names = validated_data.pop('tasks', None)
         part_names = validated_data.pop('parts', None)

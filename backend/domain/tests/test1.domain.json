@@ -4,49 +4,22 @@
     "tasks": "./tasks",
     "params": "./test1.params.json"
   },
-  "missions" : [
-    {"id": 1, "name": "m1", "chunk": "c1"},
-    {"id": 2, "name": "m2", "chunk": "c2"}
-  ],
-  "chunks": [
-    {
-      "id": 1,
-      "name": "c1a",
-      "tasks": [ "t1" ]
-    },
-    {
-      "id": 2,
-      "name": "c1b",
-      "tasks": [ "t2", "t3" ]
-    },
-    {
-      "id": 3,
-      "name": "c1c",
-      "tasks": []
-    },
-    {
-      "id": 4,
-      "name": "c1",
+  "problemsets" : [
+    { "id": 101, "name": "m1",
       "setting": { "toolbox": "tb1" },
-      "subchunks": ["c1a", "c1b", "c1c"],
-      "tasks": []
+      "parts": [ "p1A", "p1B", "p1C" ]
     },
-    {
-      "id": 5,
-      "name": "c2a",
-      "tasks": []
-    },
-    {
-      "id": 6,
-      "name": "c2b", "tasks": []
-    },
-    {
-      "id": 7,
-      "name": "c2",
+    { "id": 102, "name": "p1A", "tasks": [ "t1" ] },
+    { "id": 103, "name": "p1B", "tasks": [ "t2", "t3" ] },
+    { "id": 104, "name": "p1C", "tasks": [] },
+
+    { "id": 105, "name": "m2",
       "setting": { "toolbox": "tb2" },
-      "subchunks": ["c2a", "c2b"],
-      "tasks": []
-    }
+      "parts": [ "p2A", "p2B", "p2C" ]
+    },
+    { "id": 106, "name": "p2A" },
+    { "id": 107, "name": "p2B" },
+    { "id": 108, "name": "p2C" }
   ],
   "toolboxes": [
     {"id": 1, "name": "tb1", "blocks": ["b1"]},

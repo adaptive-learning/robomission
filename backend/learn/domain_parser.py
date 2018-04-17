@@ -78,13 +78,19 @@ def task_name_to_path(dirpath, name):
 
 def parse_task_source(text):
     data = js.run_script(script_name='parseTask', input_text=text)
-    # TODO: Remove level, and replace by chunk, once DB model and JS parsing
-    # function is changed.
-    # TODO: Use nested serialized for setting parsing.
+    setting = data['setting']
+    setting['fields'] = fields_to_str(setting['fields'])
     adapted_data = {
         'name': data['id'],
-        # 'level': data['category'],
-        'setting': json.dumps(data['setting']),
+        'setting': setting,
         'solution': data['solution'],
     }
     return adapted_data
+
+
+def fields_to_str(fields):
+    return '||'.join(row_to_str(row) for row in fields)
+
+
+def row_to_str(row):
+    return '|'.join(bg + ''.join(objects) for bg, objects in row)

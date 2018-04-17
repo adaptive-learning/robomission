@@ -224,6 +224,20 @@ class ProblemSet(Chunk):
         task = Task.objects.create(*args, **kwargs)
         return task
 
+    def save(self, *args, **kwargs):
+        # TODO(once Chunk.parent exists):
+        # Move section setting to section.default function.
+        # TODO: Make it more robust (e.g. if some sections have out-of-ordering
+        # section, or when there are multiple domains).
+        if not self.section or self.section == '0':
+            if self.parent:
+                subsection = self.parent.n_parts + 1
+                self.section = '{0}.{1}'.format(self.parent.section, subsection)
+            else:
+                top_sections = ProblemSet.objects.filter(parent__isnull=True)
+                self.section = str(top_sections.count() + 1)
+        super(ProblemSet, self).save(*args, **kwargs)
+
     def __str__(self):
         # Overrides the parent __str__ to omit prefix (type).
         return self.name

@@ -154,8 +154,32 @@ class ProblemSetTestCase(TestCase):
     def test_content_type_preserved(self):
         ps = ProblemSet.objects.create()
         ps = ProblemSet.objects.get(pk=ps.pk)
-        print('type', type(ps.content))
         assert isinstance(ps.content, dict)  # and not a str!
+
+    def test_infer_section(self):
+        ps = ProblemSet.objects.create()
+        assert ps.section == '1'
+        ps = ProblemSet.objects.create()
+        assert ps.section == '2'
+        ps = ProblemSet.objects.create()
+        assert ps.section == '3'
+
+    def test_infer_subsection(self):
+        ps1 = ProblemSet.objects.create(section='1.3')
+        ps2 = ProblemSet.objects.create(parent=ps1)
+        assert ps2.section == '1.3.1'
+        ps3 = ProblemSet.objects.create(parent=ps1)
+        assert ps3.section == '1.3.2'
+
+    def test_infer_task_sections(self):
+        t1 = Task.objects.create()
+        t2 = Task.objects.create()
+        ps = ProblemSet.objects.create(section='4.3')
+        print('--')
+        ps.tasks.set([t1, t2])
+        assert t1.section == '4.3.1'
+        assert t2.section == '4.3.2'
+
 
 class TaskTestCase(TestCase):
     def test_type(self):

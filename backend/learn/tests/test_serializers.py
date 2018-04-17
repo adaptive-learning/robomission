@@ -1,7 +1,7 @@
 from django.test import TestCase
 from learn.models import Block, Toolbox, Task, ProblemSet, Domain
 from learn.serializers import BlockSerializer, ToolboxSerializer, SettingSerializer
-from learn.serializers import ProblemSetSerializer
+from learn.serializers import TaskSerializer, ProblemSetSerializer
 from learn.serializers import DomainSerializer
 
 
@@ -116,6 +116,41 @@ class SettingSerializerTestCase(TestCase):
         serializer = SettingSerializer(data=data)
         serializer.is_valid(raise_exception=True)
         assert serializer.validated_data == {'toolbox': 'fly'}
+
+
+class TaskSerializerTestCase(TestCase):
+    def test_task_serialization(self):
+        ps = ProblemSet.objects.create(name='ps1')
+        task = Task.objects.create(
+            name='carrot', section='2.3', problemset=ps,
+            setting={'fields': 'kD|k||k|kS', 'length': 3, 'energy': 7},
+            solution='f')
+        serializer = TaskSerializer(task)
+        assert serializer.data == {
+            'id': task.pk,
+            'name': 'carrot',
+            'section': '2.3',
+            'level': 2,
+            'order': 3,
+            'problemset': 'ps1',
+            'setting': {'fields': 'kD|k||k|kS', 'length': 3, 'energy': 7},
+            'solution': 'f'}
+
+    def test_deserialize_new_task(self):
+        data = {
+            'id': 1,
+            'name': 'carrot',
+            'section': '2.3',
+            'setting': {'toolbox': 'fly'},
+            'solution': 'f'}
+        serializer = TaskSerializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        task = serializer.save()
+        assert task.id == 1
+        assert task.name == 'carrot'
+        assert task.section == '2.3'
+        assert task.solution == 'f'
+        assert task.setting == {'toolbox': 'fly'}
 
 
 class ProblemSetSerializerTestCase(TestCase):
