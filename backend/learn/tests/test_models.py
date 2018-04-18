@@ -79,13 +79,14 @@ class ProblemSetTestCase(TestCase):
         ps = ProblemSet.objects.create()
         assert ps.granularity == 'mission'
 
-    def test_type(self):
+    def test_type_mission(self):
         ps = ProblemSet.objects.create()
         assert ps.type == 'ps.mission'
 
-    def test_mission(self):
-        ps = ProblemSet.objects.create(granularity='phase')
-        assert ps.type == 'ps.phase'
+    def test_type_phase(self):
+        mission = ProblemSet.objects.create()
+        phase = ProblemSet.objects.create(parent=mission)
+        assert phase.type == 'ps.phase'
 
     def test_str(self):
         ps = ProblemSet.objects.create(
@@ -94,20 +95,20 @@ class ProblemSetTestCase(TestCase):
         assert repr(ps) == '<ProblemSet: loops>'
 
     def test_is_mission(self):
-        mission = ProblemSet.objects.create(granularity='mission')
-        phase = ProblemSet.objects.create(granularity='phase')
+        mission = ProblemSet.objects.create()
+        phase = ProblemSet.objects.create(parent=mission)
         assert mission.is_mission
         assert not phase.is_mission
 
     def test_parts(self):
-        mission = ProblemSet.objects.create(granularity='mission')
+        mission = ProblemSet.objects.create()
         phase1 = ProblemSet.objects.create(name='p1', parent=mission)
         phase2 = ProblemSet.objects.create(name='p2', parent=mission)
         self.assertQuerysetEqual(
             mission.parts.all(), ['<ProblemSet: p1>', '<ProblemSet: p2>'])
 
     def test_phases(self):
-        mission = ProblemSet.objects.create(granularity='mission')
+        mission = ProblemSet.objects.create()
         phase1 = ProblemSet.objects.create(parent=mission)
         phase2 = ProblemSet.objects.create(parent=mission)
         assert mission.phases == [phase1, phase2]
@@ -156,6 +157,14 @@ class ProblemSetTestCase(TestCase):
         ps = ProblemSet.objects.get(pk=ps.pk)
         assert isinstance(ps.content, dict)  # and not a str!
 
+    def test_mission_manager(self):
+        m1 = ProblemSet.objects.create(name='m1')
+        ProblemSet.objects.create(name='m2')
+        ProblemSet.objects.create(name='p1', parent=m1)
+        self.assertQuerysetEqual(
+            ProblemSet.missions.all(),
+            ['<ProblemSet: m1>', '<ProblemSet: m2>'])
+
     def test_infer_section(self):
         ps = ProblemSet.objects.create()
         assert ps.section == '1'
@@ -171,14 +180,55 @@ class ProblemSetTestCase(TestCase):
         ps3 = ProblemSet.objects.create(parent=ps1)
         assert ps3.section == '1.3.2'
 
+    def test_update_section_on_relationship_change(self):
+        ps1 = ProblemSet.objects.create(name='ps1')
+        ps2 = ProblemSet.objects.create(name='ps2')
+        ps3 = ProblemSet.objects.create(name='ps3')
+        ps4 = ProblemSet.objects.create(name='ps4')
+        ps5 = ProblemSet.objects.create(name='ps5')
+        ps1.set_parts([ps2])
+        ps3.set_parts([ps4, ps5], squeeze_sections=True)
+        assert ps1.section == '1'
+        assert ps2.section == '1.1'
+        assert ps3.section == '2'
+        assert ps4.section == '2.1'
+        assert ps5.section == '2.2'
+
+    def test_update_granularity_on_parts_change(self):
+        ps1 = ProblemSet.objects.create(name='ps1')
+        ps2 = ProblemSet.objects.create(name='ps2')
+        ps1.set_parts([ps2])
+        assert ps1.granularity == ProblemSet.MISSION
+        assert ps2.granularity == ProblemSet.PHASE
+
+    def test_infer_granularity_from_parent(self):
+        ps1 = ProblemSet.objects.create(name='ps1')
+        ps2 = ProblemSet.objects.create(name='ps2', parent=ps1)
+        assert ps2.granularity == ProblemSet.PHASE
+
+    def test_update_granularity_on_parent_change(self):
+        ps1 = ProblemSet.objects.create(name='ps1')
+        ps2 = ProblemSet.objects.create(name='ps2')
+        ps2.parent = ps1
+        ps2.save()
+        assert ps2.granularity == ProblemSet.PHASE
+
     def test_infer_task_sections(self):
         t1 = Task.objects.create()
         t2 = Task.objects.create()
         ps = ProblemSet.objects.create(section='4.3')
-        print('--')
-        ps.tasks.set([t1, t2])
+        ps.set_tasks([t1, t2])
         assert t1.section == '4.3.1'
         assert t2.section == '4.3.2'
+
+    def test_propagate_section_change_to_tasks(self):
+        ps1 = ProblemSet.objects.create(name='ps1')
+        ps2 = ProblemSet.objects.create(name='ps2')
+        t1 = Task.objects.create()
+        ps2.set_tasks([t1])
+        ps1.set_parts([ps2], squeeze_sections=True)
+        t1.refresh_from_db()
+        assert t1.section == '1.1.1'
 
 
 class TaskTestCase(TestCase):

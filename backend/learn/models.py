@@ -161,6 +161,23 @@ class Instruction(models.Model):
         return self.name
 
 
+class ProblemSetManager(models.Manager):
+    pass
+
+
+class MissionManager(ProblemSetManager):
+    def get_queryset(self):
+        return super().get_queryset().filter(granularity=self.model.MISSION)
+
+    def squeeze_sections(self):
+        """Update sections of all missions to remove gaps.
+        """
+        # TODO?: Optimize to single SQL query / less of them.
+        for i, mission in enumerate(self.get_queryset(), start=1):
+            mission.section = str(i)
+            mission.save()  # save() propagates the changes
+
+
 class ProblemSet(Chunk):
     """Set of tasks practicing common concepts.
     """
@@ -186,6 +203,22 @@ class ProblemSet(Chunk):
     chunk = models.OneToOneField(
         Chunk, on_delete=models.CASCADE, parent_link=True,
         related_name='problemset_obj')
+
+    objects = ProblemSetManager()
+    missions = MissionManager()
+
+    class Meta:
+        base_manager_name = 'objects'
+
+    def __init__(self, *args, **kwargs):
+        # Infer granularity from parent.
+        parent = kwargs.get('parent', None)
+        granularity = ProblemSet.PHASE if parent else ProblemSet.MISSION
+        if 'granularity' in kwargs:
+            assert kwargs['granularity'] == granularity
+        kwargs['granularity'] = granularity
+        super().__init__(*args, **kwargs)
+        self.__initial_section = self.section
 
     @property
     def is_mission(self):
@@ -218,13 +251,38 @@ class ProblemSet(Chunk):
         ps = ProblemSet.objects.create(*args, **kwargs)
         return ps
 
+    def set_parts(self, parts, squeeze_sections=False):
+        """Set parts; infer and propagate sections and granularity.
+        """
+        for i, part in enumerate(parts, start=1):
+            part.parent = self
+            part.granularity = 'phase'
+            part.section = '{0}.{1}'.format(self.section, i)
+            part.save()
+        if squeeze_sections:
+            ProblemSet.missions.squeeze_sections()
+            self.refresh_from_db()
+            for part in parts:
+                part.refresh_from_db()
+
     def add_task(self, *args, **kwargs):
         kwargs['problemset'] = self
         kwargs['section'] = '{0}.{1}'.format(self.section, self.n_tasks+1)
         task = Task.objects.create(*args, **kwargs)
         return task
 
+    def set_tasks(self, tasks):
+        """Set tasks including their section numbers.
+        """
+        for i, task in enumerate(tasks, start=1):
+            task.problemset = self
+            task.section = '{0}.{1}'.format(self.section, i)
+            task.save()
+
     def save(self, *args, **kwargs):
+        # Infer granularity from parent.
+        self.granularity = ProblemSet.PHASE if self.parent else ProblemSet.MISSION
+
         # TODO(once Chunk.parent exists):
         # Move section setting to section.default function.
         # TODO: Make it more robust (e.g. if some sections have out-of-ordering
@@ -237,10 +295,20 @@ class ProblemSet(Chunk):
                 top_sections = ProblemSet.objects.filter(parent__isnull=True)
                 self.section = str(top_sections.count() + 1)
         super(ProblemSet, self).save(*args, **kwargs)
+        # Propagate section changes
+        if self.section != self.__initial_section and self.section:
+            for i, part in enumerate(self.parts.all(), start=1):
+                part.section = '{0}.{1}'.format(self.section, i)
+                part.save()
+            for i, task in enumerate(self.tasks.all(), start=1):
+                task.section = '{0}.{1}'.format(self.section, i)
+                task.save()
+
 
     def __str__(self):
         # Overrides the parent __str__ to omit prefix (type).
         return self.name
+
 
 class Task(Chunk):
     """Problem to be solved to practice programming.
