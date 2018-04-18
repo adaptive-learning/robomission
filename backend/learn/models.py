@@ -128,6 +128,17 @@ class Chunk(models.Model):
         #    section=self.section, name=self.qualified_name)
 
 
+# TODO: Move to a custom Chunk manager.
+# TODO: Add unit tests.
+def get_chunk(qualified_name):
+    chunk_type, name = qualified_name.split(':')
+    for model in [Task, ProblemSet]:
+        model_type = model.TYPE.split('.')[0]
+        if chunk_type == model_type:
+            return model.objects.get(name=name)
+    raise Chunk.DoesNotExist('No chunk "{0}".'.format(qualified_name))
+
+
 class Block(models.Model):
     """Programming block, such as "fly" or "repeat".
     """
@@ -173,7 +184,6 @@ class MissionManager(ProblemSetManager):
         """
         # TODO?: Optimize to single SQL query / less of them.
         for i, mission in enumerate(self.get_queryset(), start=1):
-            print('squeeze', i, mission)
             mission.section = str(i)
             mission.save()  # save() propagates the changes
 
@@ -260,8 +270,6 @@ class ProblemSet(Chunk):
             part.granularity = ProblemSet.PHASE
             part.section = '{0}.{1}'.format(self.section, i)
             part.save()
-        print('set_parts', self, parts, [p.section for p in parts],
-            [p.granularity for p in parts])
         if squeeze_sections:
             ProblemSet.missions.squeeze_sections()
             self.refresh_from_db()

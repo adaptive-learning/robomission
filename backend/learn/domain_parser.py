@@ -9,7 +9,7 @@ Current domain resides in //backend/domain/domain.json
 import json
 import os
 from django.conf import settings
-from learn.models import Task, Chunk, DomainParam
+from learn.models import Task, DomainParam, get_chunk, Chunk
 from learn.serializers import DomainSerializer
 from learn.utils import js
 
@@ -34,21 +34,19 @@ def load_domain_params(domain, params_path):
         data = json.load(infile)
     assert domain.name == data['domain']
     for param_data in data['params']:
-        task_name = param_data.pop('task', None)
-        task = Task.objects.filter(name=task_name).first()
-        if task_name and not task:
-            print('Warning: Specified non-existing task "{task}". Skipping.'\
-                  .format(task=task_name))
-            continue
+        chunk = None
         chunk_name = param_data.pop('chunk', None)
-        chunk = Chunk.objects.filter(name=chunk_name).first()
-        if chunk_name and not chunk:
-            print('Warning: Specified non-existing chunk "{chunk}". Skipping.'\
-                  .format(chunk=chunk_name))
-            continue
+        if chunk_name:
+            try:
+                chunk = get_chunk(chunk_name)
+            except Chunk.DoesNotExist:
+                print(
+                    'Warning: Specified non-existing chunk "{0}". Skipping.'\
+                    .format(chunk_name))
+                continue
         for name, value in param_data.items():
             DomainParam.objects.create(
-                domain=domain, task=task, chunk=chunk, name=name, value=value)
+                domain=domain, chunk=chunk, name=name, value=value)
 
 
 def inject_tasks_data(data, task_dir):

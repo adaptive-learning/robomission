@@ -342,203 +342,203 @@ class ProblemSetSerializerTestCase(TestCase):
         serializer.set(domain.problemsets, data)
         assert {chunk.pk for chunk in domain.problemsets.all()} == {1}
 
-#class MissionSerializerTestCase(TestCase):
-#    def test_serialize_mission_with_phases(self):
-#        chunk1 = ProblemSet.objects.create(name='c1', order=1)
-#        mission = Mission.objects.create(name='loops', chunk=chunk1, order=5)
-#        serializer = MissionSerializer(mission)
-#        assert serializer.data == {
-#            'id': mission.pk,
-#            'order': 5,
-#            'name': 'loops',
-#            'chunk': 'c1'}
-#
-#    def test_deserialize_new_mission(self):
-#        chunk1 = ProblemSet.objects.create(name='c1', order=1)
-#        data = {
-#            "id": 1,
-#            "name": "m1",
-#            "chunk": "c1"}
-#        serializer = MissionSerializer(data=data)
-#        serializer.is_valid(raise_exception=True)
-#        mission = serializer.save(order=2)
-#        assert mission.id == 1
-#        assert mission.name == 'm1'
-#        assert mission.order == 2
-#
-#    def test_update_existing_mission(self):
-#        chunk1 = ProblemSet.objects.create(name='c1', order=1)
-#        chunk2 = ProblemSet.objects.create(name='c2', order=2)
-#        mission = Mission.objects.create(id=1, name='m1', chunk=chunk1)
-#        data = {
-#            "id": 1,
-#            "name": "m1n",
-#            "chunk": "c2"}
-#        serializer = MissionSerializer(mission, data=data)
-#        serializer.is_valid(raise_exception=True)
-#        mission = serializer.save(order=5)
-#        mission_db = Mission.objects.get(pk=1)
-#        assert mission == mission_db
-#        assert mission.name == 'm1n'
-#        assert mission.order == 5
-#
-#    def test_deserialize_list_of_new_missions(self):
-#        domain = Domain.objects.create()
-#        chunk1 = ProblemSet.objects.create(name='c1', order=1)
-#        chunk2 = ProblemSet.objects.create(name='c2', order=2)
-#        data = [
-#            {'id': 1, 'name': 'm1', 'chunk': 'c1'},
-#            {'id': 2, 'name': 'm2', 'chunk': 'c2'}]
-#        serializer = MissionSerializer(many=True)
-#        serializer.set(domain.missions, data)
-#        missions = list(domain.missions.all())
-#        assert len(missions) == 2
-#        assert missions[0].name == 'm1'
-#        assert missions[0].order == 1
-#        assert missions[0].chunk == chunk1
-#        assert missions[1].name == 'm2'
-#        assert missions[1].order == 2
-#        assert missions[1].chunk == chunk2
-#
-#    def test_deserialize_list_of_new_missions__update_existing(self):
-#        domain = Domain.objects.create()
-#        chunk1 = ProblemSet.objects.create(name='c1', order=1)
-#        chunk2 = ProblemSet.objects.create(name='c2', order=2)
-#        Mission.objects.create(id=1, name='m1', chunk=chunk1)
-#        data = [{'id': 1, 'name': 'm1n', 'chunk': 'c2'}]
-#        serializer = MissionSerializer(many=True)
-#        serializer.set(domain.missions, data)
-#        missions = list(domain.missions.all())
-#        assert len(missions) == 1
-#        assert missions[0].id == 1
-#        assert missions[0].name == 'm1n'
-#        assert missions[0].order == 1
-#        assert missions[0].chunk == chunk2
-#
-#    def test_deserialize_list_of_new_missions__delete_existing(self):
-#        domain = Domain.objects.create()
-#        chunk1 = ProblemSet.objects.create(name='c1', order=1)
-#        chunk2 = ProblemSet.objects.create(name='c2', order=2)
-#        Mission.objects.create(id=1, name='m1', chunk=chunk1)
-#        data = [{'id': 2, 'name': 'm2', 'chunk': 'c2'}]
-#        serializer = MissionSerializer(many=True)
-#        serializer.set(domain.missions, data)
-#        missions = list(domain.missions.all())
-#        assert len(missions) == 1
-#        assert missions[0].id == 2
-#        assert missions[0].name == 'm2'
-#        assert missions[0].order == 1
-#        assert missions[0].chunk == chunk2
+    def test_serialize_mission_with_phases(self):
+        m1 = ProblemSet.objects.create(name='m1', section='2.3')
+        p1 = m1.add_part(name='p1')
+        p2 = m1.add_part(name='p2')
+        serializer = ProblemSetSerializer(m1)
+        assert serializer.data == {
+            'id': m1.pk,
+            'name': 'm1',
+            'granularity': 'mission',
+            'parent': None,
+            'section': '2.3',
+            'level': 2,
+            'order': 3,
+            'setting': {},
+            'parts': ['p1', 'p2'],
+            'tasks': []}
+
+    def test_deserialize_new_mission(self):
+        data = {
+            "id": 2,
+            "name": "m1",
+            "setting": { "toolbox": "tb1" }}
+        serializer = ProblemSetSerializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        mission = serializer.save()
+        assert mission.id == 2
+        assert mission.name == 'm1'
+        assert mission.section == '1'
+        assert mission.setting == { "toolbox": "tb1" }
+
+    def test_update_existing_mission(self):
+        m1 = ProblemSet.objects.create(pk=1, name='m1')
+        p1 = ProblemSet.objects.create(pk=2, name='p1', parent=m1)
+        data = {
+            "id": 1,
+            "name": "m1n",
+            "setting": { "toolbox": "tb1" },
+            "parts": [ "p1" ]}
+        serializer = ProblemSetSerializer(m1, data=data)
+        serializer.is_valid(raise_exception=True)
+        m1 = serializer.save()
+        assert m1.id == 1
+        assert m1.name == 'm1n'
+        assert m1.setting == { "toolbox": "tb1" }
+        assert list(m1.parts.all()) == [p1]
+
+    def test_deserialize_list_of_new_missions(self):
+        data = [
+            {'id': 1, 'name': 'm1'},
+            {'id': 2, 'name': 'm2'}]
+        domain = Domain.objects.create()
+        serializer = ProblemSetSerializer(many=True)
+        serializer.set(domain.problemsets, data)
+        problemsets = list(domain.problemsets.all())
+        assert len(problemsets) == 2
+        assert problemsets[0].name == 'm1'
+        assert problemsets[0].section == '1'
+        assert problemsets[1].name == 'm2'
+        assert problemsets[1].section == '2'
+
+    def test_deserialize_list_of_new_missions__update_existing(self):
+        domain = Domain.objects.create()
+        m1 = ProblemSet.objects.create(pk=1, name='m1')
+        data = [
+            {'id': 1, 'name': 'm1n'},
+            {'id': 2, 'name': 'm2'}]
+        serializer = ProblemSetSerializer(many=True)
+        serializer.set(domain.problemsets, data)
+        problemsets = list(domain.problemsets.all())
+        assert len(problemsets) == 2
+        assert problemsets[0].name == 'm1n'
+        assert problemsets[0].section == '1'
+        assert problemsets[1].name == 'm2'
+        assert problemsets[1].section == '2'
+
+    def test_deserialize_list_of_new_missions__delete_existing(self):
+        domain = Domain.objects.create()
+        m1 = ProblemSet.objects.create(pk=1, name='m1')
+        data = [{'id': 2, 'name': 'm2'}]
+        serializer = ProblemSetSerializer(many=True)
+        serializer.set(domain.problemsets, data)
+        problemsets = list(domain.problemsets.all())
+        assert len(problemsets) == 1
+        assert problemsets[0].name == 'm2'
 
 
-#class DomainSerializerTestCase(TestCase):
-#    def test_nested_serialization(self):
-#        block = Block.objects.create(name='b1', order=5)
-#        toolbox = Toolbox.objects.create(name='tb1')
-#        toolbox.blocks.set([block])
-#        domain = Domain.objects.create(name='d1')
-#        domain.blocks.set([block])
-#        domain.toolboxes.set([toolbox])
-#        serializer = DomainSerializer(domain)
-#        assert serializer.data == {
-#            'name': 'd1',
-#            'blocks': [{'id': block.id, 'name': 'b1', 'order': 5}],
-#            'toolboxes': [{'id': toolbox.id, 'name': 'tb1', 'blocks': ['b1']}],
-#            'tasks': [], 'chunks': [], 'missions': []}
-#
-#    def test_nested_deserialization(self):
-#        data = {
-#            "name": "test1", "missions" : [], "chunks": [], "tasks": [],
-#            "toolboxes": [{"id": 1, "name": "tb1", "blocks": ["b1", "b2"]}],
-#            "blocks": [{"id": 1, "name": "b1"}, {"id": 2, "name": "b2"}]}
-#        serializer = DomainSerializer()
-#        serializer.create_or_update(data)
-#        domain = Domain.objects.get(name='test1')
-#        self.assertQuerysetEqual(
-#            domain.toolboxes.first().blocks.all(),
-#            ['<Block: b1>', '<Block: b2>'])
-#
-#    def test_mission_with_chunk_deserialization(self):
-#        data = {
-#            "name": "test1", "blocks" : [], "toolboxes": [], "tasks": [],
-#            "chunks": [{"id": 1, "name": "c1"}],
-#            "missions": [{"id": 1, "name": "m1", "chunk": "c1"}]}
-#        serializer = DomainSerializer()
-#        serializer.create_or_update(data)
-#        domain = Domain.objects.get(name='test1')
-#        mission = domain.missions.first()
-#        assert mission.name == 'm1'
-#
-#    def test_update_existing_domain(self):
-#        block = Block.objects.create(name='b1', order=5)
-#        domain = Domain.objects.create(name='test1')
-#        domain.blocks.set([block])
-#        data = {
-#            "name": "test1",
-#            "missions" : [], "chunks": [], "tasks": [], "toolboxes": [],
-#            "blocks": [{"id": block.id, "name": "b2"}, {"id": 3, "name": "b3"}]}
-#        serializer = DomainSerializer()
-#        serializer.create_or_update(data)
-#        domain = Domain.objects.get(name='test1')
-#        self.assertQuerysetEqual(
-#            domain.blocks.all(),
-#            ['<Block: b2>', '<Block: b3>'])
-#
-#    def test_update_existing_domain_with_toolbox(self):
-#        toolbox = Toolbox.objects.create(name='tb1')
-#        domain = Domain.objects.create(name='test1')
-#        domain.toolboxes.set([toolbox])
-#        data = {
-#            "name": "test1",
-#            "missions" : [], "chunks": [], "tasks": [], "blocks": [],
-#            "toolboxes": [{"id": toolbox.pk, "name": "tb1n", "blocks": []}]}
-#        serializer = DomainSerializer()
-#        serializer.create_or_update(data)
-#        domain = Domain.objects.get(name='test1')
-#        self.assertQuerysetEqual(domain.toolboxes.all(), ['<Toolbox: tb1n>'])
-#
-#    def test_update_existing_domain_nested(self):
-#        block = Block.objects.create(name='b1', order=5)
-#        toolbox = Toolbox.objects.create(name='tb1')
-#        toolbox.blocks.set([block])
-#        domain = Domain.objects.create(name='test1')
-#        domain.blocks.set([block])
-#        domain.toolboxes.set([toolbox])
-#        data = {
-#            "name": "test1", "missions" : [], "chunks": [], "tasks": [],
-#            "toolboxes": [{"id": toolbox.pk, "name": "tb1", "blocks": ["b2", "b3"]}],
-#            "blocks": [{"id": 2, "name": "b2"}, {"id": 3, "name": "b3"}]}
-#        serializer = DomainSerializer()
-#        serializer.create_or_update(data)
-#        domain = Domain.objects.get(name='test1')
-#        self.assertQuerysetEqual(
-#            domain.toolboxes.all(),
-#            ['<Toolbox: tb1>'])
-#        self.assertQuerysetEqual(
-#            domain.toolboxes.first().blocks.all(),
-#            ['<Block: b2>', '<Block: b3>'])
-#
-#    def test_update_domain_same_names(self):
-#        block = Block.objects.create(name='b1', order=5)
-#        toolbox = Toolbox.objects.create(name='tb1')
-#        chunk = ProblemSet.objects.create(name='c1')
-#        mission = Mission.objects.create(name='m1', chunk=chunk)
-#        domain = Domain.objects.create(name='test1')
-#        domain.blocks.set([block])
-#        domain.toolboxes.set([toolbox])
-#        domain.problemsets.set([chunk])
-#        domain.missions.set([mission])
-#        data = {
-#            "name": "test1",
-#            "missions" : [{"id": mission.pk, "name": "m1", "chunk": "c1"}],
-#            "chunks" : [{"id": chunk.pk, "name": "c1"}],
-#            "tasks": [],
-#            "toolboxes": [{"id": toolbox.pk, "name": "tb1", "blocks": []}],
-#            "blocks": [{"id": block.id, "name": "b1"}]}
-#        serializer = DomainSerializer()
-#        serializer.create_or_update(data)
-#        domain = Domain.objects.get(name='test1')
-#        self.assertQuerysetEqual(domain.blocks.all(), ['<Block: b1>'])
-#        self.assertQuerysetEqual(domain.toolboxes.all(), ['<Toolbox: tb1>'])
-#        self.assertQuerysetEqual(domain.problemsets.all(), ['<ProblemSet: c1>'])
-#        self.assertQuerysetEqual(domain.missions.all(), ['<Mission: M1 m1 (c1)>'])
+class DomainSerializerTestCase(TestCase):
+    def test_nested_serialization(self):
+        block = Block.objects.create(name='b1', order=5)
+        toolbox = Toolbox.objects.create(name='tb1')
+        toolbox.blocks.set([block])
+        domain = Domain.objects.create(name='d1')
+        domain.blocks.set([block])
+        domain.toolboxes.set([toolbox])
+        serializer = DomainSerializer(domain)
+        assert serializer.data == {
+            'name': 'd1',
+            'blocks': [{'id': block.id, 'name': 'b1', 'order': 5}],
+            'toolboxes': [{'id': toolbox.id, 'name': 'tb1', 'blocks': ['b1']}],
+            'tasks': [], 'problemsets': []}
+
+    def test_nested_deserialization(self):
+        data = {
+            "name": "test1", "problemsets" : [], "tasks": [],
+            "toolboxes": [{"id": 1, "name": "tb1", "blocks": ["b1", "b2"]}],
+            "blocks": [{"id": 1, "name": "b1"}, {"id": 2, "name": "b2"}]}
+        serializer = DomainSerializer()
+        serializer.create_or_update(data)
+        domain = Domain.objects.get(name='test1')
+        self.assertQuerysetEqual(
+            domain.toolboxes.first().blocks.all(),
+            ['<Block: b1>', '<Block: b2>'])
+
+    def test_domain_with_hierarchical_ps_deserialization(self):
+        data = {
+            "name": "test1", "blocks" : [], "toolboxes": [], "tasks": [],
+            "problemsets": [
+                {"id": 1, "name": "m1", "parts": ["p1"]},
+                {"id": 2, "name": "p1"}]}
+        serializer = DomainSerializer()
+        serializer.create_or_update(data)
+        domain = Domain.objects.get(name='test1')
+        m1 = domain.problemsets.get(name='m1')
+        assert m1.name == 'm1'
+        assert m1.section == '1'
+        assert m1.parts.count() == 1
+        assert m1.parts.first().name == 'p1'
+
+    def test_update_existing_domain(self):
+        block = Block.objects.create(name='b1', order=5)
+        domain = Domain.objects.create(name='test1')
+        domain.blocks.set([block])
+        data = {
+            "name": "test1",
+            "problemsets" : [], "tasks": [], "toolboxes": [],
+            "blocks": [{"id": block.id, "name": "b2"}, {"id": 3, "name": "b3"}]}
+        serializer = DomainSerializer()
+        serializer.create_or_update(data)
+        domain = Domain.objects.get(name='test1')
+        self.assertQuerysetEqual(
+            domain.blocks.all(),
+            ['<Block: b2>', '<Block: b3>'])
+
+    def test_update_existing_domain_with_toolbox(self):
+        toolbox = Toolbox.objects.create(name='tb1')
+        domain = Domain.objects.create(name='test1')
+        domain.toolboxes.set([toolbox])
+        data = {
+            "name": "test1",
+            "problemsets" : [], "tasks": [], "blocks": [],
+            "toolboxes": [{"id": toolbox.pk, "name": "tb1n", "blocks": []}]}
+        serializer = DomainSerializer()
+        serializer.create_or_update(data)
+        domain = Domain.objects.get(name='test1')
+        self.assertQuerysetEqual(domain.toolboxes.all(), ['<Toolbox: tb1n>'])
+
+    def test_update_existing_domain_nested(self):
+        block = Block.objects.create(name='b1', order=5)
+        toolbox = Toolbox.objects.create(name='tb1')
+        toolbox.blocks.set([block])
+        domain = Domain.objects.create(name='test1')
+        domain.blocks.set([block])
+        domain.toolboxes.set([toolbox])
+        data = {
+            "name": "test1", "problemsets" : [], "tasks": [],
+            "toolboxes": [{"id": toolbox.pk, "name": "tb1", "blocks": ["b2", "b3"]}],
+            "blocks": [{"id": 2, "name": "b2"}, {"id": 3, "name": "b3"}]}
+        serializer = DomainSerializer()
+        serializer.create_or_update(data)
+        domain = Domain.objects.get(name='test1')
+        self.assertQuerysetEqual(
+            domain.toolboxes.all(),
+            ['<Toolbox: tb1>'])
+        self.assertQuerysetEqual(
+            domain.toolboxes.first().blocks.all(),
+            ['<Block: b2>', '<Block: b3>'])
+
+    def test_update_domain_same_names(self):
+        """Test that no uniqeue name constraint error is raised when updating
+           and existing entity, leaving its name same.
+        """
+        block = Block.objects.create(name='b1', order=5)
+        toolbox = Toolbox.objects.create(name='tb1')
+        ps = ProblemSet.objects.create(name='ps')
+        domain = Domain.objects.create(name='test1')
+        domain.blocks.set([block])
+        domain.toolboxes.set([toolbox])
+        domain.problemsets.set([ps])
+        data = {
+            "name": "test1",
+            "problemsets" : [{"id": ps.pk, "name": "ps"}],
+            "tasks": [],
+            "toolboxes": [{"id": toolbox.pk, "name": "tb1", "blocks": []}],
+            "blocks": [{"id": block.id, "name": "b1"}]}
+        serializer = DomainSerializer()
+        serializer.create_or_update(data)
+        domain = Domain.objects.get(name='test1')
+        self.assertQuerysetEqual(domain.blocks.all(), ['<Block: b1>'])
+        self.assertQuerysetEqual(domain.toolboxes.all(), ['<Toolbox: tb1>'])
+        self.assertQuerysetEqual(domain.problemsets.all(), ['<ProblemSet: ps>'])
