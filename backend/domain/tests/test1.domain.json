@@ -5,7 +5,8 @@
     "params": "./test1.params.json"
   },
   "problemsets" : [
-    { "id": 101, "name": "m1",
+    { "id": 101,
+      "name": "m1",
       "setting": { "toolbox": "tb1" },
       "parts": [ "p1A", "p1B", "p1C" ]
     },
@@ -13,7 +14,8 @@
     { "id": 103, "name": "p1B", "tasks": [ "t2", "t3" ] },
     { "id": 104, "name": "p1C", "tasks": [] },
 
-    { "id": 105, "name": "m2",
+    { "id": 105,
+      "name": "m2",
       "setting": { "toolbox": "tb2" },
       "parts": [ "p2A", "p2B", "p2C" ]
     },

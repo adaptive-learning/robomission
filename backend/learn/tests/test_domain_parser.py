@@ -31,15 +31,17 @@ class DomainParserTestCase(TestCase):
             ordered=False)
         self.assertQuerysetEqual(
             domain.problemsets.all(),
-            ['<ProblemSet: m1>',
-             '<ProblemSet: p1A>', '<ProblemSet: p1B>','<ProblemSet: p1C>',
-             '<ProblemSet: m2>',
-             '<ProblemSet: p2A>','<ProblemSet: p2B>','<ProblemSet: p2C>'])
+            # NOTE: PS are ordered by type first, which is different for
+            # missions and phases.
+            ['<ProblemSet: m1>', '<ProblemSet: m2>',
+             '<ProblemSet: p1A>', '<ProblemSet: p1B>', '<ProblemSet: p1C>',
+             '<ProblemSet: p2A>','<ProblemSet: p2B>', '<ProblemSet: p2C>'])
 
-        # Test inferred sections
+        # Test inferred granularity and sections
         p2c = ProblemSet.objects.get(name='p2C')
-        assert p2c.order == 3
+        assert p2c.granularity == ProblemSet.PHASE
         assert p2c.section == '2.3'
+        assert p2c.order == 3
         assert p2c.level == 2
 
         # Test tasks content
@@ -47,9 +49,7 @@ class DomainParserTestCase(TestCase):
         assert task.name == 't1'
         assert task.solution == 'f'
         assert task.setting == {'fields': 'b||kS'}
-        # TODO: test task.section
-
-
+        assert task.section == '1.1.1'
 #
 #    def test_load_domain_from_file__relationships(self):
 #        load_domain_from_file('domain/tests/test1.domain.json')

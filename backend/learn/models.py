@@ -40,12 +40,11 @@ class Chunk(models.Model):
 
     def __init__(self, *args, **kwargs):
         # Inject type (unless already set).
-        # TODO: factor infere_type(self, **kwargs)
         if 'type' not in kwargs:
-            kwargs['type'] = self._interpolate_type(kwargs)
+            kwargs['type'] = self._interpolate_type(**kwargs)
         super(Chunk, self).__init__(*args, **kwargs)
 
-    def _interpolate_type(self, kwargs):
+    def _interpolate_type(self, **kwargs):
         """Return type based on self.TYPE, and provided kwargs or defaults.
         """
         parts = self.TYPE.split('.')
@@ -174,6 +173,7 @@ class MissionManager(ProblemSetManager):
         """
         # TODO?: Optimize to single SQL query / less of them.
         for i, mission in enumerate(self.get_queryset(), start=1):
+            print('squeeze', i, mission)
             mission.section = str(i)
             mission.save()  # save() propagates the changes
 
@@ -254,11 +254,14 @@ class ProblemSet(Chunk):
     def set_parts(self, parts, squeeze_sections=False):
         """Set parts; infer and propagate sections and granularity.
         """
+        self.parts.set(parts)  # also removes old relationships
         for i, part in enumerate(parts, start=1):
             part.parent = self
-            part.granularity = 'phase'
+            part.granularity = ProblemSet.PHASE
             part.section = '{0}.{1}'.format(self.section, i)
             part.save()
+        print('set_parts', self, parts, [p.section for p in parts],
+            [p.granularity for p in parts])
         if squeeze_sections:
             ProblemSet.missions.squeeze_sections()
             self.refresh_from_db()
@@ -274,6 +277,7 @@ class ProblemSet(Chunk):
     def set_tasks(self, tasks):
         """Set tasks including their section numbers.
         """
+        self.tasks.set(tasks)  # also removes old relationships
         for i, task in enumerate(tasks, start=1):
             task.problemset = self
             task.section = '{0}.{1}'.format(self.section, i)
@@ -282,7 +286,9 @@ class ProblemSet(Chunk):
     def save(self, *args, **kwargs):
         # Infer granularity from parent.
         self.granularity = ProblemSet.PHASE if self.parent else ProblemSet.MISSION
-
+        # TODO: Make the syncronization between granularity and type more
+        # explicit (to avoid desynchronization by mistake).
+        self.type = self._interpolate_type(granularity=self.granularity)
         # TODO(once Chunk.parent exists):
         # Move section setting to section.default function.
         # TODO: Make it more robust (e.g. if some sections have out-of-ordering

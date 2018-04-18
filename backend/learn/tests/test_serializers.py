@@ -178,9 +178,9 @@ class ProblemSetSerializerTestCase(TestCase):
             'id': ps.pk,
             'name': 'wormholes',
             'granularity': 'mission',
-            'section': '0',
-            'level': 0,
-            'order': 0,
+            'section': '1',
+            'level': 1,
+            'order': 1,
             'setting': {},
             'parent': None,
             'tasks': [],
@@ -284,10 +284,10 @@ class ProblemSetSerializerTestCase(TestCase):
         assert set(ps_db.tasks.all()) == {t2, t3}
 
     def test_change_parts_of_existing_ps(self):
-        ps1 = ProblemSet.objects.create(id=1, name='ps1', section='1')
-        ps2 = ProblemSet.objects.create(id=2, name='ps2', section='2')
-        ps3 = ProblemSet.objects.create(id=3, name='ps3', section='3')
-        ps4 = ProblemSet.objects.create(id=4, name='ps4', section='4')
+        ps1 = ProblemSet.objects.create(id=1, name='ps1')
+        ps2 = ProblemSet.objects.create(id=2, name='ps2')
+        ps3 = ProblemSet.objects.create(id=3, name='ps3')
+        ps4 = ProblemSet.objects.create(id=4, name='ps4')
         ps1.parts.set([ps2, ps3])
         data = {
             'name': 'ps1',
@@ -307,9 +307,9 @@ class ProblemSetSerializerTestCase(TestCase):
         ps1 = ProblemSet.objects.get(pk=1)
         ps2 = ProblemSet.objects.get(pk=2)
         assert ps1.name == 'ps1'
-        assert ps1.order == 0
+        assert ps1.order == 1
         assert ps2.name == 'ps2'
-        # TODO: test correct order/section set automatically: assert ps2.order == 1
+        assert ps2.order == 2
 
     def test_deserialize_list_of_new_ps_with_parts(self):
         domain = Domain.objects.create()

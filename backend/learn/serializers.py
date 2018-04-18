@@ -69,13 +69,14 @@ class SettableListSerializer(serializers.ListSerializer):
         """Create or update instances of given manager according to data.
         Assumes not-validated initial_data.
         """
-        # First set istances without relationships, then with them.
-        if self.relationship_fields:
-            self._set(manager, initial_data, ignore_fields=self.relationship_fields)
-        return self._set(manager, initial_data)
-
-    def _set(self, manager, initial_data, ignore_fields=None):
         data = self.validate(initial_data)
+        # First set instances without relationships, then with them.
+        if self.relationship_fields:
+            self._set(manager, data, ignore_fields=self.relationship_fields)
+        return self._set(manager, data)
+
+    def _set(self, manager, data, ignore_fields=None):
+        # Assumes validated data.
         instance_map = {
             instance.id: instance
             for instance in manager.model.objects.all()}
@@ -84,8 +85,11 @@ class SettableListSerializer(serializers.ListSerializer):
             if ignore_fields:
                 # Temporarily remove relationship fields to avoid attempts to
                 # create a relatihonship to an object that does not yet exist.
-                for field in ignore_fields:
-                    instance_data.pop(field, None)
+                # Using dict comprehension to preserve the original dictionary
+                # untouched for the 2nd pass.
+                instance_data = {
+                    key:value for key, value in instance_data.items()
+                    if key not in ignore_fields}
             instance = instance_map.get(instance_data['id'], None)
             serializer = self.child.__class__(instance=instance, data=instance_data)
             serializer.is_valid(raise_exception=True)
@@ -216,9 +220,9 @@ class ProblemSetSerializer(serializers.ModelSerializer):
         parts = validated_data.pop('parts', None)
         ps = ProblemSet.objects.create(**validated_data)
         if tasks:
-            ps.tasks.set(tasks)
+            ps.set_tasks(tasks)
         if parts:
-            ps.parts.set(parts)
+            ps.set_parts(parts)
         return ps
         #task_names = validated_data.pop('tasks', None)
         #part_names = validated_data.pop('parts', None)
@@ -232,18 +236,23 @@ class ProblemSetSerializer(serializers.ModelSerializer):
         #return ps
 
     def update(self, instance, validated_data):
+        instance.refresh_from_db()
         instance.name = validated_data.get('name', instance.name)
         instance.section = validated_data.get('section', instance.section)
+        instance.granularity = validated_data.get(
+            'granularity', instance.granularity)
         instance.setting = validated_data.get('setting', instance.setting)
         task_names = validated_data.pop('tasks', None)
         part_names = validated_data.pop('parts', None)
+        instance.save()
         if task_names:
             tasks = [Task.objects.get(name=name) for name in task_names]
-            instance.tasks.set(tasks)
+            instance.set_tasks(tasks)
         if part_names:
             parts = [ProblemSet.objects.get(name=name) for name in part_names]
-            instance.parts.set(parts)
-        instance.save()
+            # TODO: Only squeeze sections once after the complete list
+            # of PS is serialized.
+            instance.set_parts(parts, squeeze_sections=True)
         return instance
 
 
