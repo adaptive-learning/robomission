@@ -35,7 +35,8 @@ class DomainParserTestCase(TestCase):
             domain.problemsets.all(),
             # NOTE: PS are ordered by type first, which is different for
             # missions and phases.
-            ['<ProblemSet: m1>', '<ProblemSet: m2>',
+            ['<ProblemSet: m1>', '<ProblemSet: m2>', '<ProblemSet: m3>',
+             '<ProblemSet: m4>',
              '<ProblemSet: p1A>', '<ProblemSet: p1B>', '<ProblemSet: p1C>',
              '<ProblemSet: p2A>','<ProblemSet: p2B>', '<ProblemSet: p2C>'])
 

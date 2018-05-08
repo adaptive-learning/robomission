@@ -144,8 +144,9 @@ class SettingSerializer(serializers.Serializer):
 
 
 class TaskSerializer(serializers.ModelSerializer):
-    # Id, setting, and solution are defined explicitly to make them writable.
+    # Id, section, setting, and solution are defined explicitly to make them writable.
     id = serializers.IntegerField()
+    section = serializers.CharField(required=False)
     setting = SettingSerializer(required=False)
     solution = serializers.CharField(required=False)
     problemset = serializers.SlugRelatedField(
@@ -188,6 +189,7 @@ class ProblemSetListSerializer(SettableListSerializer):
 
 class ProblemSetSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField()  # defined explicitly to make it writable
+    section = serializers.CharField(required=False) # defined explicitly to make it writable
     name = serializers.SlugField(validators=[])
     parent = serializers.SlugRelatedField(
         slug_field='name',

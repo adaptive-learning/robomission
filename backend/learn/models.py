@@ -21,22 +21,27 @@ class Chunk(models.Model):
     # Type of the chunk, e.g 'tbx', or 'task'.  Can be overriden by subclass.
     # Can contain field placeholders, e.g. 'ps.{field:granularity}'.
     TYPE = ''
-
     type = models.CharField(max_length=256, blank=True, default='')
+
     # The name of a chunk. Same name can be used for chunks of different type,
     # but not for the chunks of the same type.
     # be must be unique across all chunks.
     name = models.SlugField(blank=True, unique=False, default='')
+
     # All chunks have order to allow for ordered relationship.
-    section = models.CharField(
-        max_length=20, blank=True, default='0',
-        help_text="Dotted section e.g. '3.4'.")
+    # Integer list is depcreacted, and string representation does not allow
+    # for correct ordering at DB level (becasue '10' < '9'), so we manually
+    # define fields for all possible sublevel.
+    level = models.PositiveSmallIntegerField(blank=True, null=True, default=None)
+    level2 = models.PositiveSmallIntegerField(blank=True, null=True, default=None)
+    level3 = models.PositiveSmallIntegerField(blank=True, null=True, default=None)
+
     content = JSONField(
         default=dict,
         help_text='Description, setting, solution, etc.')
 
     class Meta:
-        ordering = ['type', 'section']
+        ordering = ['type', 'level', 'level2', 'level3']
 
     def __init__(self, *args, **kwargs):
         # Inject type (unless already set).
@@ -60,20 +65,41 @@ class Chunk(models.Model):
         return '.'.join(parts)
 
     @property
-    def level(self):
-        """The frist part of the section number.
+    def levels(self):
+        """List of numberical levels, e.g. [2, 3, 7].
+
+        Missing levels preceding a non-zero level are filled as 0,
+        e.g. None,2,None --> [0, 2].
         """
-        #if self.section == '':
-        #    return 0
-        return int(self.section.split('.')[0])
+        nums = [(lvl or 0) for lvl in [self.level, self.level2, self.level3]]
+        for i, lvl in reversed(list(enumerate(nums))):
+            if lvl != 0:
+                return nums[:i+1]
+        return [0]
+
+    @levels.setter
+    def levels(self, value):
+        self.level = value[0]
+        if len(value) >= 2:
+            self.level2 = value[1]
+        if len(value) >= 3:
+            self.level3 = value[2]
+
+    @property
+    def section(self):
+        """Dotted representation of the full order, e.g. '3.4'.
+        """
+        return '.'.join(map(str, self.levels))
+
+    @section.setter
+    def section(self, value):
+        self.levels = [int(lvl) for lvl in value.split('.')]
 
     @property
     def order(self):
         """The last part of the section number.
         """
-        #if self.section == '':
-        #    return 0
-        return int(self.section.split('.')[-1])
+        return self.levels[-1]
 
     @property
     def qualified_name(self):
@@ -268,7 +294,7 @@ class ProblemSet(Chunk):
         for i, part in enumerate(parts, start=1):
             part.parent = self
             part.granularity = ProblemSet.PHASE
-            part.section = '{0}.{1}'.format(self.section, i)
+            part.levels = self.levels + [i]
             part.save()
         if squeeze_sections:
             ProblemSet.missions.squeeze_sections()

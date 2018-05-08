@@ -20,6 +20,7 @@ def load_domain_from_file(name='domain/domain.json'):
         data = json.load(infile)
     task_dir = os.path.join(os.path.dirname(path), data['include']['tasks'])
     inject_tasks_data(data['tasks'], task_dir)
+    # TODO: inject order?
     serializer = DomainSerializer()
     domain = serializer.create_or_update(data)
     params_path = os.path.normpath(
