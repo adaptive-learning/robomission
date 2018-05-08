@@ -1,13 +1,18 @@
 """Setting for admin page.
 """
 from django.contrib import admin
-from learn.models import Block, Toolbox, Task, Instruction, Student
+from learn.models import Block, Toolbox, Task, ProblemSet, Instruction, Student
 from learn.models import TaskSession, ProgramSnapshot, Action
 
 
 @admin.register(Block)
 class BlockAdmin(admin.ModelAdmin):
     search_fields = ['name']
+
+
+@admin.register(Toolbox)
+class ToolboxAdmin(admin.ModelAdmin):
+    list_filter = ('blocks',)
 
 
 @admin.register(Task)
@@ -17,9 +22,11 @@ class TaskAdmin(admin.ModelAdmin):
     search_fields = ['name']
 
 
-@admin.register(Toolbox)
-class ToolboxAdmin(admin.ModelAdmin):
-    list_filter = ('blocks',)
+@admin.register(ProblemSet)
+class ProblemSetAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name', 'type', 'level', 'section', 'order')
+    list_display_links = ('id', 'name')
+    search_fields = ['name']
 
 
 @admin.register(Instruction)
