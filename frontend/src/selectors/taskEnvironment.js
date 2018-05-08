@@ -221,8 +221,9 @@ export function getInitialFieldsFromTaskEnvironment(taskEnvironment) {
   //return taskEnvironment.task.setting.fields;
   const fieldsString = taskEnvironment.task.setting.fields;
   if (typeof fieldsString !== 'string' && !(fieldsString instanceof String)) {
-    throw `Value taskEnvironment.task.setting.fields (${JSON.stringify(fieldsString)}) `
-     + 'is not a string!';
+    throw new Error(
+      `Value taskEnvironment.task.setting.fields (${JSON.stringify(fieldsString)}) `
+      + 'is not a string!');
   }
   return parseSpaceWorld(fieldsString, '||');
 }

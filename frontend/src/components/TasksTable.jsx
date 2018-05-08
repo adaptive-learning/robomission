@@ -48,9 +48,9 @@ function MissionOverview({ mission, urlBase, recommendation }) {
           <span style={{marginRight: 10}}>
             <Skillometer skill={mission.skill} text={`${mission.order}`}/>
           </span>}
-        title={`${translate(`mission.${mission.id}`)}`}
+        title={`${translate(`ps.story.${mission.id}`)}`}
         titleStyle={{ fontSize: 20 }}
-        subtitle={<FormattedMessage id={`chunk.${mission.chunk}`} />}
+        subtitle={<FormattedMessage id={`ps.${mission.id}`} />}
         subtitleStyle={{ fontSize: 16 }}
         actAsExpander={true}
         showExpandableButton={true}

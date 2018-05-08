@@ -1,10 +1,11 @@
 // Return ordered list of missions with their phases and their tasks.
 // TODO: Rename to getProblemSetsNested().
 export function getMissionList(state) {
-  const missionList = state.problemSets.filter(ps => ps.granularity === 'mission');
+  const psList = Object.values(state.problemSets);
+  const missionList = psList.filter(ps => ps.granularity === 'mission');
   const missionListInjected = missionList.map(mission => ({
     ...mission,
-    phases: getPhaseList(state, mission.id),
+    phases: getPhaseList(state, mission),
   }));
   return missionListInjected;
 }
