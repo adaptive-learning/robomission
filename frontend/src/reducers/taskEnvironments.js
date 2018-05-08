@@ -76,7 +76,7 @@ export default function reduceTaskEnvironments(state = {}, action) {
 const emptyTask = {
   id: '',
   setting: {
-    fields: [[]],
+    fields: 'k',
     length: null,
     energy: null,
   },

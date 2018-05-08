@@ -35,8 +35,8 @@ export function generateSpaceWorldText(fields) {
 }
 
 
-export function parseSpaceWorld(text) {
-  const lines = text.trim().split('\n');
+export function parseSpaceWorld(text, rowSep = '\n') {
+  const lines = text.trim().split(rowSep);
   const fields = lines.map(line => line.trim().split('|').filter(f => f !== '').map(parseField));
   return fields;
 }
