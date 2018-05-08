@@ -5,7 +5,7 @@ import TasksTable from '../components/TasksTable';
 import { fetchPracticeOverview } from '../actions';
 import { isPracticeOverviewInvalidated } from '../selectors/app';
 import { getPracticeOverviewUrl } from '../selectors/student';
-import { getMissionList } from '../selectors/missions';
+import { getMissionList } from '../selectors/problemSets';
 import LongPage from '../components/LongPage';
 
 

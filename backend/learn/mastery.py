@@ -28,7 +28,9 @@ def performance_to_value(performance, n_tasks):
 
 
 def get_skills(domain, student):
-    skills = {chunk.name: 0 for chunk in domain.chunks.all()}
+    # TODO(once doman.chunks exists): Generalized to domain.chunks.all()
+    # instead of domain.problemsets.all().
+    skills = {ps.name: 0 for ps in domain.problemsets.all()}
     for skill in student.skills.all():
         skills[skill.chunk.name] = skill.value
     return skills

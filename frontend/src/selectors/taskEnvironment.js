@@ -19,12 +19,12 @@ export function getTaskEnvironment(state, taskEnvironmentId) {
 
 export function getTask(state, taskEnvironmentId) {
   const taskEnvironment = getTaskEnvironment(state, taskEnvironmentId);
-  // TODO: Merge all parent chunks setting into the task setting.
+  // TODO: Merge all parent problemSets setting into the task setting.
   return {
     ...taskEnvironment.task,
     setting: {
       ...taskEnvironment.task.setting,
-      toolbox: getOption(taskEnvironment.task, state.chunks, 'toolbox'),
+      toolbox: getOption(taskEnvironment.task, state.problemSets, 'toolbox'),
     },
   };
 }

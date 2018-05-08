@@ -130,6 +130,7 @@ class TaskSerializerTestCase(TestCase):
             'id': task.pk,
             'name': 'carrot',
             'section': '2.3',
+            'levels': [2, 3],
             'level': 2,
             'order': 3,
             'problemset': 'ps1',

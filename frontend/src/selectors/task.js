@@ -1,17 +1,14 @@
-import { getChunkLevel } from '../selectors/chunk';
-
-
 export function getToolbox(state, taskId) {
   const task = getTaskById(state, taskId);
   return getToolboxForTask(state, task);
 }
 
 
-// Note that task is a a task record, not an ID, which is enforced by
+// Note that task is a task record, not an ID, which is enforced by
 // taskEnvironment requirments.
 // TODO: Refactor so that this hack is not needed.
 export function getToolboxForTask(state, task) {
-  const toolboxId = getOption(task, state.chunks, 'toolbox');
+  const toolboxId = getOption(task, state.problemSets, 'toolbox');
   if (toolboxId === null) {
     return [];
   }
@@ -20,23 +17,23 @@ export function getToolboxForTask(state, task) {
 }
 
 
-export function getOption(task, chunks, optionName) {
+export function getOption(task, problemSets, optionName) {
   if (optionName in task.setting) {
     return task.setting[optionName];
   }
-  let chunk = chunks[task.chunk];
-  while (chunk !== null && chunk !== undefined) {
-    if (optionName in chunk.setting) {
-      return chunk.setting[optionName];
+  let problemSet = problemSets[task.problemSet];
+  while (problemSet !== null && problemSet !== undefined) {
+    if (optionName in problemSet.setting) {
+      return problemSet.setting[optionName];
     }
-    chunk = chunks[chunk.parentChunk];
+    problemSet = problemSets[problemSet.parent];
   }
   return null;
 }
 
 
-export function getChunkId(state, taskId) {
-  return state.tasks[taskId].chunk;
+export function getProblemSetId(state, taskId) {
+  return state.tasks[taskId].problemSet;
 }
 
 
@@ -46,7 +43,6 @@ export function getTaskById(state, taskId) {
 
 
 export function getTaskLevel(state, taskId) {
-  const chunkId = getChunkId(state, taskId);
-  const level = getChunkLevel(state, chunkId);
-  return level;
+  const task = getTaskById(state, taskId);
+  return task.level;
 }

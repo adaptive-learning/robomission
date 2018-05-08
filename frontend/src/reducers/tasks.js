@@ -10,27 +10,6 @@ export default function reduceTasks(state = {}, action) {
       for (const task of taskList) {
         tasks[task.id] = task;
       }
-      // Inject task chunks.
-      for (const chunk of action.payload.chunks) {
-        for (const taskId of chunk.tasks) {
-          tasks[taskId].chunk = chunk.name;
-        }
-      }
-      // Inject missions.
-      const chunkToMission = {};
-      for (const mission of action.payload.missions) {
-        chunkToMission[mission.chunk] = mission.name;
-      }
-      for (const chunk of action.payload.chunks) {
-        if (chunk.name in chunkToMission) {
-          for (const subchunkId of chunk.subchunks) {
-            chunkToMission[subchunkId] = chunkToMission[chunk.name];
-          }
-        }
-      }
-      for (const task of taskList) {
-        tasks[task.id].mission = chunkToMission[task.chunk];
-      }
       return tasks;
     }
     case FETCH_PRACTICE_OVERVIEW_SUCCESS: {
@@ -54,17 +33,15 @@ export default function reduceTasks(state = {}, action) {
 function parseTask(data) {
   const task = {
     id: data['name'],
-    category: data['level'],  // TODO: rename category to level
-    setting: jsonToObject(data.setting),
-    // solution: jsonToObject(data.solution), // TODO: requires to fix json fields first
+    category: data['level'],  // TODO: remove once not needed
+    level: data['level'],
+    levels: data['levels'],
+    order: data['order'],
+    problemSet: data['problemset'],
+    setting: data.setting,
   };
   return task;
 }
-
-function jsonToObject(jsonStr) {
-  return JSON.parse(jsonStr.replace(/'/g, '"'));
-}
-
 
 function parseStudentTask(data) {
   const task = {

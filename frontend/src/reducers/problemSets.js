@@ -2,53 +2,52 @@ import { FETCH_WORLD_SUCCESS,
          FETCH_PRACTICE_OVERVIEW_SUCCESS,
          SHOW_NEXT_LEVEL_STATUS} from '../action-types';
 
-export default function reduceChunks(state = {}, action) {
+export default function reduceProblemSets(state = {}, action) {
   switch (action.type) {
     case FETCH_WORLD_SUCCESS: {
-      const chunkList = action.payload.chunks.map(parseChunk);
-      const chunks = {};
-      for (const chunk of chunkList) {
-        chunks[chunk.id] = chunk;
-        // Add links from childre to this chuns.
-        for (const subchunkId of chunk.subchunks) {
-          chunks[subchunkId].parentChunk = chunk.id
-        }
+      const psList = action.payload.problemsets.map(parseProblemSet);
+      const problemSets = {};
+      for (const ps of psList) {
+        problemSets[ps.id] = ps;
       }
-      return chunks;
+      return problemSets;
     }
     case FETCH_PRACTICE_OVERVIEW_SUCCESS: {
-      const chunks = {};
+      const problemSets = {};
       for (const skill of action.payload.skills) {
-        chunks[skill.name] = {
+        problemSets[skill.name] = {
           ...state[skill.name],
           skill: skill.value,
         };
       }
-      return chunks;
+      return problemSets;
     }
     case SHOW_NEXT_LEVEL_STATUS:
-      const chunks = {...state};
+      const problemSets = {...state};
       for (const progress of action.payload.progress) {
-        chunks[progress.chunk] = {
+        problemSets[progress.chunk] = {
           ...state[progress.chunk],
           skill: progress.skill,
         };
       }
-      return chunks;
+      return problemSets;
     default: {
       return state;
     }
   }
 }
 
-function parseChunk(data) {
-  const chunk = {
+function parseProblemSet(data) {
+  const ps = {
     id: data['name'],
+    granularity: data['granularity'],
+    section: data['section'],
+    level: data['level'],
     order: data['order'],
     setting: data['setting'],
     tasks: data['tasks'],
-    subchunks: data['subchunks'],
-    parentChunk: null,
+    parts: data['parts'],
+    parent: data['parent'],
   };
-  return chunk;
+  return ps;
 }

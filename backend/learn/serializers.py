@@ -158,7 +158,7 @@ class TaskSerializer(serializers.ModelSerializer):
     class Meta:
         model = Task
         fields = (
-            'id', 'name', 'section', 'level', 'order', 'problemset',
+            'id', 'name', 'section', 'levels', 'level', 'order', 'problemset',
             'setting', 'solution')
         list_serializer_class = SettableListSerializer
 
