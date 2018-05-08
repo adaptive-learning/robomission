@@ -1,4 +1,5 @@
 from django.test import TestCase
+import pytest
 from learn.domain_parser import load_domain_from_file
 from learn.models import Domain, Task, ProblemSet
 
@@ -13,6 +14,7 @@ from learn.models import Domain, Task, ProblemSet
 class DomainParserTestCase(TestCase):
     # TODO: Use a fixture to avoid parsing the file multiple times, but still
     # having multiple unit tests for better readability.
+    @pytest.mark.slow
     def test_load_domain_from_file(self):
         load_domain_from_file('domain/tests/test1.domain.json')
         domain = Domain.objects.get(name='test1')
@@ -63,6 +65,7 @@ class DomainParserTestCase(TestCase):
              '<DomainParam: test1:good_time:task:t3=30.0>'],
             ordered=False)
 
+    @pytest.mark.slow
     def test_load_domain_update_existing_task(self):
         domain = Domain.objects.create(name='test1')
         t1 = Task.objects.create(pk=1, name='t1-original')
@@ -73,6 +76,15 @@ class DomainParserTestCase(TestCase):
         assert t1.name == 't1'
         assert t1.solution == 'f'
         assert not Task.objects.filter(name='t1-original').exists()
+
+    @pytest.mark.slow
+    def test_load_current_domain(self):
+        load_domain_from_file('domain/domain.json')
+        domain = Domain.objects.get(name='current')
+        assert domain.blocks.exists()
+        assert domain.toolboxes.exists()
+        assert domain.tasks.exists()
+        assert domain.params.exists()
 
 
     # The following test demonstrates currently not allowed behavior

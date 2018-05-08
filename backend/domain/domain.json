@@ -6,27 +6,20 @@
   },
 
   "problemsets" : [
-    {"id": 1, "name": "spaceship-control", "chunk": "commands"},
-    {"id": 2, "name": "shooting-and-wormholes", "chunk": "commands-2"},
-    {"id": 3, "name": "repeat-n-times", "chunk": "repeat"},
-    {"id": 4, "name": "repeat-while", "chunk": "while"},
-    {"id": 5, "name": "loops-challenge", "chunk": "loops"},
-    {"id": 6, "name": "color-decisions", "chunk": "if"},
-    {"id": 7, "name": "position-decisions", "chunk": "comparing"},
-    {"id": 8, "name": "if-else", "chunk": "if-else"},
-    {"id": 9, "name": "final-challenge", "chunk": "loops-if"}
-  ],
-
-  "chunks": [
+    { "id": 1010,
+      "name": "commands",
+      "setting": { "toolbox": "fly" },
+      "parts": ["fly-forward", "turn", "diamonds"]
+    },
     {
-      "id": 1,
+      "id": 1011,
       "name": "fly-forward",
       "tasks": [
         "three-steps-forward"
       ]
     },
     {
-      "id": 2,
+      "id": 1012,
       "name": "turn",
       "tasks": [
         "turning-right",
@@ -36,7 +29,7 @@
       ]
     },
     {
-      "id": 3,
+      "id": 1013,
       "name": "diamonds",
       "tasks": [
         "diamond-on-right",
@@ -46,18 +39,19 @@
         "surrounded-diamond"
       ]
     },
-    {
-      "id": 4,
-      "name": "commands",
-      "setting": {
-        "toolbox": "fly"
-      },
-      "subchunks": ["fly-forward", "turn", "diamonds"],
-      "tasks": []
-    },
+
 
     {
-      "id": 5,
+      "id": 1020,
+      "name": "commands-2",
+      "setting": {
+        "toolbox": "shoot"
+      },
+      "parts": ["shooting", "wormhole", "shooting-wormholes"],
+      "tasks": []
+    },
+    {
+      "id": 1021,
       "name": "shooting",
       "tasks": [
         "shot",
@@ -65,14 +59,14 @@
       ]
     },
     {
-      "id": 6,
+      "id": 1022,
       "name": "wormhole",
       "tasks": [
         "wormhole-demo"
       ]
     },
     {
-      "id": 7,
+      "id": 1023,
       "name": "shooting-2",
       "tasks": [
         "tunnel",
@@ -80,18 +74,18 @@
         "2diamonds-2meteorids"
       ]
     },
-    {
-      "id": 8,
-      "name": "commands-2",
-      "setting": {
-        "toolbox": "shoot"
-      },
-      "subchunks": ["shooting", "wormhole", "shooting-2"],
-      "tasks": []
-    },
+
 
     {
-      "id": 9,
+      "id": 1030,
+      "name": "repeat",
+      "parts": ["single-repeat", "multiple-repeats", "repeat-practice"],
+      "setting": {
+        "toolbox": "repeat"
+      }
+    },
+    {
+      "id": 1031,
       "name": "single-repeat",
       "tasks": [
         "ladder",
@@ -99,7 +93,7 @@
       ]
     },
     {
-      "id": 10,
+      "id": 1032,
       "name": "multiple-repeats",
       "tasks": [
         "big-left-turn",
@@ -110,8 +104,8 @@
       ]
     },
     {
-      "id": 11,
-      "name": "repeat-puzzle",
+      "id": 1033,
+      "name": "repeat-practice",
       "tasks": [
         "steal-the-nose",
         "find-the-path",
@@ -119,17 +113,18 @@
         "clean-your-path"
       ]
     },
-    {
-      "id": 12,
-      "name": "repeat",
-      "subchunks": ["single-repeat", "multiple-repeats", "repeat-puzzle"],
-      "setting": {
-        "toolbox": "repeat"
-      }
-    },
+
 
     {
-      "id": 13,
+      "id": 1040,
+      "name": "while",
+      "parts": ["single-while", "multiple-whiles", "while-practice"],
+      "setting": {
+        "toolbox": "while"
+      }
+    },
+    {
+      "id": 1041,
       "name": "single-while",
       "tasks": [
         "zig-zag",
@@ -137,7 +132,7 @@
       ]
     },
     {
-      "id": 14,
+      "id": 1042,
       "name": "multiple-whiles",
       "tasks": [
         "yellow-is-not-red",
@@ -147,23 +142,24 @@
       ]
     },
     {
-      "id": 15,
-      "name": "while-puzzle",
+      "id": 1043,
+      "name": "while-practice",
       "tasks": [
         "diamond-in-house"
       ]
     },
-    {
-      "id": 16,
-      "name": "while",
-      "subchunks": ["single-while", "multiple-whiles", "while-puzzle"],
-      "setting": {
-        "toolbox": "while"
-      }
-    },
+
 
     {
-      "id": 17,
+      "id": 1050,
+      "name": "loops",
+      "parts": ["repeat-while-1", "repeat-while-2", "loops-practice"],
+      "setting": {
+        "toolbox": "loops"
+      }
+    },
+    {
+      "id": 1051,
       "name": "repeat-while-1",
       "tasks": [
         "diamond-cross",
@@ -173,7 +169,7 @@
       ]
     },
     {
-      "id": 18,
+      "id": 1052,
       "name": "repeat-while-2",
       "tasks": [
         "collect-diamonds",
@@ -184,24 +180,25 @@
       ]
     },
     {
-      "id": 19,
-      "name": "loops-puzzle",
+      "id": 1053,
+      "name": "loops-practice",
       "tasks": [
         "arrow",
         "double-track"
       ]
     },
-    {
-      "id": 20,
-      "name": "loops",
-      "subchunks": ["repeat-while-1", "repeat-while-2", "loops-puzzle"],
-      "setting": {
-        "toolbox": "loops"
-      }
-    },
+
 
     {
-      "id": 21,
+      "id": 1060,
+      "name": "if",
+      "parts": ["if-intro", "if-practice", "if-puzzles"],
+      "setting": {
+        "toolbox": "loops-if"
+      }
+    },
+    {
+      "id": 1061,
       "name": "if-intro",
       "tasks": [
         "on-yellow-to-left",
@@ -210,7 +207,7 @@
       ]
     },
     {
-      "id": 22,
+      "id": 1062,
       "name": "if-practice",
       "tasks": [
         "two-diamonds",
@@ -219,23 +216,23 @@
       ]
     },
     {
-      "id": 23,
-      "name": "if-puzzle",
+      "id": 1063,
+      "name": "if-puzzles",
       "tasks": [
         "belgian-flag"
       ]
     },
-    {
-      "id": 24,
-      "name": "if",
-      "subchunks": ["if-intro", "if-practice", "if-puzzle"],
-      "setting": {
-        "toolbox": "loops-if"
-      }
-    },
 
     {
-      "id": 25,
+      "id": 1070,
+      "name": "comparing",
+      "parts": ["comparing-intro", "comparing-practice", "comparing-puzzles"],
+      "setting": {
+        "toolbox": "loops-if-position"
+      }
+    },
+    {
+      "id": 1071,
       "name": "comparing-intro",
       "tasks": [
         "chessboard",
@@ -245,7 +242,7 @@
       ]
     },
     {
-      "id": 26,
+      "id": 1072,
       "name": "comparing-practice",
       "tasks": [
         "free-column",
@@ -254,24 +251,25 @@
       ]
     },
     {
-      "id": 27,
-      "name": "comparing-puzzle",
+      "id": 1073,
+      "name": "comparing-puzzles",
       "tasks": [
         "wave",
         "slalom-position-testing"
       ]
     },
-    {
-      "id": 28,
-      "name": "comparing",
-      "subchunks": ["comparing-intro", "comparing-practice", "comparing-puzzle"],
-      "setting": {
-        "toolbox": "loops-if-position"
-      }
-    },
+
 
     {
-      "id": 29,
+      "id": 1080,
+      "name": "if-else",
+      "parts": ["if-else-intro", "if-else-practice", "if-else-puzzles"],
+      "setting": {
+        "toolbox": "loops-if-else"
+      }
+    },
+    {
+      "id": 1081,
       "name": "if-else-intro",
       "tasks": [
         "letter-e",
@@ -280,7 +278,7 @@
       ]
     },
     {
-      "id": 30,
+      "id": 1082,
       "name": "if-else-practice",
       "tasks": [
         "bouncing-from-edge",
@@ -289,23 +287,27 @@
       ]
     },
     {
-      "id": 31,
-      "name": "if-else-puzzle",
+      "id": 1083,
+      "name": "if-else-puzzles",
       "tasks": [
         "colorful-flowers"
       ]
     },
+
     {
-      "id": 32,
-      "name": "if-else",
-      "subchunks": ["if-else-intro", "if-else-practice", "if-else-puzzle"],
+      "id": 1090,
+      "name": "loops-if",
+      "parts": [
+        "loops-if-practice-1",
+        "loops-if-practice-2",
+        "loops-if-practice-3"
+      ],
       "setting": {
         "toolbox": "loops-if-else"
       }
     },
-
     {
-      "id": 33,
+      "id": 1091,
       "name": "loops-if-practice-1",
       "tasks": [
         "five-diamonds",
@@ -317,7 +319,7 @@
       ]
     },
     {
-      "id": 34,
+      "id": 1092,
       "name": "loops-if-practice-2",
       "tasks": [
         "two-color-tracks",
@@ -328,7 +330,7 @@
       ]
     },
     {
-      "id": 35,
+      "id": 1093,
       "name": "loops-if-practice-3",
       "tasks": [
         "triple-slalom",
@@ -337,21 +339,10 @@
         "meteoroids-on-left",
         "two-bit-instructions"
       ]
-    },
-    {
-      "id": 36,
-      "name": "loops-if",
-      "subchunks": [
-        "loops-if-practice-1",
-        "loops-if-practice-2",
-        "loops-if-practice-3"
-      ],
-      "setting": {
-        "toolbox": "loops-if-else"
-      }
     }
-
   ],
+
+
   "toolboxes": [
     {
       "id": 1,
@@ -395,6 +386,7 @@
                  "if-else"]
     }
   ],
+
   "blocks": [
     {"id": 1, "name": "fly"},
     {"id": 2, "name": "shoot"},
@@ -405,6 +397,7 @@
     {"id": 7, "name": "if"},
     {"id": 8, "name": "if-else"}
   ],
+
   "tasks": [
     {"id": 51, "name": "three-steps-forward"},
     {"id": 49, "name": "turning-right"},
