@@ -67,11 +67,12 @@
     },
     {
       "id": 1023,
-      "name": "shooting-2",
+      "name": "shooting-wormholes",
       "tasks": [
         "tunnel",
         "dont-forget-shot",
-        "2diamonds-2meteorids"
+        "2diamonds-2meteorids",
+        "last-shot"
       ]
     },
 
@@ -482,6 +483,7 @@
     {"id": 74, "name": "turning-in-square"},
     {"id": 77, "name": "letter-d"},
     {"id": 39, "name": "meteoroids-on-left"},
-    {"id": 62, "name": "two-bit-instructions"}
+    {"id": 62, "name": "two-bit-instructions"},
+    {"id": 79, "name": "last-shot"}
   ]
 }

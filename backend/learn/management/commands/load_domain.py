@@ -12,11 +12,10 @@ class Command(BaseCommand):
         domain = load_domain_from_file(path)
         self.stdout.write(self.style.SUCCESS(
             ('Domain "{domain}" loaded: '
-             '{m} missions, {c} chunks, {t} tasks, {x} toolboxes, {b} blocks.'
+             '{p} problem sets, {t} tasks, {x} toolboxes, {b} blocks.'
             ).format(
                 domain=domain.name,
-                m=domain.missions.count(),
-                c=domain.chunks.count(),
+                p=domain.problemsets.count(),
                 t=domain.tasks.count(),
                 x=domain.toolboxes.count(),
                 b=domain.blocks.count())))
