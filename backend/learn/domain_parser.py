@@ -78,7 +78,7 @@ def task_name_to_path(dirpath, name):
 def parse_task_source(text):
     data = js.run_script(script_name='parseTask', input_text=text)
     setting = data['setting']
-    setting['fields'] = fields_to_str(setting['fields'])
+    setting['fields'] = normalize_fields(setting['fields'])
     adapted_data = {
         'name': data['id'],
         'setting': setting,
@@ -86,10 +86,15 @@ def parse_task_source(text):
     }
     return adapted_data
 
+def normalize_fields(text):
+    rows = text.strip().replace(' ', '').split('\n')
+    fields = ';'.join(row.strip('|') for row in rows)
+    return fields
 
-def fields_to_str(fields):
-    return '||'.join(row_to_str(row) for row in fields)
-
-
-def row_to_str(row):
-    return '|'.join(bg + ''.join(objects) for bg, objects in row)
+# TODO: Remove if not needed.
+#def fields_to_str(fields):
+#    return '||'.join(row_to_str(row) for row in fields)
+#
+#
+#def row_to_str(row):
+#    return '|'.join(bg + ''.join(objects) for bg, objects in row)

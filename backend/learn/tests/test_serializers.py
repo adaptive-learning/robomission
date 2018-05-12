@@ -123,7 +123,7 @@ class TaskSerializerTestCase(TestCase):
         ps = ProblemSet.objects.create(name='ps1')
         task = Task.objects.create(
             name='carrot', section='2.3', problemset=ps,
-            setting={'fields': 'kD|k||k|kS', 'length': 3, 'energy': 7},
+            setting={'fields': 'kD|k;k|kS', 'length': 3, 'energy': 7},
             solution='f')
         serializer = TaskSerializer(task)
         assert serializer.data == {
@@ -134,7 +134,7 @@ class TaskSerializerTestCase(TestCase):
             'level': 2,
             'order': 3,
             'problemset': 'ps1',
-            'setting': {'fields': 'kD|k||k|kS', 'length': 3, 'energy': 7},
+            'setting': {'fields': 'kD|k;k|kS', 'length': 3, 'energy': 7},
             'solution': 'f'}
 
     def test_deserialize_new_task(self):

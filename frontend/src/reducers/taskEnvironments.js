@@ -17,7 +17,6 @@ import { CHANGE_LOCATION,
          SET_EDITOR_TYPE,
          SET_SPEED,
          RUN_PROGRAM_SOLVED_REPORT } from '../action-types';
-import { parseSpaceWorld } from '../core/spaceWorldDescription';
 import { parseRoboCode, RoboCodeSyntaxError } from '../core/roboCodeParser';
 import { generateRoboCode } from '../core/roboCodeGenerator';
 import { practicePageTaskEnvironmentId } from '../selectors/taskEnvironment';
@@ -167,23 +166,12 @@ function addDefaults(task) {
 
 
 function changeSetting(taskEnvironment, { taskSource }) {
-  const { task, invalidSpaceWorldText } = taskEnvironment;
+  const { task } = taskEnvironment;
   const { id, toolbox, energy, length, spaceWorldText } = taskSource;
-  let newInvalidSpaceWorldText = invalidSpaceWorldText;
-  let newFields = null;
-  if (spaceWorldText !== undefined) {
-    try {
-      newFields = parseSpaceWorld(spaceWorldText);
-      newInvalidSpaceWorldText = null;
-    } catch (err) {
-      newFields = null;
-      newInvalidSpaceWorldText = spaceWorldText;
-    }
-  }
   const updatedTask = {
     id: (id !== undefined) ? id : task.id,
     setting: {
-      fields: (newFields !== null) ? newFields : task.setting.fields,
+      fields: (spaceWorldText !== undefined) ? spaceWorldText : task.setting.fields,
       toolbox: (toolbox !== undefined) ? toolbox : task.setting.toolbox,
       energy: (energy !== undefined) ? energy : task.setting.energy,
       length: (length !== undefined) ? length : task.setting.length,
@@ -193,7 +181,6 @@ function changeSetting(taskEnvironment, { taskSource }) {
   const updatedTaskEnvironment = {
     ...taskEnvironment,
     task: updatedTaskWithDefaults,
-    invalidSpaceWorldText: newInvalidSpaceWorldText,
   };
   return updatedTaskEnvironment;
 }

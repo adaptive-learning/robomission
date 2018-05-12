@@ -8,7 +8,7 @@ import { changeSetting,
          setEditorType,
          switchVimMode } from '../actions';
 import { getSpaceWorldText,
-         isSpaceWorldTextValid,
+         getSpaceWorldErrors,
          getTask,
          getEditorType } from '../selectors/taskEnvironment';
 import { isVimModeEnabled } from '../selectors/taskEditor';
@@ -64,7 +64,7 @@ class SettingEditorWrapper extends React.Component {
     return (
       <SettingEditor
         spaceWorldText={this.props.spaceWorldText}
-        isValid={this.props.isValid}
+        spaceWorldErrors={this.props.spaceWorldErrors}
         onChange={this.handleChangeSetting}
         taskId={this.props.taskId}
         onTaskIdChange={this.handleTaskIdChange}
@@ -88,7 +88,7 @@ class SettingEditorWrapper extends React.Component {
 SettingEditorWrapper.propTypes = {
   taskEnvironmentId: PropTypes.string.isRequired,
   spaceWorldText: PropTypes.string.isRequired,
-  isValid: PropTypes.bool.isRequired,
+  spaceWorldErrors: PropTypes.array.isRequired,
   changeSetting: PropTypes.func.isRequired,
   taskId: PropTypes.string.isRequired,
   toolbox: PropTypes.string,
@@ -107,7 +107,7 @@ function mapStateToProps(state, props) {
   const { id, setting } = getTask(state, taskEnvironmentId);
   const { energy, length, toolbox } = setting;
   const spaceWorldText = getSpaceWorldText(state, taskEnvironmentId);
-  const isValid = isSpaceWorldTextValid(state, taskEnvironmentId);
+  const spaceWorldErrors = getSpaceWorldErrors(state, taskEnvironmentId);
   const editorType = getEditorType(state, taskEnvironmentId);
   const vimMode = isVimModeEnabled(state);
   return {
@@ -117,7 +117,7 @@ function mapStateToProps(state, props) {
     energy,
     lengthLimit: length,
     spaceWorldText,
-    isValid,
+    spaceWorldErrors,
     vimMode,
     editorType,
   };

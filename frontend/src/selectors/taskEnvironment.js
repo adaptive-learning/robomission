@@ -1,5 +1,5 @@
 import { countStatements } from '../core/roboCodeSyntaxChecker';
-import { parseSpaceWorld, generateSpaceWorldText } from '../core/spaceWorldDescription';
+import { parseSpaceWorld } from '../core/spaceWorldDescription';
 import { generateMiniRoboCode } from '../core/miniRoboCodeGenerator';
 import { stripIndentation } from '../utils/text';
 import { initialTaskEnvironment } from '../reducers/taskEnvironments';
@@ -83,9 +83,8 @@ export function getLengthLimit(state, taskEnvironmentId) {
 
 
 export function getTaskSourceText(state, taskEnvironmentId) {
-  if (!isSpaceWorldTextValid(state, taskEnvironmentId)) {
-    throw Error('Invalid task setting');
-  }
+  // TODO: Check if the space world is valid (can be parsed, both the setting
+  // and solution) - if not, raise an exception.
   const { id, setting } = getTask(state, taskEnvironmentId);
   const { toolbox, energy, length } = setting;
   const spaceWorldText = getSpaceWorldText(state, taskEnvironmentId);
@@ -120,29 +119,16 @@ export function getSetting(state, taskEnvironmentId) {
 
 
 export function getSpaceWorldText(state, taskEnvironmentId) {
-  if (!isSpaceWorldTextValid(state, taskEnvironmentId)) {
-    const invalidSpaceWorldText = getInvalidSpaceWorldText(state, taskEnvironmentId);
-    return invalidSpaceWorldText;
-  }
   const setting = getSetting(state, taskEnvironmentId);
-  const spaceWorldText = generateSpaceWorldText(setting.fields);
-  return spaceWorldText;
+  return setting.fields;
 }
 
 
-export function getInvalidSpaceWorldText(state, taskEnvironmentId) {
-  const { invalidSpaceWorldText } = getTaskEnvironment(state, taskEnvironmentId);
-  if (invalidSpaceWorldText === undefined) {
-    return null;
-  }
-  return invalidSpaceWorldText;
-}
-
-
-export function isSpaceWorldTextValid(state, taskEnvironmentId) {
-  const { invalidSpaceWorldText } = getTaskEnvironment(state, taskEnvironmentId);
-  const isValid = (invalidSpaceWorldText == null);
-  return isValid;
+// TODO: Move to TaskEditor selectors!
+export function getSpaceWorldErrors(state, taskEnvironmentId) {
+  const text = getSpaceWorldText(state, taskEnvironmentId);
+  const { errors } = parseSpaceWorld(text);
+  return errors;
 }
 
 
@@ -225,5 +211,6 @@ export function getInitialFieldsFromTaskEnvironment(taskEnvironment) {
       `Value taskEnvironment.task.setting.fields (${JSON.stringify(fieldsString)}) `
       + 'is not a string!');
   }
-  return parseSpaceWorld(fieldsString, '||');
+  const { fields } = parseSpaceWorld(fieldsString);
+  return fields;
 }

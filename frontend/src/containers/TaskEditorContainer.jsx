@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import TaskEditor from '../components/TaskEditor';
-import { parseSpaceWorld } from '../core/spaceWorldDescription';
 import { setTask } from '../actions';
+import { stripIndentation } from '../utils/text'
 
 
 class TaskEditorWrapper extends React.Component {
@@ -30,12 +30,12 @@ const defaultInitialTask = {
   id: 'nameless-task',
   setting: {
     toolbox: 'shoot',
-    fields: parseSpaceWorld(`\
+    fields: stripIndentation`\
       |b |b |b |b |b |
       |k |k |k |k |k |
       |k |k |k |k |k |
       |k |k |k |k |k |
-      |k |k |kS|k |k |`),
+      |k |k |kS|k |k |`,
   },
 };
 

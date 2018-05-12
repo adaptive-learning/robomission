@@ -51,7 +51,7 @@ class DomainParserTestCase(TestCase):
         task = Task.objects.get(pk=1)
         assert task.name == 't1'
         assert task.solution == 'f'
-        assert task.setting == {'fields': 'b||kS'}
+        assert task.setting == {'fields': 'b;kS'}
         assert task.section == '1.1.1'
 
         # Test relationships.

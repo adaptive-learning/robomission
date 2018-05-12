@@ -20,7 +20,7 @@ import '../core/spaceWorldHighlighter';
 
 function SettingEditor({
   spaceWorldText,
-  isValid,
+  spaceWorldErrors,
   onChange,
   taskId,
   onTaskIdChange,
@@ -38,10 +38,8 @@ function SettingEditor({
   onEditorTypeChange,
   muiTheme,
 }) {
-  const annotations = [];
-  if (!isValid) {
-    annotations.push({ row: 0, column: 0, type: 'error', text: 'Invalid setting' });
-  }
+  const annotations = spaceWorldErrors.map(
+    ({ row, col, message }) => ({ row, column: col, text: message, type: 'error'}));
 
   return (
     <div
@@ -134,7 +132,7 @@ function SettingEditor({
 
 SettingEditor.propTypes = {
   spaceWorldText: PropTypes.string.isRequired,
-  isValid: PropTypes.bool.isRequired,
+  spaceWorldErrors: PropTypes.array.isRequired,
   onChange: PropTypes.func.isRequired,
   taskId: PropTypes.string.isRequired,
   onTaskIdChange: PropTypes.func.isRequired,
