@@ -43,7 +43,8 @@ const gameObjectsSet = new Set(Object.values(gameObjects));
 
 
 export function parseSpaceWorld(text) {
-  text = text.replace(' ', '').trimRight().replace(';', '\n');
+  // The regex is necessary to replace all occurrences of a semicolon.
+  text = text.replace(' ', '').trimRight().replace(/;/g, '\n');
   const lines = text.split('\n');
   let fields = [];
   let errors = [];
