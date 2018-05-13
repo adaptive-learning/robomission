@@ -2,11 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
-import { Scrollbars } from 'react-custom-scrollbars';
-import { Card, CardTitle, CardHeader, CardText } from 'material-ui/Card';
+import Avatar from 'material-ui/Avatar';
+import { Card, CardHeader, CardText } from 'material-ui/Card';
 import { GridList, GridTile } from 'material-ui/GridList';
 import TaskName from './TaskName';
-import Skillometer from './Skillometer';
 import Rating from './Rating';
 import { theme } from '../theme';
 import { translate } from '../localization';
@@ -41,20 +40,35 @@ TaskTable.defaultProps = {
 
 function MissionOverview({ mission, urlBase, recommendation }) {
   const tasks = flatten(mission.phases.map(phase => phase.tasks));
+  const isRecommended = recommendation.mission === mission.id
+  let badgeTextColor = theme.palette.canvasColor;
+  let badgeBackgroundColor = theme.palette.disabledColor;
+  if (isRecommended) {
+    badgeTextColor = theme.palette.accent2Color;
+  } else if (mission.level < recommendation.levels[0]) {
+    // TODO: Use explicit student.mission/phase info instead of recommendation.
+    badgeBackgroundColor = theme.palette.successColor;
+  }
   return (
     <Card
       style={{ margin: 10 }}
-      initiallyExpanded={recommendation.mission === mission.id}
+      initiallyExpanded={isRecommended}
     >
       <CardHeader
         avatar={
-          <span style={{marginRight: 10}}>
-            <Skillometer skill={mission.skill} text={`${mission.order}`}/>
-          </span>}
+          <Avatar
+            color={badgeTextColor}
+            backgroundColor={badgeBackgroundColor}
+          >
+            L{mission.level}
+          </Avatar>}
         title={`${translate(`ps.story.${mission.id}`)}`}
-        titleStyle={{ fontSize: 20 }}
+        titleStyle={{
+          fontSize: 20 }}
+          //color: isRecommended ? theme.palette.accent2Color : null}}
         subtitle={<FormattedMessage id={`ps.${mission.id}`} />}
         subtitleStyle={{ fontSize: 16 }}
+        subtitle={<FormattedMessage id={`ps.${mission.id}`} />}
         actAsExpander={true}
         showExpandableButton={true}
       />

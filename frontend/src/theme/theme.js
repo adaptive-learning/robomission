@@ -2,7 +2,7 @@ import {
   grey400, grey600, grey700,
   amber500, amber700, amber100,
   cyan500, cyan700, cyan100,
-  green700, green200,
+  //green700, green200, green800, green900,
   white, fullWhite,
 } from 'material-ui/styles/colors';
 import { fade } from 'material-ui/utils/colorManipulator';
@@ -29,8 +29,7 @@ const theme = {
     pickerHeaderColor: fade(fullWhite, 0.12),
     clockCircleColor: fade(fullWhite, 0.12),
 
-    successColor: green700,
-    successColorLight: green200,
+    successColor: cyan700,
   },
   raisedButton: {
     color: grey700,

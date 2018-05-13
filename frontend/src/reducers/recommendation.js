@@ -23,5 +23,6 @@ function parseRecommendation(data) {
     task: data['task'],
     phase: data['phase'],
     mission: data['mission'],
+    levels: data['levels'],
   };
 }

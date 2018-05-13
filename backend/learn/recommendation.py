@@ -12,6 +12,7 @@ Recommendation = namedtuple('Recommendation', [
     'mission',
     'phase',
     'task',
+    'levels',
 ])
 
 
@@ -25,7 +26,8 @@ def get_recommendation(domain, student):
         available=True,
         mission=mission.name,
         phase=phase.name,
-        task=task.name)
+        task=task.name,
+        levels=task.levels)
 
 
 def select_mission(domain, student):

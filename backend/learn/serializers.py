@@ -354,6 +354,7 @@ class RecommendationSerializer(serializers.Serializer):
     task = serializers.CharField()
     phase = serializers.CharField()
     mission = serializers.CharField()
+    levels = serializers.ListField(child=serializers.IntegerField())
 
 
 class PracticeOverviewSerializer(serializers.Serializer):
