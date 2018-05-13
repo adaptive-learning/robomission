@@ -10,6 +10,7 @@ import Skillometer from './Skillometer';
 import Rating from './Rating';
 import { theme } from '../theme';
 import { translate } from '../localization';
+import { flatten } from '../utils/arrays';
 
 
 export default function TaskTable({ urlBase, missions, recommendation }) {
@@ -39,6 +40,7 @@ TaskTable.defaultProps = {
 
 
 function MissionOverview({ mission, urlBase, recommendation }) {
+  const tasks = flatten(mission.phases.map(phase => phase.tasks));
   return (
     <Card
       style={{ margin: 10 }}
@@ -59,13 +61,33 @@ function MissionOverview({ mission, urlBase, recommendation }) {
       <CardText
         expandable={true}
       >
-      {mission.phases.map(phase => (
-        <Phase
-          key={phase.id}
-          urlBase={urlBase}
-          phase={phase}
-          recommendation={recommendation}
-        />))}
+        <div style={{
+          display: 'flex',
+          flexWrap: 'wrap',
+          justifyContent: 'space-around',
+          //borderStyle: 'solid',
+          //borderWidth: 1,
+          //borderColor: '#535353',
+        }}>
+          <GridList
+            cellHeight={120}
+            rows={1}
+            // Hack to determine number of columns. TODO: unhack (also make it
+            // respond to screen size changes.
+            cols={Math.min(5, Math.ceil(window.innerWidth / 250))}
+            style={{
+              width: '100%',
+            }}
+          >
+            {tasks.map(task => (
+              <TaskTile
+                key={task.id}
+                urlBase={urlBase}
+                task={task}
+                recommendation={recommendation}
+              />))}
+          </GridList>
+        </div>
       </CardText>
     </Card>
   );
@@ -79,95 +101,42 @@ MissionOverview.propTypes = {
 };
 
 
-function Phase({ phase, urlBase, recommendation }) {
-  const chooseBackgroundColor = task => {
-    if (task.id === recommendation.task) {
-      return theme.palette.accent2Color;
-    }
-    if (task.solved) {
-      return theme.palette.successColor;
-    }
-    // TODO: Use explicit mastery info.
-    if (phase.skill >= 1) {
-      return theme.palette.successColorLight;
-    }
-    if (phase.id === recommendation.phase) {
-      return theme.palette.primary3Color;
-    }
-    return '#888';
-  };
-
-  const getSubtitle = task => {
-    if (task.id === recommendation.task) {
-      return translate('recommended');
-    }
-    return formatSolvingTime(task.time);
-  };
-
-  const sorted = tasks => {
-    // 1: solved, 2: recommended, 3: other tasks
-    const compareTasks = (a, b) => {
-      const keyA = [!a.solved, a.id !== recommendation.task, a.id];
-      const keyB = [!b.solved, b.id !== recommendation.task, b.id];
-      return keyA > keyB ? 1 : -1;
-    };
-    return tasks.sort(compareTasks);
+function TaskTile({ task, urlBase, recommendation }) {
+  let background = '#888';
+  if (task.id === recommendation.task) {
+    background = theme.palette.accent2Color;
+  } else if (task.solved) {
+    background = theme.palette.successColor;
+  } else if (task.problemSet === recommendation.phase) {
+    background = '#ddd';
   }
 
-  const tasks = sorted(phase.tasks);
-  // TODO: Nicer scrollbars.
+  let subtitle = '';
+  if (task.id === recommendation.task) {
+    subtitle = translate('recommended');
+  } else {
+    // TODO: Add explicit branch for task.solved/unsolved
+    subtitle = formatSolvingTime(task.time);
+  };
+
   return (
-      <div style={{
-        margin: 7,
-        display: 'flex',
-        flexWrap: 'wrap',
-        justifyContent: 'space-around',
-        borderStyle: 'solid',
-        borderWidth: 1,
-        borderColor: '#535353',
-      }}>
-        <span style={{
-          marginLeft: 10,
-          marginRight: 10,
-          marginTop: 40,
-          display: 'inline-block'
-        }}>
-          <Skillometer skill={phase.skill} text={`${phase.index}`} />
-        </span>
-        <GridList
-          cellHeight={120}
-          rows={1}
-          cols={window.innerWidth / 250}
+    <Link key={task.id} to={`${urlBase}${task.id}`}>
+      <GridTile
+        title={<TaskName taskId={task.id} />}
+        subtitle={subtitle}
+      >
+        <div
           style={{
-            width: '100%',
-            display: 'flex',
-            // Uncomment the following 2 lines to make it single-line:
-            //flexWrap: 'nowrap',
-            //overflowX: 'auto',
-            flex: 1,
+            backgroundColor: background,
+            //width: 250,
+            height: '100%',
+            padding: '15px 10px',
           }}
         >
-          {tasks.map((task) => (
-            <Link key={task.id} to={`${urlBase}${task.id}`}>
-              <GridTile
-                title={<TaskName taskId={task.id} />}
-                subtitle={getSubtitle(task)}
-              >
-                <div
-                  style={{
-                    backgroundColor: chooseBackgroundColor(task),
-                    //width: 250,
-                    height: '100%',
-                    padding: '15px 10px',
-                  }}
-                >
-                  <Rating value={task.solved ? task.levels[1] : 0} max={task.levels[1]} />
-                </div>
-              </GridTile>
-            </Link>
-          ))}
-        </GridList>
-      </div>
+          <Rating value={task.solved ? task.levels[1] : 0} max={task.levels[1]} />
+        </div>
+      </GridTile>
+    </Link>
   );
 }
 
