@@ -583,6 +583,9 @@ class DomainParam(models.Model):
     chunk = models.ForeignKey(Chunk, blank=True, null=True)
     value = models.FloatField(default=0)
 
+    class Meta:
+        unique_together = ('domain', 'name', 'chunk')
+
     def __str__(self):
         identifiers = [
             str(entity)

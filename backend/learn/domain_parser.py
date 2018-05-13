@@ -46,8 +46,9 @@ def load_domain_params(domain, params_path):
                     .format(chunk_name))
                 continue
         for name, value in param_data.items():
-            DomainParam.objects.create(
-                domain=domain, chunk=chunk, name=name, value=value)
+            DomainParam.objects.update_or_create(
+                domain=domain, chunk=chunk, name=name,
+                defaults={'value': value})
 
 
 def inject_tasks_data(data, task_dir):
