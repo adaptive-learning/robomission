@@ -3,6 +3,7 @@
 from django.contrib import admin
 from learn.models import Block, Toolbox, Task, ProblemSet, Instruction, Student
 from learn.models import TaskSession, ProgramSnapshot, Action
+from learn.models import DomainParam
 
 
 @admin.register(Block)
@@ -58,3 +59,10 @@ class ActionAdmin(admin.ModelAdmin):
 @admin.register(Student)
 class StudentAdmin(admin.ModelAdmin):
     pass
+
+
+@admin.register(DomainParam)
+class DomainParamAdmin(admin.ModelAdmin):
+    list_display = ('id', 'domain', 'name', 'chunk', 'value')
+    list_filter = ('domain', 'name')
+    search_fields = ('domain__name', 'name', 'chunk__name', 'value')
