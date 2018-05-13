@@ -7,6 +7,7 @@ import { Card, CardTitle, CardHeader, CardText } from 'material-ui/Card';
 import { GridList, GridTile } from 'material-ui/GridList';
 import TaskName from './TaskName';
 import Skillometer from './Skillometer';
+import Rating from './Rating';
 import { theme } from '../theme';
 import { translate } from '../localization';
 
@@ -155,10 +156,13 @@ function Phase({ phase, urlBase, recommendation }) {
                 <div
                   style={{
                     backgroundColor: chooseBackgroundColor(task),
-                    width: 250,
+                    //width: 250,
                     height: '100%',
+                    padding: '15px 10px',
                   }}
-                />
+                >
+                  <Rating value={task.solved ? task.levels[1] : 0} max={task.levels[1]} />
+                </div>
               </GridTile>
             </Link>
           ))}
