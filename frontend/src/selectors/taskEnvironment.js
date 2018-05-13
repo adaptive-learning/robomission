@@ -48,12 +48,10 @@ export function getTaskId(state, taskEnvironmentId) {
 
 export function getTaskLevel(state, taskEnvironmentId) {
   const task = getTask(state, taskEnvironmentId);
-  const missionId = task.mission;
-  if (!missionId) {
+  if (task.level == null) {
     return 0;
   }
-  const mission = state.missions[missionId];
-  return mission.order;
+  return task.level;
 }
 
 
