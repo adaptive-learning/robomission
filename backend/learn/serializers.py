@@ -309,6 +309,10 @@ class StudentSerializer(serializers.HyperlinkedModelSerializer):
         required=False)
     credits = serializers.IntegerField(read_only=True)
     level = serializers.SerializerMethodField()
+    seen_instructions = serializers.SlugRelatedField(
+        slug_field='name',
+        many=True,
+        read_only=True)
     classroom = serializers.SlugRelatedField(
         slug_field='name',
         queryset=Classroom.objects.all())
@@ -324,7 +328,7 @@ class StudentSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Student
         fields = (
-            'url', 'user', 'credits', 'level',
+            'url', 'user', 'credits', 'level', 'seen_instructions',
             'classroom', 'practice_overview',
             'start_task', 'edit_program', 'run_program')
 

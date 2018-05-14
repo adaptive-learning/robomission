@@ -30,6 +30,11 @@ export function getTask(state, taskEnvironmentId) {
 }
 
 
+export function getPracticePageTask(state) {
+  return getTask(state, practicePageTaskEnvironmentId);
+}
+
+
 export function getTaskSessionId(state, taskEnvironmentId) {
   return getTaskEnvironment(state, taskEnvironmentId).taskSessionId;
 }

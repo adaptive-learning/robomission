@@ -8,14 +8,12 @@ import Joyride from 'react-joyride';
 import 'react-joyride/lib/react-joyride-compiled.css';
 import { translate } from '../localization';
 import { showInstructions, seeInstruction } from '../actions';
-import { inMode } from '../selectors/app';
 import { getScheduledInstructions } from '../selectors/instructions';
 
 
 const getProps = (state) => ({
-  activeInstructionIndex: state.instructions.activeIndex,
+  shown: state.instructions.shown,
   scheduledInstructions: getScheduledInstructions(state),
-  showInstructionsButton: inMode(state, 'task') && getScheduledInstructions(state).length > 0,
 });
 const actionCreators = {
   showInstructions,
@@ -26,7 +24,7 @@ class InstructionsContainer extends React.Component {
   static propTypes = {
     muiTheme: PropTypes.object,
     scheduledInstructions: PropTypes.array,
-    activeInstructionIndex: PropTypes.number,
+    shown: PropTypes.bool,
     showInstructions: PropTypes.func,
     seeInstruction: PropTypes.func,
   };
@@ -35,7 +33,7 @@ class InstructionsContainer extends React.Component {
     super(props);
     // this.showInstructions = props.showInstructions.bind(this);
     this.showInstructions = () => {
-      if (this.props.activeInstructionIndex == null) {
+      if (!this.props.shown) {
         this.props.showInstructions();
       }
     };
@@ -49,7 +47,7 @@ class InstructionsContainer extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.activeInstructionIndex === null && this.props.activeInstructionIndex !== null) {
+    if (!prevProps.shown && this.props.shown) {
       this.joyride.reset(true);
     }
   }
@@ -82,57 +80,29 @@ class InstructionsContainer extends React.Component {
     }
   }
 
-  renderShowInstructionsButton() {
-    if (!this.props.showInstructionsButton) {
+  render() {
+    if (!this.props.shown) {
       return null;
     }
-    const blocklyTrashcanColor = '#576065';
     return (
-      <IconButton
-        onClick={this.showInstructions}
-        style={{
-          position: 'fixed',
-          bottom: 31,
-          right: 110,
-          zIndex: 100,
-          width: 60,
-          height: 60,
-          padding: 0,
+      <Joyride
+        ref={(ref) => { this.joyride = ref; }}
+        steps={this.steps}
+        type="continuous"
+        run={this.props.shown}
+        autoStart={this.props.shown}
+        showBackButton={true}
+        debug={true}
+        holePadding={2}
+        locale={{
+          back: translate('Previous'),
+          close: translate('I understand'),
+          next: translate('I understand'),
+          last: translate('I understand'),
+          skip: 'Skip',
         }}
-        iconStyle={{
-          width: 60,
-          height: 60,
-        }}
-      >
-        <HelpIcon color={blocklyTrashcanColor} hoverColor="#fff" />
-      </IconButton>
-    );
-  }
-
-  render() {
-    const active = this.props.activeInstructionIndex != null;
-    return (
-      <div>
-        <Joyride
-          ref={(ref) => { this.joyride = ref; }}
-          steps={this.steps}
-          type="continuous"
-          run={active}
-          autoStart={active}
-          showBackButton={false}
-          debug={false}
-          holePadding={2}
-          locale={{
-            back: translate('Previous'),
-            close: translate('I understand'),
-            next: translate('I understand'),
-            last: translate('I understand'),
-            skip: 'Skip',
-          }}
-          callback={this.handleJoyrideChange}
-        />
-        { this.renderShowInstructionsButton() }
-      </div>
+        callback={this.handleJoyrideChange}
+      />
     );
   }
 

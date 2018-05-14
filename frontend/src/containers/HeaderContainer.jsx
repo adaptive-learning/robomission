@@ -2,10 +2,12 @@ import React from 'react';
 import { connect } from 'react-redux';
 import {
   setOpenMenu,
+  showInstructions,
   toggleFeedbackModal,
   toggleLoginModal,
   toggleSignUpModal,
   logout } from '../actions';
+import { getNNewInstructions } from '../selectors/instructions';
 import { getLevelStatus } from '../selectors/student';
 import { getUser } from '../selectors/user';
 import { getMode } from '../selectors/app';
@@ -14,11 +16,13 @@ import Header from '../components/Header';
 
 const getProps = state => ({
   levelStatus: getLevelStatus(state),
+  nNewInstructions: getNNewInstructions(state),
   user: getUser(state),
   mode: getMode(state),
 });
 
 const actionCreators = {
+  showInstructions,
   setOpenMenu,
   toggleFeedbackModal,
   toggleLoginModal,
@@ -29,6 +33,7 @@ const actionCreators = {
 class HeaderContainer extends React.Component {
   constructor(props) {
     super(props);
+    this.showInstructions = this.props.showInstructions.bind(this);
     this.openMenu = this.props.setOpenMenu.bind(this, true);
     this.openFeedbackModal = this.props.toggleFeedbackModal.bind(this, true);
     this.openLoginModal = this.props.toggleLoginModal.bind(this, true);
@@ -41,6 +46,8 @@ class HeaderContainer extends React.Component {
       <Header
         onMenuIconTouchTap={this.openMenu}
         levelInfo={this.props.levelStatus}
+        nNewInstructions={this.props.nNewInstructions}
+        showInstructions={this.showInstructions}
         openFeedbackModal={this.openFeedbackModal}
         openLoginModal={this.openLoginModal}
         openSignUpModal={this.openSignUpModal}

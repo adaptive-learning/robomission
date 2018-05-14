@@ -1,9 +1,11 @@
 import React from 'react';
 import AppBar from 'material-ui/AppBar';
 import Avatar from 'material-ui/Avatar';
-import { Toolbar, ToolbarGroup, ToolbarSeparator } from 'material-ui/Toolbar';
+import { Toolbar, ToolbarGroup } from 'material-ui/Toolbar';
 import FeedbackIcon from 'material-ui/svg-icons/action/feedback';
+import HelpIcon from 'material-ui/svg-icons/action/help';
 import UserIcon from 'material-ui/svg-icons/social/person';
+import MenuIcon from 'material-ui/svg-icons/navigation/menu';
 import IconButton from 'material-ui/IconButton';
 import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
@@ -41,7 +43,9 @@ class Header extends React.Component {
     );
     return [logoImg, modeTitle];
   }
+
   render() {
+    const { nNewInstructions } = this.props;
     let userIcon = (<UserIcon />);
     if (!this.props.user.isLazy) {
       userIcon = this.props.user.initial;
@@ -82,20 +86,19 @@ class Header extends React.Component {
     const toolbar = (
       <Toolbar style={{ backgroundColor: 'transparent', color: 'white' }}>
         {this.props.mode !== 'monitoring' && [(
-          <ToolbarGroup key="levelbar">
+          <ToolbarGroup key="levelbar" style={{ marginRight: 10 }}>
             <LevelBar mini {...this.props.levelInfo} />
           </ToolbarGroup>
-        ),
-        (
-          <ToolbarSeparator
-            key="separator1"
-            style={{
-              position: 'relative',
-              top: 9,
-            }}
-          />
-        )]}
+        )
+        ]}
         <ToolbarGroup key="user-toolbar" lastChild={true}>
+          <IconButton
+            tooltip={translate('Help')}
+            onClick={this.props.showInstructions}
+          >
+            <HelpIcon color={
+              (nNewInstructions > 0) ? this.props.muiTheme.palette.accent1Color : 'white' } />
+          </IconButton>
           <IconButton
             tooltip={translate('Feedback')}
             onClick={this.props.openFeedbackModal}
@@ -113,6 +116,8 @@ class Header extends React.Component {
           backgroundColor: this.props.muiTheme.palette.primary1Color,
           margin: 0,
         }}
+        iconElementLeft={
+          <IconButton className="instructionable-env-menu"><MenuIcon /></IconButton>}
         onLeftIconButtonTouchTap={this.props.onMenuIconTouchTap}
         iconElementRight={toolbar}
       />

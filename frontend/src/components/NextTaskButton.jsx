@@ -15,6 +15,7 @@ export default function NextTaskButton({ task }) {
     return (
       <RaisedButton
         style={style}
+        className="instructionable-env-recommended-task-button"
         label="..."
         primary={true}
         disabled={false}
@@ -26,6 +27,7 @@ export default function NextTaskButton({ task }) {
       <RaisedButton
         icon={<TaskIcon style={{ marginLeft: 8 }}/>}
         style={style}
+        className="instructionable-env-recommended-task-button"
         label={<span style={{ position: 'relative', top: 1 }}><TaskName taskId={task.taskId} /></span>}
         primary={true}
       />

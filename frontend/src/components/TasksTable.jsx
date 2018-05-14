@@ -68,7 +68,6 @@ function MissionOverview({ mission, urlBase, recommendation }) {
           //color: isRecommended ? theme.palette.accent2Color : null}}
         subtitle={<FormattedMessage id={`ps.${mission.id}`} />}
         subtitleStyle={{ fontSize: 16 }}
-        subtitle={<FormattedMessage id={`ps.${mission.id}`} />}
         actAsExpander={true}
         showExpandableButton={true}
       />

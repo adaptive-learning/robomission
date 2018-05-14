@@ -11,6 +11,7 @@ export default {
   'Practice': 'Practice',
   'Previous': 'Previous',
   'Feedback': 'Feedback',
+  'Help': 'Help',
   'ALG': 'Adaptive Learning group',
   'FI-MU': 'Faculty of Informatics MU',
   'For hackers': 'For hackers',
