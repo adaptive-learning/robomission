@@ -29,8 +29,7 @@ export function getNewInstructions(state) {
 
 
 export function getNNewInstructions(state) {
-  const { all, seen } = state.instructions;
-  return all.length - seen.length;
+  return getNewInstructions(state).length;
 }
 
 
