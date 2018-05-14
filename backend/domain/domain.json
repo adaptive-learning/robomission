@@ -488,10 +488,10 @@
   ],
 
   "instructions": [
-    {"id": 2000, "name": "env.space-world", "mode": "task" },
-    {"id": 2001, "name": "env.toolbox", "mode": "task" },
+    {"id": 2000, "name": "task-space-world"},
+    {"id": 2001, "name": "task-toolbox"},
 
-    {"id": 2100, "name": "recommended-task-button", "mode": "home" },
-    {"id": 2101, "name": "menu", "mode": "home" }
+    {"id": 2100, "name": "env-recommended-task-button"},
+    {"id": 2101, "name": "env-menu"}
   ]
 }

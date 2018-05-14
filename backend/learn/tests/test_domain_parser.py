@@ -29,8 +29,7 @@ class DomainParserTestCase(TestCase):
             ordered=False)
         self.assertQuerysetEqual(
             domain.tasks.all(),
-            ['<Task: t1>', '<Task: t2>', '<Task: t3>'],
-            ordered=False)
+            ['<Task: t1>', '<Task: t2>', '<Task: t3>'])
         self.assertQuerysetEqual(
             domain.problemsets.all(),
             # NOTE: PS are ordered by type first, which is different for
@@ -39,6 +38,9 @@ class DomainParserTestCase(TestCase):
              '<ProblemSet: m4>',
              '<ProblemSet: p1A>', '<ProblemSet: p1B>', '<ProblemSet: p1C>',
              '<ProblemSet: p2A>','<ProblemSet: p2B>', '<ProblemSet: p2C>'])
+        self.assertQuerysetEqual(
+            domain.instructions.all(),
+            ['<Instruction: i1>', '<Instruction: i2>'])
 
         # Test inferred granularity and sections.
         p2c = ProblemSet.objects.get(name='p2C')
@@ -85,6 +87,7 @@ class DomainParserTestCase(TestCase):
         assert domain.blocks.exists()
         assert domain.toolboxes.exists()
         assert domain.tasks.exists()
+        assert domain.instructions.exists()
         assert domain.params.exists()
 
 
