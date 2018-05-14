@@ -188,10 +188,12 @@ class Toolbox(models.Model):
         return self.name
 
 
-class Instruction(models.Model):
+class Instruction(Chunk):
     """Explanation of a single concept, such as while loop or wormholes.
     """
-    name = models.SlugField(unique=True)
+    chunk_ptr = models.OneToOneField(
+        Chunk, on_delete=models.CASCADE, parent_link=True,
+        related_name='instruction_obj')
 
     def __str__(self):
         return self.name
