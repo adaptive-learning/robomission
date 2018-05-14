@@ -32,6 +32,7 @@ class ProblemSetAdmin(admin.ModelAdmin):
 
 @admin.register(Instruction)
 class InstructionAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name', 'order')
     search_fields = ['name']
 
 

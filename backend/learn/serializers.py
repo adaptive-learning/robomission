@@ -131,9 +131,12 @@ class ToolboxSerializer(serializers.ModelSerializer):
 
 
 class InstructionSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField()  # defined explicitly to make it writable
+    order = serializers.IntegerField(default=int)
+
     class Meta:
         model = Instruction
-        fields = ('id', 'name')
+        fields = ('id', 'name', 'order')
         list_serializer_class = SettableOrderedListSerializer
 
 

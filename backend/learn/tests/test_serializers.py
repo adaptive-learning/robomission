@@ -565,3 +565,23 @@ class DomainSerializerTestCase(TestCase):
         self.assertQuerysetEqual(domain.blocks.all(), ['<Block: b1>'])
         self.assertQuerysetEqual(domain.toolboxes.all(), ['<Toolbox: tb1>'])
         self.assertQuerysetEqual(domain.problemsets.all(), ['<ProblemSet: ps>'])
+
+
+class InstructionSerializerTestCase(TestCase):
+    def test_serialization(self):
+        instruction = Instruction.objects.create(name='i1')
+        serializer = InstructionSerializer(instruction)
+        assert serializer.data == {
+            'id': instruction.id,
+            'name': 'i1',
+            'order': 0}
+
+    def test_deserialize_order(self):
+        domain = Domain.objects.create()
+        data = [
+            {'id': 2, 'name': 'i1'},
+            {'id': 1, 'name': 'i2'}]
+        serializer = InstructionSerializer(many=True)
+        serializer.set(domain.instructions, data)
+        assert Instruction.objects.get(pk=2).order == 0
+        assert Instruction.objects.get(pk=1).order == 1

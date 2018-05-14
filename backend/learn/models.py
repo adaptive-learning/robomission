@@ -101,6 +101,12 @@ class Chunk(models.Model):
         """
         return self.levels[-1]
 
+    @order.setter
+    def order(self, value):
+        # TODO: Make it more robust (e.g when both level and order is set in
+        # init)
+        self.levels = self.levels[:-1] + [value]
+
     @property
     def qualified_name(self):
         if self.type:
