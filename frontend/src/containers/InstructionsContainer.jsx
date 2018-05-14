@@ -2,8 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import muiThemeable from 'material-ui/styles/muiThemeable';
-import HelpIcon from 'material-ui/svg-icons/action/help';
-import IconButton from 'material-ui/IconButton';
 import Joyride from 'react-joyride';
 import 'react-joyride/lib/react-joyride-compiled.css';
 import { translate } from '../localization';

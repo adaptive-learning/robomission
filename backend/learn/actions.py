@@ -106,3 +106,14 @@ def solve_task(domain, task_session):
     student.save()
     task_session.save()
     return progress
+
+
+def watch_instruction(domain, student, instruction_name):
+    instruction = domain.instructions.get(name=instruction_name)
+    student.seen_instructions.add(instruction)
+    action = Action(
+        name=Action.WATCH_INSTRUCTION,
+        student=student,
+        data={'instruction': instruction_name})
+    action.save()
+    return action

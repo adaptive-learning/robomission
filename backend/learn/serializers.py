@@ -324,13 +324,17 @@ class StudentSerializer(serializers.HyperlinkedModelSerializer):
         view_name='student-edit-program')
     run_program = serializers.HyperlinkedIdentityField(
         view_name='student-run-program')
+    start_task = serializers.HyperlinkedIdentityField(
+        view_name='student-start-task')
+    watch_instruction = serializers.HyperlinkedIdentityField(
+            view_name='student-watch-instruction')
 
     class Meta:
         model = Student
         fields = (
             'url', 'user', 'credits', 'level', 'seen_instructions',
             'classroom', 'practice_overview',
-            'start_task', 'edit_program', 'run_program')
+            'start_task', 'edit_program', 'run_program', 'watch_instruction')
 
     def get_level(self, student):
         domain = get_domain()

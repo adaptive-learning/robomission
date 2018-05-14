@@ -18,16 +18,16 @@ export default function reduceInstructions(state = initial, action) {
   switch (action.type) {
     case FETCH_WORLD_SUCCESS: {
       const instructionList = action.payload.instructions.map(parseInstruction);
-      const state = {
+      const nextState = {
         ...state,
         byId: createEntityMap(instructionList),
         all: instructionList.map(instruction => instruction.id),
       };
       if (state.seen === null) {
         // To avoid flickering instruction button.
-        state.seen = state.all;
+        nextState.seen = state.all;
       }
-      return state;
+      return nextState;
     }
     case FETCH_STUDENT_SUCCESS: {
       return {

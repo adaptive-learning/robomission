@@ -174,6 +174,16 @@ class StudentViewSet(viewsets.ReadOnlyModelViewSet):
         serializer = RunProgramResponseSerializer(response)
         return Response(serializer.data)
 
+    @detail_route(methods=['post'])
+    def watch_instruction(self, request, pk=None):
+        student = self.get_object()
+        assert student.pk == int(pk)
+        instruction_name = request.data['instruction']
+        domain = get_domain()
+        action = actions.watch_instruction(domain, student, instruction_name)
+        #serializer = ActionSerializer(action, context={'request': request})
+        return Response()
+
     def get_queryset(self):
         user = get_or_fake_user(self.request)
         return Student.objects.filter(user=user)
