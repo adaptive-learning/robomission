@@ -247,6 +247,6 @@ export function closeTaskCompletionDialog(taskEnvironmentId) {
 }
 
 
-export function showInstructions() {
-  return action(at.SHOW_INSTRUCTIONS);
+export function showInstructions(show = true) {
+  return action(at.SHOW_INSTRUCTIONS, { show });
 }

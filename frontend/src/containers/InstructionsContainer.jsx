@@ -30,11 +30,7 @@ class InstructionsContainer extends React.Component {
   constructor(props) {
     super(props);
     // this.showInstructions = props.showInstructions.bind(this);
-    this.showInstructions = () => {
-      if (!this.props.shown) {
-        this.props.showInstructions();
-      }
-    };
+    this.showInstructions = props.showInstructions.bind(this);
     this.seeInstruction = props.seeInstruction.bind(this);
     this.handleJoyrideChange = this.handleJoyrideChange.bind(this);
     this.setInstructions(props.scheduledInstructions);
@@ -72,6 +68,10 @@ class InstructionsContainer extends React.Component {
       case 'step:after': {
         const instructionId = this.props.scheduledInstructions[index].id;
         this.seeInstruction(instructionId);
+        break;
+      }
+      case 'finished': {
+        this.showInstructions(false);
         break;
       }
       // no default

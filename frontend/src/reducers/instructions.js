@@ -45,12 +45,9 @@ export default function reduceInstructions(state = initial, action) {
       };
     }
     case SHOW_INSTRUCTIONS: {
-      if (state.shown || state.all.length === 0) {
-        return state;
-      }
       return {
         ...state,
-        shown: true,
+        shown: action.payload.show && state.all.length > 0,
       };
     }
     default: {
