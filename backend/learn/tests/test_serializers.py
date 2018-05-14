@@ -1,7 +1,8 @@
 from django.test import TestCase
-from learn.models import Block, Toolbox, Task, ProblemSet, Domain
+from learn.models import Block, Toolbox, Instruction, Task, ProblemSet, Domain
 from learn.serializers import BlockSerializer, ToolboxSerializer, SettingSerializer
 from learn.serializers import TaskSerializer, ProblemSetSerializer
+from learn.serializers import InstructionSerializer
 from learn.serializers import DomainSerializer
 
 
@@ -430,6 +431,27 @@ class ProblemSetSerializerTestCase(TestCase):
 
 
 class DomainSerializerTestCase(TestCase):
+    def test_serialization(self):
+        block = Block.objects.create(name='b1', order=5)
+        toolbox = Toolbox.objects.create(name='tb1')
+        instruction = Instruction.objects.create(name='i1')
+        task = Task.objects.create(name='t1')
+        ps = ProblemSet.objects.create(name='ps1')
+        domain = Domain.objects.create(name='d1')
+        domain.blocks.set([block])
+        domain.toolboxes.set([toolbox])
+        domain.instructions.set([instruction])
+        domain.tasks.set([task])
+        domain.problemsets.set([ps])
+        serializer = DomainSerializer(domain)
+        assert serializer.data['name'] == 'd1'
+        assert serializer.data['blocks'] == [
+            {'id': block.id, 'name': 'b1', 'order': 5}]
+        assert len(serializer.data['toolboxes']) == 1
+        assert len(serializer.data['tasks']) == 1
+        assert len(serializer.data['problemsets']) == 1
+        assert len(serializer.data['instructions']) == 1
+
     def test_nested_serialization(self):
         block = Block.objects.create(name='b1', order=5)
         toolbox = Toolbox.objects.create(name='tb1')
@@ -442,7 +464,7 @@ class DomainSerializerTestCase(TestCase):
             'name': 'd1',
             'blocks': [{'id': block.id, 'name': 'b1', 'order': 5}],
             'toolboxes': [{'id': toolbox.id, 'name': 'tb1', 'blocks': ['b1']}],
-            'tasks': [], 'problemsets': []}
+            'tasks': [], 'problemsets': [], 'instructions': []}
 
     def test_nested_deserialization(self):
         data = {

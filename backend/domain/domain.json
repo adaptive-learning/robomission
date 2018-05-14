@@ -485,5 +485,13 @@
     {"id": 39, "name": "meteoroids-on-left"},
     {"id": 62, "name": "two-bit-instructions"},
     {"id": 79, "name": "last-shot"}
+  ],
+
+  "instructions": [
+    {"id": 2000, "name": "env.space-world", "mode": "task" },
+    {"id": 2001, "name": "env.toolbox", "mode": "task" },
+
+    {"id": 2100, "name": "recommended-task-button", "mode": "home" },
+    {"id": 2101, "name": "menu", "mode": "home" }
   ]
 }

@@ -191,6 +191,7 @@ class Toolbox(models.Model):
 class Instruction(Chunk):
     """Explanation of a single concept, such as while loop or wormholes.
     """
+    TYPE = 'instruction'
     chunk_ptr = models.OneToOneField(
         Chunk, on_delete=models.CASCADE, parent_link=True,
         related_name='instruction_obj')
@@ -568,6 +569,7 @@ class Domain(models.Model):
     toolboxes = models.ManyToManyField(Toolbox)
     tasks = models.ManyToManyField(Task)
     problemsets = models.ManyToManyField(ProblemSet)
+    instructions = models.ManyToManyField(Instruction)
 
     @property
     def missions(self):

@@ -38,5 +38,9 @@
     {"id": 1, "name": "t1"},
     {"id": 2, "name": "t2"},
     {"id": 3, "name": "t3"}
+  ],
+  "instructions" : [
+    {"id": 201, "name": "i1"},
+    {"id": 202, "name": "i2"}
   ]
 }

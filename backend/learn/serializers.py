@@ -134,6 +134,7 @@ class InstructionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Instruction
         fields = ('id', 'name')
+        list_serializer_class = SettableOrderedListSerializer
 
 
 class SettingSerializer(serializers.Serializer):
@@ -264,10 +265,12 @@ class DomainSerializer(serializers.ModelSerializer):
     toolboxes = ToolboxSerializer(many=True)
     tasks = TaskSerializer(many=True)
     problemsets = ProblemSetSerializer(many=True)
+    instructions = InstructionSerializer(many=True, default=list)
 
     class Meta:
         model = Domain
-        fields = ('name', 'blocks', 'toolboxes', 'tasks', 'problemsets')
+        fields = ('name', 'blocks', 'toolboxes', 'tasks', 'problemsets',
+                  'instructions')
 
     def create_or_update(self, data):
         # Call directly without validation!
@@ -276,6 +279,8 @@ class DomainSerializer(serializers.ModelSerializer):
         ToolboxSerializer(many=True).set(domain.toolboxes, data['toolboxes'])
         TaskSerializer(many=True).set(domain.tasks, data['tasks'])
         ProblemSetSerializer(many=True).set(domain.problemsets, data['problemsets'])
+        InstructionSerializer(many=True).set(
+            domain.instructions, data.get('instructions', []))
         return domain
 
 
