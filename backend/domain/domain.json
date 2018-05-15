@@ -490,8 +490,37 @@
   "instructions": [
     {"id": 2000, "name": "env-recommended-task-button"},
     {"id": 2001, "name": "env-menu"},
+    {"id": 2002, "name": "env-levelbar"},
+    {"id": 2003, "name": "env-help"},
+    {"id": 2004, "name": "env-feedback"},
+    {"id": 2005, "name": "env-login"},
 
-    {"id": 2102, "name": "task-space-world"},
-    {"id": 2103, "name": "task-toolbox"}
+    {"id": 2100, "name": "task-space-world"},
+    {"id": 2101, "name": "task-toolbox"},
+    {"id": 2102, "name": "task-snapping"},
+    {"id": 2103, "name": "task-controls"},
+    {"id": 2104, "name": "task-asteroid"},
+    {"id": 2105, "name": "task-meteoroid"},
+    {"id": 2106, "name": "task-diamond"},
+    {"id": 2107, "name": "task-diamond-status"},
+    {"id": 2108, "name": "task-wormhole"},
+    {"id": 2109, "name": "task-energy-status"},
+    {"id": 2110, "name": "task-length-limit"},
+    {"id": 2111, "name": "task-block-fly"},
+    {"id": 2112, "name": "task-block-shoot"},
+    {"id": 2113, "name": "task-block-repeat"},
+    {"id": 2114, "name": "task-block-while"},
+    {"id": 2115, "name": "task-block-color"},
+    {"id": 2116, "name": "task-block-position"},
+    {"id": 2117, "name": "task-block-if"},
+    {"id": 2118, "name": "task-block-if-else"},
+
+    {"id": 2200, "name": "editor-setting"},
+    {"id": 2201, "name": "editor-space-world"},
+
+    {"id": 2300, "name": "overview-levels"},
+    {"id": 2301, "name": "overview-difficulty"},
+    {"id": 2302, "name": "overview-solved-task"},
+    {"id": 2303, "name": "overview-recommended-task"}
   ]
 }

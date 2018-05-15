@@ -187,26 +187,81 @@ export default {
     'Modrá tlačítka s šipkou označují doporučenou úlohu.',
   'instruction.env-menu':
     'Kliknutím na toto tlačitko rozbalíš menu.',
-  'instruction.task-space-world': 'Tvým úkolem je dostat vesmírnou loď na druhou stranu vesmírného světa.',
-  'instruction.task-toolbox': 'Tohle je sada příkazů k ovládání vesmírné lodi. Příkazy můžeš ve svém programu používat opakovaně.',
-  'instruction.task-snapping': 'Tady vytváříš svůj program. Všimni si, že bloky mají malé zobáčky, kterými je lze zapojovat do sebe. Raketka bude vykonávat pouze příkazy zapojené pod startovní blok.',
-  'instruction.task-controls': 'Program spustíš kliknutím na toto tlačítko.',
-  'instruction.task-editor': 'Editor úloh je určen pouze pro hackery. Pokud vytvoříte nějakou pěknou úlohu, tak nám ji určitě pošlete!',
-  'instruction.object-diamond': 'Raketka musí po cestě posbírat všechny diamanty.',
-  'instruction.object-asteroid': 'Pokud raketka narazí do asteroidu, tak se rozbije.',
-  'instruction.object-meteoroid': 'Pokud raketka narazí do meteoroidu, tak se rozbije. Naštěstí jsou meteoroidy malé a raketka je tak může rozstřelit.',
-  'instruction.object-wormhole': 'Pokud raketka vletí do červí díry, okamžitě se objeví v druhé červí díře.',
-  'instruction.length-limit': 'Tohle je ukazatel délky programu. Raketka má omezenou paměť, tvůj program proto nesmí být příliš dlouhý.',
-  'instruction.diamonds-status': 'Tohle je počítadlo diamantů. Zobrazuje, kolik diamantů raketka posbírala a kolik jich musí posbírat celkem.',
-  'instruction.energy-status': 'Tohle je ukazatel energie. Každý výstřel odebere raketce 1 jednotku energie.',
-  'instruction.block-fly': 'Příkaz pro let o jedno políčko vpřed.',
-  'instruction.block-shoot': 'Raketka vystřelí a pak se posune o jedno políčko vpřed.',
-  'instruction.block-repeat': 'Tento blok říká raketce, aby N-krát zopakovala zadanou posloupnost příkazů.',
-  'instruction.block-while': 'Tento blok říká raketce, aby opakovala zadanou posloupnost příkazů, dokud platí nějaká podmínka.',
-  'instruction.block-color': 'Testování barvy pod raketkou.',
-  'instruction.block-position': 'Test na aktuální sloupec, ve kterém se raketka nachází. Sloupce jsou číslovány zleva 1, 2, 3, ...',
-  'instruction.block-if': 'Podmíněný příkaz. Umožňuje nám říct, že chceme vykonat nějaké příkazy, pouze pokud platí určitá podmínka.',
-  'instruction.block-if-else': 'Úplný podmíněný příkaz. Umožňuje nám říct, že chceme vykonat nějaké příkazy, pokud platí určitá podmínka, a jiné příkazy, pokud podmínka neplatí.',
+  'instruction.env-levelbar':
+    'Za každou vyřešenou úlohu dostáváš kredity. ' +
+    'Až jich máš dostatek, postupuješ do dalšího levelu.',
+  'instruction.env-help':
+    'Kliknutím na otazník se zobrazí všechny nápovědy.' +
+    'Oranžová barva značí, že jsou připraveny nové, nepřečtené nápovědy.',
+  'instruction.env-feedback':
+    'Když něco nebude fungovat podle tvých představ, dej nám o tom vědět.',
+  'instruction.env-login':
+    'Pro zapamatování postupu je potřeba se přihlásit.' +
+    'Pokud máte účet u Googlu nebo Facebooku, nemusíte se ani registrovat.',
+  'instruction.task-space-world':
+    'Tvým úkolem je dostat vesmírnou loď na druhou stranu vesmírného světa.',
+  'instruction.task-toolbox':
+    'Tohle jsou příkazy k ovládání vesmírné lodi.' +
+    'Příkazy můžeš ve svém programu používat opakovaně.',
+  'instruction.task-snapping':
+    'Tady vytváříš svůj program. Bloky mají malé zobáčky, kterými je lze ' +
+    'zapojovat do sebe. Raketka bude vykonávat pouze příkazy zapojené pod start.',
+  'instruction.task-controls':
+    'Program spustíš kliknutím na toto tlačítko. Můžeš ho spouštět opakovaně, ' +
+    'dokud tvoje řešení nebude správné.',
+  'instruction.task-diamond':
+    'Raketka musí po cestě posbírat všechny diamanty.',
+  'instruction.task-asteroid':
+    'Pokud raketka narazí do asteroidu, tak se rozbije.',
+  'instruction.task-meteoroid':
+    'Pokud raketka narazí do meteoroidu, tak se rozbije.',
+  'instruction.task-wormhole':
+    'Pokud raketka vletí do červí díry, okamžitě se objeví v druhé červí díře.',
+  'instruction.task-length-limit':
+    'Ukazatel délky programu. ' +
+    'Raketka má omezenou paměť, program proto nesmí být příliš dlouhý.',
+  'instruction.task-diamonds-status':
+    'Počítadlo diamantů zobrazuje, kolik diamantů raketka posbírala a ' +
+    'kolik jich musí posbírat celkem.',
+  'instruction.task-energy-status':
+    'Ukazatel energie. Každý výstřel odebere raketce 1 jednotku energie.',
+  'instruction.task.block-fly':
+    'Příkaz pro let o jedno políčko vpřed.',
+  'instruction.task.block-shoot':
+    'Raketka vystřelí a pak se posune o jedno políčko vpřed.',
+  'instruction.task.block-repeat':
+    'Tento blok říká raketce, aby N-krát zopakovala zadanou posloupnost příkazů.',
+  'instruction.task.block-while':
+    'Tento blok říká raketce, aby opakovala zadanou posloupnost příkazů, ' +
+    'dokud platí nějaká podmínka.',
+  'instruction.task.block-color':
+    'Testování barvy políčka pod raketkou.',
+  'instruction.task.block-position':
+    'Test na aktuální sloupec, ve kterém se raketka nachází. ' +
+    'Sloupce jsou číslovány zleva 1, 2, 3, atd.',
+  'instruction.task.block-if':
+    'Podmíněný příkaz. ' +
+    'Raketka vykoná vnořené příkazy, pouze pokud platí určitá podmínka.',
+  'instruction.task.block-if-else':
+    'Úplný podmíněný příkaz. Raketka vykoná jednu posloupnost příkazů, ' +
+    'pokud podmínka platí, a jinou posloupnost příkazů, pokud podmínka neplatí.',
+
+  'instruction.editor-setting':
+    'Editor umožňuje tvorbu vlastních zadání. ' +
+    'Pokud vytvoříte nějakou pěknou úlohu, tak nám ji můžete poslat.',
+  'instruction.editor-space-world':
+    'Každé políčko na mřížce má barvu (k = černá, r = červená, g = zelená) ' +
+    'a objekty (A = asteroid, M = meteoroid, D = diamant, W = červí díra).',
+
+  'instruction.overview-levels':
+    'Úlohy jsou rozdělené do levelů podle jejich obtížnosti.' +
+    'Vyřešené levely jsou vybarvené modře, nevyřešené šedě.',
+  'instruction.overview-difficulty':
+    'Počet hvězdiček znázorňuje obtížnost úlohy v rámci daného levelu.',
+  'instruction.overview-solved-task':
+    'Vyřešené úlohy jsou obarvené modře.',
+  'instruction.overview-recommended-task':
+    'Doporučená úloha je obarvená zeleně.',
 
   'user.email': 'Email',
   'user.login': 'Přihlásit se',
