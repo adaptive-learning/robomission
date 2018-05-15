@@ -191,13 +191,13 @@ export default {
     'Za každou vyřešenou úlohu dostáváš kredity. ' +
     'Až jich máš dostatek, postupuješ do dalšího levelu.',
   'instruction.env-help':
-    'Kliknutím na otazník se zobrazí všechny nápovědy.' +
+    'Kliknutím na otazník se zobrazí všechny nápovědy. ' +
     'Oranžová barva značí, že jsou připraveny nové, nepřečtené nápovědy.',
   'instruction.env-feedback':
     'Když něco nebude fungovat podle tvých představ, dej nám o tom vědět.',
   'instruction.env-login':
-    'Pro zapamatování postupu je potřeba se přihlásit.' +
-    'Pokud máte účet u Googlu nebo Facebooku, nemusíte se ani registrovat.',
+    'Pro zapamatování postupu je potřeba se přihlásit. ' +
+    'Pokud máš účet u Googlu nebo Facebooku, nemusíš se registrovat.',
   'instruction.task-space-world':
     'Tvým úkolem je dostat vesmírnou loď na druhou stranu vesmírného světa.',
   'instruction.task-toolbox':
@@ -250,7 +250,7 @@ export default {
     'Editor umožňuje tvorbu vlastních zadání. ' +
     'Pokud vytvoříte nějakou pěknou úlohu, tak nám ji můžete poslat.',
   'instruction.editor-space-world':
-    'Každé políčko na mřížce má barvu (k = černá, r = červená, g = zelená) ' +
+    'Každé políčko na mřížce má nějakou barvu (k = černá, r = červená, g = zelená) ' +
     'a objekty (A = asteroid, M = meteoroid, D = diamant, W = červí díra).',
 
   'instruction.overview-levels':

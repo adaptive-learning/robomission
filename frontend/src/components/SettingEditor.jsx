@@ -43,7 +43,7 @@ function SettingEditor({
 
   return (
     <div
-      className="instructionable-env-task-editor"
+      className="instructionable-editor-setting"
       style={{ overflowX: 'hidden', backgroundColor: muiTheme.palette.canvasColor }}
     >
       <div style={{ marginLeft: 5, marginBottom: 10 }}>
@@ -84,19 +84,21 @@ function SettingEditor({
           />
         </div>
       </div>
-      <AceEditor
-        value={spaceWorldText}
-        onChange={onChange}
-        mode="spaceworld"
-        theme="solarized_dark"
-        fontSize={18}
-        keyboardHandler={vimMode ? 'vim' : null}
-        annotations={annotations}
-        editorProps={{ $blockScrolling: true }}
-        width="100%"
-        height="300px"
-        style={{ display: 'block' }}
-      />
+      <div className="instructionable-editor-space-world">
+        <AceEditor
+          value={spaceWorldText}
+          onChange={onChange}
+          mode="spaceworld"
+          theme="solarized_dark"
+          fontSize={18}
+          keyboardHandler={vimMode ? 'vim' : null}
+          annotations={annotations}
+          editorProps={{ $blockScrolling: true }}
+          width="100%"
+          height="300px"
+          style={{ display: 'block' }}
+        />
+      </div>
       <div>
         <Paper style={{ width: 350, margin: 10 }}>
           <List>

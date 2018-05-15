@@ -58,19 +58,21 @@ class Header extends React.Component {
       </IconButton>
     );
     let userMenu = (
-      <IconMenu iconButtonElement={avatar}>
-        <MenuItem
-          primaryText={translate('user.login')}
-          onClick={this.props.openLoginModal}
-        />
-        <MenuItem
-          primaryText={translate('user.signup')}
-          onClick={this.props.openSignUpModal}
-        />
-        <MenuItem
-          primaryText={translate('user.delete-history')}
-          onClick={this.props.logout}
-        />
+      <IconMenu
+        className="instructionable-env-login"
+        iconButtonElement={avatar}>
+          <MenuItem
+            primaryText={translate('user.login')}
+            onClick={this.props.openLoginModal}
+          />
+          <MenuItem
+            primaryText={translate('user.signup')}
+            onClick={this.props.openSignUpModal}
+          />
+          <MenuItem
+            primaryText={translate('user.delete-history')}
+            onClick={this.props.logout}
+          />
       </IconMenu>
     );
     if (!this.props.user.isLazy) {
@@ -86,14 +88,18 @@ class Header extends React.Component {
     const toolbar = (
       <Toolbar style={{ backgroundColor: 'transparent', color: 'white' }}>
         {this.props.mode !== 'monitoring' && [(
-          <ToolbarGroup key="levelbar" style={{ marginRight: 10 }}>
-            <LevelBar mini {...this.props.levelInfo} />
+          <ToolbarGroup
+            key="levelbar"
+            className="instructionable-env-levelbar"
+            style={{ marginRight: 10 }}>
+              <LevelBar mini {...this.props.levelInfo} />
           </ToolbarGroup>
         )
         ]}
         <ToolbarGroup key="user-toolbar" lastChild={true}>
           <IconButton
             tooltip={translate('Help')}
+            className="instructionable-env-help"
             onClick={this.props.showInstructions}
           >
             <HelpIcon color={
@@ -101,6 +107,7 @@ class Header extends React.Component {
           </IconButton>
           <IconButton
             tooltip={translate('Feedback')}
+            className="instructionable-env-feedback"
             onClick={this.props.openFeedbackModal}
           >
             <FeedbackIcon />

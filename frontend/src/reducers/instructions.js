@@ -64,6 +64,19 @@ const viewData = {
   'env-menu': {
     position: 'right',
   },
+  'env-levelbar': {
+    position: 'bottom',
+  },
+  'env-help': {
+    position: 'bottom',
+  },
+  'env-feedback': {
+    position: 'bottom',
+  },
+  'env-login': {
+    position: 'bottom',
+  },
+
   'task-space-world': {
     position: 'bottom',
   },
@@ -121,7 +134,11 @@ const viewData = {
   'block-if-else': {
     position: 'bottom-left',
   },
-  'env-task-editor': {
+
+  'editor-setting': {
+    position: 'left',
+  },
+  'editor-space-world': {
     position: 'left',
   },
 };
