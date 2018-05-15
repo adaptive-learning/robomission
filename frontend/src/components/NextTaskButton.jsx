@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import RaisedButton from 'material-ui/RaisedButton';
 import TaskIcon from 'material-ui/svg-icons/av/play-arrow';
+import Instructionable from '../containers/Instructionable';
 import TaskName from './TaskName';
 
 
@@ -15,7 +16,6 @@ export default function NextTaskButton({ task }) {
     return (
       <RaisedButton
         style={style}
-        className="instructionable-env-recommended-task-button"
         label="..."
         primary={true}
         disabled={false}
@@ -24,13 +24,14 @@ export default function NextTaskButton({ task }) {
   }
   return (
     <Link to={task.url}>
-      <RaisedButton
-        icon={<TaskIcon style={{ marginLeft: 8 }}/>}
-        style={style}
-        className="instructionable-env-recommended-task-button"
-        label={<span style={{ position: 'relative', top: 1 }}><TaskName taskId={task.taskId} /></span>}
-        primary={true}
-      />
+      <Instructionable instruction="env-recommended-task-button">
+        <RaisedButton
+          icon={<TaskIcon style={{ marginLeft: 8 }}/>}
+          style={style}
+          label={<span style={{ position: 'relative', top: 1 }}><TaskName taskId={task.taskId} /></span>}
+          primary={true}
+        />
+      </Instructionable>
     </Link>
   );
 }

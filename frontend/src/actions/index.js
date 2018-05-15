@@ -250,3 +250,8 @@ export function closeTaskCompletionDialog(taskEnvironmentId) {
 export function showInstructions(show = true) {
   return action(at.SHOW_INSTRUCTIONS, { show });
 }
+
+
+export function registerInsructionable(value = true) {
+  return action(at.REGISTER_INSTRUCTIONABLE, { value });
+}

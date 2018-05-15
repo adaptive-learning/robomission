@@ -89,49 +89,49 @@ const viewData = {
   'task-controls': {
     position: 'bottom-left',
   },
-  'object-wormhole': {
+  'task-wormhole': {
     position: 'bottom-left',
   },
-  'object-diamond': {
+  'task-diamond': {
     position: 'bottom-left',
   },
-  'object-asteroid': {
+  'task-asteroid': {
     position: 'bottom-left',
   },
-  'object-meteoroid': {
+  'task-meteoroid': {
     position: 'bottom-left',
   },
-  'diamonds-status': {
+  'task-diamond-status': {
     position: 'bottom-left',
   },
-  'energy-status': {
+  'task-energy-status': {
     position: 'bottom-left',
   },
-  'length-limit': {
+  'task-length-limit': {
     position: 'bottom-left',
   },
-  'block-fly': {
+  'task-block-fly': {
     position: 'bottom-left',
   },
-  'block-shoot': {
+  'task-block-shoot': {
     position: 'bottom-left',
   },
-  'block-repeat': {
+  'task-block-repeat': {
     position: 'bottom-left',
   },
-  'block-while': {
+  'task-block-while': {
     position: 'bottom-left',
   },
-  'block-color': {
+  'task-block-color': {
     position: 'bottom-left',
   },
-  'block-position': {
+  'task-block-position': {
     position: 'bottom-left',
   },
-  'block-if': {
+  'task-block-if': {
     position: 'bottom-left',
   },
-  'block-if-else': {
+  'task-block-if-else': {
     position: 'bottom-left',
   },
 
@@ -140,6 +140,19 @@ const viewData = {
   },
   'editor-space-world': {
     position: 'left',
+  },
+
+  'overview-levels': {
+    position: 'bottom',
+  },
+  'overview-recommended-task': {
+    position: 'bottom',
+  },
+  'overview-solved-task': {
+    position: 'bottom',
+  },
+  'overview-difficulty': {
+    position: 'bottom',
   },
 };
 

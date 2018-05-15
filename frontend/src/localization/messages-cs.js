@@ -220,7 +220,7 @@ export default {
   'instruction.task-length-limit':
     'Ukazatel délky programu. ' +
     'Raketka má omezenou paměť, program proto nesmí být příliš dlouhý.',
-  'instruction.task-diamonds-status':
+  'instruction.task-diamond-status':
     'Počítadlo diamantů zobrazuje, kolik diamantů raketka posbírala a ' +
     'kolik jich musí posbírat celkem.',
   'instruction.task-energy-status':

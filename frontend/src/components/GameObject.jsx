@@ -10,7 +10,7 @@ export default function GameObject({ imageId, width, height, position, bottom, l
     bottom,
     left,
   };
-  const instructionableClassName = `instructionable-object-${imageId}`;
+  const instructionableClassName = `instructionable-task-${imageId}`;
   return (
     <Image imageId={imageId} className={instructionableClassName} style={imageStyle} />
   );
