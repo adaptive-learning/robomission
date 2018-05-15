@@ -36,7 +36,10 @@ export function getNNewInstructions(state) {
 function isRelevant(instruction) {
   // Try to find a corresponding element; if not found declare as non-relevant.
   // TODO: Unhack (make it more explicit, fast, reliable).
-  return document.getElementsByClassName(instruction.selectorClass).length > 0;
+  const instructionables = document.getElementsByClassName(instruction.selectorClass);
+  const instructionableFound = instructionables.length > 0;
+  console.log('isRelevant', instruction.id, instructionableFound)
+  return instructionableFound;
 }
 
 

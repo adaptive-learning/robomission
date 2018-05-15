@@ -90,6 +90,7 @@ class InstructionsContainer extends React.Component {
         run={this.props.shown}
         autoStart={this.props.shown}
         showBackButton={true}
+        showStepsProgress={true}
         debug={false}
         holePadding={2}
         locale={{

@@ -57,6 +57,7 @@ function MissionOverview({ mission, urlBase, recommendation }) {
       <CardHeader
         avatar={
           <Avatar
+            className="instructionable-overview-levels"
             color={badgeTextColor}
             backgroundColor={badgeBackgroundColor}
           >
@@ -132,11 +133,18 @@ function TaskTile({ task, urlBase, recommendation }) {
     subtitle = formatSolvingTime(task.time);
   };
 
+  // TODO: Factor out the logic of choosing class names to a util.
+  const classes = [
+    task.solved ? 'instructionable-overview-solved-task' : '',
+    task.id === recommendation.task ? 'instructionable-overview-recommended-task' : '',
+  ].join('');
+
   return (
     <Link key={task.id} to={`${urlBase}${task.id}`}>
       <GridTile
         title={<TaskName taskId={task.id} />}
         subtitle={subtitle}
+        className={classes}
       >
         <div
           style={{
@@ -146,7 +154,10 @@ function TaskTile({ task, urlBase, recommendation }) {
             padding: '15px 10px',
           }}
         >
-          <Rating value={task.solved ? task.levels[1] : 0} max={task.levels[1]} />
+          <Rating
+            className="instructionable-overview-rating"
+            value={task.solved ? task.levels[1] : 0} max={task.levels[1]}
+          />
         </div>
       </GridTile>
     </Link>

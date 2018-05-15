@@ -261,7 +261,7 @@ export default {
   'instruction.overview-solved-task':
     'Vyřešené úlohy jsou obarvené modře.',
   'instruction.overview-recommended-task':
-    'Doporučená úloha je obarvená zeleně.',
+    'Doporučená úloha je obarvená oranžově.',
 
   'user.email': 'Email',
   'user.login': 'Přihlásit se',
