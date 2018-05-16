@@ -35,7 +35,10 @@ class TaskSerializer(serializers.ModelSerializer):
         model = Task
         fields = (
             'id', 'name', 'setting', 'solution',
-            'section', 'level', 'level2', 'order', 'problemset')
+            'section', 'level', 'level2', 'order', 'mission', 'problemset')
+        # Django Rest Pandas cannot derive itself that id field should be
+        # index (related to the multitable inheritance).
+        pandas_index = ['id']
 
 
 class TaskPandasSerializer(PandasSerializer):
@@ -60,24 +63,14 @@ class ProblemSetSerializer(serializers.ModelSerializer):
                   'granularity', 'section', 'level', 'order',
                   'parent', 'n_parts', 'n_tasks',
                   'setting', 'parts', 'tasks')
+        # Django Rest Pandas cannot derive itself that id field should be
+        # index (related to the multitable inheritance).
+        pandas_index = ['id']
 
 
 class ProblemSetViewSet(ExportViewSet):
     queryset = ProblemSet.objects.all()
     serializer_class = ProblemSetSerializer
-
-
-#class MissionSerializer(serializers.ModelSerializer):
-#    chunk = serializers.SlugRelatedField(
-#        slug_field='name', many=False, read_only=True)
-#    class Meta:
-#        model = Mission
-#        fields = ('id', 'name', 'order', 'chunk')
-#
-#
-#class MissionViewSet(ExportViewSet):
-#    queryset = Mission.objects.all()
-#    serializer_class = MissionSerializer
 
 
 class TaskSessionSerializer(serializers.ModelSerializer):
