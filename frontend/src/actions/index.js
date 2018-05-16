@@ -252,6 +252,6 @@ export function showInstructions(show = true) {
 }
 
 
-export function registerInsructionable(value = true) {
-  return action(at.REGISTER_INSTRUCTIONABLE, { value });
+export function registerInstructable(instructionId, show = true) {
+  return action(at.REGISTER_INSTRUCTABLE, { instructionId, show });
 }

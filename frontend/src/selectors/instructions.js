@@ -12,19 +12,22 @@ export function getScheduledInstructions(state) {
   return getAllInstructions(state);
 }
 
+
 export function getAllInstructions(state) {
   const { byId, all } = state.instructions;
-  const instructions = all.map(id => byId[id]);
-  return instructions.filter(isRelevant);
+  const relevant = filterRelevant(state, all);
+  console.log('all', relevant);
+  const instructions = relevant.map(id => byId[id]);
+  return instructions;
 }
 
 
 export function getNewInstructions(state) {
-  // TODO: Simplify.
-  const { all, seen, byId } = state.instructions;
-  const unseen = all.filter(id => !seen.includes(id));
-  const instructions = unseen.map(id => byId[id]);
-  return instructions.filter(isRelevant);
+  const { all, byId } = state.instructions;
+  const unseenRelevant = filterRelevant(state, filterUnseen(state, all));
+  console.log('new', unseenRelevant);
+  const instructions = unseenRelevant.map(id => byId[id]);
+  return instructions;
 }
 
 
@@ -33,13 +36,18 @@ export function getNNewInstructions(state) {
 }
 
 
-function isRelevant(instruction) {
-  // Try to find a corresponding element; if not found declare as non-relevant.
-  // TODO: Unhack (make it more explicit, fast, reliable).
-  const instructionables = document.getElementsByClassName(instruction.selectorClass);
-  const instructionableFound = instructionables.length > 0;
-  console.log('isRelevant', instruction.id, instructionableFound)
-  return instructionableFound;
+function filterUnseen(state, instructions) {
+  const { seen } = state.instructions;
+  const unseen = instructions.filter(id => !seen.includes(id));
+  return unseen;
+}
+
+
+function filterRelevant(state, instructions) {
+  const withInstructables = Object.keys(state.instructions.instructables);
+  console.log('filterRelevant', instructions, 'withInstructables', withInstructables);
+  const relevant = instructions.filter(id => withInstructables.includes(id));
+  return relevant;
 }
 
 

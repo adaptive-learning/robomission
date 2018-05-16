@@ -1,6 +1,7 @@
 import {
   FETCH_WORLD_SUCCESS,
   FETCH_STUDENT_SUCCESS,
+  REGISTER_INSTRUCTABLE,
   SEE_INSTRUCTION_REQUEST,
   SHOW_INSTRUCTIONS,
   } from '../action-types';
@@ -10,6 +11,7 @@ const initial = {
   byId: {},
   all: [],
   seen: null,  // to distinguish between initial state and no-instruction-seen
+  instructables: {}, // maps instructions to number of registered instructables
   shown: false,
 };
 
@@ -49,6 +51,16 @@ export default function reduceInstructions(state = initial, action) {
         ...state,
         shown: action.payload.show && state.all.length > 0,
       };
+    }
+    case REGISTER_INSTRUCTABLE: {
+      const { instructionId } = action.payload;
+      let {instructionId: prevCount, ...instructables} = state.instructables;
+      const delta = action.payload.show ? 1 : -1;
+      const newCount = (prevCount | 0) + delta;
+      if (newCount > 0) {
+        instructables =  {...instructables, [instructionId]: newCount};
+      }
+      return { ...state, instructables };
     }
     default: {
       return state;
@@ -162,7 +174,7 @@ function parseInstruction(data) {
   if (viewData[instructionId] === undefined) {
     console.warn(`Missing view data for instruction '${instructionId}'`);
   }
-  const selectorClass = `instructionable-${instructionId}`;
+  const selectorClass = `instructable-${instructionId}`;
   const instruction = {
     ...viewData[instructionId],
     id: instructionId,
