@@ -15,6 +15,8 @@ export default {
   'ALG': 'Laboratoř adaptabilního učení',
   'FI-MU': 'Fakulta informatiky MU',
   'For hackers': 'Pro hackery',
+  'New instructions': 'Nové nápovědy',
+  'All instructions': 'Všechny nápovědy',
 
   'easy-task-challenge': 'Pro změnu něco jednoduššího. Zvládneš to vyřešit do minuty?',
   'excellent-task-solved': 'Skvěle, úloha vyřešena!',

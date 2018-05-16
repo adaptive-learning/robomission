@@ -11,11 +11,18 @@ import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
 import muiThemeable from 'material-ui/styles/muiThemeable';
 import logo from '../images/logo.png'
+import Instructable from '../containers/Instructable';
 import LevelBar from '../components/LevelBar';
 import { translate } from '../localization';
 
 
 class Header extends React.Component {
+  constructor(props) {
+    super(props);
+    this.showNewInstructions = props.showInstructions.bind(this, { onlyNew: true });
+    this.showAllInstructions = props.showInstructions.bind(this, { onlyNew: false });
+  }
+
   renderTitle() {
     const logoImg = (
       <img
@@ -58,22 +65,23 @@ class Header extends React.Component {
       </IconButton>
     );
     let userMenu = (
-      <IconMenu
-        className="instructionable-env-login"
-        iconButtonElement={avatar}>
-          <MenuItem
-            primaryText={translate('user.login')}
-            onClick={this.props.openLoginModal}
-          />
-          <MenuItem
-            primaryText={translate('user.signup')}
-            onClick={this.props.openSignUpModal}
-          />
-          <MenuItem
-            primaryText={translate('user.delete-history')}
-            onClick={this.props.logout}
-          />
-      </IconMenu>
+      <Instructable key="login" instruction="env-login">
+        <IconMenu
+          iconButtonElement={avatar}>
+            <MenuItem
+              primaryText={translate('user.login')}
+              onClick={this.props.openLoginModal}
+            />
+            <MenuItem
+              primaryText={translate('user.signup')}
+              onClick={this.props.openSignUpModal}
+            />
+            <MenuItem
+              primaryText={translate('user.delete-history')}
+              onClick={this.props.logout}
+            />
+        </IconMenu>
+      </Instructable>
     );
     if (!this.props.user.isLazy) {
       userMenu = (
@@ -88,30 +96,46 @@ class Header extends React.Component {
     const toolbar = (
       <Toolbar style={{ backgroundColor: 'transparent', color: 'white' }}>
         {this.props.mode !== 'monitoring' && [(
-          <ToolbarGroup
-            key="levelbar"
-            className="instructionable-env-levelbar"
-            style={{ marginRight: 10 }}>
-              <LevelBar mini {...this.props.levelInfo} />
-          </ToolbarGroup>
+          <Instructable key="levelbar" instruction="env-levelbar">
+            <ToolbarGroup
+              key="levelbar"
+              style={{ marginRight: 10 }}>
+                <LevelBar mini {...this.props.levelInfo} />
+            </ToolbarGroup>
+          </Instructable>
         )
         ]}
         <ToolbarGroup key="user-toolbar" lastChild={true}>
-          <IconButton
-            tooltip={translate('Help')}
-            className="instructionable-env-help"
-            onClick={this.props.showInstructions}
-          >
-            <HelpIcon color={
-              (nNewInstructions > 0) ? this.props.muiTheme.palette.accent1Color : 'white' } />
-          </IconButton>
-          <IconButton
-            tooltip={translate('Feedback')}
-            className="instructionable-env-feedback"
-            onClick={this.props.openFeedbackModal}
-          >
-            <FeedbackIcon />
-          </IconButton>
+          <Instructable key="help" instruction="env-help">
+            <IconMenu
+              iconButtonElement={
+                <IconButton tooltip={translate('Help')} >
+                  <HelpIcon color={ (nNewInstructions > 0) ?
+                    this.props.muiTheme.palette.accent1Color : 'white' } />
+                </IconButton>
+              }
+            >
+              <MenuItem
+                primaryText={`${translate('New instructions')} (${nNewInstructions})`}
+                onClick={this.showNewInstructions}
+              />
+              <MenuItem
+                primaryText={translate('All instructions')}
+                onClick={this.showAllInstructions}
+              />
+            </IconMenu>
+
+
+
+          </Instructable>
+          <Instructable key="feedback" instruction="env-feedback">
+            <IconButton
+              tooltip={translate('Feedback')}
+              onClick={this.props.openFeedbackModal}
+            >
+              <FeedbackIcon />
+            </IconButton>
+          </Instructable>
           {userMenu}
         </ToolbarGroup>
       </Toolbar>
@@ -124,7 +148,9 @@ class Header extends React.Component {
           margin: 0,
         }}
         iconElementLeft={
-          <IconButton className="instructionable-env-menu"><MenuIcon /></IconButton>}
+          <Instructable instruction="env-menu">
+            <IconButton><MenuIcon /></IconButton>
+          </Instructable>}
         onLeftIconButtonTouchTap={this.props.onMenuIconTouchTap}
         iconElementRight={toolbar}
       />
