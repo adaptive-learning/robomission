@@ -9,14 +9,11 @@ const propTypes = {
   max: PropTypes.number.isRequired,
   color: PropTypes.string,
   height: PropTypes.number,
-  className: PropTypes.string,  // TODO: Generalize (Apply all other props to
-                                // the top-level span.)
 };
 
 const defaultProps = {
   color: 'white',
   height: 20,
-  className: '',
 };
 
 class Rating extends React.Component {
@@ -34,11 +31,10 @@ class Rating extends React.Component {
   }
 
   render() {
-    const stars = Array.from(
-      {length: this.props.max},
-      (_, i) => this.createStar(i));
+    const { value, max, color, height, ...otherProps } = this.props;
+    const stars = Array.from({length: max}, (_, i) => this.createStar(i));
     return (
-      <span className={this.props.className}>
+      <span style={{ display: 'inline-block' }} {...otherProps}>
         {stars}
       </span>
     );

@@ -203,10 +203,10 @@ export default {
   'instruction.task-space-world':
     'Tvým úkolem je dostat vesmírnou loď na druhou stranu vesmírného světa.',
   'instruction.task-toolbox':
-    'Tohle jsou příkazy k ovládání vesmírné lodi.' +
+    'Tohle jsou příkazy k ovládání vesmírné lodi. ' +
     'Příkazy můžeš ve svém programu používat opakovaně.',
   'instruction.task-snapping':
-    'Tady vytváříš svůj program. Bloky mají malé zobáčky, kterými je lze ' +
+    'Tady skládáš svůj program. Bloky mají malé zobáčky, kterými je lze ' +
     'zapojovat do sebe. Raketka bude vykonávat pouze příkazy zapojené pod start.',
   'instruction.task-controls':
     'Program spustíš kliknutím na toto tlačítko. Můžeš ho spouštět opakovaně, ' +
@@ -227,24 +227,24 @@ export default {
     'kolik jich musí posbírat celkem.',
   'instruction.task-energy-status':
     'Ukazatel energie. Každý výstřel odebere raketce 1 jednotku energie.',
-  'instruction.task.block-fly':
+  'instruction.task-block-fly':
     'Příkaz pro let o jedno políčko vpřed.',
-  'instruction.task.block-shoot':
+  'instruction.task-block-shoot':
     'Raketka vystřelí a pak se posune o jedno políčko vpřed.',
-  'instruction.task.block-repeat':
+  'instruction.task-block-repeat':
     'Tento blok říká raketce, aby N-krát zopakovala zadanou posloupnost příkazů.',
-  'instruction.task.block-while':
+  'instruction.task-block-while':
     'Tento blok říká raketce, aby opakovala zadanou posloupnost příkazů, ' +
     'dokud platí nějaká podmínka.',
-  'instruction.task.block-color':
+  'instruction.task-block-color':
     'Testování barvy políčka pod raketkou.',
-  'instruction.task.block-position':
+  'instruction.task-block-position':
     'Test na aktuální sloupec, ve kterém se raketka nachází. ' +
     'Sloupce jsou číslovány zleva 1, 2, 3, atd.',
-  'instruction.task.block-if':
+  'instruction.task-block-if':
     'Podmíněný příkaz. ' +
     'Raketka vykoná vnořené příkazy, pouze pokud platí určitá podmínka.',
-  'instruction.task.block-if-else':
+  'instruction.task-block-if-else':
     'Úplný podmíněný příkaz. Raketka vykoná jednu posloupnost příkazů, ' +
     'pokud podmínka platí, a jinou posloupnost příkazů, pokud podmínka neplatí.',
 
@@ -256,7 +256,7 @@ export default {
     'a objekty (A = asteroid, M = meteoroid, D = diamant, W = červí díra).',
 
   'instruction.overview-levels':
-    'Úlohy jsou rozdělené do levelů podle jejich obtížnosti.' +
+    'Úlohy jsou rozdělené do levelů podle jejich obtížnosti. ' +
     'Vyřešené levely jsou vybarvené modře, nevyřešené šedě.',
   'instruction.overview-difficulty':
     'Počet hvězdiček znázorňuje obtížnost úlohy v rámci daného levelu.',

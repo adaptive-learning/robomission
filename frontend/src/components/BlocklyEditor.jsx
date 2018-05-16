@@ -16,7 +16,6 @@ const workspaceConfiguration = {
 // It fills the parent div completely and resize on dimensions change
 export default class BlocklyEditor extends React.Component {
   componentDidMount() {
-    this.registerInstructables();
     this.setHighlight();
   }
 
@@ -31,7 +30,6 @@ export default class BlocklyEditor extends React.Component {
   componentDidUpdate(prevProps) {
     if (prevProps.editorSessionId !== this.props.editorSessionId) {
       this.setRoboAst(this.props.roboAst);
-      this.registerInstructables();
     }
     this.checkLengthLimit(this.props.roboAst);
     this.setHighlight();
@@ -45,25 +43,6 @@ export default class BlocklyEditor extends React.Component {
   setXml(xml) {
     this.blocklyWorkspace.clear();
     this.blocklyEditor.importFromXml(xml);
-  }
-
-  registerInstructables() {
-    // TODO: move to a separate decorator (currently violates SRP)
-    const toolboxBlocks = this.blocklyToolbox.getAllBlocks();
-    for (const block of toolboxBlocks) {
-      const svgElement = block.getSvgRoot();
-      const instructionableClassName = `instructionable-block-${block.type}`;
-      // TODO: addClass only working in modern browsers -> include polyfill
-      // (alternatively, use Blockly.utils.addClass)
-      svgElement.classList.add(instructionableClassName);
-    }
-    const programBlocks = this.blocklyWorkspace.getAllBlocks();
-    for (const block of programBlocks) {
-      if (block.type === 'start') {
-        const svgElement = block.getSvgRoot();
-        svgElement.classList.add('instructionable-env-snapping');
-      }
-    }
   }
 
   resize() {

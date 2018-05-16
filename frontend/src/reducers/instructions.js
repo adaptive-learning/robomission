@@ -2,6 +2,7 @@ import {
   FETCH_WORLD_SUCCESS,
   FETCH_STUDENT_SUCCESS,
   REGISTER_INSTRUCTABLE,
+  REGISTER_INSTRUCTABLES,
   SEE_INSTRUCTION_REQUEST,
   SHOW_INSTRUCTIONS,
   } from '../action-types';
@@ -85,6 +86,19 @@ export default function reduceInstructions(state = initial, action) {
       const byId = { ...state.byId, [instructionId]: instruction };
       return { ...state, byId, instructables };
     }
+    case REGISTER_INSTRUCTABLES: {
+      const { registered, unregistered } = action.payload;
+      const instructables = {...state.instructables};
+      const byId = {...state.byId};
+      for (let id of unregistered) {
+        delete instructables[id];
+      }
+      for (let { instructionId, position } of registered) {
+        instructables[instructionId] = 1;
+        byId[instructionId] = {...byId[instructionId], position};
+      }
+      return { ...state, byId, instructables };
+    }
     default: {
       return state;
     }
@@ -120,37 +134,10 @@ function filterRelevant(state, instructions) {
 // TODO: Remove once the postions are set in Instructables
 //const viewData = {
 //
-//  'task-space-world': {
-//    position: 'bottom',
-//  },
 //  'task-toolbox': {
 //    position: 'right',
 //  },
 //  'task-snapping': {
-//    position: 'bottom-left',
-//  },
-//  'task-controls': {
-//    position: 'bottom-left',
-//  },
-//  'task-wormhole': {
-//    position: 'bottom-left',
-//  },
-//  'task-diamond': {
-//    position: 'bottom-left',
-//  },
-//  'task-asteroid': {
-//    position: 'bottom-left',
-//  },
-//  'task-meteoroid': {
-//    position: 'bottom-left',
-//  },
-//  'task-diamond-status': {
-//    position: 'bottom-left',
-//  },
-//  'task-energy-status': {
-//    position: 'bottom-left',
-//  },
-//  'task-length-limit': {
 //    position: 'bottom-left',
 //  },
 //  'task-block-fly': {
@@ -176,26 +163,6 @@ function filterRelevant(state, instructions) {
 //  },
 //  'task-block-if-else': {
 //    position: 'bottom-left',
-//  },
-//
-//  'editor-setting': {
-//    position: 'left',
-//  },
-//  'editor-space-world': {
-//    position: 'left',
-//  },
-//
-//  'overview-levels': {
-//    position: 'bottom',
-//  },
-//  'overview-recommended-task': {
-//    position: 'bottom',
-//  },
-//  'overview-solved-task': {
-//    position: 'bottom',
-//  },
-//  'overview-difficulty': {
-//    position: 'bottom',
 //  },
 //};
 

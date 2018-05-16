@@ -255,3 +255,7 @@ export function showInstructions({show = true, onlyNew = false}) {
 export function registerInstructable(instructionId, show = true, position = 'auto') {
   return action(at.REGISTER_INSTRUCTABLE, { instructionId, show, position });
 }
+
+export function registerInstructables(registered, unregistered) {
+  return action(at.REGISTER_INSTRUCTABLES, { registered, unregistered });
+}

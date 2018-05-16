@@ -10,6 +10,7 @@ import Rating from './Rating';
 import { theme } from '../theme';
 import { translate } from '../localization';
 import { flatten } from '../utils/arrays';
+import Instructable from '../containers/Instructable';
 
 
 export default function TaskTable({ urlBase, missions, recommendation }) {
@@ -56,13 +57,15 @@ function MissionOverview({ mission, urlBase, recommendation }) {
     >
       <CardHeader
         avatar={
-          <Avatar
-            className="instructionable-overview-levels"
-            color={badgeTextColor}
-            backgroundColor={badgeBackgroundColor}
-          >
-            L{mission.level}
-          </Avatar>}
+          <Instructable instruction="overview-levels" position="top">
+            <Avatar
+              color={badgeTextColor}
+              backgroundColor={badgeBackgroundColor}
+              style={{ marginRight: 10 }}
+            >
+              L{mission.level}
+            </Avatar>
+          </Instructable>}
         title={`${translate(`ps.story.${mission.id}`)}`}
         titleStyle={{
           fontSize: 20 }}
@@ -122,7 +125,8 @@ function TaskTile({ task, urlBase, recommendation }) {
   } else if (task.solved) {
     background = theme.palette.successColor;
   } else if (task.problemSet === recommendation.phase) {
-    background = '#ddd';
+    //background = '#ddd';
+    background = theme.palette.accent3Color;
   }
 
   let subtitle = '';
@@ -133,33 +137,41 @@ function TaskTile({ task, urlBase, recommendation }) {
     subtitle = formatSolvingTime(task.time);
   };
 
-  // TODO: Factor out the logic of choosing class names to a util.
-  const classes = [
-    task.solved ? 'instructionable-overview-solved-task' : '',
-    task.id === recommendation.task ? 'instructionable-overview-recommended-task' : '',
-  ].join('');
-
+  let tile = (
+    <GridTile
+      title={<TaskName taskId={task.id} />}
+      subtitle={subtitle}
+    >
+      <div
+        style={{
+          backgroundColor: background,
+          //width: 250,
+          height: '100%',
+          padding: '15px 10px',
+        }}
+      >
+        <Instructable instruction="overview-difficulty" position="top">
+          <Rating value={task.solved ? task.levels[1] : 0} max={task.levels[1]} />
+        </Instructable>
+      </div>
+    </GridTile>
+  );
+  if (task.solved) {
+    tile = (
+      <Instructable instruction="overview-solved-task" position="top">
+        {tile}
+      </Instructable>
+    );
+  } else if (task.id === recommendation.task) {
+    tile = (
+      <Instructable instruction="overview-recommended-task" position="top">
+        {tile}
+      </Instructable>
+    );
+  }
   return (
     <Link key={task.id} to={`${urlBase}${task.id}`}>
-      <GridTile
-        title={<TaskName taskId={task.id} />}
-        subtitle={subtitle}
-        className={classes}
-      >
-        <div
-          style={{
-            backgroundColor: background,
-            //width: 250,
-            height: '100%',
-            padding: '15px 10px',
-          }}
-        >
-          <Rating
-            className="instructionable-overview-rating"
-            value={task.solved ? task.levels[1] : 0} max={task.levels[1]}
-          />
-        </div>
-      </GridTile>
+      {tile}
     </Link>
   );
 }

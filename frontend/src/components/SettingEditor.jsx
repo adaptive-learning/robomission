@@ -12,6 +12,7 @@ import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 import TextField from 'material-ui/TextField';
 import muiThemeable from 'material-ui/styles/muiThemeable';
+import Instructable from '../containers/Instructable';
 
 import 'brace/theme/solarized_dark';
 import 'brace/keybinding/vim';
@@ -42,93 +43,94 @@ function SettingEditor({
     ({ row, col, message }) => ({ row, column: col, text: message, type: 'error'}));
 
   return (
-    <div
-      className="instructionable-editor-setting"
-      style={{ overflowX: 'hidden', backgroundColor: muiTheme.palette.canvasColor }}
-    >
-      <div style={{ marginLeft: 5, marginBottom: 10 }}>
-        <div>
-          <TextField
-            id="setting-editor-task-id"
-            floatingLabelText="Task Name"
-            value={taskId}
-            onChange={onTaskIdChange}
-          />
+    <Instructable instruction="editor-setting" position="left">
+      <div
+        style={{ overflowX: 'hidden', backgroundColor: muiTheme.palette.canvasColor }}
+      >
+        <div style={{ marginLeft: 5, marginBottom: 10 }}>
+          <div>
+            <TextField
+              id="setting-editor-task-id"
+              floatingLabelText="Task Name"
+              value={taskId}
+              onChange={onTaskIdChange}
+            />
+          </div>
+          <div>
+            <SelectField
+              floatingLabelText="Toolbox"
+              value={toolbox}
+              onChange={onToolboxChange}
+            >
+              <MenuItem value={'fly'} primaryText="fly" />
+              <MenuItem value={'shoot'} primaryText="shoot" />
+            </SelectField>
+          </div>
+          <div>
+            <TextField
+              id="setting-editor-energy"
+              floatingLabelText="Energy"
+              floatingLabelFixed={true}
+              value={energy || ''}
+              onChange={onEnergyChange}
+            />
+          </div>
+          <div>
+            <TextField
+              id="setting-editor-length-limit"
+              floatingLabelText="Length Limit"
+              floatingLabelFixed={true}
+              value={lengthLimit || ''}
+              onChange={onLengthLimitChange}
+            />
+          </div>
         </div>
-        <div>
-          <SelectField
-            floatingLabelText="Toolbox"
-            value={toolbox}
-            onChange={onToolboxChange}
-          >
-            <MenuItem value={'fly'} primaryText="fly" />
-            <MenuItem value={'shoot'} primaryText="shoot" />
-          </SelectField>
-        </div>
-        <div>
-          <TextField
-            id="setting-editor-energy"
-            floatingLabelText="Energy"
-            floatingLabelFixed={true}
-            value={energy || ''}
-            onChange={onEnergyChange}
+        <Instructable instruction="editor-space-world" position="left">
+          <AceEditor
+            value={spaceWorldText}
+            onChange={onChange}
+            mode="spaceworld"
+            theme="solarized_dark"
+            fontSize={18}
+            keyboardHandler={vimMode ? 'vim' : null}
+            annotations={annotations}
+            editorProps={{ $blockScrolling: true }}
+            width="100%"
+            height="300px"
+            style={{ display: 'block' }}
           />
-        </div>
+        </Instructable>
         <div>
-          <TextField
-            id="setting-editor-length-limit"
-            floatingLabelText="Length Limit"
-            floatingLabelFixed={true}
-            value={lengthLimit || ''}
-            onChange={onLengthLimitChange}
-          />
+          <Paper style={{ width: 350, margin: 10 }}>
+            <List>
+              <ListItem
+                primaryText="Vim SpaceWorld editor"
+                rightToggle={<Toggle toggled={vimMode} onToggle={onSwitchMode} />}
+              />
+              <ListItem
+                primaryText="Blockly editor"
+                rightToggle={<Toggle toggled={blocklyEditorType} onToggle={onEditorTypeChange} />}
+              />
+            </List>
+            <Divider />
+            <List>
+              <ListItem primaryText="Import task" onClick={onImport} leftIcon={<IconUpload />} />
+              <ListItem primaryText="Export task" onClick={onExport} leftIcon={<IconDownload />} />
+            </List>
+            <Divider />
+            <List>
+              <ListItem
+                href="https://github.com/adaptive-learning/flocs-visual-components/blob/master/docs/space-world.md"
+                target="_blank"
+                rel="noreferrer noopener"
+                primaryText="Open SpaceWorld desription"
+                leftIcon={<IconDescription />}
+              />
+            </List>
+          </Paper>
         </div>
       </div>
-      <div className="instructionable-editor-space-world">
-        <AceEditor
-          value={spaceWorldText}
-          onChange={onChange}
-          mode="spaceworld"
-          theme="solarized_dark"
-          fontSize={18}
-          keyboardHandler={vimMode ? 'vim' : null}
-          annotations={annotations}
-          editorProps={{ $blockScrolling: true }}
-          width="100%"
-          height="300px"
-          style={{ display: 'block' }}
-        />
-      </div>
-      <div>
-        <Paper style={{ width: 350, margin: 10 }}>
-          <List>
-            <ListItem
-              primaryText="Vim SpaceWorld editor"
-              rightToggle={<Toggle toggled={vimMode} onToggle={onSwitchMode} />}
-            />
-            <ListItem
-              primaryText="Blockly editor"
-              rightToggle={<Toggle toggled={blocklyEditorType} onToggle={onEditorTypeChange} />}
-            />
-          </List>
-          <Divider />
-          <List>
-            <ListItem primaryText="Import task" onClick={onImport} leftIcon={<IconUpload />} />
-            <ListItem primaryText="Export task" onClick={onExport} leftIcon={<IconDownload />} />
-          </List>
-          <Divider />
-          <List>
-            <ListItem
-              href="https://github.com/adaptive-learning/flocs-visual-components/blob/master/docs/space-world.md"
-              target="_blank"
-              rel="noreferrer noopener"
-              primaryText="Open SpaceWorld desription"
-              leftIcon={<IconDescription />}
-            />
-          </List>
-        </Paper>
-      </div>
-    </div>
+    </Instructable>
   );
 }
 

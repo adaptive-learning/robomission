@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Image from './Image';
+import Instructable from '../containers/Instructable';
 
 export default function GameObject({ imageId, width, height, position, bottom, left }) {
   const imageStyle = {
@@ -10,9 +11,10 @@ export default function GameObject({ imageId, width, height, position, bottom, l
     bottom,
     left,
   };
-  const instructionableClassName = `instructionable-task-${imageId}`;
   return (
-    <Image imageId={imageId} className={instructionableClassName} style={imageStyle} />
+    <Instructable instruction={`task-${imageId}`} position="bottom-left">
+      <Image imageId={imageId} style={imageStyle} />
+    </Instructable>
   );
 }
 

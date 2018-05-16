@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import GameObject from './GameObject';
 import SpaceBackgroundGrid from './SpaceBackgroundGrid';
+import Instructable from '../containers/Instructable';
 
 export default function SpaceWorld({ fields, width }) {
   const { cols, backgrounds, objects } = prepareFields(fields);
@@ -12,22 +13,24 @@ export default function SpaceWorld({ fields, width }) {
     position: 'relative',
   };
   return (
-    <span className="instructionable-env-space-world" style={worldStyle}>
-      <SpaceBackgroundGrid backgroundColors={backgrounds} fieldSize={fieldSize} />
-      <span>
-        {objects.map((object, index) =>
-          <GameObject
-            key={index}
-            imageId={object.imageId}
-            width={fieldSize}
-            height={fieldSize}
-            position="absolute"
-            bottom={object.row * fieldSize}
-            left={object.col * fieldSize}
-          />
-        )}
+    <Instructable instruction="task-space-world" position="bottom">
+      <span style={worldStyle}>
+        <SpaceBackgroundGrid backgroundColors={backgrounds} fieldSize={fieldSize} />
+        <span>
+          {objects.map((object, index) =>
+            <GameObject
+              key={index}
+              imageId={object.imageId}
+              width={fieldSize}
+              height={fieldSize}
+              position="absolute"
+              bottom={object.row * fieldSize}
+              left={object.col * fieldSize}
+            />
+          )}
+        </span>
       </span>
-    </span>
+    </Instructable>
   );
 }
 

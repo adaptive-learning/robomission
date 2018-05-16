@@ -29,7 +29,6 @@ class InstructionsContainer extends React.Component {
 
   constructor(props) {
     super(props);
-    // this.showInstructions = props.showInstructions.bind(this);
     this.showInstructions = props.showInstructions.bind(this);
     this.seeInstruction = props.seeInstruction.bind(this);
     this.handleJoyrideChange = this.handleJoyrideChange.bind(this);
@@ -49,7 +48,7 @@ class InstructionsContainer extends React.Component {
   setInstructions(instructions) {
     this.steps = instructions.map(instruction => ({
       text: translate(`instruction.${instruction.id}`),
-      selector: instruction.selector,  // '.instructionable-spaceworld',
+      selector: instruction.selector,  // '.instructable-task-spaceworld',
       position: instruction.position, // 'bottom-left',
       type: 'hover',
       style: {
@@ -63,18 +62,12 @@ class InstructionsContainer extends React.Component {
     }));
   }
 
-  handleJoyrideChange({ type, index }) {
-    switch (type) {
-      case 'step:after': {
-        const instructionId = this.props.scheduledInstructions[index].id;
-        this.seeInstruction(instructionId);
-        break;
-      }
-      case 'finished': {
-        this.showInstructions(false);
-        break;
-      }
-      // no default
+  handleJoyrideChange({ type, index, action }) {
+    if (type === 'step:after' && action === 'next') {
+      const instructionId = this.props.scheduledInstructions[index].id;
+      this.seeInstruction(instructionId);
+    } else if (type === 'finished' || action === 'close' || action === 'esc') {
+      this.showInstructions({ show: false });
     }
   }
 
@@ -89,6 +82,7 @@ class InstructionsContainer extends React.Component {
         type="continuous"
         run={this.props.shown}
         autoStart={this.props.shown}
+        scrollToFirstStep={true}
         showBackButton={true}
         showStepsProgress={true}
         debug={false}

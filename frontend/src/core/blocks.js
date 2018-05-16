@@ -225,4 +225,8 @@ const blocks = [
   },
 ];
 
+export function getAllBlocksList() {
+  return blocks.map(block => block.id);
+}
+
 export default blocks;
