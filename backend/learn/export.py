@@ -35,12 +35,12 @@ class TaskSerializer(serializers.ModelSerializer):
         model = Task
         fields = (
             'id', 'name', 'setting', 'solution',
-            'level', 'order', 'mission', 'phase')
+            'section', 'level', 'level2', 'order', 'problemset')
 
 
 class TaskPandasSerializer(PandasSerializer):
     def transform_dataframe(self, dataframe):
-        return dataframe.sort_values('order')
+        return dataframe
 
 
 class TaskViewSet(ExportViewSet):
@@ -56,7 +56,10 @@ class ProblemSetSerializer(serializers.ModelSerializer):
         slug_field='name', many=True, read_only=True)
     class Meta:
         model = ProblemSet
-        fields = ('id', 'name', 'order', 'setting', 'parts', 'tasks')
+        fields = ('id', 'name',
+                  'granularity', 'section', 'level', 'order',
+                  'parent', 'n_parts', 'n_tasks',
+                  'setting', 'parts', 'tasks')
 
 
 class ProblemSetViewSet(ExportViewSet):

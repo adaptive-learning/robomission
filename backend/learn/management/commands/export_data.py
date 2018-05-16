@@ -16,7 +16,7 @@ class Command(MonitoredCommand):
 
     entities_to_export = [
         ('tasks', learn.export.TaskViewSet),
-        ('chunks', learn.export.ChunkViewSet),
+        ('problemsets', learn.export.ProblemSetViewSet),
         ('task_sessions', learn.export.TaskSessionsViewSet),
         ('program_snapshots', learn.export.ProgramSnapshotsViewSet),
     ]
