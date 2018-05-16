@@ -230,7 +230,8 @@ export default {
   'instruction.task-block-fly':
     'Příkaz pro let o jedno políčko vpřed.',
   'instruction.task-block-shoot':
-    'Raketka vystřelí a pak se posune o jedno políčko vpřed.',
+    'Raketka vystřelí a pak se posune o jedno políčko vpřed.' +
+    'Rozstřelit lze malé meteoroidy v libovolné vzdálenosti.',
   'instruction.task-block-repeat':
     'Tento blok říká raketce, aby N-krát zopakovala zadanou posloupnost příkazů.',
   'instruction.task-block-while':

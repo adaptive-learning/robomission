@@ -185,26 +185,86 @@ export default {
   'fail-reason.last-row-not-reached': 'The spaceship must reach the final row.',
   'fail-reason.missing-diamonds': 'The spaceship must collect all diamonds.',
 
-  'instruction.env.space-world': 'Your task is to fly to the other end of the space world.',
-  'instruction.env.toolbox': 'This is a toolbox with commands for the spaceship. You can use these commands multiple times in your program.',
-  'instruction.env.snapping': 'There you create your program. The spaceship performs the sequence of commands snapped under the start block.',
-  'instruction.env.controls': 'Click this button to run your program.',
-  'instruction.env.task-editor': 'This is Task Editor for hackers. If you create a cool task, send it to us.',
-  'instruction.object.diamond': 'The spaceship must collect all diamonds.',
-  'instruction.object.asteroid': 'If the spaceship hits an asteroids, it creashes.',
-  'instruction.object.meteoroid': 'If the spaceship hits a meteoroid, it creashes. Thankfully, meteoroid are small and the spaceship can destroy them by a single shot.',
-  'instruction.object.wormhole': 'If the spaceshipt flies into a wormhole, it appears in the other wormole.',
-  'instruction.length-limit': 'This is a program length status. The spaceship has a limited memmory, so the program cannot be too long.',
-  'instruction.diamonds-status': 'This indicator shows how many diamonds the spaceship already collected.',
-  'instruction.energy-status': 'This is energy status. Ever shot takes 1 unit of energy.',
-  'instruction.block.fly': 'Command to fly 1 step ahead.',
-  'instruction.block.shoot': 'Spaceship shoots and then moves 1 step ahead.',
-  'instruction.block.repeat': 'Use this block to repeat a sequence of commands N-times.',
-  'instruction.block.while': 'Use this block to repeat a sequence of commands while given condition is true.',
-  'instruction.block.color': 'Testing color on the field where the spaceship is.',
-  'instruction.block.position': 'Test on the column where the spaceship is. Columns are numbered from left to right 1, 2, 3, ...',
-  'instruction.block.if': 'Conditional command to only perform some commands if a given condition is true.',
-  'instruction.block.if-else': 'Complete conditional command to perform some commands if a given condition is true, and some other commands if the condition is false.',
+
+  'instruction.env-recommended-task-button':
+    'Blue buttons with a triangle show a recommended task.',
+  'instruction.env-menu':
+    'Open a menu by clicking this button.',
+  'instruction.env-levelbar':
+    'You earn credits for each solved  task. ' +
+    'When you have enough credits, you progress to the next level.',
+  'instruction.env-help':
+    'You can display all hints by clicking this question mark. ' +
+    'When a new, unread hints are prepared, then the question is orange.',
+  'instruction.env-feedback':
+    'If something doesn\'t work as expected, let us know.',
+  'instruction.env-login':
+    'To save your progress, you need to login. ' +
+    'You can also use a Google or Facebook account if you have one.',
+
+  'instruction.task-space-world':
+    'Your task is to fly through the space track all the way to the blue line.',
+  'instruction.task-toolbox':
+    'This is a toolbox with commands for the spaceship. ' +
+    'You can use these commands multiple times in your program.',
+  'instruction.task-snapping':
+    'There you create your program. ' +
+    'The spaceship performs the sequence of commands snapped under the start block.',
+  'instruction.task-controls':
+    'Click this button to run your program. ' +
+    'You can run your program as many times as you need, until it\'s correct.',
+
+  'instruction.task-diamond':
+    'The spaceship has to collect all diamonds.',
+  'instruction.task-asteroid':
+    'Asteorid. If the spaceship hits an asteroid, it creashes.',
+  'instruction.task-meteoroid':
+    'Metoroid. If the spaceship hits a meteoroid, it creashes.',
+  'instruction.task-wormhole':
+    'If the spaceshipt flies into a wormhole, it appears in the other wormole.',
+  'instruction.task-length-limit':
+    'This is a program length status. ' +
+    'The spaceship has a limited memory, so the program cannot be too long.',
+  'instruction.task-diamond-status':
+    'This indicator shows how many diamonds the spaceship already collected.',
+  'instruction.task-energy-status':
+    'This is energy status. Ever shot takes 1 unit of energy.',
+  'instruction.task-block-fly':
+    'Command to fly 1 step ahead.',
+  'instruction.task-block-shoot':
+    'Spaceship shoots and then moves 1 step ahead. ' +
+    'Small meteoroids in any distance from the spaceship can be destroyed.',
+  'instruction.task-block-repeat':
+    'Use this block to repeat a sequence of commands N-times.',
+  'instruction.task-block-while':
+    'Use this block to repeat a sequence of commands while given condition is true.',
+  'instruction.task-block-color':
+    'Testing color on the field where the spaceship is.',
+  'instruction.task-block-position':
+    'Test on the column where the spaceship is. ' +
+    'Columns are numbered from left to right 1, 2, 3, etc.',
+  'instruction.task-block-if':
+    'Conditional command to only perform some commands if a given condition is true.',
+  'instruction.task-block-if-else':
+    'Complete conditional command to perform some commands if a given condition is true, ' +
+    'and some other commands if the condition is false.',
+
+  'instruction.editor-setting':
+    'In this Editor, you can create your own tasks. ' +
+    'If you create a cool task, send it to us.',
+  'instruction.editor-space-world':
+    'Each field on the grid has a color (k = black, r = red, g = green) ' +
+    'and objects (A = asteroid, M = meteoroid, D = diaomond, W = wormhole).',
+
+  'instruction.overview-levels':
+    'Tasks are divided into levels by their difficulty. ' +
+    'Solved levels are colored blue, unsolved grey.',
+  'instruction.overview-difficulty':
+    'The number of stars represents the difficulty of the task within given level.',
+  'instruction.overview-solved-task':
+    'Solved tasks are colored blue.',
+  'instruction.overview-recommended-task':
+    'The recommended task is colored orange.',
 
   'user.email': 'Email',
   'user.login': 'Login',
