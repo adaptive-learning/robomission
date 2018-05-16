@@ -22,7 +22,7 @@ export default function GameControls({ controls, speed, onClick }) {
     if (!(visible(name))) {
       return null;
     }
-    return (
+    let button = (
       <RaisedButton
         label={label}
         disabled={disabled(name)}
@@ -32,6 +32,14 @@ export default function GameControls({ controls, speed, onClick }) {
         onClick={() => onClick(name)}
       />
     );
+    if (name === 'run') {
+      button = (
+        <Instructable instruction="task-controls" position="bottom-left">
+          {button}
+        </Instructable>
+      );
+    }
+    return button;
   }
 
   function conditionallyRenderSpeedControl() {
@@ -47,21 +55,19 @@ export default function GameControls({ controls, speed, onClick }) {
   }
 
   return (
-    <Instructable instruction="task-controls" position="bottom-left">
-      <span style={{ display: 'block', margin: '5px 4px' }}>
-        {(visible('fly') || visible('left') || visible('right') || visible('shoot')) &&
-          <span style={{ display: 'block', marginBottom: '2px' }}>
-            {conditionallyRenderControlButton('left', '↖', 'primary')}
-            {conditionallyRenderControlButton('fly', '↑', 'primary')}
-            {conditionallyRenderControlButton('right', '↗', 'primary')}
-            {conditionallyRenderControlButton('shoot', '★', 'primary')}
-          </span>
-        }
-        {conditionallyRenderControlButton('run', translate('Run'), 'primary', 88)}
-        {conditionallyRenderControlButton('reset', 'Reset', 'accent', false, 88)}
-        {conditionallyRenderSpeedControl()}
-      </span>
-    </Instructable>
+    <span style={{ display: 'block', margin: '5px 4px' }}>
+      {(visible('fly') || visible('left') || visible('right') || visible('shoot')) &&
+        <span style={{ display: 'block', marginBottom: '2px' }}>
+          {conditionallyRenderControlButton('left', '↖', 'primary')}
+          {conditionallyRenderControlButton('fly', '↑', 'primary')}
+          {conditionallyRenderControlButton('right', '↗', 'primary')}
+          {conditionallyRenderControlButton('shoot', '★', 'primary')}
+        </span>
+      }
+      {conditionallyRenderControlButton('run', translate('Run'), 'primary', 88)}
+      {conditionallyRenderControlButton('reset', 'Reset', 'accent', false, 88)}
+      {conditionallyRenderSpeedControl()}
+    </span>
   );
 }
 

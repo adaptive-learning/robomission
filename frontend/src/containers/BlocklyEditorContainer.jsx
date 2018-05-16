@@ -58,7 +58,6 @@ class BlocklyEditorWrapper extends React.Component {
       }
     }
     // Blocks.
-    const blocks = getAllBlocksList();
     const toolboxBlocks = this.blocklyEditor.blocklyToolbox.getAllBlocks();
     for (const block of toolboxBlocks) {
       const svgElement = block.getSvgRoot();

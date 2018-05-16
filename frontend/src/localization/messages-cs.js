@@ -201,9 +201,9 @@ export default {
     'Pro zapamatování postupu je potřeba se přihlásit. ' +
     'K přihlášení lze využít i účet u Googlu nebo Facebooku.',
   'instruction.task-space-world':
-    'Tvým úkolem je dostat vesmírnou loď na druhou stranu vesmírného světa.',
+    'Tvým úkolem je proletět s raketkou celou vesmírnou dráhou až na modrou čáru.',
   'instruction.task-toolbox':
-    'Tohle jsou příkazy k ovládání vesmírné lodi. ' +
+    'Tohle jsou příkazy k ovládání raketky. ' +
     'Příkazy můžeš ve svém programu používat opakovaně.',
   'instruction.task-snapping':
     'Tady skládáš svůj program. Bloky mají malé zobáčky, kterými je lze ' +
@@ -214,9 +214,9 @@ export default {
   'instruction.task-diamond':
     'Raketka musí po cestě posbírat všechny diamanty.',
   'instruction.task-asteroid':
-    'Pokud raketka narazí do asteroidu, tak se rozbije.',
+    'Asteroid. Pokud do něj raketka narazí, tak se rozbije.',
   'instruction.task-meteoroid':
-    'Pokud raketka narazí do meteoroidu, tak se rozbije.',
+    'Meteoroid. Pokud do něj raketka narazí, tak se rozbije.',
   'instruction.task-wormhole':
     'Pokud raketka vletí do červí díry, okamžitě se objeví v druhé červí díře.',
   'instruction.task-length-limit':

@@ -7,7 +7,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import ArrowDown from 'material-ui/svg-icons/hardware/keyboard-arrow-down';
 import Scroll from 'react-scroll';
 import SpaceGameContainer from '../containers/SpaceGameContainer';
-import TaskEnvironmentContainer from '../containers/TaskEnvironmentContainer';
+//import TaskEnvironmentContainer from '../containers/TaskEnvironmentContainer';
 import NextTaskButtonContainer from '../containers/NextTaskButtonContainer';
 import neuronsBackgroundPath from '../images/neurons-tile.png';
 import fiBackgroundPath from '../images/fi-slide.jpg';
@@ -111,7 +111,9 @@ class Home extends React.Component {
           </Scroll.Link>
         ),
       },
-      // slide 2
+      // slide 2: temporarily removed
+      // TODO: Reintroduce, but with code skeleton and without instructions.
+      /*
       {
         style: {
           backgroundColor: this.props.muiTheme.palette.primary1Color,
@@ -151,6 +153,7 @@ class Home extends React.Component {
           </Scroll.Link>
         ),
       },
+      */
       // slide 3
       {
         style: {
@@ -166,7 +169,7 @@ class Home extends React.Component {
           </div>
         ),
         footer: (
-          <Scroll.Link to="intro-slide-4" smooth={true} duration={500}>
+          <Scroll.Link to="intro-slide-3" smooth={true} duration={500}>
             <FloatingActionButton secondary={true}>
               <ArrowDown />
             </FloatingActionButton>
@@ -207,7 +210,7 @@ class Home extends React.Component {
           </Paper>
         ),
         footer: (
-          <Scroll.Link to="intro-slide-5" smooth={true} duration={500}>
+          <Scroll.Link to="intro-slide-4" smooth={true} duration={500}>
             <FloatingActionButton secondary={true}>
               <ArrowDown />
             </FloatingActionButton>
