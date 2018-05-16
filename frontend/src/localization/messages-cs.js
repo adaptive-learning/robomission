@@ -194,12 +194,12 @@ export default {
     'Až jich máš dostatek, postupuješ do dalšího levelu.',
   'instruction.env-help':
     'Kliknutím na otazník se zobrazí všechny nápovědy. ' +
-    'Oranžová barva značí, že jsou připraveny nové, nepřečtené nápovědy.',
+    'Pokud je otazník oranžový, jsou připraveny nové, nepřečtené nápovědy.',
   'instruction.env-feedback':
     'Když něco nebude fungovat podle tvých představ, dej nám o tom vědět.',
   'instruction.env-login':
     'Pro zapamatování postupu je potřeba se přihlásit. ' +
-    'Pokud máš účet u Googlu nebo Facebooku, nemusíš se registrovat.',
+    'K přihlášení lze využít i účet u Googlu nebo Facebooku.',
   'instruction.task-space-world':
     'Tvým úkolem je dostat vesmírnou loď na druhou stranu vesmírného světa.',
   'instruction.task-toolbox':

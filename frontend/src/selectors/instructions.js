@@ -1,5 +1,3 @@
-//import { getMode } from '../selectors/app';
-//import { getPracticePageTask } from '../selectors/taskEnvironment';
 import { getNewRelevantInstructions } from '../reducers/instructions';
 
 export function getScheduledInstructions(state) {

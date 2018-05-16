@@ -24,7 +24,7 @@ export default function NextTaskButton({ task }) {
   }
   return (
     <Link to={task.url}>
-      <Instructable instruction="env-recommended-task-button">
+      <Instructable instruction="env-recommended-task-button" position="top">
         <RaisedButton
           icon={<TaskIcon style={{ marginLeft: 8 }}/>}
           style={style}

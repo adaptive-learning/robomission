@@ -29,7 +29,7 @@ class Instructable extends React.Component {
   }
 
   componentDidMount() {
-    this.registerInstructable(this.props.instruction, true);
+    this.registerInstructable(this.props.instruction, true, this.props.position);
   }
 
   componentWillUnmount() {
@@ -48,8 +48,14 @@ class Instructable extends React.Component {
 
 Instructable.propTypes = {
   instruction: PropTypes.string.isRequired,
+  position: PropTypes.string,
   registerInstructable: PropTypes.func.isRequired,
   children: PropTypes.element.isRequired,
+};
+
+
+Instructable.defaultProps = {
+  position: 'auto',
 };
 
 Instructable = connect(getProps, actionCreators)(Instructable);

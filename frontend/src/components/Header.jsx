@@ -65,7 +65,7 @@ class Header extends React.Component {
       </IconButton>
     );
     let userMenu = (
-      <Instructable key="login" instruction="env-login">
+      <Instructable key="login" instruction="env-login" position="bottom">
         <IconMenu
           iconButtonElement={avatar}>
             <MenuItem
@@ -96,7 +96,7 @@ class Header extends React.Component {
     const toolbar = (
       <Toolbar style={{ backgroundColor: 'transparent', color: 'white' }}>
         {this.props.mode !== 'monitoring' && [(
-          <Instructable key="levelbar" instruction="env-levelbar">
+          <Instructable key="levelbar" instruction="env-levelbar" position="bottom">
             <ToolbarGroup
               key="levelbar"
               style={{ marginRight: 10 }}>
@@ -106,7 +106,7 @@ class Header extends React.Component {
         )
         ]}
         <ToolbarGroup key="user-toolbar" lastChild={true}>
-          <Instructable key="help" instruction="env-help">
+          <Instructable key="help" instruction="env-help" position="bottom">
             <IconMenu
               iconButtonElement={
                 <IconButton tooltip={translate('Help')} >
@@ -118,6 +118,7 @@ class Header extends React.Component {
               <MenuItem
                 primaryText={`${translate('New instructions')} (${nNewInstructions})`}
                 onClick={this.showNewInstructions}
+                disabled={nNewInstructions === 0}
               />
               <MenuItem
                 primaryText={translate('All instructions')}
@@ -128,7 +129,7 @@ class Header extends React.Component {
 
 
           </Instructable>
-          <Instructable key="feedback" instruction="env-feedback">
+          <Instructable key="feedback" instruction="env-feedback" position="bottom">
             <IconButton
               tooltip={translate('Feedback')}
               onClick={this.props.openFeedbackModal}
@@ -148,7 +149,7 @@ class Header extends React.Component {
           margin: 0,
         }}
         iconElementLeft={
-          <Instructable instruction="env-menu">
+          <Instructable instruction="env-menu" position="right">
             <IconButton><MenuIcon /></IconButton>
           </Instructable>}
         onLeftIconButtonTouchTap={this.props.onMenuIconTouchTap}

@@ -15,6 +15,8 @@ export default {
   'ALG': 'Adaptive Learning group',
   'FI-MU': 'Faculty of Informatics MU',
   'For hackers': 'For hackers',
+  'New instructions': 'New instructions',
+  'All instructions': 'All instructions',
 
   'easy-task-challenge': 'And now something easier. Will you solve it within 1 minute?',
   'excellent-task-solved': 'Excellent! Task solved.',

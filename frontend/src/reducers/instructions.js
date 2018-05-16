@@ -74,14 +74,16 @@ export default function reduceInstructions(state = initial, action) {
       };
     }
     case REGISTER_INSTRUCTABLE: {
-      const { instructionId } = action.payload;
+      const { instructionId, position } = action.payload;
       let {[instructionId]: prevCount, ...instructables} = state.instructables;
       const delta = action.payload.show ? 1 : -1;
       const newCount = (prevCount || 0) + delta;
       if (newCount > 0) {
         instructables =  {...instructables, [instructionId]: newCount};
       }
-      return { ...state, instructables };
+      const instruction = { ...state.byId[instructionId], position }
+      const byId = { ...state.byId, [instructionId]: instruction };
+      return { ...state, byId, instructables };
     }
     default: {
       return state;
@@ -115,120 +117,98 @@ function filterRelevant(state, instructions) {
 }
 
 
-const viewData = {
-  'env-recommended-task-button': {
-    position: 'top',
-  },
-  'env-menu': {
-    position: 'right',
-  },
-  'env-levelbar': {
-    position: 'bottom',
-  },
-  'env-help': {
-    position: 'bottom',
-  },
-  'env-feedback': {
-    position: 'bottom',
-  },
-  'env-login': {
-    position: 'bottom',
-  },
-
-  'task-space-world': {
-    position: 'bottom',
-  },
-  'task-toolbox': {
-    position: 'right',
-  },
-  'task-snapping': {
-    position: 'bottom-left',
-  },
-  'task-controls': {
-    position: 'bottom-left',
-  },
-  'task-wormhole': {
-    position: 'bottom-left',
-  },
-  'task-diamond': {
-    position: 'bottom-left',
-  },
-  'task-asteroid': {
-    position: 'bottom-left',
-  },
-  'task-meteoroid': {
-    position: 'bottom-left',
-  },
-  'task-diamond-status': {
-    position: 'bottom-left',
-  },
-  'task-energy-status': {
-    position: 'bottom-left',
-  },
-  'task-length-limit': {
-    position: 'bottom-left',
-  },
-  'task-block-fly': {
-    position: 'bottom-left',
-  },
-  'task-block-shoot': {
-    position: 'bottom-left',
-  },
-  'task-block-repeat': {
-    position: 'bottom-left',
-  },
-  'task-block-while': {
-    position: 'bottom-left',
-  },
-  'task-block-color': {
-    position: 'bottom-left',
-  },
-  'task-block-position': {
-    position: 'bottom-left',
-  },
-  'task-block-if': {
-    position: 'bottom-left',
-  },
-  'task-block-if-else': {
-    position: 'bottom-left',
-  },
-
-  'editor-setting': {
-    position: 'left',
-  },
-  'editor-space-world': {
-    position: 'left',
-  },
-
-  'overview-levels': {
-    position: 'bottom',
-  },
-  'overview-recommended-task': {
-    position: 'bottom',
-  },
-  'overview-solved-task': {
-    position: 'bottom',
-  },
-  'overview-difficulty': {
-    position: 'bottom',
-  },
-};
+// TODO: Remove once the postions are set in Instructables
+//const viewData = {
+//
+//  'task-space-world': {
+//    position: 'bottom',
+//  },
+//  'task-toolbox': {
+//    position: 'right',
+//  },
+//  'task-snapping': {
+//    position: 'bottom-left',
+//  },
+//  'task-controls': {
+//    position: 'bottom-left',
+//  },
+//  'task-wormhole': {
+//    position: 'bottom-left',
+//  },
+//  'task-diamond': {
+//    position: 'bottom-left',
+//  },
+//  'task-asteroid': {
+//    position: 'bottom-left',
+//  },
+//  'task-meteoroid': {
+//    position: 'bottom-left',
+//  },
+//  'task-diamond-status': {
+//    position: 'bottom-left',
+//  },
+//  'task-energy-status': {
+//    position: 'bottom-left',
+//  },
+//  'task-length-limit': {
+//    position: 'bottom-left',
+//  },
+//  'task-block-fly': {
+//    position: 'bottom-left',
+//  },
+//  'task-block-shoot': {
+//    position: 'bottom-left',
+//  },
+//  'task-block-repeat': {
+//    position: 'bottom-left',
+//  },
+//  'task-block-while': {
+//    position: 'bottom-left',
+//  },
+//  'task-block-color': {
+//    position: 'bottom-left',
+//  },
+//  'task-block-position': {
+//    position: 'bottom-left',
+//  },
+//  'task-block-if': {
+//    position: 'bottom-left',
+//  },
+//  'task-block-if-else': {
+//    position: 'bottom-left',
+//  },
+//
+//  'editor-setting': {
+//    position: 'left',
+//  },
+//  'editor-space-world': {
+//    position: 'left',
+//  },
+//
+//  'overview-levels': {
+//    position: 'bottom',
+//  },
+//  'overview-recommended-task': {
+//    position: 'bottom',
+//  },
+//  'overview-solved-task': {
+//    position: 'bottom',
+//  },
+//  'overview-difficulty': {
+//    position: 'bottom',
+//  },
+//};
 
 
 function parseInstruction(data) {
   const instructionId = data['name'];
-  if (viewData[instructionId] === undefined) {
-    console.warn(`Missing view data for instruction '${instructionId}'`);
-  }
   const selectorClass = `instructable-${instructionId}`;
   const instruction = {
-    ...viewData[instructionId],
     id: instructionId,
-    // save both class and selector
+    // Save both class and selector.
     selectorClass: selectorClass,
     selector: `.${selectorClass}`,
   };
-
   return instruction;
 }
 
