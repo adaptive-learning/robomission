@@ -149,9 +149,11 @@ class Header extends React.Component {
           margin: 0,
         }}
         iconElementLeft={
-          <Instructable instruction="env-menu" position="right">
-            <IconButton><MenuIcon /></IconButton>
-          </Instructable>}
+          <IconButton>
+            <Instructable instruction="env-menu" position="bottom">
+              <MenuIcon />
+            </Instructable>
+          </IconButton>}
         onLeftIconButtonTouchTap={this.props.onMenuIconTouchTap}
         iconElementRight={toolbar}
       />
