@@ -5,6 +5,7 @@ import {
   REGISTER_INSTRUCTABLES,
   SEE_INSTRUCTION_REQUEST,
   SHOW_INSTRUCTIONS,
+  CHANGE_LOCATION,
   } from '../action-types';
 
 
@@ -98,6 +99,11 @@ export default function reduceInstructions(state = initial, action) {
         byId[instructionId] = {...byId[instructionId], position};
       }
       return { ...state, byId, instructables };
+    }
+    case CHANGE_LOCATION: {
+      // Hack to unregister all old game elements.
+      // TODO: Unhack (unregister explictly).
+      return { ...state, instructables: {} };
     }
     default: {
       return state;
