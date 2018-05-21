@@ -19,7 +19,9 @@ export default function SpaceWorld({ fields, width }) {
         <span>
           {objects.map((object, index) =>
             <GameObject
-              key={index}
+              // The key must change if the object type changes in order to
+              // unregister old instructable and register the new one.
+              key={`${index}-${object.imageId}`}
               imageId={object.imageId}
               width={fieldSize}
               height={fieldSize}
