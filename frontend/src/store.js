@@ -13,8 +13,12 @@ export function createFlocsStore(initialState) {
     intl: getLocalizationSetting(),
   };
   const sagaMiddleware = createSagaMiddleware();
-  const loggerMiddleware = createLogger();
-  const middleware = applyMiddleware(sagaMiddleware, loggerMiddleware);
+  const middlewares = [sagaMiddleware];
+  if (process.env.NODE_ENV === 'development') {
+    const logger = createLogger();
+    middlewares.push(logger);
+  }
+  const middleware = applyMiddleware(...middlewares);
   const store = createStore(rootReducer, initialStateWithLocalization, middleware);
   sagaMiddleware.run(rootSaga);
   return store;
