@@ -78,12 +78,11 @@ def get_current_mission_phase(domain, student):
 
 
 def get_first_unsolved_mission(domain, student):
-    # TODO: has mastered mission - if all phases are solved ??
     # Missions are ordered in DB layer.
-    for mission in domain.missions.all():
+    for mission in domain.missions:
         if not has_mastered(student, mission):
             return mission
-    # The student could have mastered all missions.
+    # The student have mastered all missions.
     return None
 
 
@@ -91,7 +90,7 @@ def get_first_unsolved_phase(mission, student):
     for phase in mission.phases:
         if not has_mastered(student, phase):
             return phase
-    # The student could have mastered all phases of the given mission.
+    # The student have mastered all phases of the given mission.
     return None
 
 
