@@ -28,7 +28,9 @@ def performance_to_value(performance, n_tasks):
 
 
 def get_skills(domain, student):
-    # TODO(once doman.chunks exists): Generalized to domain.chunks.all()
+    """Return a dict mapping PS names to a value of the skill.
+    """
+    # TODO(once domain.chunks exists): Generalized to domain.chunks.all()
     # instead of domain.problemsets.all().
     skills = {ps.name: 0 for ps in domain.problemsets.all()}
     for skill in student.skills.all():
@@ -37,6 +39,13 @@ def get_skills(domain, student):
 
 
 def update_skills(student, task, performance):
+    """Update skill of a student after solving a task with given perforamance.
+
+    Args:
+        student: learn.Student
+        task: learn.Task
+        performance: one of TaskSession.PERFORMANCE_CHOICES
+    """
     progress = []
     phase = task.problemset
     if phase:
