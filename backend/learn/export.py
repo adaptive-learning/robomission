@@ -47,7 +47,7 @@ class TaskPandasSerializer(PandasSerializer):
 
 
 class TaskViewSet(ExportViewSet):
-    queryset = Task.objects.all()
+    queryset = Task.objects.select_related('problemset__parent').all()
     serializer_class = TaskSerializer
     pandas_serializer_class = TaskPandasSerializer
 
@@ -69,7 +69,11 @@ class ProblemSetSerializer(serializers.ModelSerializer):
 
 
 class ProblemSetViewSet(ExportViewSet):
-    queryset = ProblemSet.objects.all()
+    queryset = (
+        ProblemSet.objects
+        .select_related('parent')
+        .prefetch_related('parts', 'tasks')
+        .all())
     serializer_class = ProblemSetSerializer
 
 
