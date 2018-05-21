@@ -12,6 +12,8 @@ def get_domain(name='current'):
         'params', 'blocks', 'toolboxes__blocks', 'tasks__problemset',
         Prefetch(
             'problemsets',
-            queryset=ProblemSet.objects.prefetch_related('parent', 'tasks', 'parts'))]
+            queryset=ProblemSet.objects
+                .select_related('parent')
+                .prefetch_related('tasks', 'parts'))]
     domain = Domain.objects.prefetch_related(*prefetches).get(name=name)
     return domain

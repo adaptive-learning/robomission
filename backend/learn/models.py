@@ -5,6 +5,7 @@ from random import randrange
 from uuid import uuid4
 from django.db import models
 from django.contrib.auth.models import User
+from django.db.models import prefetch_related_objects, Prefetch
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils import timezone
@@ -422,10 +423,22 @@ class Student(models.Model):
     # task_sessions = m:n relation with tasks through learn.TaskSession
     # skills = m:n relation with chunks through learn.Skill
 
-    # TODO: Caching.
-    def get_skill(self, chunk):
-        skill = self.skills.filter(chunk=chunk).first()
+    def get_skill(self, chunk, cached=False):
+        """Retrieve the current or cached skill.
+        """
+        if cached:
+            self.cache_skills(update=False)
+            # It's important to test PK due to inheritance (Chunk vs. ProblemSet)
+            skills = [s for s in self.cached_skills if chunk.pk == s.chunk.pk]
+            skill = skills[0] if skills else None
+        else:
+            skill = self.skills.filter(chunk=chunk).first()
         return skill.value if skill else 0
+
+    def cache_skills(self, update=True):
+        if not update and hasattr(self, 'cached_skills'):
+            return
+        prefetch_related_objects([self], Prefetch('skills', to_attr='cached_skills'))
 
     def __str__(self):
         return 's{pk}'.format(pk=self.pk)
@@ -577,9 +590,14 @@ class Domain(models.Model):
     problemsets = models.ManyToManyField(ProblemSet)
     instructions = models.ManyToManyField(Instruction)
 
-    @property
+    @cached_property
     def missions(self):
-        return self.problemsets.filter(granularity=ProblemSet.MISSION)
+        return (
+            self.problemsets
+            .filter(granularity=ProblemSet.MISSION)
+            # We prefetch parts of parts (even though they are currently empty)
+            # to avoid unwanted SQL queries, e.g. in mastery.has_mastered.
+            .prefetch_related('tasks', 'parts', 'parts__parts'))
 
     def __str__(self):
         return str(self.name)

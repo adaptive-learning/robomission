@@ -67,7 +67,7 @@ def update_parent_skill(student, ps):
 def has_mastered(student, ps):
     parts_mastered = (has_mastered(student, part) for part in ps.parts.all())
     all_parts_mastered = all(parts_mastered)
-    skill = student.get_skill(ps)
+    skill = student.get_skill(ps, cached=True)
     return all_parts_mastered and skill >= SKILL_FOR_MASTERY
 
 

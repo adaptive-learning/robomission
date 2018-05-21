@@ -19,7 +19,8 @@ Recommendation = namedtuple('Recommendation', [
 def get_recommendation(domain, student):
     mission = select_mission(domain, student)
     if not mission:
-        return Recommendation(available=False, mission=None, phase=None, task=None)
+        return Recommendation(
+            available=False, mission=None, phase=None, task=None, levels=None)
     phase = select_phase(mission, student)
     task = select_task(phase, student)
     return Recommendation(
