@@ -31,6 +31,9 @@ export default class CompleteTaskModal extends React.Component {
     if (!this.state.animating && nextProps.levelStatus.hasNext) {
       this.setState({ animating: true });
     }
+    if (this.state.animating && !nextProps.levelStatus.hasNext) {
+      this.setState({ animating: false });
+    }
   }
 
   componentDidUpdate(prevProps) {
