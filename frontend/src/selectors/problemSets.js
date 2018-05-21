@@ -3,7 +3,8 @@
 export function getMissionList(state) {
   const psList = Object.values(state.problemSets);
   const missionList = psList.filter(ps => ps.granularity === 'mission');
-  const missionListInjected = missionList.map(mission => ({
+  const orderedMissionList = missionList.sort((a, b) => a.level - b.level);
+  const missionListInjected = orderedMissionList.map(mission => ({
     ...mission,
     phases: getPhaseList(state, mission),
   }));
