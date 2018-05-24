@@ -2,10 +2,6 @@
   "domain": "current",
   "params": [
     {
-      "chunk": "task:one-step-forward",
-      "good_time": 12
-    },
-    {
       "chunk": "task:three-steps-forward",
       "good_time": 22
     },
