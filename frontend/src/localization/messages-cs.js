@@ -260,7 +260,7 @@ export default {
     'Úlohy jsou rozdělené do levelů podle jejich obtížnosti. ' +
     'Vyřešené levely jsou vybarvené modře, nevyřešené šedě.',
   'instruction.overview-difficulty':
-    'Počet hvězdiček znázorňuje obtížnost úlohy v rámci daného levelu.',
+    'Počet puclíků znázorňuje obtížnost úlohy v rámci daného levelu.',
   'instruction.overview-solved-task':
     'Vyřešené úlohy jsou obarvené modře.',
   'instruction.overview-recommended-task':

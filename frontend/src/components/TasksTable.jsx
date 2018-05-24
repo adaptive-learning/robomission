@@ -125,8 +125,8 @@ function TaskTile({ task, urlBase, recommendation }) {
   } else if (task.solved) {
     background = theme.palette.successColor;
   } else if (task.problemSet === recommendation.phase) {
-    //background = '#ddd';
-    background = theme.palette.accent3Color;
+    background = '#ddd';
+    //background = theme.palette.accent3Color;
   }
 
   let subtitle = '';

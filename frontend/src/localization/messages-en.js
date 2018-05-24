@@ -260,7 +260,7 @@ export default {
     'Tasks are divided into levels by their difficulty. ' +
     'Solved levels are colored blue, unsolved grey.',
   'instruction.overview-difficulty':
-    'The number of stars represents the difficulty of the task within given level.',
+    'The number of puzzle pieces represents the difficulty of the task within given level.',
   'instruction.overview-solved-task':
     'Solved tasks are colored blue.',
   'instruction.overview-recommended-task':

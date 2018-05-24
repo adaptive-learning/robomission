@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import StarBorder from 'material-ui/svg-icons/toggle/star-border';
-import Star from 'material-ui/svg-icons/toggle/star';
+//import StarBorder from 'material-ui/svg-icons/toggle/star-border';
+//import Star from 'material-ui/svg-icons/toggle/star';
+import Puzzle from 'material-ui/svg-icons/action/extension';
 
 
 const propTypes = {
@@ -12,12 +13,18 @@ const propTypes = {
 };
 
 const defaultProps = {
-  color: 'white',
+  color: '#eee', // 'white',
   height: 20,
 };
 
 class Rating extends React.Component {
   createStar(index) {
+    // We decided to draw all "stars" filled.
+    // TODO: Rename Star (it's not star anymore.)
+    return (
+      <Puzzle key={index} color={this.props.color}/>
+    );
+    /*
     const filled = index < this.props.value;
     if (filled) {
       return (
@@ -28,6 +35,7 @@ class Rating extends React.Component {
         <StarBorder key={index} color={this.props.color}/>
       );
     }
+    */
   }
 
   render() {
