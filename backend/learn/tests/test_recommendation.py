@@ -32,6 +32,51 @@ def test_recommendation_available():
 
 
 @pytest.mark.django_db
+def test_recommendation_unavailable_in_empty_domain():
+    domain = Domain.objects.create()
+    student = Student.objects.create()
+    recommendation = get_recommendation(domain, student)
+    assert not recommendation.available
+
+
+@pytest.mark.django_db
+def test_recommendation_unavailable_phase_without_tasks():
+    domain = Domain.objects.create()
+    m1 = ProblemSet.objects.create(name='m1')
+    p1 = m1.add_part(name='p1')
+    domain.problemsets.set([m1, p1])
+    student = Student.objects.create()
+    recommendation = get_recommendation(domain, student)
+    assert not recommendation.available
+
+
+@pytest.mark.django_db
+def test_recommendation_unavailable_all_ps_solved():
+    domain = create_domain()
+    student = Student.objects.create()
+    p1 = domain.problemsets.get(name='p1')
+    p2 = domain.problemsets.get(name='p2')
+    Skill.objects.create(student=student, chunk=p1, value=1)
+    Skill.objects.create(student=student, chunk=p2, value=1)
+    recommendation = get_recommendation(domain, student)
+    assert not recommendation.available
+
+
+@pytest.mark.django_db
+def test_recommendation_unavailable_tasks_solved():
+    domain = create_domain()
+    m1 = ProblemSet.objects.create(name='m1')
+    p1 = m1.add_part(name='p1')
+    t1 = p1.add_task(name='t1')
+    domain.problemsets.set([m1, p1])
+    domain.tasks.set([t1])
+    student = Student.objects.create()
+    TaskSession.objects.create(student=student, task=t1, solved=True)
+    recommendation = get_recommendation(domain, student)
+    assert not recommendation.available
+
+
+@pytest.mark.django_db
 def test_recommend_first_mission_and_phase_for_new_student():
     domain = create_domain()
     student = Student.objects.create()
