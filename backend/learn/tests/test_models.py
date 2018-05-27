@@ -7,16 +7,14 @@ from learn.utils.time import ms
 
 
 class BlockTestCase(TestCase):
-    def test_blocks_exists(self):
-        assert Block.objects.exists()
 
     def test_blocks_are_ordered(self):
-        first_retrieved_blocks = list(Block.objects.all())[:3]
-        first_expected_blocks = [
-            Block.objects.get(name='fly'),
-            Block.objects.get(name='shoot'),
-            Block.objects.get(name='repeat')]
-        assert first_retrieved_blocks == first_expected_blocks
+        Block.objects.all().delete()
+        b1 = Block.objects.create(name='a', order=1)
+        b3 = Block.objects.create(name='b', order=3)
+        b2 = Block.objects.create(name='c', order=2)
+        retrieved_blocks = list(Block.objects.all())
+        assert retrieved_blocks == [b1, b2, b3]
 
     def test_str_returns_name(self):
         carrot_block = Block(name='carrot', order=4)
