@@ -367,16 +367,16 @@ class StudentSkillSerializer(serializers.Serializer):
 
 class RecommendationSerializer(serializers.Serializer):
     available = serializers.BooleanField()
-    task = serializers.CharField()
-    phase = serializers.CharField()
-    mission = serializers.CharField()
-    levels = serializers.ListField(child=serializers.IntegerField())
+    task = serializers.CharField(required=False, allow_null=True)
+    phase = serializers.CharField(required=False, allow_null=True)
+    mission = serializers.CharField(required=False, allow_null=True)
+    levels = serializers.ListField(child=serializers.IntegerField(), required=False)
 
 
 class PracticeOverviewSerializer(serializers.Serializer):
     level = serializers.IntegerField()
-    mission = serializers.CharField()
-    phase = serializers.CharField()
+    mission = serializers.CharField(required=False, allow_null=True)
+    phase = serializers.CharField(required=False, allow_null=True)
     credits = serializers.IntegerField()
     tasks = StudentTaskSerializer(many=True)
     skills = StudentSkillSerializer(many=True)

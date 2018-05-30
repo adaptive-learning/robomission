@@ -4,6 +4,22 @@ from learn.serializers import BlockSerializer, ToolboxSerializer, SettingSeriali
 from learn.serializers import TaskSerializer, ProblemSetSerializer
 from learn.serializers import InstructionSerializer
 from learn.serializers import DomainSerializer
+from learn.serializers import PracticeOverviewSerializer
+from learn.practice_overview import PracticeOverview
+
+
+class PraciceOverviewSerializerTestCase(TestCase):
+    def test_serialization(self):
+        overview = PracticeOverview(
+            level=3,
+            mission=None,
+            phase='p1',
+            credits=30,
+            tasks=[],
+            skills=[],
+            recommendation=None)
+        serializer = PracticeOverviewSerializer(overview)
+        assert serializer.data is not None
 
 
 class BlockSerializerTestCase(TestCase):

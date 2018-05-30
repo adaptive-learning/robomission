@@ -82,7 +82,7 @@ def has_mastered(student, ps):
 
 def get_current_mission_phase(domain, student):
     mission = get_first_unsolved_mission(domain, student)
-    phase = get_first_unsolved_phase(mission, student)
+    phase = get_first_unsolved_phase(mission, student) if mission else None
     return mission, phase
 
 

@@ -50,6 +50,7 @@ def get_skill_list(domain, student):
 
 
 def get_practice_overview(domain, student):
+    # TODO: Remove redundancy of get_current_mission_phase vs get_recommendation.
     mission, phase = get_current_mission_phase(domain, student)
     overview = PracticeOverview(
         level=get_level(domain, student),

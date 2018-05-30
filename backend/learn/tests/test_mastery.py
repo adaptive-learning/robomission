@@ -5,6 +5,7 @@ from learn.models import Student, TaskSession, Skill
 from learn.mastery import has_mastered, get_level
 from learn.mastery import get_first_unsolved_mission
 from learn.mastery import get_first_unsolved_phase
+from learn.mastery import get_current_mission_phase
 
 
 # Django DB is always needed for many-to-many relations (chunks.tasks)
@@ -105,6 +106,28 @@ def test_get_first_unsolved_phase__first_solved():
     student = Student.objects.create()
     Skill.objects.create(student=student, chunk=p1, value=1)
     assert get_first_unsolved_phase(m1, student) == p2
+
+
+@pytest.mark.django_db
+def test_get_first_unsolved_phase__all_solved():
+    m1 = ProblemSet.objects.create()
+    p1 = m1.add_part()
+    student = Student.objects.create()
+    Skill.objects.create(student=student, chunk=p1, value=1)
+    Skill.objects.create(student=student, chunk=m1, value=1)
+    assert get_first_unsolved_phase(m1, student) == None
+
+
+@pytest.mark.django_db
+def test_get_mission_phase__all_solved():
+    domain = Domain.objects.create()
+    m1 = ProblemSet.objects.create()
+    p1 = m1.add_part()
+    domain.problemsets.set([m1, p1])
+    student = Student.objects.create()
+    Skill.objects.create(student=student, chunk=p1, value=1)
+    Skill.objects.create(student=student, chunk=m1, value=1)
+    assert get_current_mission_phase(domain, student) == (None, None)
 
 
 @pytest.mark.django_db
