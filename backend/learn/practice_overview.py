@@ -54,8 +54,8 @@ def get_practice_overview(domain, student):
     mission, phase = get_current_mission_phase(domain, student)
     overview = PracticeOverview(
         level=get_level(domain, student),
-        mission=mission.name,
-        phase=phase.name,
+        mission=mission.name if mission else None,
+        phase=phase.name if phase else None,
         credits=student.credits,
         tasks=get_tasks(domain, student),
         skills=get_skill_list(domain, student),
