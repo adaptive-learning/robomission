@@ -526,14 +526,20 @@ class ProgramSnapshot(models.Model):
 
     task_session = models.ForeignKey(TaskSession, related_name='snapshots')
     time = models.DateTimeField(default=timezone.now)
+    time_from_start = models.PositiveIntegerField(
+        blank=True, null=True, default=None,
+        help_text='Number of seconds from the start of the task session.')
     program = models.TextField()
     granularity = models.CharField(
         help_text='Level of snapshoptting frequency.',
         max_length=10,
         choices=GRANULARITY_CHOICES,
         default=EDIT)
+    order = models.PositiveSmallIntegerField(
+        blank=True, null=True, default=None,
+        help_text='Order of the snapshot for given task session and granularity.')
     correct = models.NullBooleanField(
-        help_text='Whether the snapshot is correct solution. Only applies for executions.',
+        help_text='Whether the snapshot is correct solution (executions only).',
         default=None)
 
     @property
@@ -541,29 +547,6 @@ class ProgramSnapshot(models.Model):
         if len(self.program) > 60:
             return self.program[:60] + '...'
         return self.program
-
-    @cached_property
-    def order(self):
-        """Order of the snapshot for the granularity level and current task session.
-        """
-        # The filtering is done in plain Python to avoid excess SQL queries if
-        # the snapshots are already prefetched.
-        # TODO: Compute the order on save(). It's not going to change later, so
-        # there no consistency issues.
-        snapshots = self.task_session.snapshots.all()
-        n_previous_snapshots = sum(
-            1 for s in snapshots
-            if s.granularity == self.granularity and s.time < self.time)
-        order = n_previous_snapshots + 1
-        return order
-
-    @cached_property
-    def time_from_start(self):
-        """Number of seconds from the point when the student started the task session.
-        """
-        delta = self.time - self.task_session.start
-        seconds = int(delta.total_seconds())
-        return seconds
 
     def __str__(self):
         return '[{pk}] {program}'.format(pk=self.pk, program=self.program_shortened)
