@@ -9,7 +9,7 @@ def compute_order_and_time_from_start(apps, schema_editor):
     # Django doesn't support simple iterations through group-by groups, so we
     # will emulate it by ordering.
     task_session = None
-    for snapshot in snapshots.order_by('task_session__pk'):
+    for snapshot in snapshots.order_by('task_session__pk', 'time'):
         if not task_session or task_session.pk != snapshot.task_session.pk:
             order_edits, order_executions = 0, 0
             last_edit_snapshot, last_execution_snapshot = None, None
