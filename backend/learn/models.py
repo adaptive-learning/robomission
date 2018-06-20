@@ -529,6 +529,9 @@ class ProgramSnapshot(models.Model):
     time_from_start = models.PositiveIntegerField(
         blank=True, null=True, default=None,
         help_text='Number of seconds from the start of the task session.')
+    time_delta = models.PositiveIntegerField(
+        blank=True, null=True, default=None,
+        help_text='Number of seconds from the last snapshot of the same granularity.')
     program = models.TextField()
     granularity = models.CharField(
         help_text='Level of snapshoptting frequency.',

@@ -93,35 +93,12 @@ class ProgramSnapshotSerializer(serializers.ModelSerializer):
         model = ProgramSnapshot
         fields = (
             'id', 'task_session', 'time', 'program',
-            'granularity', 'order', 'correct', 'time_from_start')
-
-
-def to_delta(times):
-    deltas = times.diff()
-    deltas.iat[0] = times.iat[0]
-    return deltas
-
-
-class ProgramSnapshotPandasSerializer(PandasSerializer):
-    def transform_dataframe(self, dataframe):
-        """Add a column with time since last snapshot of the same granularity.
-        """
-        grouped_programs = dataframe.groupby(['task_session', 'granularity'])
-        dataframe['time_delta'] = grouped_programs.time_from_start.transform(to_delta)
-        return dataframe
+            'granularity', 'order', 'correct', 'time_from_start', 'time_delta')
 
 
 class ProgramSnapshotsViewSet(ExportViewSet):
-    # Not only task session, but also its snapshots must be prefetched to avoid
-    # generating individual SQL queries for each serialed row. (The reason is
-    # in ProgramSnapshot.order which is a computed property and needs to know
-    # all snapshots of its task session.)
-    # TODO: Once the order is computed on save(), it is enought to
-    # select_related('task_session') (that is still needed for time_from
-    # start), although that could be computed on save() as well.
-    queryset = ProgramSnapshot.objects.prefetch_related('task_session__snapshots').all()
+    queryset = ProgramSnapshot.objects.all()
     serializer_class = ProgramSnapshotSerializer
-    pandas_serializer_class = ProgramSnapshotPandasSerializer
 
 
 class LatestBundleViewSet(viewsets.ViewSet):
