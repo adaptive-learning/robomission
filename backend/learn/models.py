@@ -542,6 +542,9 @@ class ProgramSnapshot(models.Model):
         help_text='Whether the snapshot is correct solution (executions only).',
         default=None)
 
+    class Meta:
+        ordering = ['time']
+
     @property
     def program_shortened(self):
         if len(self.program) > 60:
