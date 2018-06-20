@@ -357,6 +357,29 @@ class ProgramSnapshotTestCase(TestCase):
         snapshot = ProgramSnapshot.objects.create(task_session=ts, time=ms('2:05'))
         assert snapshot.time_from_start == 125
 
+    def test_first_time_delta__is_time_from_stat(self):
+        ts = _create_task_session_at(ms('0:00'))
+        snapshot = ProgramSnapshot.objects.create(task_session=ts, time=ms('0:10'))
+        assert snapshot.time_delta == 10
+
+    def test_time_delta__is_time_from_last_snapshot(self):
+        ts = _create_task_session_at(ms('0:00'))
+        ProgramSnapshot.objects.create(task_session=ts, time=ms('0:10'))
+        snapshot = ProgramSnapshot.objects.create(task_session=ts, time=ms('0:15'))
+        assert snapshot.time_delta == 5
+
+    def test_time_delta__is_per_granularity(self):
+        ts = _create_task_session_at(ms('0:00'))
+        ProgramSnapshot.objects.create(
+            task_session=ts,
+            time=ms('0:10'),
+            granularity=ProgramSnapshot.EXECUTION)
+        snapshot = ProgramSnapshot.objects.create(
+            task_session=ts,
+            time=ms('0:15'),
+            granularity=ProgramSnapshot.EDIT)
+        assert snapshot.time_delta == 15
+
 
 class SkillTestCase(TestCase):
     def test_str(self):

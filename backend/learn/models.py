@@ -548,6 +548,28 @@ class ProgramSnapshot(models.Model):
     class Meta:
         ordering = ['time']
 
+    def save(self, *args, **kwargs):
+        if not self.order:
+            n_previous_snapshots = (
+                self.task_session.snapshots
+                .filter(granularity=self.granularity)
+                .count())
+            self.order = n_previous_snapshots + 1
+        if not self.time_from_start:
+            delta_from_start = self.time - self.task_session.start
+            self.time_from_start = int(delta_from_start.total_seconds())
+        if not self.time_delta:
+            last_snapshot = (
+                self.task_session.snapshots
+                .filter(granularity=self.granularity)
+                .last())
+            if not last_snapshot:
+                self.time_delta = self.time_from_start
+            else:
+                delta = self.time - last_snapshot.time
+                self.time_delta = int(max(delta.total_seconds(), 0))
+        super(ProgramSnapshot, self).save(*args, **kwargs)
+
     @property
     def program_shortened(self):
         if len(self.program) > 60:
