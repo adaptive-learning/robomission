@@ -1,11 +1,12 @@
 """Views and utilities for exporting data to csv.
 """
+import csv
 from django.conf import settings
 from django.shortcuts import redirect
 from rest_framework import permissions
 from rest_framework import serializers
 from rest_framework import viewsets
-from rest_pandas import PandasSerializer, PandasViewSet
+from rest_pandas import PandasViewSet
 from learn.models import Block, Toolbox, Task, ProblemSet
 from learn.models import TaskSession, ProgramSnapshot
 
@@ -19,6 +20,8 @@ class ExportViewSet(PandasViewSet):
     # in such case, the permissions would need to rethink.
     permission_classes = (permissions.IsAdminUser,)
 
+    # Currently not used, but we may need it again once we introduce online
+    # export of the latest data.
     def get_dataframe(self):
         queryset = self.filter_queryset(self.get_queryset())
         # The `with_list_serializer` method combines standard serializer class
@@ -41,15 +44,9 @@ class TaskSerializer(serializers.ModelSerializer):
         pandas_index = ['id']
 
 
-class TaskPandasSerializer(PandasSerializer):
-    def transform_dataframe(self, dataframe):
-        return dataframe
-
-
 class TaskViewSet(ExportViewSet):
     queryset = Task.objects.select_related('problemset__parent').all()
     serializer_class = TaskSerializer
-    pandas_serializer_class = TaskPandasSerializer
 
 
 class ProblemSetSerializer(serializers.ModelSerializer):
@@ -114,3 +111,13 @@ class LatestBundleViewSet(viewsets.ViewSet):
             media=settings.MEDIA_URL,
             bundle_name=settings.EXPORT_BUNDLE_NAME)
         return redirect(bundle_url)
+
+
+def save_viewset_to_csv(viewset, path):
+    with open(path, 'w', newline='') as csvfile:
+        writer = csv.writer(csvfile)
+        fields = tuple(viewset.serializer_class().fields.keys())
+        writer.writerow(fields)
+        for entity in viewset.queryset:
+            row = tuple(viewset.serializer_class(entity).data.values())
+            writer.writerow(row)

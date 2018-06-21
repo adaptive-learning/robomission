@@ -5,7 +5,7 @@ import os
 from django.conf import settings
 from mmc.mixins import BaseCommand as MonitoredCommand
 from rest_framework.test import APIClient
-import learn.export
+from learn import export
 
 
 logger = logging.getLogger(__name__)
@@ -15,10 +15,10 @@ class Command(MonitoredCommand):
     help = "Export all data for analysis into CSV files."
 
     entities_to_export = [
-        ('tasks', learn.export.TaskViewSet),
-        ('problemsets', learn.export.ProblemSetViewSet),
-        ('task_sessions', learn.export.TaskSessionsViewSet),
-        ('program_snapshots', learn.export.ProgramSnapshotsViewSet),
+        ('tasks', export.TaskViewSet),
+        ('problemsets', export.ProblemSetViewSet),
+        ('task_sessions', export.TaskSessionsViewSet),
+        ('program_snapshots', export.ProgramSnapshotsViewSet),
     ]
 
     def handle(self, *args, **options):
@@ -37,11 +37,15 @@ class Command(MonitoredCommand):
     def export_entity(self, entity_name, viewset_class, dirpath):
         file_name = entity_name + '.csv'
         file_path = os.path.join(dirpath, file_name)
-        self.stdout.write(
-            '-> exporting {entity} as {file_name}'
-            .format(entity=entity_name, file_name=file_name))
-        df = viewset_class().get_dataframe()
-        df.to_csv(file_path)
+        self.stdout.write('-> exporting {file_name}'.format(file_name=file_name))
+        export.save_viewset_to_csv(viewset_class, path=file_path)
+
+        # We have originally used Django Rest Pandas to create (and possibly
+        # transform) dataframe:
+        #     df = viewset_class().get_dataframe()
+        #     df.to_csv(file_path)
+        # but that caused memory problems as there
+        # started to be too many entities.
 
     def zip_bundle(self, dirpath):
         # shutil.make_archive needs bundle output path without ".zip" as the

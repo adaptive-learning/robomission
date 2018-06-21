@@ -19,8 +19,10 @@ export_router.register(
     base_name='latest/bundle')
 export_router.register(r'current/tasks', export.TaskViewSet)
 export_router.register(r'current/problemsets', export.ProblemSetViewSet)
-export_router.register(r'current/task_sessions', export.TaskSessionsViewSet)
-export_router.register(r'current/program_snapshots', export.ProgramSnapshotsViewSet)
+# TODO: Allow for online export of the most recent task sessions and snapshots
+# (e.g. last 5 days).
+#export_router.register(r'current/task_sessions', export.TaskSessionsViewSet)
+#export_router.register(r'current/program_snapshots', export.ProgramSnapshotsViewSet)
 
 
 urlpatterns = [
