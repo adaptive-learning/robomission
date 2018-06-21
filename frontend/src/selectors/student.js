@@ -8,7 +8,7 @@ export function getLevelStatus(state) {
   if (state.student.mission !== null) {
     const currentProblemSet = state.problemSets[state.student.mission];
     const skill = currentProblemSet.skill;
-    activeCredits = Math.floor(100 * skill);
+    activeCredits = (skill !== undefined) ? Math.floor(100 * skill) : 0;
   }
   const missionCompleted = activeCredits >= maxCredits;
   const nextMissionId = missionCompleted ? state.recommendation.mission : null;
