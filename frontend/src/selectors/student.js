@@ -3,10 +3,13 @@ export function getLevelStatus(state) {
   // TODO: Remove notion of activeCredits; replace progressbar by stepper.
   // Temporarily activeCredits are set to correspond to the mastered skill
   // (percentage).
-  const currentProblemSet = state.problemSets[state.student.mission];
-  const skill = currentProblemSet.skill;
-  const activeCredits = Math.floor(100 * skill);
+  let activeCredits = 100
   const maxCredits = 100;
+  if (state.student.mission !== null) {
+    const currentProblemSet = state.problemSets[state.student.mission];
+    const skill = currentProblemSet.skill;
+    activeCredits = Math.floor(100 * skill);
+  }
   return { level, activeCredits, maxCredits };
 }
 
