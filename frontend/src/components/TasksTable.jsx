@@ -13,7 +13,7 @@ import { flatten } from '../utils/arrays';
 import Instructable from '../containers/Instructable';
 
 
-export default function TaskTable({ urlBase, missions, recommendation }) {
+export default function TaskTable({ urlBase, missions, recommendation, levelStatus }) {
   return (
     <div style={{paddingBottom: 10}}>
       { missions.map(mission =>
@@ -22,6 +22,7 @@ export default function TaskTable({ urlBase, missions, recommendation }) {
           urlBase={urlBase}
           mission={mission}
           recommendation={recommendation}
+          levelStatus={levelStatus}
         />)
       }
     </div>
@@ -32,6 +33,7 @@ TaskTable.propTypes = {
   urlBase: PropTypes.string,
   missions: PropTypes.array.isRequired,
   recommendation: PropTypes.object.isRequired,
+  levelStatus: PropTypes.object.isRequired,
 };
 
 TaskTable.defaultProps = {
@@ -39,15 +41,14 @@ TaskTable.defaultProps = {
 };
 
 
-function MissionOverview({ mission, urlBase, recommendation }) {
+function MissionOverview({ mission, urlBase, recommendation, levelStatus }) {
   const tasks = flatten(mission.phases.map(phase => phase.tasks));
   const isRecommended = recommendation.mission === mission.id
   let badgeTextColor = theme.palette.canvasColor;
   let badgeBackgroundColor = theme.palette.disabledColor;
   if (isRecommended) {
     badgeTextColor = theme.palette.accent2Color;
-  } else if (mission.level < recommendation.levels[0]) {
-    // TODO: Use explicit student.mission/phase info instead of recommendation.
+  } else if (mission.level < levelStatus.level) {
     badgeBackgroundColor = theme.palette.successColor;
   }
   return (

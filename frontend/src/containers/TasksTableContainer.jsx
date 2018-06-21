@@ -4,7 +4,7 @@ import muiThemeable from 'material-ui/styles/muiThemeable';
 import TasksTable from '../components/TasksTable';
 import { fetchPracticeOverview } from '../actions';
 import { isPracticeOverviewInvalidated } from '../selectors/app';
-import { getPracticeOverviewUrl } from '../selectors/student';
+import { getPracticeOverviewUrl, getLevelStatus } from '../selectors/student';
 import { getMissionList } from '../selectors/problemSets';
 import LongPage from '../components/LongPage';
 
@@ -13,6 +13,7 @@ function getProps(state) {
   return {
     missions: getMissionList(state),
     recommendation: state.recommendation,
+    levelStatus: getLevelStatus(state),
     isPracticeOverviewInvalidated: isPracticeOverviewInvalidated(state),
     practiceOverviewUrl: getPracticeOverviewUrl(state),
   };
@@ -42,6 +43,7 @@ class TasksTableContainer extends React.Component {
       <LongPage>
         <TasksTable
           missions={this.props.missions}
+          levelStatus={this.props.levelStatus}
           urlBase="/task/"
           recommendation={this.props.recommendation}
         />
