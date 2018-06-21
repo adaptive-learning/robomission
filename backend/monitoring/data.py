@@ -46,9 +46,12 @@ def get_last_available_datestamp():
     return max(get_available_datestamps())
 
 
-def load_csv(dirpath, name):
+def load_csv(dirpath, name, n_last_rows=100000):
     path = get_csv_path(dirpath, name)
-    df = pd.read_csv(path, index_col='id')
+    # DType for 'correct' field is specified because it contains NaNs, which
+    # makes pandas confused (unless the dtype is specified).
+    df = pd.read_csv(path, index_col='id', dtype={'correct': bool})
+    df = df.tail(n_last_rows)
     return df
 
 

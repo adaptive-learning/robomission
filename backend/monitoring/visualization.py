@@ -7,6 +7,13 @@ import seaborn as sns
 VIRIDIS = sns.color_palette('viridis', n_colors=256)
 
 
+def phase_background(values):
+    alpha = 0.1
+    if 'level2' in values:
+        alpha = values.level2 * 0.1
+    attr = 'background-color: rgba(0, 0, 0, {alpha});'.format(alpha=alpha)
+    return [attr for v in values]
+
 def viridis_background(value, vmin, vmax, reverse=False):
     norm_value = (value - vmin) / (vmax - vmin)
     if reverse:
@@ -27,8 +34,6 @@ def time_background(value):
 
 
 def style_level(df, order_by='order'):
-    df = df[['name', 'order', 'n_attempts', 'success', 'time']]
-    df = df.reset_index()
     df = df.sort_values(by=order_by)
     styled_df = (
         df.style
@@ -40,6 +45,7 @@ def style_level(df, order_by='order'):
               'props': [('display', 'none;')]},
             ])
         #.bar(subset=['n_attempts'], align='mid', color='#d65f5f')
+        .apply(phase_background, axis=1)
         .applymap(percentage_background, subset=['success'])
         .applymap(time_background, subset=['time'])
         .format({
@@ -49,6 +55,6 @@ def style_level(df, order_by='order'):
     return styled_df
 
 
-def display_level_overview(overview_df, order_by='order'):
-    styled = style_level(overview_df, order_by=order_by)
+def display_level_overview(df, order_by):
+    styled = style_level(df, order_by=order_by)
     display(styled)
