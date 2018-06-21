@@ -26,7 +26,7 @@ class LevelBar extends React.Component {
     };
     const styleMini = {
       display: 'inline-block',
-      width: 50,
+      width: 54,
       marginLeft: 8,
       fontSize: 12,
       lineHeight: '9px',
