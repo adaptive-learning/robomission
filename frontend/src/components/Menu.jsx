@@ -97,13 +97,13 @@ class Menu extends React.Component {
           >
             <Text id="Intro" />
           </MenuItem>
-          <MenuItem
+          {practiceTaskUrl && <MenuItem
             value="task"
             leftIcon={<TaskIcon />}
             containerElement={<Link to={practiceTaskUrl} />}
           >
             <Text id="Practice" />
-          </MenuItem>
+          </MenuItem>}
           <MenuItem
             value="tasks"
             leftIcon={<TasksOverviewIcon />}
