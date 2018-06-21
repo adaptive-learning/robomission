@@ -21,25 +21,16 @@ export default class CompleteTaskModal extends React.Component {
     this.showLevelProgress = props.showLevelProgress.bind(this);
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.levelStatus.level !== this.props.levelStatus.level) {
-      this.setState({ shownPercent: 0, shownCredits: 0, animating: true }, () => {
-        // immediately update state again to avoid "decrease" animation
-        this.setState({ shownPercent: 1 });
-      });
-    }
-    if (!this.state.animating && nextProps.levelStatus.hasNext) {
-      this.setState({ animating: true });
-    }
-    if (this.state.animating && !nextProps.levelStatus.hasNext) {
-      this.setState({ animating: false });
-    }
-  }
-
   componentDidUpdate(prevProps) {
     if (!prevProps.open && this.props.open && this.props.levelStatus.hasNext) {
       this.showLevelProgress(this.props.levelProgress);
     }
+    //// NOTE: Level changes withing a single dialog cannot currently happen.
+    //if (this.props.levelStatus.level !== prevProps.levelStatus.level) {
+    //  this.setState({ shownPercent: 0, shownCredits: 0, animating: true }, () => {
+    //    // immediately update state again to avoid "decrease" animation
+    //    this.setState({ shownPercent: 1 });
+    //  });
     if (prevProps.levelStatus.activeCredits !== this.props.levelStatus.activeCredits) {
       this.animateProgress();
     }
@@ -47,6 +38,7 @@ export default class CompleteTaskModal extends React.Component {
 
 
   animateProgress() {
+    this.setState({ animating: true });
     const { activeCredits, maxCredits } = this.props.levelStatus;
     // clear any pending animation before starting a new one
     clearTimeout(this.animationTimer);
@@ -79,15 +71,25 @@ export default class CompleteTaskModal extends React.Component {
 
   render() {
     let actions = [];
-    let bottomMessage = null;
+    const bottomMessages = [];
     if (this.props.levelStatus.hasNext && !this.state.animating) {
       actions = [this.renderContinueButton(true)];
     } else if (this.state.animating) {
       actions = [this.renderContinueButton(false)];
     } else {
-      if (this.props.recommendation.isEasy) {
-        bottomMessage = <Text id="easy-task-challenge" />
+      const { missionCompleted, nextMissionId } = this.props.levelStatus;
+      if (missionCompleted) {
+        bottomMessages.push(translate('Mission completed'));
+        if (nextMissionId) {
+          const missionStoryNameId = `ps.story.${nextMissionId}`;
+          bottomMessages.push(
+            `${translate('New mission')}: ${translate(missionStoryNameId)}`);
+        }
       }
+      // TODO: Uncomment/update if easy recommendations are reintroduced.
+      //if (this.props.recommendation.isEasy) {
+      //  bottomMessage = <Text id="easy-task-challenge" />
+      //}
       actions = [
         <NextTaskButtonContainer />,
         <Link to="/tasks">
@@ -95,6 +97,7 @@ export default class CompleteTaskModal extends React.Component {
         </Link>
       ];
     }
+
     return (
       <Dialog
         title={translate('excellent-task-solved')}
@@ -110,11 +113,11 @@ export default class CompleteTaskModal extends React.Component {
           maxCredits={this.props.levelStatus.maxCredits}
           percent={this.state.shownPercent}
         />
-        {bottomMessage && (
-          <div style={{ marginTop: 25 }}>
-            {bottomMessage}
+        {bottomMessages.map((message, index) => (
+          <div key={index} style={{ marginTop: 25 }}>
+            {message}
           </div>
-        )}
+        ))}
       </Dialog>
     );
   }

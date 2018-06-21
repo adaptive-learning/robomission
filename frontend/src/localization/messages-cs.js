@@ -17,6 +17,8 @@ export default {
   'For hackers': 'Pro hackery',
   'New instructions': 'Nové nápovědy',
   'All instructions': 'Všechny nápovědy',
+  'Mission completed': 'Mise úspěšně dokončena.',
+  'New mission': 'Nová mise',
 
   'easy-task-challenge': 'Pro změnu něco jednoduššího. Zvládneš to vyřešit do minuty?',
   'excellent-task-solved': 'Skvěle, úloha vyřešena!',

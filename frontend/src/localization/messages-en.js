@@ -17,6 +17,8 @@ export default {
   'For hackers': 'For hackers',
   'New instructions': 'New instructions',
   'All instructions': 'All instructions',
+  'Mission completed': 'Mission completed.',
+  'New mission': 'New mission',
 
   'easy-task-challenge': 'And now something easier. Will you solve it within 1 minute?',
   'excellent-task-solved': 'Excellent! Task solved.',
