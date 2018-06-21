@@ -13,14 +13,18 @@ export default function NextTaskButton({ task }) {
     display: 'inline-block',
   };
   if (task === null) {
-    return (
-      <RaisedButton
-        style={style}
-        label="..."
-        primary={true}
-        disabled={false}
-      />
-    );
+    // When all mission are completed (or recommendation is unavailable for
+    // other reason), don't show anything.
+    return null;
+    // (TODO: Make localized pages for "Next goals".)
+    //return (
+    //    <RaisedButton
+    //      style={style}
+    //      label="..."
+    //      primary={true}
+    //      disabled={false}
+    //    />
+    //);
   }
   return (
     <Link to={task.url}>
