@@ -16,8 +16,8 @@
 ## Implementation details
 
 * We use cron to schedule exporting new data and monitoring notebook every week;
-  see [cronjobs.md](./cronjobs.md) for details.
-* The export of new data is described in [data.md](./docs.md).
+  see [scheduled_jobs.md](./scheduled_jobs.md) for details.
+* The export of new data is described in [data.md](./data.md).
 * The export of the notebook is defined in [export_monitoring_notebook.py]:
   * The template is loaded and parsed using `nbformat` module.
   * The timestamp is replaced by the timestamp of the last exported data bundle.
