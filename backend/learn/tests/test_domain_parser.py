@@ -1,7 +1,8 @@
 from django.test import TestCase
 import pytest
-from learn.domain_parser import load_domain_from_file
+from learn.domain_parser import load_domain_from_file, parse_task_source
 from learn.models import Domain, Task, ProblemSet
+from learn.utils.text import unpad
 
 
 #@pytest.fixture(scope='module')
@@ -105,3 +106,46 @@ class DomainParserTestCase(TestCase):
     #    load_domain_from_file('domain/tests/test1.domain.json')
     #    assert Task.objects.get(pk=1).name == 't1'
     #    assert Task.objects.get(pk=2).name == 't2'
+
+
+@pytest.fixture(scope='session')
+def task_text_scaffolding():
+    return unpad('''
+        # t4-scaffolding
+
+        ## Setting
+        - description: "Fly twice forward."
+
+        ```
+        |b |
+        |k |
+        |kS|
+        ```
+
+        ### Initial Code
+        ```
+        fly()
+        ```
+
+        ## Solution
+
+        ```
+        fly()
+        fly()
+        ```
+        ''')
+
+
+def test_parse_task_source_scaffolding(task_text_scaffolding):
+    parsed_data = parse_task_source(task_text_scaffolding)
+    expected_data = {
+            'name': 't4-scaffolding',
+            'setting': {
+                'description': "Fly twice forward.",
+                'fields': 'b;k;kS',
+                'initial_code': 'f'
+                },
+            'solution': 'ff'
+    }
+    assert parsed_data == expected_data
+

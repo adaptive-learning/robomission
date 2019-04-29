@@ -1,0 +1,12 @@
+{
+  "name": "test-scaffolding",
+  "include": {
+    "tasks": "./tasks"
+  },
+  "problemsets" : [
+    { "id": 102, "name": "p1", "tasks": [ "t4-scaffolding" ] }
+  ],
+  "tasks" : [
+    {"id": 1, "name": "t4-scaffolding"}
+  ]
+}

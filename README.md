@@ -16,7 +16,9 @@ at [Masaryk University][4].
 2. Configure virtualenv and virtualenvwrapper by adding the following two lines in your `~/.bashrc`:
 
         export WORKON_HOME=~/.virtualenvs
-        source --python=/usr/bin/python3.5 /usr/bin/virtualenvwrapper.sh
+        export VIRTUALENVWRAPPER_PYTHON='/usr/bin/python3'
+        source /usr/local/bin/virtualenvwrapper.sh
+
 
   Load the changes:
 
@@ -41,6 +43,10 @@ at [Masaryk University][4].
   npm for frontend dependencies,
   and then it sets up the database for development. (See Makefile for details.)
   You can deactivate the virtual environment by calling `deactivate`.
+
+6. Create dummy file with secret keys:
+
+        $ cp settings_secret_template.py settings_secret.py
 
 ## Workflow
 
