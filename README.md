@@ -18,11 +18,10 @@ at [Masaryk University][4].
         export WORKON_HOME=~/.virtualenvs
         export VIRTUALENVWRAPPER_PYTHON='/usr/bin/python3'
         source /usr/local/bin/virtualenvwrapper.sh
+        
+    Load the changes:
 
-
-  Load the changes:
-
-        $ source ~/.bashrc
+          $ source ~/.bashrc
 
 3. Clone the project repository:
 
@@ -33,16 +32,16 @@ at [Masaryk University][4].
         $ cd robomission
         $ mkvirtualenv robomission && setvirtualenvproject
 
-  The name of the virtual environment (robomission) should now appear in front of the prompt.
+    The name of the virtual environment (robomission) should now appear in front of the prompt.
 
 5. Install dependencies and initialize DB:
 
         $ make install
 
-  The `make install` command uses pip to install install backend dependencies,
-  npm for frontend dependencies,
-  and then it sets up the database for development. (See Makefile for details.)
-  You can deactivate the virtual environment by calling `deactivate`.
+    The `make install` command uses pip to install install backend dependencies,
+    npm for frontend dependencies,
+    and then it sets up the database for development. (See Makefile for details.)
+    You can deactivate the virtual environment by calling `deactivate`.
 
 6. Create dummy file with secret keys:
 
