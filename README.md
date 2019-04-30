@@ -15,9 +15,13 @@ at [Masaryk University][4].
 
 2. Configure virtualenv and virtualenvwrapper by adding the following two lines in your `~/.bashrc`:
 
+
         export WORKON_HOME=~/.virtualenvs
         export VIRTUALENVWRAPPER_PYTHON='/usr/bin/python3'
         source /usr/local/bin/virtualenvwrapper.sh
+
+    The path to the `virtualenvwrapper.sh` might be different depending on the OS
+    and the way you install it.
         
     Load the changes:
 
