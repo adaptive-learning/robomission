@@ -136,6 +136,7 @@ def task_text_scaffolding():
         ''')
 
 
+@pytest.mark.skip(reason='implementation of scaffolding postponed')
 def test_parse_task_source_scaffolding(task_text_scaffolding):
     parsed_data = parse_task_source(task_text_scaffolding)
     expected_data = {

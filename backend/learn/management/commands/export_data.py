@@ -14,12 +14,12 @@ logger = logging.getLogger(__name__)
 class Command(MonitoredCommand):
     help = "Export all data for analysis into CSV files."
 
-    entities_to_export = [
-        ('tasks', export.TaskViewSet),
-        ('problemsets', export.ProblemSetViewSet),
-        ('task_sessions', export.TaskSessionsViewSet),
-        ('program_snapshots', export.ProgramSnapshotsViewSet),
-    ]
+    #entities_to_export = [
+    #    ('tasks', export.TaskViewSet),
+    #    ('problemsets', export.ProblemSetViewSet),
+    #    ('task_sessions', export.TaskSessionsViewSet),
+    #    ('program_snapshots', export.ProgramSnapshotsViewSet),
+    #]
 
     def handle(self, *args, **options):
         logger.info('Management command called: export_data')
@@ -29,23 +29,26 @@ class Command(MonitoredCommand):
         full_dirpath = os.path.join(settings.EXPORTS_DIR, dirname, '')
         self.stdout.write('Exporting entities to {path}'.format(path=full_dirpath))
         os.makedirs(full_dirpath, exist_ok=True)
-        for entity_name, viewset_class in self.entities_to_export:
-            self.export_entity(entity_name, viewset_class, full_dirpath)
+
+        #for entity_name, viewset_class in self.entities_to_export:
+        #    self.export_entity(entity_name, viewset_class, full_dirpath)
+        export.export_to_csv(path=full_dirpath)
+
         bundle_path = self.zip_bundle(full_dirpath)
         self.mark_zip_bundle_as_latest(bundle_path)
 
-    def export_entity(self, entity_name, viewset_class, dirpath):
-        file_name = entity_name + '.csv'
-        file_path = os.path.join(dirpath, file_name)
-        self.stdout.write('-> exporting {file_name}'.format(file_name=file_name))
-        export.save_viewset_to_csv(viewset_class, path=file_path)
+    #def export_entity(self, entity_name, viewset_class, dirpath):
+    #    file_name = entity_name + '.csv'
+    #    file_path = os.path.join(dirpath, file_name)
+    #    self.stdout.write('-> exporting {file_name}'.format(file_name=file_name))
+    #    viewset_class().export_to_csv(path=file_path)
 
-        # We have originally used Django Rest Pandas to create (and possibly
-        # transform) dataframe:
-        #     df = viewset_class().get_dataframe()
-        #     df.to_csv(file_path)
-        # but that caused memory problems as there
-        # started to be too many entities.
+    #    # We have originally used Django Rest Pandas to create (and possibly
+    #    # transform) dataframe:
+    #    #     df = viewset_class().get_dataframe()
+    #    #     df.to_csv(file_path)
+    #    # but that caused memory problems as there
+    #    # started to be too many entities.
 
     def zip_bundle(self, dirpath):
         # shutil.make_archive needs bundle output path without ".zip" as the
