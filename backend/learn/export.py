@@ -211,9 +211,9 @@ def make_events_df():
     events = events.join(attempts, on='task_session_id')
     events = pd.DataFrame(OrderedDict([
         ('id', events.id),
-        ('event_type', events.granularity),
         ('event_order', events.time.rank(method='first').astype(int)),
         ('timestamp', events.time),
+        ('event_type', events.granularity),
         ('student', events.student),
         ('problem', events.problem),
         ('attempt', events.task_session_id),
