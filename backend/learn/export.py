@@ -217,7 +217,8 @@ def make_events_df():
         ('student', events.student),
         ('problem', events.problem),
         ('attempt', events.task_session_id),
-        ('program', events.program.fillna('')),
+        # Make minicode characters unambiguous.
+        ('program', events.program.fillna('').str.replace('r{', 'd{')),
         ('correct', events.correct),
         ('time_from_attempt_start', events.time_from_start),
         ('tools', 'robomission:1.0'),
@@ -228,6 +229,10 @@ def make_events_df():
     # Hack to denote the old code version.
     is_new_version = events.timestamp < '2018-05-26'
     events['tools'] = events['tools'].where(is_new_version, other='robomission:1.1')
+    # Remove incorrectly matched one-step-forward attempts.
+    events = events[(events.problem != 51) | (events.tools != 'robomission:1.0')]
+    # Renumber.
+    events['event_order'] = events['event_order'].rank(method='first').astype(int)
     return events
 
 
