@@ -28,7 +28,9 @@ def get_cronjobs(logfile):
     cronjobs_list = [
         cronjob(EVERYDAY_2AM, 'compute_metrics', logfile),
         cronjob(SATURDAY_3AM, 'export_data', logfile),
-        cronjob(SATURDAY_4AM, 'export_monitoring_notebook', logfile)]
+        # TODO: Fix monitoring notebook.
+        #cronjob(SATURDAY_4AM, 'export_monitoring_notebook', logfile),
+    ]
     return cronjobs_list
 
 
