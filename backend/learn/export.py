@@ -4,6 +4,7 @@ from collections import OrderedDict
 import csv
 from functools import partial
 import json
+from math import ceil
 import os
 from django.conf import settings
 from django.shortcuts import redirect
@@ -207,7 +208,7 @@ def make_events_df():
         'problem': attempts.task_id,
     })
     attempts = attempts.set_index('id')
-    events = pd.DataFrame.from_records(ProgramSnapshotsViewSet.queryset.values())
+    events = load_queryset_as_df(ProgramSnapshotsViewSet.queryset)
     events = events.join(attempts, on='task_session_id')
     events = pd.DataFrame(OrderedDict([
         ('id', events.id),
@@ -234,6 +235,25 @@ def make_events_df():
     # Renumber.
     events['event_order'] = events['event_order'].rank(method='first').astype(int)
     return events
+
+
+def load_queryset_as_df(queryset, batch_size=500000):
+    """Memory-optimized version of loading a queryset into dataframe.
+
+    Neccessary if there are two many records (approx. more than 1M for program
+    snapshots). (The whole DF of events takes a few hundreds of MB for
+    a few millions of records, but still the evaluation of the whole queryset
+    at once fails.
+    """
+    n_events = queryset.count()
+    n_batches = ceil(n_events / batch_size)
+    df_parts = []
+    for i in range(n_batches):
+        batch_qs = queryset[i*batch_size : (i+1)*batch_size]
+        batch_df = pd.DataFrame.from_records(batch_qs.values())
+        df_parts.append(batch_df)
+    df = pd.concat(df_parts)
+    return df
 
 
 def make_attempts_df(events, problems):
