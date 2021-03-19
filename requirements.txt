@@ -17,7 +17,7 @@ django-lazysignup==1.1.2
 django-mmc==1.6.5
 django-rest-auth==0.9.2
 django-webpack-loader==0.5.0
-djangorestframework==3.6.4
+djangorestframework==3.11.2
 dukpy==0.1.0
 entrypoints==0.2.3
 Flask==1.0
